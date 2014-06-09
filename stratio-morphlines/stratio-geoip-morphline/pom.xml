@@ -9,6 +9,12 @@
 	</parent>
 	<artifactId>stratio-geoip-morphline</artifactId>
 	<packaging>jar</packaging>
+	
+	<name>Stratio GeoIP morphline</name>
+
+	<properties>
+		<maxmind.version>0.3.2</maxmind.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -22,7 +28,7 @@
 		<dependency>
 			<groupId>com.maxmind.db</groupId>
 			<artifactId>maxmind-db</artifactId>
-			<version>0.3.2</version>
+			<version>${maxmind.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

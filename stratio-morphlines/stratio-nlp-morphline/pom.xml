@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>stratio-nlp-morphline</artifactId>
 	<packaging>jar</packaging>
+	<name>Stratio NLP morphlines</name>
 
 	<dependencies>
 		<dependency>
@@ -40,7 +41,7 @@
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-core</artifactId>
-			<version>1.5</version>
+			<version>${tika.version}</version>
 		</dependency>
 	</dependencies>
 
