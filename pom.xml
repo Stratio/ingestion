@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.stratio.ingestion</groupId>
+	<artifactId>stratio-ingestion</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Stratio Ingestion</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<streaming.api.version>0.2.0</streaming.api.version>
+		<flume.version>1.5.0</flume.version>
+		<junit.version>4.11</junit.version>
+		<mockito.version>1.9.5</mockito.version>
+		<jackson.databind.version>2.3.1</jackson.databind.version>
+	</properties>
+
+	<modules>
+		<module>stratio-sinks</module>
+		<module>stratio-morphlines</module>
+		<module>stratio-serializers</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.flume.flume-ng-sinks</groupId>
+				<artifactId>flume-ng-elasticsearch-sink</artifactId>
+				<version>${flume.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.stratio.streaming</groupId>
+				<artifactId>streaming-api</artifactId>
+				<version>${streaming.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.datastax.cassandra</groupId>
+				<artifactId>cassandra-driver-core</artifactId>
+				<version>2.0.2</version>
+				<exclusions>
+					<exclusion>
+						<groupId>io.netty</groupId>
+						<artifactId>netty</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.databind.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.elasticsearch</groupId>
+				<artifactId>elasticsearch</artifactId>
+				<version>1.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<scope>test</scope>
+				<version>${mockito.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.flume</groupId>
+				<artifactId>flume-ng-core</artifactId>
+				<version>${flume.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>

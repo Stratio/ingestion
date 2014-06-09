@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.stratio.ingestion</groupId>
+		<artifactId>stratio-ingestion</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>stratio-morphlines</artifactId>
+	<name>Stratio Morphlines</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>stratio-geoip-morphline</module>
+		<module>stratio-nlp-morphline</module>
+	</modules>
+
+	<repositories>
+		<repository>
+			<id>cloudera-repo-releases</id>
+			<url>https://repository.cloudera.com/artifactory/repo/</url>
+		</repository>
+	</repositories>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.kitesdk</groupId>
+				<artifactId>kite-morphlines-core</artifactId>
+				<version>0.12.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.typesafe</groupId>
+				<artifactId>config</artifactId>
+				<version>1.2.1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>

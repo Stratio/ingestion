@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.stratio.ingestion.stratio-serializers</groupId>
+	<artifactId>stratio-elasticesearch-serializer</artifactId>
+	<packaging>jar</packaging>
+
+	<parent>
+		<groupId>com.stratio.ingestion</groupId>
+		<artifactId>stratio-serializers</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.flume</groupId>
+			<artifactId>flume-ng-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.flume.flume-ng-sinks</groupId>
+			<artifactId>flume-ng-elasticsearch-sink</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
