@@ -141,7 +141,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
 
     private List<Event> takeEventsFromChannel(Channel channel, int eventsToTake) {
         List<Event> events = new ArrayList<Event>();
-        for (int i = 0; i < this.batchsize; i++) {
+        for (int i = 0; i < eventsToTake; i++) {
             this.sinkCounter.incrementEventDrainAttemptCount();
             events.add(channel.take());
         }
