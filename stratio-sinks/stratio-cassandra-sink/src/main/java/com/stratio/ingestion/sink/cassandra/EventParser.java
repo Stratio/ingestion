@@ -50,7 +50,7 @@ class EventParser {
 	}
 
 	public List<CassandraRow> parse(List<Event> events) {
-		List<CassandraRow> rows = new ArrayList<CassandraRow>();
+		List<CassandraRow> rows = new ArrayList<CassandraRow>(events.size());
 		for (Event event : events) {
 			rows.add(this.parse(event));
 		}
