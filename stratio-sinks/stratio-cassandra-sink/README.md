@@ -64,7 +64,7 @@ The following file describes an example configuration of an flume agent that use
     agent.channels.c1.type = file
     agent.channels.c1.checkpointDir = /home/user/flume/channel/check/
     agent.channels.c1.dataDirs = /home/user/flume/channel/data/
-    agent.channels.c1.transactionCapacity=10000 # Please, remember, this value must be major than sink.batchSize value.
+    agent.channels.c1.transactionCapacity=10000 # Please, remember, this value must be greater than sink.batchSize value.
 
     # Bind the source and sink to the channel
     agent.sources.r1.channels = c1
