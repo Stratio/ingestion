@@ -14,7 +14,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-public class EventParserTest {
+public class EventParserJUnit4Test {
 
 	private EventParser instance;
 

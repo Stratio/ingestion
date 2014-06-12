@@ -1,0 +1,81 @@
+{
+    "fieldDefinitions" : [
+        {
+            "type": "UUID",
+            "columnName": "id_field"
+        }, 
+        {
+            "type": "TEXT",
+            "columnName": "text_field"
+        },
+        {
+            "type": "VARCHAR",
+            "columnName": "varchar_field"
+        },
+        {
+            "type": "VARINT",
+            "columnName": "varint_field"
+        },
+        {
+            "type": "ASCII",
+            "columnName": "ascii_field"
+        },
+        {
+            "type": "BOOLEAN",
+            "columnName": "boolean_field"
+        },
+        {
+            "type": "DECIMAL",
+            "columnName": "decimal_field"
+        },
+        {
+            "type": "DOUBLE",
+            "columnName": "double_field"
+        },
+        {
+            "type": "FLOAT",
+            "columnName": "float_field"
+        },
+        {
+            "type": "INET",
+            "columnName": "inet_field"
+        },
+        {
+            "type": "INT",
+            "columnName": "int_field"
+        },
+        {
+            "type": "LIST",
+            "columnName": "list_field",
+            "itemSeparator": ",",
+            "listValueType": "TEXT"
+        },
+        {
+            "type": "MAP",
+            "columnName": "map_field",
+            "itemSeparator": ";",
+            "mapValueSeparator": ",",
+            "mapKeyType": "TEXT",
+            "mapValueType": "TEXT"
+        },
+        {
+            "type": "SET",
+            "columnName": "set_field",
+            "itemSeparator": ",",
+            "listValueType": "TEXT"
+        },
+        {
+            "type": "TIMESTAMP",
+            "columnName": "timestamp_field",
+            "dateFormat": "dd/MM/yyyy"
+        },
+        {
+            "type": "UUID",
+            "columnName": "uuid_field"
+        },
+        {
+            "type": "BIGINT",
+            "columnName": "bigint_field"
+        }
+    ]
+}
