@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.flume.Event;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -29,11 +30,20 @@ class EventParser {
 		try {
 			this.definition = mapper.readValue(jsonDefinition,
 					ColumnDefinition.class);
+			validateDefinition();
 		} catch (Exception e) {
 			throw new CassandraSinkException(e);
 		}
 	}
-
+	
+	private void validateDefinition() {
+		for (FieldDefinition field : definition.getFields()) {
+			boolean validEnum = EnumUtils.isValidEnum(CassandraDataType.class, field.getType());
+			if (!validEnum)
+				throw new CassandraSinkException("Field type \"" + field.getType() + "\" is not a valid one.");
+		}
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public CassandraRow parse(Event event) {
 		List<CassandraField> fields = new ArrayList<CassandraField>();
