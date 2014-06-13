@@ -11,10 +11,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		
+
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
-		
+
 		<flume.version>1.5.0</flume.version>
 		<streaming.api.version>0.2.0</streaming.api.version>
 		<junit.version>4.11</junit.version>
@@ -23,6 +23,7 @@
 		<datastax.version>2.0.2</datastax.version>
 		<elasticsearch.version>1.1.1</elasticsearch.version>
 		<tika.version>1.5</tika.version>
+		<commons.lang3.version>3.3.2</commons.lang3.version>
 	</properties>
 
 	<modules>
@@ -81,6 +82,11 @@
 				<groupId>org.apache.flume</groupId>
 				<artifactId>flume-ng-core</artifactId>
 				<version>${flume.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons.lang3.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

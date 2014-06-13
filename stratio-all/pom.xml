@@ -69,6 +69,11 @@
 									<artifactId>tika-core</artifactId>
 									<version>${tika.version}</version>
 								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.commons</groupId>
+									<artifactId>commons-lang3</artifactId>
+									<version>${commons.lang3.version}</version>
+								</artifactItem>
 							</artifactItems>
 							<outputDirectory>../target</outputDirectory>
 						</configuration>
