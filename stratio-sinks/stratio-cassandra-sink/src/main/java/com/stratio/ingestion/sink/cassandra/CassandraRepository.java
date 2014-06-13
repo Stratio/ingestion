@@ -89,7 +89,7 @@ class CassandraRepository {
         for (FieldDefinition field : definition.getFields()) {
             columnType.append(field.getColumnName());
             columnType.append(" ");
-            columnType.append(field.getType());
+            columnType.append(field.getCassandraType());
             columnType.append(",");
         }
         String query = "CREATE TABLE if not exists " + keyspace + "." + table

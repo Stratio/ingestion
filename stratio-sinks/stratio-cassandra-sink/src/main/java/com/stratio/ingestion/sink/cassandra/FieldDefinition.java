@@ -78,6 +78,23 @@ class FieldDefinition implements Serializable {
     public void setListValueType(String listValueType) {
         this.listValueType = listValueType;
     }
+    
+    public String getCassandraType() {
+    	String ctype = this.getType();
+		switch (CassandraDataType.valueOf(ctype)) {
+		case LIST:
+			ctype += "<" + this.getListValueType() + ">";
+			break;
+		case MAP:
+			ctype += "<" + this.getMapKeyType() + "," + this.getMapValueType() + ">";
+			break;
+		case SET:
+			ctype += "<" + this.getListValueType() + ">";
+			break;
+		default:
+		}
+		return ctype;
+	}
 
     @Override
     public int hashCode() {
