@@ -26,10 +26,10 @@
 	</properties>
 
 	<modules>
-		<module>stratio-all</module>
 		<module>stratio-sinks</module>
 		<module>stratio-morphlines</module>
 		<module>stratio-serializers</module>
+		<module>stratio-all</module>
 	</modules>
 
 	<dependencyManagement>
