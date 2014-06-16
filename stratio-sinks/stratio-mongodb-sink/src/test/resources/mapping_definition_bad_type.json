@@ -1,0 +1,7 @@
+{
+    "properties": {
+        "myString": {
+            "type": "string___"
+        }
+    }
+}
