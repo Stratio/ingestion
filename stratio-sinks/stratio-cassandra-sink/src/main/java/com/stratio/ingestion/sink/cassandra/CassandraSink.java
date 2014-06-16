@@ -28,7 +28,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
     private static final int DEFAULT_PORT = 9042;
     private static final String DEFAULT_CLUSTER = "TestCluster";
     private static final String DEFAULT_HOST = "localhost";
-    private static final int DEFAULT_BATCH_SIZE = 20;
+    private static final int DEFAULT_BATCH_SIZE = 100;
     private static final String DEFAULT_CONSISTENCY_LEVEL = "QUORUM";
 	
 	private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
