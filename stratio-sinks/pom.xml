@@ -14,7 +14,8 @@
 	<modules>
 		<module>stratio-stratiostreaming-sink</module>
 		<module>stratio-cassandra-sink</module>
-        <module>stratio-mongodb-sink</module>
-    </modules>
+	        <module>stratio-mongodb-sink</module>
+		<module>stratio-jdbc-sink</module>
+	</modules>
 
 </project>
