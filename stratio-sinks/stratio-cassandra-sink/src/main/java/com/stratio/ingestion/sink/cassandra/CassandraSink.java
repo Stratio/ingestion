@@ -17,10 +17,27 @@ import org.apache.flume.conf.Configurable;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
 
+import com.datastax.driver.core.ColumnMetadata;
+import com.datastax.driver.core.TableMetadata;
+import com.google.common.base.Strings;
+
 public class CassandraSink extends AbstractSink implements Configurable {
 
-	private static final String CASSANDRA_DEFAULT_CONSISTENCY = "QUORUM";
-	private static final int CASSANDRA_DEFAULT_BATCH_SIZE = 20;
+	private static final String DEFAULT_TABLE = "table_logs";
+    private static final String DEFAULT_KEYSPACE = "keyspace_logs";
+    private static final int DEFAULT_PORT = 9042;
+    private static final String DEFAULT_CLUSTER = "TestCluster";
+    private static final String DEFAULT_HOST = "localhost";
+    private static final int DEFAULT_BATCH_SIZE = 20;
+    private static final String DEFAULT_CONSISTENCY_LEVEL = "QUORUM";
+	
+	private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
+	private static final String DEFAULT_ITEM_SEPARATOR = ",";
+	private static final String DEFAULT_MAP_VALUE_SEPARATOR = ";";
+	private static final String DEFAULT_MAP_KEY_TYPE = "TEXT";
+	private static final String DEFAULT_MAP_VALUE_TYPE = "INT";
+	private static final String DEFAULT_LIST_VALUE_TYPE = "TEXT";
+	
     private static final String CONF_TABLE = "table";
     private static final String CONF_PRIMARY_KEY = "primaryKey";
     private static final String CONF_KEYSPACE = "keyspace";
@@ -32,11 +49,24 @@ public class CassandraSink extends AbstractSink implements Configurable {
     private static final String CONF_CONSISTENCY_LEVEL = "consistency";
     private static final String CONF_KEYSPACE_STATEMENT = "keyspaceStatement";
 	private static final String CONF_TABLE_STATEMENT = "tableStatement";
+	
+	private static final String CONF_DATE_FORMAT = "dateFormat";
+    private static final String CONF_ITEM_SEPARATOR = "itemSeparator";
+    private static final String CONF_MAP_VALUE_SEPARATOR = "mapValueSeparator";
+    private static final String CONF_MAP_KEY_TYPE = "mapKeyType";
+    private static final String CONF_MAP_VALUE_TYPE = "mapValueType";
+	private static final String CONF_LIST_VALUE_TYPE = "listValueType";
 
     private SinkCounter sinkCounter;
     private CassandraRepository repository;
     private int batchsize;
     private EventParser parser;
+    private String dateFormat;
+    private String itemSeparator;
+    private String mapValueSeparator;
+    private String mapKeyType;
+    private String mapValueType;
+    private String listValueType;
 
     public CassandraSink() {
         super();
@@ -53,21 +83,31 @@ public class CassandraSink extends AbstractSink implements Configurable {
 
     @Override
     public void configure(Context context) {
-        String table = context.getString(CONF_TABLE);
-        String host = context.getString(CONF_HOST);
-        String keyspace = context.getString(CONF_KEYSPACE);
-        int port = context.getInteger(CONF_PORT);
-        String clusterName = context.getString(CONF_CLUSTER);
+        String table = context.getString(CONF_TABLE, DEFAULT_TABLE);
+        String host = context.getString(CONF_HOST, DEFAULT_HOST);
+        String keyspace = context.getString(CONF_KEYSPACE, DEFAULT_KEYSPACE);
+        int port = context.getInteger(CONF_PORT, DEFAULT_PORT);
+        String clusterName = context.getString(CONF_CLUSTER, DEFAULT_CLUSTER);
         String consistency = context.getString(
-        		CONF_CONSISTENCY_LEVEL, CASSANDRA_DEFAULT_CONSISTENCY);
+        		CONF_CONSISTENCY_LEVEL, DEFAULT_CONSISTENCY_LEVEL);
         String columnDefinitionFile = context.getString(CONF_COLUMN_DEFINITION_FILE);
-        this.parser = new EventParser(readJsonFromFile(new File(columnDefinitionFile)));
+        if (!Strings.isNullOrEmpty(columnDefinitionFile)) {
+        	this.parser = new EventParser(readJsonFromFile(new File(columnDefinitionFile)));
+        }
+        ColumnDefinition definition = this.parser == null ? null : this.parser.getDefinition();
         this.repository = new CassandraRepository(host, table, keyspace,
-                port, clusterName, consistency, this.parser.getDefinition());
+                port, clusterName, consistency, definition);
         setOptionalRepoConfiguration(context);
         
-        this.batchsize = context.getInteger(CONF_BATCH_SIZE, CASSANDRA_DEFAULT_BATCH_SIZE);
+        this.batchsize = context.getInteger(CONF_BATCH_SIZE, DEFAULT_BATCH_SIZE);
         this.sinkCounter = new SinkCounter(this.getName());
+        
+        this.dateFormat = context.getString(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT);
+        this.itemSeparator = context.getString(CONF_ITEM_SEPARATOR, DEFAULT_ITEM_SEPARATOR);
+        this.mapValueSeparator = context.getString(CONF_MAP_VALUE_SEPARATOR, DEFAULT_MAP_VALUE_SEPARATOR);
+        this.mapKeyType = context.getString(CONF_MAP_KEY_TYPE, DEFAULT_MAP_KEY_TYPE);
+        this.mapValueType = context.getString(CONF_MAP_VALUE_TYPE, DEFAULT_MAP_VALUE_TYPE);
+        this.listValueType = context.getString(CONF_LIST_VALUE_TYPE, DEFAULT_LIST_VALUE_TYPE);
     }
     
     private void setOptionalRepoConfiguration(Context context) {
@@ -123,10 +163,32 @@ public class CassandraSink extends AbstractSink implements Configurable {
 
     @Override
     public synchronized void start() {
-    	this.repository.createStructure();
+    	TableMetadata table = this.repository.createStructure();
+    	if (parser == null) {
+    		parser = new EventParser(getColumnDefinition(table));
+    	}
         this.sinkCounter.start();
         super.start();
     }
+    
+	private ColumnDefinition getColumnDefinition(TableMetadata tableMetadata) {
+		List<FieldDefinition> fields = new ArrayList<>();
+		for (ColumnMetadata column : tableMetadata.getColumns()) {
+			FieldDefinition field = new FieldDefinition();
+			field.setColumnName(column.getName());
+			field.setType(column.getType().getName().name().toUpperCase());
+			field.setDateFormat(dateFormat);
+			field.setItemSeparator(itemSeparator);
+			field.setListValueType(listValueType);
+			field.setMapKeyType(mapKeyType);
+			field.setMapValueSeparator(mapValueSeparator);
+			field.setMapValueType(mapValueType);
+			fields.add(field);
+		}
+		ColumnDefinition definition = new ColumnDefinition();
+		definition.setFields(fields);
+		return definition;
+	}
 
     @Override
     public synchronized void stop() {

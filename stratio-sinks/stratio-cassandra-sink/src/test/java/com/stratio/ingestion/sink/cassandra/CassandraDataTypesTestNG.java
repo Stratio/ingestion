@@ -281,7 +281,7 @@ public class CassandraDataTypesTestNG {
 
 	@Test
 	public void mapFieldAllowsMap() throws EventDeliveryException {
-		headers.put(MAP_FIELD, "a,b;c,d");
+		headers.put(MAP_FIELD, "a,0;c,1");
 		addEventToChannel(headers);
 
 		Status status = sink.process();

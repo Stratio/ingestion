@@ -36,6 +36,10 @@ class EventParser {
 		}
 	}
 	
+	public EventParser(ColumnDefinition definition) {
+		this.definition = definition;
+	}
+	
 	private void validateDefinition() {
 		for (FieldDefinition field : definition.getFields()) {
 			boolean validEnum = EnumUtils.isValidEnum(CassandraDataType.class, field.getType());

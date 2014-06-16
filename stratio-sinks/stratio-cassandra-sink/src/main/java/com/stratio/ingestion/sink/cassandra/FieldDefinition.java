@@ -2,6 +2,8 @@ package com.stratio.ingestion.sink.cassandra;
 
 import java.io.Serializable;
 
+import com.google.common.base.Strings;
+
 class FieldDefinition implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -14,6 +16,7 @@ class FieldDefinition implements Serializable {
     private String mapKeyType;
     private String mapValueType;
     private String listValueType;
+    private String cassandraType;
 
     public String getType() {
         return this.type;
@@ -80,20 +83,22 @@ class FieldDefinition implements Serializable {
     }
     
     public String getCassandraType() {
-    	String ctype = this.getType();
-		switch (CassandraDataType.valueOf(ctype)) {
-		case LIST:
-			ctype += "<" + this.getListValueType() + ">";
-			break;
-		case MAP:
-			ctype += "<" + this.getMapKeyType() + "," + this.getMapValueType() + ">";
-			break;
-		case SET:
-			ctype += "<" + this.getListValueType() + ">";
-			break;
-		default:
-		}
-		return ctype;
+    	if (Strings.isNullOrEmpty(this.cassandraType)) {
+	    	String ctype = this.getType();
+			switch (CassandraDataType.valueOf(ctype)) {
+			case LIST:
+			case SET:
+				ctype += "<" + this.getListValueType() + ">";
+				break;
+			case MAP:
+				ctype += "<" + this.getMapKeyType() + "," + this.getMapValueType() + ">";
+				break;
+			default:
+				break;
+			}
+			this.cassandraType = ctype;
+    	}
+		return this.cassandraType;
 	}
 
     @Override

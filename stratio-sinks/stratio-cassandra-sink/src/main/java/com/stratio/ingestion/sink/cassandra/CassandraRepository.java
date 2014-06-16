@@ -19,7 +19,7 @@ class CassandraRepository {
 	private final Session session;
 	private final Cluster cluster;
 	private final String consistencyLevel;
-	private final ColumnDefinition definition;
+	private ColumnDefinition definition;
 	
 	private String primaryKey;
 	private String keyspaceStatement;
@@ -46,7 +46,7 @@ class CassandraRepository {
 		this.definition = definition;
 	}
 	
-	public void createStructure() {
+	public TableMetadata createStructure() {
 		KeyspaceMetadata keyspaceMetadata = session.getCluster().getMetadata()
 				.getKeyspace(keyspace);
 		if (keyspaceMetadata == null) {
@@ -56,7 +56,10 @@ class CassandraRepository {
 				.getKeyspace(keyspace).getTable(table);
 		if (tableMetadata == null) {
 			createTable();
+			tableMetadata = session.getCluster().getMetadata()
+					.getKeyspace(keyspace).getTable(table);
 		}
+		return tableMetadata;
 	}
 
 	private void createKeyspace() {
@@ -70,10 +73,10 @@ class CassandraRepository {
 	private void createTable() {
 		if (!Strings.isNullOrEmpty(tableStatement)) {
 			session.execute(tableStatement);
-		} else if (!Strings.isNullOrEmpty(primaryKey)){
+		} else if (!Strings.isNullOrEmpty(primaryKey) && definition != null){
 			createDefaultTable();
 		} else {
-			throw new CassandraSinkException("The table statement or the primary key must be not null");
+			throw new CassandraSinkException("The table statement or the primary key and the definition file must be not null");
 		}
 	}
 	
