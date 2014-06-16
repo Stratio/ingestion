@@ -105,9 +105,10 @@ class CassandraRepository {
 			BatchStatement batch = new BatchStatement();
 			for (CassandraRow row : rows) {
 				Insert buildInsert = buildInsert(row, this.keyspace,
-						this.table, this.consistencyLevel);
+						this.table);
 				batch.add(buildInsert);
 			}
+			batch.setConsistencyLevel(ConsistencyLevel.valueOf(this.consistencyLevel));
 			this.session.executeAsync(batch);
 		} catch (Exception e) {
 			throw new CassandraSinkException(e);
@@ -126,9 +127,8 @@ class CassandraRepository {
 
 	@SuppressWarnings("rawtypes")
 	private static final Insert buildInsert(CassandraRow row, String keyspace,
-			String table, String consistencyLevel) {
+			String table) {
 		Insert insert = QueryBuilder.insertInto(keyspace, table);
-		insert.setConsistencyLevel(ConsistencyLevel.valueOf(consistencyLevel));
 		for (CassandraField field : row.getFields()) {
 			insert.value(field.getColumnName(), field.getValue());
 		}
