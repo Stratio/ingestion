@@ -14,6 +14,34 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ * Reads events from a channel and writes them to MongoDB. It can read fields
+ * from both body and headers.
+ *
+ * Configuration parameters are:
+ *
+ * <p><ul>
+ * <li><tt>dynamic</tt> <em>(boolean)</em>: If true, the dynamic mode will be
+ *      enabled and the database and collection to use will be selected by the
+ *      event headers. Defaults to <tt>false</tt>.</li>
+ * <li><tt>dynamicDB</tt> <em>(string)</em>: Name of the event header that will
+ *      be looked up for the database name. This will only work when dynamic
+ *      mode is enabled. Defaults to <tt>db</tt>.</li>
+ * <li><tt>dynamicCollection</tt> <em>(string)</em>: Name of the event header
+ *      that will be looked up for the collection name. This will only work when
+ *      dynamic mode is enabled. Defaults to <tt>collection</tt>.</li>
+ * <li><tt>mongoUri</tt> <em>(string, required)</em>:
+ *      A <a href="http://api.mongodb.org/java/current/com/mongodb/MongoClientURI.html">Mongo client URI</a>
+ *      defining the MongoDB server address and, optionally, default database
+ *      and collection. When dynamic mode is enabled, the collection defined
+ *      here will be used as a fallback.</li>
+ * <li><tt>mappingFile</tt> <em>(string)</em>: Path to a
+ *      <a href="http://json-schema.org/">JSON Schema</a>
+ *      to be used for type mapping purposes.</li>
+ * </ul></p>
+ *
+ */
 public class MongoSink extends AbstractSink implements Configurable {
 
     private static final Logger log = LoggerFactory.getLogger(MongoSink.class);
@@ -44,6 +72,11 @@ public class MongoSink extends AbstractSink implements Configurable {
         super();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param context
+     */
     @Override
     public void configure(Context context) {
         try {
@@ -81,6 +114,9 @@ public class MongoSink extends AbstractSink implements Configurable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Status process() throws EventDeliveryException {
         Status status = Status.BACKOFF;
@@ -129,12 +165,18 @@ public class MongoSink extends AbstractSink implements Configurable {
         return status;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void start() {
         this.sinkCounter.start();
         super.start();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void stop() {
         this.mongoClient.close();
