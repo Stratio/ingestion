@@ -9,27 +9,41 @@ Configuration
 
 The available config parameters are:
 
-- cluster-name: The Cassandra's cluster name.
+- cluster-name: The Cassandra's cluster name. (Default: TestCluster)
 
-- keyspace: The Keyspace name which allocates the table.
+- keyspace: The Keyspace name which allocates the table. (Default: keyspace_logs)
 
-- host: The ip address or the host name of one Cassandra node.
+- host: The ip address or the host name of one Cassandra node. (Default: localhost)
 
-- table: The table name.
+- table: The table name. (Default: table_logs)
 
-- primaryKey: The primary key of the table.
+- primaryKey: The primary key of the table. (Optional)
 
-- batchSize: The size to batch insert statement. We recommend 100 as an optimum value to this property. Please do not forget increase the channel.capacity property on your channel component over the sink.batchSize property.
+- batchSize: The size to batch insert statement. We recommend 100 as an optimum value to this property. Please do not forget increase the channel.capacity property on your channel component over the sink.batchSize property. (Default: 100)
 
-- port: The CQL native transport port. Please make sure that this port is open.
+- port: The CQL native transport port. Please make sure that this port is open. (Default: 9042)
 
-- definitionFile: The absolute route to the JSON definition file which defines the Cassandra table. Explained below.
-
-- consistency: The consistency level for this insert. Default value are QUORUM, available options are described here: [Cassandra data consistency](http://www.datastax.com/documentation/cassandra/2.0/cassandra/dml/dml_config_consistency_c.html)
+- consistency: The consistency level for this insert. Default value are QUORUM, available options are described here: [Cassandra data consistency](http://www.datastax.com/documentation/cassandra/2.0/cassandra/dml/dml_config_consistency_c.html) (Default: QUORUM)
 
 - keyspaceStatement: The keyspace creation statement. (Optional)
 
 - tableStatement: The table creation statement. (Optional)
+
+- definitionFile: The absolute route to the JSON definition file which defines the Cassandra table. Explained below. (Optional)
+
+The following configuration is used when the definitionFile is not set it. Explained below.
+
+- dateFormat: (Default: dd/MM/yyyy)
+
+- itemSeparator: (Default: ,)
+
+- mapValueSeparator: (Default: ;)
+
+- mapKeyType: (Default: TEXT)
+
+- mapValueType: (Default: INT)
+
+- listValueType: (Default: TEXT)
 
 Sample Complete-flow Flume config
 =================================
@@ -38,37 +52,32 @@ The following file describes an example configuration of an flume agent that use
 
 ``` 
     # Name the components on this agent
-    agent.sources = r1
+    agent.sources = spoolSource
     agent.sinks = cassandraSink
-    agent.channels = c1
+    agent.channels = fileChannel
 
     # Describe/configure the source
-    agent.sources.r1.type = spoolDir
-    agent.sources.r1.spoolDir = /home/flume/data/files/
+    agent.sources.spoolSource.type = spoolDir
+    agent.sources.spoolSource.spoolDir = /home/flume/data/files/
 
     # Describe the sink
     agent.sinks.cassandraSink.keyspace=test
     agent.sinks.cassandraSink.cluster-name=testCluster
-    agent.sinks.cassandraSink.type=com.stratio.flume.sink.cassandra.CassandraSink
-    agent.sinks.cassandraSink.host=localhost
+    agent.sinks.cassandraSink.type=com.stratio.ingestion.sink.cassandra.CassandraSink
     agent.sinks.cassandraSink.table=tableTest
-    agent.sinks.cassandraSink.primaryKey=logId
-    agent.sinks.cassandraSink.batchSize=200 
-    agent.sinks.cassandraSink.port=9042
     agent.sinks.cassandraSink.separator=,
-    agent.sinks.cassandraSink.definitionFile=/home/flume/conf/definition.json
-    agent.sinks.cassandraSink.consistency=QUORUM
+    agent.sinks.cassandraSink.dateFormat=dd/MMM/yyyy:HH:mm:ss z
 
     # Use a channel which buffers events in file
-    agent.channels = c1
-    agent.channels.c1.type = file
-    agent.channels.c1.checkpointDir = /home/user/flume/channel/check/
-    agent.channels.c1.dataDirs = /home/user/flume/channel/data/
-    agent.channels.c1.transactionCapacity=10000 # Please, remember, this value must be greater than sink.batchSize value.
+    agent.channels = fileChannel
+    agent.channels.fileChannel.type = file
+    agent.channels.fileChannel.checkpointDir = /home/user/flume/channel/check/
+    agent.channels.fileChannel.dataDirs = /home/user/flume/channel/data/
+    agent.channels.fileChannel.transactionCapacity=10000 # Please, remember, this value must be greater than sink.batchSize value.
 
     # Bind the source and sink to the channel
-    agent.sources.r1.channels = c1
-    agent.sinks.cassandraSink.channel = c1
+    agent.sources.spoolSource.channels = fileChannel
+    agent.sinks.cassandraSink.channel = fileChannel
 
 ``` 
 
@@ -103,7 +112,7 @@ We highly recommend verify this file using some verify application or web pages 
 This is an example for a 4 columns table. The column types are field1:TEXT, field2:DOUBLE, field3:MAP(timestamp{dateFormat ddMMyyyy},double) and field4:LIST(double)
 ``` 
   {
-    "headerFieldDefinitions": [
+    "fieldDefinitions": [
         {
             "type": "TEXT",
             "columnName": "field1",
@@ -123,9 +132,7 @@ This is an example for a 4 columns table. The column types are field1:TEXT, fiel
             "mapKeyType": "",
             "mapValueType": "",
             "listValueType": ""
-        }
-    ],
-    "bodyFieldDefinitions": [
+        },
         {
             "type": "MAP",
             "columnName": "field3",
