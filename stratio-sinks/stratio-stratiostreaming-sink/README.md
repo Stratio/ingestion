@@ -3,7 +3,7 @@ Stratio Streaming Sink
 
 A Flume sink using Stratio Streaming.
 
-The StratioStreaming Sink will insert flume events to an specific stream. The configuration is located in the flume config (see sample below.) 
+The StratioStreaming Sink will insert flume events to an specific stream. The configuration is located in the flume config (see sample below.)
 
 Available config parameters:
 
@@ -17,11 +17,11 @@ This sink will extract the data from the flume event headers and for each field 
 
 
 Sample Flume config
-===================
+-------------------
 
-The following file describes an example configuration of a flume agent that uses a Spooling directory source, a file channel our StratioStreaming Sink and one morphline interceptor which parses the flume flow content to the events header 
+The following file describes an example configuration of a flume agent that uses a Spooling directory source, a file channel our StratioStreaming Sink and one morphline interceptor which parses the flume flow content to the events header
 
-```
+```properties
 # Name the components on this agent
 agent.sources = r1
 agent.sinks = streamingSink
@@ -58,7 +58,7 @@ agent.sinks.streamingSink.channel = c1
 ```
 
 Stream definition file
-======================
+----------------------
 
 See following an stream definition file. The available stream field types are:
 
@@ -80,7 +80,7 @@ See following an stream definition file. The available stream field types are:
 ```
 
 Morphline definition file
-=========================
+------------------------
 
 This file is an example of a morphline file that parses the content of the flume flow:
 
@@ -126,17 +126,11 @@ morphlines : [
     ]
   }
 ]
-```  
-  
+```
+
 Building Stratio Streaming Sink
-===============================
+-------------------------------
 
 The sink is built using Maven:
 
 mvn clean package
-
-Required Dependencies
-=====================
-
-guava*
-curator*
