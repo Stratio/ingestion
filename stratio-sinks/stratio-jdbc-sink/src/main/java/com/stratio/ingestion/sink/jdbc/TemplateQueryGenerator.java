@@ -1,14 +1,12 @@
 package com.stratio.ingestion.sink.jdbc;
 
 import com.google.common.base.*;
-import com.google.common.collect.Lists;
 import org.apache.flume.Event;
 import org.jooq.*;
 import org.jooq.impl.DefaultDataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
