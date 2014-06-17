@@ -32,7 +32,7 @@ agent.sources.r1.type = spoolDir
 agent.sources.r1.spoolDir = /home/flume/data/files
 
 # Describe the sink
-agent.sinks.streamingSink.type=com.stratio.flume.sink.streaming.StratioStreamingSink
+agent.sinks.streamingSink.type=com.stratio.ingestion.sink.stratiostreaming.StratioStreamingSink
 agent.sinks.streamingSink.kafkaHost=localhost
 agent.sinks.streamingSink.kafkaPort=9092
 agent.sinks.streamingSink.zookeeperHost=localhost
