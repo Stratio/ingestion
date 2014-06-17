@@ -22,9 +22,8 @@
     <dependencySets>
         <dependencySet>
             <outputDirectory>/libext</outputDirectory>
-            <excludes>
-                <exclude>com.stratio.ingestion:*</exclude>
-            </excludes>
+            <useStrictFiltering>true</useStrictFiltering>
+            <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveDependencies>true</useTransitiveDependencies>
         </dependencySet>
     </dependencySets>
