@@ -33,10 +33,17 @@
 		<dependency>
 			<groupId>org.apache.flume</groupId>
 			<artifactId>flume-ng-core</artifactId>
+            <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.stratio.streaming</groupId>
 			<artifactId>streaming-api</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 	</dependencies>
 </project>
