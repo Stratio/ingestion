@@ -13,6 +13,7 @@
 	<modules>
 		<module>stratio-geoip-morphline</module>
 		<module>stratio-nlp-morphline</module>
+		<module>stratio-wikipediacleaner-morphline</module>
 	</modules>
 
 	<repositories>
