@@ -2,6 +2,7 @@ package com.stratio.ingestion.sink.cassandra;
 
 import java.io.Serializable;
 
+import com.datastax.driver.core.DataType;
 import com.google.common.base.Strings;
 
 class FieldDefinition implements Serializable {
@@ -85,7 +86,7 @@ class FieldDefinition implements Serializable {
     public String getCassandraType() {
     	if (Strings.isNullOrEmpty(this.cassandraType)) {
 	    	String ctype = this.getType();
-			switch (CassandraDataType.valueOf(ctype)) {
+			switch (DataType.Name.valueOf(ctype)) {
 			case LIST:
 			case SET:
 				ctype += "<" + this.getListValueType() + ">";

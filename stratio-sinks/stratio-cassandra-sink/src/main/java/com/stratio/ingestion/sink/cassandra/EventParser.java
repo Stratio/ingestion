@@ -20,6 +20,8 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.flume.Event;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.datastax.driver.core.DataType;
+
 class EventParser {
 
 	private static final String BODY_COLUMN = "data";
@@ -42,7 +44,7 @@ class EventParser {
 	
 	private void validateDefinition() {
 		for (FieldDefinition field : definition.getFields()) {
-			boolean validEnum = EnumUtils.isValidEnum(CassandraDataType.class, field.getType());
+			boolean validEnum = EnumUtils.isValidEnum(DataType.Name.class, field.getType());
 			if (!validEnum)
 				throw new CassandraSinkException("Field type \"" + field.getType() + "\" is not a valid one.");
 		}
@@ -79,18 +81,18 @@ class EventParser {
 	static final CassandraField parseField(String field,
 			FieldDefinition definition) {
 		String columnName = definition.getColumnName();
-		if (CassandraDataType.valueOf(definition.getType()).equals(
-				CassandraDataType.SET)) {
+		if (DataType.Name.valueOf(definition.getType()).equals(
+				DataType.Name.SET)) {
 			return parseSet(field, definition);
-		} else if (CassandraDataType.valueOf(definition.getType()).equals(
-				CassandraDataType.MAP)) {
+		} else if (DataType.Name.valueOf(definition.getType()).equals(
+				DataType.Name.MAP)) {
 			return parseMap(field, definition);
-		} else if (CassandraDataType.valueOf(definition.getType()).equals(
-				CassandraDataType.LIST)) {
+		} else if (DataType.Name.valueOf(definition.getType()).equals(
+				DataType.Name.LIST)) {
 			return parseList(field, definition);
 		} else {
 			return new CassandraField(columnName, parseValue(field,
-					CassandraDataType.valueOf(definition.getType()),
+					DataType.Name.valueOf(definition.getType()),
 					definition.getDateFormat()));
 		}
 	}
@@ -105,10 +107,10 @@ class EventParser {
 			String rawKey = rawItem.split(definition.getMapValueSeparator())[0];
 			String rawValue = rawItem.split(definition.getMapValueSeparator())[1];
 			Object key = parseValue(rawKey,
-					CassandraDataType.valueOf(definition.getMapKeyType()),
+					DataType.Name.valueOf(definition.getMapKeyType()),
 					definition.getDateFormat());
 			Object value = parseValue(rawValue,
-					CassandraDataType.valueOf(definition.getMapValueType()),
+					DataType.Name.valueOf(definition.getMapValueType()),
 					definition.getDateFormat());
 			map.put(key, value);
 		}
@@ -146,7 +148,7 @@ class EventParser {
 				.getItemSeparator()));
 		for (String rawItem : rawItems) {
 			items.add(parseValue(rawItem,
-					CassandraDataType.valueOf(definition.getListValueType()),
+					DataType.Name.valueOf(definition.getListValueType()),
 					definition.getDateFormat()));
 		}
 		return new CassandraField<Set>(definition.getColumnName(), items);
@@ -160,43 +162,43 @@ class EventParser {
 				.getItemSeparator()));
 		for (String rawItem : rawItems) {
 			items.add(parseValue(rawItem,
-					CassandraDataType.valueOf(definition.getListValueType()),
+					DataType.Name.valueOf(definition.getListValueType()),
 					definition.getDateFormat()));
 		}
 		return new CassandraField<List>(definition.getColumnName(), items);
 	}
 
-	final static Object parseValue(String rawValue, CassandraDataType type,
+	final static Object parseValue(String rawValue, DataType.Name type,
 			String dateFormat) {
-		if (type.equals(CassandraDataType.DECIMAL)) {
+		if (type.equals(DataType.Name.DECIMAL)) {
 			return BigDecimal.valueOf(Double.parseDouble(rawValue.replaceAll(
 					"\\s+", "")));
-		} else if (type.equals(CassandraDataType.ASCII)) {
+		} else if (type.equals(DataType.Name.ASCII)) {
 			return rawValue;
-		} else if (type.equals(CassandraDataType.VARCHAR)) {
+		} else if (type.equals(DataType.Name.VARCHAR)) {
 			return rawValue;
-		} else if (type.equals(CassandraDataType.COUNTER)) {
+		} else if (type.equals(DataType.Name.COUNTER)) {
 			return Long.parseLong(rawValue.replaceAll("\\s+", ""));
-		} else if (type.equals(CassandraDataType.VARINT)) {
+		} else if (type.equals(DataType.Name.VARINT)) {
 			return new BigInteger(rawValue.replaceAll("\\s+", ""));
-		} else if (type.equals(CassandraDataType.BIGINT)) {
+		} else if (type.equals(DataType.Name.BIGINT)) {
 			return Long.parseLong(rawValue.replaceAll("\\s+", ""));
-		} else if (type.equals(CassandraDataType.BOOLEAN)) {
+		} else if (type.equals(DataType.Name.BOOLEAN)) {
 			return new Boolean(Boolean.parseBoolean(rawValue));
-		} else if (type.equals(CassandraDataType.TIMESTAMP)) {
+		} else if (type.equals(DataType.Name.TIMESTAMP)) {
 			return parseDate(rawValue, dateFormat);
-		} else if (type.equals(CassandraDataType.DOUBLE)) {
+		} else if (type.equals(DataType.Name.DOUBLE)) {
 			return new Double(Double.parseDouble(rawValue
 					.replaceAll("\\s+", "")));
-		} else if (type.equals(CassandraDataType.FLOAT)) {
+		} else if (type.equals(DataType.Name.FLOAT)) {
 			return new Float(Float.parseFloat(rawValue.replaceAll("\\s+", "")));
-		} else if (type.equals(CassandraDataType.INET)) {
+		} else if (type.equals(DataType.Name.INET)) {
 			return parseInetSocketAddress(rawValue);
-		} else if (type.equals(CassandraDataType.INT)) {
+		} else if (type.equals(DataType.Name.INT)) {
 			return Integer.parseInt(rawValue.replaceAll("\\s+", ""));
-		} else if (type.equals(CassandraDataType.TEXT)) {
+		} else if (type.equals(DataType.Name.TEXT)) {
 			return rawValue;
-		} else if (type.equals(CassandraDataType.UUID)) {
+		} else if (type.equals(DataType.Name.UUID)) {
 			return UUID.fromString(rawValue);
 		}
 		throw new CassandraSinkException("Class not found for type: "

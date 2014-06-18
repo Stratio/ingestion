@@ -14,6 +14,8 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.datastax.driver.core.DataType;
+
 public class EventParserJUnit4Test {
 
 	private EventParser instance;
@@ -34,19 +36,19 @@ public class EventParserJUnit4Test {
 	@Test
 	public void shoudParsePrimitiveTypes() throws Exception {
 		Integer integer = (Integer) EventParser.parseValue("1",
-				CassandraDataType.valueOf("INT"), "");
+				DataType.Name.valueOf("INT"), "");
 		Assert.assertEquals(new Integer(1), integer);
 
 		String string = (String) EventParser.parseValue("string",
-				CassandraDataType.valueOf("TEXT"), "");
+				DataType.Name.valueOf("TEXT"), "");
 		Assert.assertEquals("string", string);
 
 		Boolean bool = (Boolean) EventParser.parseValue("true",
-				CassandraDataType.valueOf("BOOLEAN"), "");
+				DataType.Name.valueOf("BOOLEAN"), "");
 		Assert.assertEquals(new Boolean(true), bool);
 
 		InetAddress addr = (InetAddress) EventParser.parseValue("192.168.1.1",
-				CassandraDataType.valueOf("INET"), "");
+				DataType.Name.valueOf("INET"), "");
 		Assert.assertEquals(InetAddress.getByName("192.168.1.1"), addr);
 	}
 
