@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.stratio.ingestion</groupId>
-		<artifactId>stratio-ingestion</artifactId>
+		<artifactId>stratio-ingestion-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>stratio-morphlines</artifactId>
@@ -16,24 +16,12 @@
 		<module>stratio-wikipediacleaner-morphline</module>
 	</modules>
 
-	<repositories>
-		<repository>
-			<id>cloudera-repo-releases</id>
-			<url>https://repository.cloudera.com/artifactory/repo/</url>
-		</repository>
-	</repositories>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.kitesdk</groupId>
 				<artifactId>kite-morphlines-core</artifactId>
-				<version>0.12.0</version>
-			</dependency>
-			<dependency>
-				<groupId>com.typesafe</groupId>
-				<artifactId>config</artifactId>
-				<version>1.2.1</version>
+				<version>0.14.1</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
