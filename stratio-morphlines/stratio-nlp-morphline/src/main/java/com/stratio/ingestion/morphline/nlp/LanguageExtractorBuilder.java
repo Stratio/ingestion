@@ -56,8 +56,4 @@ public class LanguageExtractorBuilder implements CommandBuilder {
 
 	}
 
-	public static void main(String[] args) {
-		LanguageIdentifier li = new LanguageIdentifier("Hola");
-		System.out.println(li.getLanguage());
-	}
 }
