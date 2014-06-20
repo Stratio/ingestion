@@ -27,15 +27,21 @@
 		<commons.lang3.version>3.3.2</commons.lang3.version>
         <commons.io.version>2.1</commons.io.version>
         <slf4j.version>1.7.7</slf4j.version>
-        <guava.version>17.0</guava.version>
+        <kite.version>0.14.1</kite.version>
+        <!--
+            XXX: We need to use an old Guava. kite-morphlines (as of version 14) uses
+            the deprecated com.google.common.io.Closeables.closeQuietly(Ljava/io/Closeable;)V
+        -->
+        <guava.version>15.0</guava.version>
 	</properties>
 
 	<modules>
 		<module>stratio-sinks</module>
 		<module>stratio-morphlines</module>
 		<module>stratio-serializers</module>
+        <module>stratio-deserializers</module>
 		<module>stratio-ingestion-all</module>
-	</modules>
+    </modules>
 
     <repositories>
         <repository>
@@ -94,6 +100,11 @@
 				<scope>test</scope>
 				<version>${mockito.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>org.easytesting</groupId>
+                <artifactId>fest-assert</artifactId>
+                <version>1.4</version>
+            </dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
@@ -133,6 +144,12 @@
                 <groupId>com.codahale.metrics</groupId>
                 <artifactId>metrics-healthchecks</artifactId>
                 <version>3.0.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-common</artifactId>
+                <version>2.2.0</version>
             </dependency>
 
             <!-- Use the same version as Stratio Streaming -->
