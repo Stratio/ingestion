@@ -14,7 +14,7 @@ import com.typesafe.config.Config;
 
 public class LanguageExtractorBuilder implements CommandBuilder {
 
-	private final static String COMMAND_NAME = "languageIdentifier";
+	private final static String COMMAND_NAME = "languageExtractor";
 
 	@Override
 	public Collection<String> getNames() {
