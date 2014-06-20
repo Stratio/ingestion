@@ -16,7 +16,7 @@
         <dependency>
             <groupId>org.kitesdk</groupId>
             <artifactId>kite-morphlines-all</artifactId>
-            <version>0.14.1</version>
+            <version>${kite.version}</version>
             <type>pom</type>
         </dependency>
 

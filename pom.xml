@@ -27,6 +27,7 @@
 		<commons.lang3.version>3.3.2</commons.lang3.version>
         <commons.io.version>2.1</commons.io.version>
         <slf4j.version>1.7.7</slf4j.version>
+        <kite.version>0.14.1</kite.version>
         <!--
             XXX: We need to use an old Guava. kite-morphlines (as of version 14) uses
             the deprecated com.google.common.io.Closeables.closeQuietly(Ljava/io/Closeable;)V
@@ -99,6 +100,11 @@
 				<scope>test</scope>
 				<version>${mockito.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>org.easytesting</groupId>
+                <artifactId>fest-assert</artifactId>
+                <version>1.4</version>
+            </dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>

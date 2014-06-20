@@ -14,14 +14,15 @@
 		<module>stratio-geoip-morphline</module>
 		<module>stratio-nlp-morphline</module>
 		<module>stratio-wikipediacleaner-morphline</module>
-	</modules>
+        <module>stratio-commons-morphline</module>
+    </modules>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.kitesdk</groupId>
 				<artifactId>kite-morphlines-core</artifactId>
-				<version>0.14.1</version>
+				<version>${kite.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
