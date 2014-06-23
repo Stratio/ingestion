@@ -92,9 +92,9 @@ class TemplateQueryGenerator implements QueryGenerator {
                 return dataType.convert(new String(body, Charsets.UTF_8));
             } else {
                 final Map<String, String> headers = event.getHeaders();
-                for (final String key : headers.keySet()) {
-                    if (key.equals(header)) {
-                        return dataType.convert(headers.get(key));
+                for (final Map.Entry<String, String> entry : headers.entrySet()) {
+                    if (entry.getKey().equals(header)) {
+                        return dataType.convert(entry.getValue());
                     }
                 }
             }

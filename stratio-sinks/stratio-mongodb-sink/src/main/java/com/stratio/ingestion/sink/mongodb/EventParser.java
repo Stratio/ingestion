@@ -136,14 +136,16 @@ class EventParser {
 
 		final Map<String, String> eventHeaders = event.getHeaders();
         if (definition.allowsAdditionalProperties()) {
-            for (final String fieldName : eventHeaders.keySet()) {
+            for (final Map.Entry<String,String> headerEntry : eventHeaders.entrySet()) {
+                final String fieldName = headerEntry.getKey();
+                final String fieldValue = headerEntry.getValue();
                 FieldDefinition def = definition.getFieldDefinitionByName(fieldName);
                 if (def == null) {
-                    dbObject.put(fieldName, parseValue(null, eventHeaders.get(fieldName)));
+                    dbObject.put(fieldName, parseValue(null, fieldValue));
                 } else {
                     final String mappedName = (def.getMappedName() == null) ? def.getFieldName() : def.getMappedName();
                     if (eventHeaders.containsKey(fieldName)) {
-                        dbObject.put(mappedName, parseValue(def, eventHeaders.get(fieldName)));
+                        dbObject.put(mappedName, parseValue(def, fieldValue));
                     }
                 }
             }

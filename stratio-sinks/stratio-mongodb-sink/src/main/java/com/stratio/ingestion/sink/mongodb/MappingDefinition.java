@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
+import com.google.common.io.Closeables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -147,8 +148,8 @@ class MappingDefinition implements Serializable {
     }
 
     public static MappingDefinition load(final String path) {
+        InputStream mappingInputstream = null;
         try {
-            InputStream mappingInputstream;
             File mappingFile = new File(path);
             if (mappingFile.exists()) {
                 mappingInputstream = new FileInputStream(mappingFile);
@@ -163,6 +164,12 @@ class MappingDefinition implements Serializable {
             return new MappingDefinition(new ObjectMapper().readTree(mappingInputstream));
         } catch (IOException | IllegalArgumentException ex) {
             throw new MongoSinkException(ex);
+        } finally {
+            try {
+                Closeables.close(mappingInputstream, true);
+            } catch (IOException ex) {
+                // Ignore
+            }
         }
     }
 

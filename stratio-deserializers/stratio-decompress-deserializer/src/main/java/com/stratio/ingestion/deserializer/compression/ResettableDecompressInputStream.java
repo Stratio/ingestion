@@ -138,7 +138,10 @@ public class ResettableDecompressInputStream extends ResettableInputStream {
         position += toSkip;
         if (coderResult.isOverflow()) {
             bufferedInputStream.reset();
-            bufferedInputStream.skip(toSkip);
+            long skipped = 0;
+            while (skipped < toSkip) {
+                skipped += bufferedInputStream.skip(toSkip - skipped);
+            }
         }
         if (charBuffer.hasRemaining()) {
             return charBuffer.get();
