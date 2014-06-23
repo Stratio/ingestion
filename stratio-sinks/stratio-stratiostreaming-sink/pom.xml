@@ -31,10 +31,6 @@
 
 	<repositories>
 		<repository>
-			<id>stratio-snapshots</id>
-			<url>http://nexus.strat.io:8081/nexus/content/repositories/snapshots</url>
-		</repository>
-		<repository>
 			<id>scala-tools.org</id>
 			<name>Scala-tools Maven2 Repository</name>
 			<url>http://scala-tools.org/repo-releases</url>
