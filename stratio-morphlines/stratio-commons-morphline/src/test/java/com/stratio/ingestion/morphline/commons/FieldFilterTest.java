@@ -2,7 +2,6 @@ package com.stratio.ingestion.morphline.commons;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
 import org.apache.commons.io.IOUtils;
@@ -10,19 +9,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.kitesdk.morphline.api.Record;
-import org.kitesdk.morphline.base.Compiler;
-import org.kitesdk.morphline.base.Notifications;
 import org.kitesdk.morphline.api.Command;
 import org.kitesdk.morphline.api.MorphlineContext;
-
-import static org.fest.assertions.Assertions.*;
+import org.kitesdk.morphline.api.Record;
+import org.kitesdk.morphline.base.Compiler;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 @RunWith(JUnit4.class)
 public class FieldFilterTest {
@@ -159,7 +156,7 @@ public class FieldFilterTest {
         record = record(
                 "field1", "value1",
                 "field2", "value2",
-                "field3", "value2",
+                "field3", "value3",
                 "fieldRegex1Blah", "value",
                 "fieldRegex2Blah", "value"
         );
@@ -169,6 +166,89 @@ public class FieldFilterTest {
                 "field2", "value2",
                 "fieldRegex1Blah", "value",
                 "fieldRegex2Blah", "value"
+        ));
+    }
+
+    @Test
+    public void onlyExcludeRegex() throws IOException {
+        final MorphlineContext context =  new MorphlineContext.Builder().build();
+        Collector collectorParent = new Collector();
+        Collector collectorChild = new Collector();
+        final Command command = new FieldFilterBuilder().build(
+                parse("/onlyExcludeRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
+                collectorParent, collectorChild, context
+        );
+
+        Record record = record();
+        command.process(record);
+        assertThat(collectorChild.getFirstRecord()).isEqualTo(record());
+        collectorChild.reset();
+
+        record = record(
+                "field1", "value1",
+                "field2", "value2",
+                "field3", "value3"
+        );
+        command.process(record);
+        assertThat(collectorChild.getFirstRecord()).isEqualTo(record(
+                "field3", "value3"
+        ));
+
+        collectorChild.reset();
+
+        record = record(
+                "field1", "value1",
+                "field2", "value2",
+                "field3", "value3",
+                "fieldRegex1Blah", "value",
+                "fieldRegex2Blah", "value"
+        );
+        command.process(record);
+        assertThat(collectorChild.getFirstRecord()).isEqualTo(record(
+                "field3", "value3"
+        ));
+    }
+
+    @Test
+    public void includeAndExcludeRegex() throws IOException {
+        final MorphlineContext context =  new MorphlineContext.Builder().build();
+        Collector collectorParent = new Collector();
+        Collector collectorChild = new Collector();
+        final Command command = new FieldFilterBuilder().build(
+                parse("/includeAndExcludeRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
+                collectorParent, collectorChild, context
+        );
+
+        Record record = record();
+        command.process(record);
+        assertThat(collectorChild.getFirstRecord()).isEqualTo(record());
+        collectorChild.reset();
+
+        record = record(
+                "field1", "value1",
+                "field2", "value2",
+                "field3", "value3"
+        );
+        command.process(record);
+        assertThat(collectorChild.getFirstRecord()).isEqualTo(record(
+                "field1", "value1",
+                "field2", "value2"
+        ));
+
+        collectorChild.reset();
+
+        record = record(
+                "field1", "value1",
+                "field2", "value2",
+                "field3", "value3",
+                "fieldRegex1foo", "value",
+                "fieldRegex2bar", "value"
+        );
+        command.process(record);
+        assertThat(collectorChild.getFirstRecord()).isEqualTo(record(
+                "field1", "value1",
+                "field2", "value2",
+                "fieldRegex1foo", "value"
         ));
     }
 

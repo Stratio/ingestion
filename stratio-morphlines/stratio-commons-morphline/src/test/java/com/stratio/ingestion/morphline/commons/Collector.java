@@ -15,16 +15,15 @@
 */
 package com.stratio.ingestion.morphline.commons;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.common.base.Preconditions;
 import org.kitesdk.morphline.api.Command;
 import org.kitesdk.morphline.api.Record;
 import org.kitesdk.morphline.base.Notifications;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Collector implements Command {
 
