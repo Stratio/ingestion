@@ -75,6 +75,12 @@ public class TestElasticSearchSerializerWithMapping {
 		node = nodeBuilder().local(true).settings(ESSettings.build()).node();
 		client = node.client();	
 	}
+
+    @After
+    public void tearDownES() throws IOException {
+        client.close();
+        node.close();
+    }
 	
 	@Test
 	public void sameTimestampEventsShouldCreateOnlyOneIndexWithTheExpectedMapping() throws IOException {
