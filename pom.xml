@@ -50,6 +50,7 @@
 		<commons.lang3.version>3.3.2</commons.lang3.version>
         <commons.io.version>2.1</commons.io.version>
         <slf4j.version>1.7.7</slf4j.version>
+        <lucene.version>4.7.2</lucene.version>
         <kite.version>0.14.1</kite.version>
         <!--
             XXX: We need to use an old Guava. kite-morphlines (as of version 14) uses
