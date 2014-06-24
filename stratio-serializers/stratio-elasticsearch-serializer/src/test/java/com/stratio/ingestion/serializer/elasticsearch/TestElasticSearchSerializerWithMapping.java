@@ -18,10 +18,12 @@ package com.stratio.ingestion.serializer.elasticsearch;
 import static org.apache.flume.sink.elasticsearch.ElasticSearchEventSerializer.charset;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -59,7 +61,8 @@ public class TestElasticSearchSerializerWithMapping {
 	
 	@Before
 	public void setUpES() throws IOException {
-		String jsonMapping = IOUtils.toString(this.getClass()
+        FileUtils.deleteDirectory(new File("data/test"));
+        String jsonMapping = IOUtils.toString(this.getClass()
                 .getResourceAsStream(MAPPING_PATH));
 		expectedESMapping = Strings.trimAllWhitespace("{\"" + INDEX_TYPE + "\":" + jsonMapping + "}");
 		
@@ -75,6 +78,15 @@ public class TestElasticSearchSerializerWithMapping {
 		node = nodeBuilder().local(true).settings(ESSettings.build()).node();
 		client = node.client();	
 	}
+
+    @After
+    public void tearDownES() throws IOException {
+        client.close();
+        node.stop();
+        node.close();
+        client = null;
+        node = null;
+    }
 	
 	@Test
 	public void sameTimestampEventsShouldCreateOnlyOneIndexWithTheExpectedMapping() throws IOException {
@@ -108,13 +120,7 @@ public class TestElasticSearchSerializerWithMapping {
 		Assert.assertTrue("The first index must exists and its mapping must be the same as the expected", mappingIndex1.equals(expectedESMapping));
 		Assert.assertTrue("The second index must exists and its mapping must be the same as the expected", mappingIndex2.equals(expectedESMapping));
 	}
-	
-	@After
-	public void tearDown() {
-		client.admin().indices().delete(new DeleteIndexRequest("_all")).actionGet();
-		node.close();
-	}
-	
+
 	private String getIndexName(String indexPrefix, long timestamp) {
 		return new StringBuilder(indexPrefix).append('-')
 				.append(ElasticSearchIndexRequestBuilderFactory.df

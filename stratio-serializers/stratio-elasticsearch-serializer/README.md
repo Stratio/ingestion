@@ -1,10 +1,10 @@
-Stratio Elasticsearch Serializer
-=======================
+Stratio ElasticSearch Serializer
+================================
 
 This serializer creates the index if it does not exist in ElasticSearch. The index is created with a mapping defined by the user.
 
-Sample mapping
-=================================
+Mapping example
+===============
 
 ```
 { 
@@ -22,5 +22,4 @@ Sample mapping
 	    }
 	}
 }
-
 ```  

@@ -21,7 +21,7 @@
 
 	<groupId>com.stratio.ingestion</groupId>
 	<artifactId>stratio-ingestion-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Stratio Ingestion</name>
@@ -38,9 +38,10 @@
 
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 
 		<flume.version>1.5.0.1</flume.version>
-		<streaming.api.version>0.2.0</streaming.api.version>
+		<streaming.api.version>0.3.0</streaming.api.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<jackson.databind.version>2.3.1</jackson.databind.version>
@@ -191,7 +192,15 @@
 				<plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
 					<version>2.4</version>
-				</plugin>				
+				</plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>2.5.4</version>
+                    <configuration>
+                        <effort>Max</effort>
+                    </configuration>
+                </plugin>
 			</plugins>
 		</pluginManagement>
         <plugins>
@@ -202,10 +211,14 @@
                 <configuration>
                     <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
                     <properties>
-                        <owner>${organization.name}</owner>
-                        <email>${organization.url}</email>
+                        <owner>${project.organization.name}</owner>
+                        <email>${project.organization.url}</email>
                         <failOnMissingHeader>true</failOnMissingHeader>
                     </properties>
+                    <includes>
+                        <include>**/src/**</include>
+                        <include>**/*.xml</include>
+                    </includes>
                     <excludes>
                         <exclude>**/README</exclude>
                         <exclude>**/src/test/resources/**</exclude>
@@ -213,6 +226,7 @@
                         <!-- The following files were written by other authors -->
                         <exclude>stratio-morphlines/stratio-commons-morphline/src/test/java/**/Collector.java</exclude>
                         <exclude>**/src/test/java/**/TransientPositionTracker.java</exclude>
+                        <exclude>**/src/main/java/cue/lang/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -223,6 +237,15 @@
                         <phase>process-resources</phase>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <!-- Optional directory to put findbugs xdoc xml report -->
+                    <xmlOutputDirectory>target/site</xmlOutputDirectory>
+                </configuration>
             </plugin>
         </plugins>
 	</build>

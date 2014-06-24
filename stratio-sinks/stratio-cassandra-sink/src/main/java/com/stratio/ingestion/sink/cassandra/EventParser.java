@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import com.google.common.base.Charsets;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.flume.Event;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -73,7 +74,7 @@ class EventParser {
 			if (event.getHeaders().containsKey(def.getColumnName())) {
 				fields.add(parseField(event.getHeaders().get(def.getColumnName()), def));
 			} else if (def.getColumnName().equals(BODY_COLUMN)) {
-				fields.add(parseField(new String(event.getBody()), def));
+				fields.add(parseField(new String(event.getBody(), Charsets.UTF_8), def));
 			}
 		}
 
@@ -199,14 +200,14 @@ class EventParser {
 		} else if (type.equals(DataType.Name.BIGINT)) {
 			return Long.parseLong(rawValue.replaceAll("\\s+", ""));
 		} else if (type.equals(DataType.Name.BOOLEAN)) {
-			return new Boolean(Boolean.parseBoolean(rawValue));
+			return Boolean.valueOf(rawValue);
 		} else if (type.equals(DataType.Name.TIMESTAMP)) {
 			return parseDate(rawValue, dateFormat);
 		} else if (type.equals(DataType.Name.DOUBLE)) {
-			return new Double(Double.parseDouble(rawValue
-					.replaceAll("\\s+", "")));
+			return Double.valueOf(rawValue
+                    .replaceAll("\\s+", ""));
 		} else if (type.equals(DataType.Name.FLOAT)) {
-			return new Float(Float.parseFloat(rawValue.replaceAll("\\s+", "")));
+			return Float.valueOf(rawValue.replaceAll("\\s+", ""));
 		} else if (type.equals(DataType.Name.INET)) {
 			return parseInetSocketAddress(rawValue);
 		} else if (type.equals(DataType.Name.INT)) {

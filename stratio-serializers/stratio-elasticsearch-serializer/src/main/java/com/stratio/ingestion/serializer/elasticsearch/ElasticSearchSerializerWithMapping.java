@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.Map;
 
+import com.google.common.base.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flume.Context;
@@ -189,9 +190,9 @@ public class ElasticSearchSerializerWithMapping implements
 			builder.field("@timestamp", new Date(timestampMs));
 		}
 
-		for (String key : headers.keySet()) {
-			byte[] val = headers.get(key).getBytes(Charset.defaultCharset());
-			ContentBuilderUtil.appendField(builder, key, val);
+		for (Map.Entry<String,String> entry: headers.entrySet()) {
+			byte[] val = entry.getValue().getBytes(Charsets.UTF_8);
+			ContentBuilderUtil.appendField(builder, entry.getKey(), val);
 		}
 	}
 
@@ -219,9 +220,9 @@ final class TimestampedEvent extends SimpleEvent {
 		}
 		if (StringUtils.isBlank(timestampString)) {
 			this.timestamp = DateTimeUtils.currentTimeMillis();
-			headers.put("timestamp", String.valueOf(timestamp));
+			headers.put("timestamp", Long.toString(timestamp));
 		} else {
-			this.timestamp = Long.valueOf(timestampString);
+			this.timestamp = Long.parseLong(timestampString);
 		}
 		setHeaders(headers);
 	}
