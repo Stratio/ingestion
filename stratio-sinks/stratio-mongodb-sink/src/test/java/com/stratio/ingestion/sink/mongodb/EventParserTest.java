@@ -15,25 +15,25 @@
  */
 package com.stratio.ingestion.sink.mongodb;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSONParseException;
-import org.apache.commons.io.IOUtils;
 import org.apache.flume.event.EventBuilder;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.fest.assertions.Assertions.*;
+import static org.fest.assertions.Assertions.assertThat;
 
 @RunWith(JUnit4.class)
 public class EventParserTest {
@@ -52,8 +52,9 @@ public class EventParserTest {
         assertThat(eventParser.parseValue(definition(MongoDataType.INT64), "64")).isEqualTo(64L);
         assertThat(eventParser.parseValue(definition(MongoDataType.DOUBLE), "1.0")).isEqualTo(1.0);
         assertThat(eventParser.parseValue(definition(MongoDataType.BOOLEAN), "true")).isEqualTo(true);
-        final Date now = new Date();
-        assertThat(eventParser.parseValue(definition(MongoDataType.DATE), Long.toString(now.getTime()))).isEqualTo(now);
+        final DateTime now = DateTime.now().toDateTime(DateTimeZone.UTC);
+        assertThat(eventParser.parseValue(definition(MongoDataType.DATE), Long.toString(now.getMillis()))).isEqualTo(now.toDate());
+        assertThat((eventParser.parseValue(definition(MongoDataType.DATE), ISODateTimeFormat.dateTime().print(now)))).isEqualTo(now.toDate());
         assertThat(eventParser.parseValue(definition(MongoDataType.NULL), "full")).isNull();
         assertThat(eventParser.parseValue(definition(MongoDataType.OBJECTID), "507c7f79bcf86cd7994f6c0e")).isEqualTo(new ObjectId("507c7f79bcf86cd7994f6c0e"));
 

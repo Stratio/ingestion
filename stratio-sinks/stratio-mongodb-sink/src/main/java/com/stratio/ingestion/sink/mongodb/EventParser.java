@@ -21,8 +21,10 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 import com.mongodb.util.JSONParseException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Event;
 import org.bson.types.ObjectId;
+import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +84,11 @@ class EventParser {
             case DATE:
                 DateFormat dateFormat = fd.getDateFormat();
                 if (dateFormat == null) {
-                    return new Date(Long.parseLong(stringValue));
+                    if (StringUtils.isNumeric(stringValue)) {
+                        return new Date(Long.parseLong(stringValue));
+                    } else {
+                        return ISODateTimeFormat.dateOptionalTimeParser().parseDateTime(stringValue).toDate();
+                    }
                 } else {
                     try {
                         return dateFormat.parse(stringValue);
