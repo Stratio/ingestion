@@ -21,7 +21,7 @@ Sample Flume config
 
 The following file describes an example configuration of a flume agent that request metrics from flume web server and log them using a memory channel.
 
-
+```
 # Name the components on this agent
 agent.sources = requestMetrics
 agent.sinks = logSink
@@ -44,7 +44,7 @@ agent.channels.c1.type = memory
 # Bind the source and sink to the channel
 agent.sources.requestMetrics.channels = c1
 agent.sinks.logSink.channel = c1
-
+```
 
 Building Stratio REST Source
 -------------------------------
