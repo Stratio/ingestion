@@ -59,10 +59,11 @@
 	</properties>
 
 	<modules>
+		<module>stratio-sources</module>
 		<module>stratio-sinks</module>
 		<module>stratio-morphlines</module>
 		<module>stratio-serializers</module>
-        <module>stratio-deserializers</module>
+	        <module>stratio-deserializers</module>
 		<module>stratio-ingestion-all</module>
     </modules>
 
