@@ -70,7 +70,6 @@ public class StratioStreamingSink
 
     public void configure(Context context) {
         try {
-
             this.dynamicStreamCreationEnabled = checkDynamicStreamCreationEnabled(context);
             ensureRequiredFieldsNonNull(context);
             ensureOptionalFieldsDefinedProperly(context);
@@ -119,7 +118,7 @@ public class StratioStreamingSink
 
     private boolean checkDynamicStreamCreationEnabled(Context context) {
         return context.getParameters().containsKey(DYNAMIC)
-                && context.getParameters().get(DYNAMIC) == "true";
+                && context.getParameters().get(DYNAMIC).equals("true");
     }
 
     private boolean dynamicStreamNameIsDefined(Context context) {
