@@ -164,6 +164,10 @@ public class ElasticSearchSerializerWithMapping implements
 		BytesStream contentBuilder = getContentBuilder(event);
 		indexRequest.setIndex(indexName).setType(indexType)
 				.setSource(contentBuilder.bytes());
+        final String _id = event.getHeaders().get("_id");
+        if (_id != null) {
+            indexRequest.setId(_id);
+        }
 	}
 
 	private BytesStream getContentBuilder(Event event) throws IOException {
