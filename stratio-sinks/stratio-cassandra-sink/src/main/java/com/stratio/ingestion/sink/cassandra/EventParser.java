@@ -33,8 +33,10 @@ import java.util.UUID;
 
 import com.google.common.base.Charsets;
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Event;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.format.ISODateTimeFormat;
 
 import com.datastax.driver.core.DataType;
 
@@ -140,6 +142,13 @@ class EventParser {
 	}
 
 	final static Date parseDate(String rawValue, String dateFormat) {
+        if (dateFormat == null) {
+            if (StringUtils.isNumeric(rawValue)) {
+                return new Date(Long.parseLong(rawValue));
+            } else {
+                return ISODateTimeFormat.dateOptionalTimeParser().parseDateTime(rawValue).toDate();
+            }
+        }
 		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 		try {
 			return sdf.parse(rawValue);

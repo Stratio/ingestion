@@ -46,7 +46,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
     private static final int DEFAULT_BATCH_SIZE = 100;
     private static final String DEFAULT_CONSISTENCY_LEVEL = "QUORUM";
 	
-	private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
+	private static final String DEFAULT_DATE_FORMAT = null;
 	private static final String DEFAULT_ITEM_SEPARATOR = ",";
 	private static final String DEFAULT_MAP_VALUE_SEPARATOR = ";";
 	private static final String DEFAULT_MAP_KEY_TYPE = "TEXT";
