@@ -30,6 +30,7 @@
 
 	<modules>
 		<module>stratio-rest-source</module>
+		<module>stratio-flumestats-source</module>
 	</modules>
 
 </project>
