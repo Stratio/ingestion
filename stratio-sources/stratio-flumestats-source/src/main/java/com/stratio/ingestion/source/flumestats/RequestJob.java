@@ -50,6 +50,7 @@ public class RequestJob implements Job {
     private LinkedBlockingQueue<Event> queue;
     private Client client;
     private String url;
+    private ObjectMapper mapper = new ObjectMapper();
 
     /**
      * {@inheritDoc}
@@ -101,26 +102,26 @@ public class RequestJob implements Job {
     @SuppressWarnings("unchecked")
     public List<Event> processStatsResponse(Response response) throws JsonParseException,
             JsonMappingException, IOException {
+       
         String responseString = response.readEntity(String.class);
-        ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(responseString, Map.class);
         List<Event> list = new ArrayList<Event>();
 
         for (Entry<String, Object> entry : map.entrySet()) {
-            
+
             Map<String, String> headers = new HashMap<String, String>();
             String key = entry.getKey();
             String name = key.substring(key.indexOf(".") + 1, key.length());
-            headers.put("name", name);
+            headers.put("Name", name);
 
-            for (Entry<String, Object> componentInfo : ((Map<String, Object>) entry.getValue()).entrySet()) {
+            for (Entry<String, Object> componentInfo : ((Map<String, Object>) entry.getValue())
+                    .entrySet()) {
                 headers.put(componentInfo.getKey(), componentInfo.getValue().toString());
             }
-            
+
             Event event = new JSONEvent();
             event.setHeaders(headers);
             event.setBody("".getBytes());
-
             list.add(event);
         }
 
