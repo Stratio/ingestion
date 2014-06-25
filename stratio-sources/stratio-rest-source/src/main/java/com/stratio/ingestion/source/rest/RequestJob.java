@@ -15,10 +15,12 @@
  */
 package com.stratio.ingestion.source.rest;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -26,6 +28,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -46,11 +51,14 @@ public class RequestJob implements Job {
     public static final String APPLICATION_TYPE = "applicationType";
     public static final String METHOD = "method";
     public static final String URL = "url";
-    public static final String BODY_FIELD = "bodyField";
+    public static final String HEADERS = "headers";
+    public static final String BODY = "body";
 
     private Map<String, Object> properties;
+    private Map<String, Object> headers;
     private LinkedBlockingQueue<Event> queue;
     private Client client;
+    private MediaType mediaType;
 
     /**
      * {@inheritDoc}
@@ -66,11 +74,13 @@ public class RequestJob implements Job {
 
             WebTarget target = client.target((String) properties.get(URL));
             Builder request = setApplicationType(target, (String) properties.get(APPLICATION_TYPE));
+            request = addHeaders(request, (String) properties.get(HEADERS));
 
             Response response = null;
             switch ((String) properties.get(METHOD)) {
                 case "POST":
-                    // TODO POST Request.
+                    response = request.post(Entity.entity(
+                            (String) properties.get(APPLICATION_TYPE), mediaType));
                     break;
                 case "GET":
                     response = request.get();
@@ -97,6 +107,7 @@ public class RequestJob implements Job {
         queue = (LinkedBlockingQueue<Event>) context.get("queue");
         properties = (Map<String, Object>) context.get("properties");
         client = (Client) context.get("client");
+
     }
 
     /**
@@ -111,14 +122,41 @@ public class RequestJob implements Job {
         Builder builder = null;
         switch (applicationType) {
             case "TEXT":
-                builder = targetURL.request(MediaType.TEXT_PLAIN_TYPE);
+                mediaType = MediaType.TEXT_PLAIN_TYPE;
                 break;
-            default:
-                builder = targetURL.request(MediaType.APPLICATION_JSON_TYPE);
+            default: // Json
+                mediaType = MediaType.APPLICATION_JSON_TYPE;
                 break;
         }
+        builder = targetURL.request(mediaType);
 
         return builder;
+    }
+
+    /**
+     * Map raw Json to an object and add each key-value to a headers request.
+     * 
+     * @param request Current REST request.
+     * @param jsonHeaders raw json.
+     * @return
+     */
+    private Builder addHeaders(Builder request, String jsonHeaders) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Map<String, Object> headers = mapper.readValue(jsonHeaders, Map.class);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (Map.Entry<String, Object> entry : headers.entrySet()) {
+            request.header(entry.getKey(), entry.getKey());
+        }
+
+        return request;
     }
 
 }

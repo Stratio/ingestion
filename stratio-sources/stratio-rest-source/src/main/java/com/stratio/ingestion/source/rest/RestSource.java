@@ -47,15 +47,15 @@ import org.slf4j.LoggerFactory;
  * 
  * <p>
  * <ul>
- * 
  * <li><tt>url</tt> <em>(string, required)</em>: target URI.</li>
  * <li><tt>frequency</tt> <em>(integer)</em>: Frequency, in seconds, to make the request. Default:
  * 10 seconds.</li>
  * <li><tt>method</tt> <em>(string)</em>: Method type. Possible values: GET, POST. Default: GET.</li>
  * <li><tt>applicationType</tt> <em>(string)</em>: Application Type. Possible values: JSON, TEXT.
  * Default: JSON.</li>
- * <li><tt>bodyField</tt> <em>(string)</em>: Field to include in body. Useful for POST request.
- * Default: none.</li>
+ * <li><tt>headers</tt> <em>(string)</em>: Headers json. e.g.: { Accept-Charset: utf-8, Date: Tue,
+ * 15 Nov 1994 08:12:31 GMT} Default: "".</li>
+ * <li><tt>body</tt> <em>(string)</em>: Body for post request. Default: "".</li>
  * </ul>
  * </p>
  * 
@@ -69,12 +69,15 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     private static final String DEFAULT_JOBNAME = "Quartz Job";
     private static final String DEFAULT_METHOD = "GET";
     private static final String DEFAULT_APPLICATION_TYPE = "JSON";
+    private static final String DEFAULT_HEADERS = "";
+    private static final String DEFAULT_BODY = "";
 
     private static final String CONF_FREQUENCY = "frequency";
     private static final String CONF_URL = "url";
     private static final String CONF_METHOD = "method";
-    private static final String CONF_BODY_FIELD = "bodyField";
     private static final String CONF_APPLICATION_TYPE = "applicationType";
+    private static final String CONF_HEADERS = "headers";
+    private static final String CONF_BODY = "body";
 
     private LinkedBlockingQueue<Event> queue = new LinkedBlockingQueue<Event>(QUEUE_SIZE);
     private int frequency;
@@ -92,9 +95,10 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
 
         properties.put(CONF_URL, context.getString(CONF_URL));
         properties.put(CONF_METHOD, context.getString(CONF_METHOD, DEFAULT_METHOD).toUpperCase());
-        properties.put(CONF_BODY_FIELD, context.getString(CONF_BODY_FIELD));
         properties.put(CONF_APPLICATION_TYPE,
                 context.getString(CONF_APPLICATION_TYPE, DEFAULT_APPLICATION_TYPE).toUpperCase());
+        properties.put(CONF_HEADERS, context.getString(CONF_HEADERS, DEFAULT_HEADERS));
+        properties.put(CONF_BODY, context.getString(CONF_BODY, DEFAULT_BODY));
 
         if (queue != null) {
             log.error("QUEUE ISNOT NULL");
