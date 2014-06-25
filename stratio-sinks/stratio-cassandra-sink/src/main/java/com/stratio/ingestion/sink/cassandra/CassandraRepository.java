@@ -124,7 +124,7 @@ class CassandraRepository {
 				batch.add(buildInsert);
 			}
 			batch.setConsistencyLevel(ConsistencyLevel.valueOf(this.consistencyLevel));
-			this.session.executeAsync(batch);
+			this.session.execute(batch);
 		} catch (Exception e) {
 			throw new CassandraSinkException(e);
 		}
