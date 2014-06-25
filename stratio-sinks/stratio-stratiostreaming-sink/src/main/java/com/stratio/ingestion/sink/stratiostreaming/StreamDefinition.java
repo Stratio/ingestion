@@ -33,16 +33,7 @@ package com.stratio.ingestion.sink.stratiostreaming;
 import java.util.List;
 
 public class StreamDefinition {
-    private String streamName;
     private List<StreamField> fields;
-    
-    public String getStreamName() {
-       return streamName;
-    }
-    
-    public void setStreamName(String streamName) {
-       this.streamName = streamName;
-    }
     
     public List<StreamField> getFields() {
        return fields;

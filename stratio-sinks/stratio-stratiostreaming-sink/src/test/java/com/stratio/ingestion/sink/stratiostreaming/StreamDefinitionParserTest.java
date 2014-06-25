@@ -49,7 +49,6 @@ public class StreamDefinitionParserTest {
                                 .getResourceAsStream("/definition.json")));
      StreamDefinition streamDefinition = parser.parse();
      List<StreamField> listOfStreamFields = streamDefinition.getFields();
-     assertEquals(streamDefinition.getStreamName(),"testStream");
      assertEquals(listOfStreamFields.size(), 2);
      assertEquals(listOfStreamFields.get(0).getName(), "field1");
      assertEquals(listOfStreamFields.get(0).getType(), "string");
@@ -63,7 +62,6 @@ public class StreamDefinitionParserTest {
                 .getResourceAsStream("/definition.json")));
         StreamDefinition streamDefinition = parser.parse();
         List<StreamField> listOfStreamFields = streamDefinition.getFields();
-        assertEquals(streamDefinition.getStreamName(),"testStream");
         assertEquals(listOfStreamFields.size(), 2);
         assertEquals(listOfStreamFields.get(0).getName(), "field1");
         assertEquals(listOfStreamFields.get(0).getType(), "string");

@@ -26,6 +26,7 @@ import org.apache.flume.*;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
+import org.apache.flume.conf.Configurables;
 
 
 import java.io.File;
@@ -36,14 +37,20 @@ public class StratioStreamingSink
         extends AbstractSink
         implements Configurable {
 
-    private static final int DEFAULT_BATCH_SIZE = 20;
-    private static final String CONF_BATCH_SIZE = "batchSize";
+    //Required fields
     private static final String ZOOKEEPER_HOST = "zookeeperHost";
     private static final String ZOOKEEPER_PORT = "zookeeperPort";
     private static final String KAFKA_HOST = "kafkaHost";
     private static final String KAFKA_PORT = "kafkaPort";
     private static final String STREAM_DEFINITION_FILE = "streamDefinitionFile";
 
+    //Optional fields
+    private static final String CONF_BATCH_SIZE = "batchSize";
+    private static final String STREAM_NAME = "streamName";
+    private static final String DYNAMIC = "dynamic";
+    private static final String DYNAMIC_STREAM = "dynamicStreamHeader";
+
+    private static final int DEFAULT_BATCH_SIZE = 20;
     private SinkCounter sinkCounter;
     private int batchsize;
     private IStratioStreamingAPI stratioStreamingAPI;
@@ -51,8 +58,11 @@ public class StratioStreamingSink
     private Integer zookeeperPort;
     private String kafkaHost;
     private Integer kafkaPort;
+    private String dynamicStreamHeader;
     private String streamName;
     private List<StreamField> streamFields;
+    private HashSet<String> streamsCreated = new HashSet<String>();
+    private boolean dynamicStreamCreationEnabled = false;
 
     public StratioStreamingSink() {
         super();
@@ -60,8 +70,12 @@ public class StratioStreamingSink
 
     public void configure(Context context) {
         try {
-            this.batchsize = context.getInteger(CONF_BATCH_SIZE, DEFAULT_BATCH_SIZE);
+
+            this.dynamicStreamCreationEnabled = checkDynamicStreamCreationEnabled(context);
+            ensureRequiredFieldsNonNull(context);
+            ensureOptionalFieldsDefinedProperly(context);
             this.sinkCounter = new SinkCounter(this.getName());
+            this.batchsize = context.getInteger(CONF_BATCH_SIZE, DEFAULT_BATCH_SIZE);
             this.zookeeperHost = context.getString(ZOOKEEPER_HOST);
             this.zookeeperPort = context.getInteger(ZOOKEEPER_PORT);
             this.kafkaHost = context.getString(KAFKA_HOST);
@@ -69,7 +83,6 @@ public class StratioStreamingSink
             String columnDefinitionFile = context.getString(STREAM_DEFINITION_FILE);
             StreamDefinitionParser parser = new StreamDefinitionParser(readJsonFromFile(new File(columnDefinitionFile)));
             StreamDefinition theStreamDefinition = parser.parse();
-            this.streamName = theStreamDefinition.getStreamName();
             this.streamFields = theStreamDefinition.getFields();
             this.stratioStreamingAPI = StratioStreamingAPIFactory.
                     create().
@@ -77,16 +90,45 @@ public class StratioStreamingSink
                             kafkaPort,
                             zookeeperHost,
                             zookeeperPort);
-            createStream();
+            if (!dynamicStreamCreationEnabled) {
+                this.streamName = context.getString(STREAM_NAME);
+                createStream(this.streamName);
+            } else {
+                this.dynamicStreamHeader = context.getString(DYNAMIC_STREAM);
+            }
         } catch (Exception e) {
             throw new StratioStreamingSinkException(e);
         }
     }
 
 
-    private void createStream() {
+    private void ensureRequiredFieldsNonNull(Context context) {
+        Configurables.ensureRequiredNonNull(context, ZOOKEEPER_HOST);
+        Configurables.ensureRequiredNonNull(context, ZOOKEEPER_PORT);
+        Configurables.ensureRequiredNonNull(context, KAFKA_HOST);
+        Configurables.ensureRequiredNonNull(context, KAFKA_PORT);
+        Configurables.ensureRequiredNonNull(context, STREAM_DEFINITION_FILE);
+    }
+
+    private void ensureOptionalFieldsDefinedProperly(Context context) {
+        if (dynamicStreamCreationEnabled)
+            if (!dynamicStreamNameIsDefined(context))
+                throw new IllegalArgumentException("Required parameter " + DYNAMIC_STREAM
+                        + " must exist and may not be null");
+    }
+
+    private boolean checkDynamicStreamCreationEnabled(Context context) {
+        return context.getParameters().containsKey(DYNAMIC)
+                && context.getParameters().get(DYNAMIC) == "true";
+    }
+
+    private boolean dynamicStreamNameIsDefined(Context context) {
+        return context.getParameters().containsKey(DYNAMIC_STREAM)
+                && context.getParameters().get(DYNAMIC_STREAM) != null;
+    }
+
+    private void createStream(String streamName) {
         try {
-            String streamName = this.streamName;
             List<ColumnNameType> columnList = new ArrayList<ColumnNameType>();
             for (StreamField streamField: this.streamFields) {
                 ColumnNameType streamColumn = new ColumnNameType(streamField.getName(), parseStreamField(streamField.getType()));
@@ -112,8 +154,17 @@ public class StratioStreamingSink
                     this.sinkCounter.incrementBatchUnderflowCount();
                 }
                 for (Event event : eventList) {
+                    String theStreamName = this.streamName;
                     List<ColumnNameValue> columnNameValueList = getColumnNameValueListFromEvent(event);
-                    stratioStreamingAPI.insertData(this.streamName, columnNameValueList);
+                    if (dynamicStreamCreationEnabled) {
+                        Map<String, String> headers = event.getHeaders();
+                        theStreamName = headers.get(dynamicStreamHeader);
+                        if (!streamsCreated.contains(theStreamName)) {
+                            createStream(theStreamName);
+                            streamsCreated.add(theStreamName);
+                        }
+                    }
+                    stratioStreamingAPI.insertData(theStreamName, columnNameValueList);
                 }
                 this.sinkCounter.addToEventDrainSuccessCount(eventList.size());
             } else {
