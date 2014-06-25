@@ -1,9 +1,7 @@
 Stratio REST Source
 ==============================
 
-A Flume source using Stratio Streaming.
-
-The Stratio Request Metrics Source will 
+A Flume source that make a request to a REST service.
 
 Available config parameters:
 
