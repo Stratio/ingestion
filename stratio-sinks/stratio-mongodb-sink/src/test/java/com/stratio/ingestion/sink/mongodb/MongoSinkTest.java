@@ -190,7 +190,7 @@ public class MongoSinkTest {
     @Test(expected = MongoSinkException.class)
     public void errorOnProcess() throws Exception {
         DBCollection mockedCollection = Mockito.mock(DBCollection.class);
-        Mockito.when(mockedCollection.insert(Mockito.anyListOf(DBObject.class))).thenThrow(Error.class);
+        Mockito.when(mockedCollection.save(Mockito.any(DBObject.class))).thenThrow(Error.class);
         setField(mongoSink, "mongoDefaultCollection", mockedCollection);
         Transaction tx = channel.getTransaction();
         tx.begin();

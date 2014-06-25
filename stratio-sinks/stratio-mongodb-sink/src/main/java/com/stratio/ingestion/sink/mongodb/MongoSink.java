@@ -147,14 +147,9 @@ public class MongoSink extends AbstractSink implements Configurable {
                 } else {
                     this.sinkCounter.incrementBatchUnderflowCount();
                 }
-                if (!isDynamicMode) {
-                    final List<DBObject> documents = this.eventParser.parse(eventList);
-                    this.mongoDefaultCollection.insert(documents);
-                } else {
-                    for (Event event : eventList) {
-                        final DBObject document = this.eventParser.parse(event);
-                        getDBCollection(event).insert(document);
-                    }
+                for (Event event : eventList) {
+                    final DBObject document = this.eventParser.parse(event);
+                    getDBCollection(event).save(document);
                 }
                 this.sinkCounter.addToEventDrainSuccessCount(eventList.size());
             } else {
