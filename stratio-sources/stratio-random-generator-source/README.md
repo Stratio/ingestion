@@ -16,6 +16,7 @@ See following a generator definition file. The available generator fields are:
  * string
  * integer
  * list
+ * ip
  * date
 
 ```json
@@ -45,6 +46,7 @@ See following a generator definition file. The available generator fields are:
                          }
                      ]
         },
+        {"type" : "ip"},
         {"type" : "date",
                  "properties": [
                                  {
@@ -59,9 +61,9 @@ See following a generator definition file. The available generator fields are:
 
 Defining this configuration file the source will generate events with the following pattern:
 
-- value1 1234 abcde 01/Jul/1995:00:00:01 -0400
-- value2 5678 fghij 01/Jul/1995:00:00:02 -0400
-- value3 9087 lmhkd 01/Jul/1995:00:00:02 -0400
+- value1 1234 abcde 226.156.182.36 01/Jul/1995:00:00:01 -0400
+- value2 5678 fghij 150.91.107.34 01/Jul/1995:00:00:02 -0400
+- value3 9087 lmhkd 207.141.38.217 01/Jul/1995:00:00:02 -0400
 ......
 
 
