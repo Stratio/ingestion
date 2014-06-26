@@ -9,7 +9,7 @@ Configuration
 
 The available config parameters are:
 
-- cluster-name: The Cassandra's cluster name. (Default: TestCluster)
+- clusterName: The Cassandra's cluster name. (Default: TestCluster)
 
 - keyspace: The Keyspace name which allocates the table. (Default: keyspace_logs)
 
@@ -62,7 +62,7 @@ The following file describes an example configuration of an flume agent that use
 
     # Describe the sink
     agent.sinks.cassandraSink.keyspace=test
-    agent.sinks.cassandraSink.cluster-name=testCluster
+    agent.sinks.cassandraSink.clusterName=testCluster
     agent.sinks.cassandraSink.type=com.stratio.ingestion.sink.cassandra.CassandraSink
     agent.sinks.cassandraSink.table=tableTest
     agent.sinks.cassandraSink.separator=,
@@ -73,7 +73,8 @@ The following file describes an example configuration of an flume agent that use
     agent.channels.fileChannel.type = file
     agent.channels.fileChannel.checkpointDir = /home/user/flume/channel/check/
     agent.channels.fileChannel.dataDirs = /home/user/flume/channel/data/
-    agent.channels.fileChannel.transactionCapacity=10000 # Please, remember, this value must be greater than sink.batchSize value.
+    # Please, remember, this value must be greater than sink.batchSize value.
+    agent.channels.fileChannel.transactionCapacity=10000
 
     # Bind the source and sink to the channel
     agent.sources.spoolSource.channels = fileChannel
