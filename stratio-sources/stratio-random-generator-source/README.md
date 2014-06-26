@@ -110,3 +110,8 @@ Run example
 Copy .jar resuling from package and run agent on flume
 
 bin/flume-ng agent --conf conf --conf-file streaming-random.conf --name agent -Dflume.root.logger=INFO,console -Dflume.monitoring.type=http
+
+Possible improvements
+------
+* Atrribute to define the field separator
+* Specify list of values from file
