@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class FieldTypeToCassandraTypeJUnit4Test {
+public class FieldTypeToCassandraTypeTest {
 
 	private FieldDefinition definition;
 	
