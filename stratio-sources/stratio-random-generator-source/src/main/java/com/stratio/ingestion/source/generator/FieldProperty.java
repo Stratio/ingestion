@@ -15,25 +15,23 @@
  */
 package com.stratio.ingestion.source.generator;
 
-import java.util.List;
+public class FieldProperty {
+    private String propertyName;
+    private String propertyValue;
 
-public class GeneratorField {
-    private String type;
-    private List<FieldProperty> properties;
-
-    public List<FieldProperty> getProperties() {
-        return properties;
+    public String getPropertyName() {
+        return propertyName;
     }
 
-    public void setProperties(List<FieldProperty> properties) {
-        this.properties = properties;
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
     }
 
-    public String getType() {
-        return type;
+    public String getPropertyValue() {
+        return propertyValue;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setPropertyValue(String propertyValue) {
+        this.propertyValue = propertyValue;
     }
 }

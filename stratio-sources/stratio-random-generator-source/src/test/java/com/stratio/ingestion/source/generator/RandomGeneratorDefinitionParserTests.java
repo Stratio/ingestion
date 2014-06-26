@@ -31,23 +31,19 @@ public class RandomGeneratorDefinitionParserTests {
                 .getResourceAsStream("/generator.json")));
         GeneratorDefinition generatorDefinition = parser.parse();
         List<GeneratorField> listOfStreamFields = generatorDefinition.getFields();
-        assertEquals(listOfStreamFields.size(), 2);
-        assertEquals(listOfStreamFields.get(0).getName(), "field1");
-        assertEquals(listOfStreamFields.get(0).getType(), "string");
-        assertEquals(listOfStreamFields.get(1).getName(), "field2");
+        assertEquals(listOfStreamFields.size(), 3);
+        assertEquals(listOfStreamFields.get(0).getType(), "list");
+        List<FieldProperty> listOfFieldPropertiesField1 = listOfStreamFields.get(0).getProperties();
+        assertEquals(listOfFieldPropertiesField1.get(0).getPropertyName(), "values");
+        assertEquals(listOfFieldPropertiesField1.get(0).getPropertyValue(), "testStream1, testStream2");
         assertEquals(listOfStreamFields.get(1).getType(), "int");
+        List<FieldProperty> listOfFieldPropertiesField2 = listOfStreamFields.get(1).getProperties();
+        assertEquals(listOfFieldPropertiesField2.get(0).getPropertyName(), "length");
+        assertEquals(listOfFieldPropertiesField2.get(0).getPropertyValue(), "4");
+        assertEquals(listOfStreamFields.get(2).getType(), "string");
+        List<FieldProperty> listOfFieldPropertiesField3 = listOfStreamFields.get(2).getProperties();
+        assertEquals(listOfFieldPropertiesField3.get(0).getPropertyName(), "length");
+        assertEquals(listOfFieldPropertiesField3.get(0).getPropertyValue(), "5");
     }
 
-    @Test
-    public void testParseStreamType() throws Exception {
-        RandomGeneratorDefinitionParser parser = new RandomGeneratorDefinitionParser(IOUtils.toString(this.getClass()
-                .getResourceAsStream("/generator.json")));
-        GeneratorDefinition generatorDefinition = parser.parse();
-        List<GeneratorField> listOfStreamFields = generatorDefinition.getFields();
-        assertEquals(listOfStreamFields.size(), 2);
-        assertEquals(listOfStreamFields.get(0).getName(), "field1");
-        assertEquals(listOfStreamFields.get(0).getType(), "string");
-        assertEquals(listOfStreamFields.get(1).getName(), "field2");
-        assertEquals(listOfStreamFields.get(1).getType(), "int");
-    }
 }

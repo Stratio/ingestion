@@ -1,6 +1,28 @@
 {
     "fields": [
-        {"name" : "field1","type" : "string"},
-        {"name" : "field2","type" : "int"}
+        {"type" : "list",
+         "properties": [
+                         {
+                             "propertyName": "values",
+                             "propertyValue": "testStream1, testStream2"
+                         }
+                     ]
+         },
+        {"type" : "int",
+        "properties": [
+                        {
+                            "propertyName": "length",
+                            "propertyValue": "4"
+                        }
+                    ]
+        },
+        {"type" : "string",
+         "properties": [
+                         {
+                             "propertyName": "length",
+                             "propertyValue": "5"
+                         }
+                     ]
+        }
         ]
 }
