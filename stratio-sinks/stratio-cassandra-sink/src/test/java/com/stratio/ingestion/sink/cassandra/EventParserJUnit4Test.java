@@ -17,13 +17,14 @@ package com.stratio.ingestion.sink.cassandra;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Assert;
+import static org.fest.assertions.Assertions.*;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -43,9 +44,15 @@ public class EventParserJUnit4Test {
 
 	@Test
 	public void shouldParseDate() throws Exception {
-		Date date = EventParser.parseDate("01/02/2014 12:00:00",
-				"dd/MM/yyyy HH:mm:ss");
-		Assert.assertEquals(date, getDate());
+        DateTime now = DateTime.now();
+		assertThat(EventParser.parseDate(ISODateTimeFormat.dateTime().print(now), null))
+                .isEqualTo(now.toDate());
+        assertThat(EventParser.parseDate(ISODateTimeFormat.dateTimeNoMillis().print(now), null))
+                .isEqualTo(now.withMillisOfSecond(0).toDate());
+        assertThat(EventParser.parseDate(Long.toString(now.getMillis()), null))
+                .isEqualTo(now.toDate());
+        assertThat(EventParser.parseDate("10/12/2004 12:01:02", "dd/MM/yyyy HH:mm:ss"))
+                .isEqualTo(new DateTime(2004, 12, 10, 12, 1, 2, 0).toDate());
 	}
 
 	@Test
@@ -87,15 +94,4 @@ public class EventParserJUnit4Test {
 		Assert.assertEquals(expected.get(1), mapField.getValue().get(1));
 	}
 
-	private final static Date getDate() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, 2014);
-		calendar.set(Calendar.MONTH, 1);
-		calendar.set(Calendar.DAY_OF_MONTH, 1);
-		calendar.set(Calendar.HOUR_OF_DAY, 12);
-		calendar.set(Calendar.MINUTE, 00);
-		calendar.set(Calendar.SECOND, 00);
-		calendar.set(Calendar.MILLISECOND, 0);
-		return calendar.getTime();
-	}
 }
