@@ -16,6 +16,7 @@
 package com.stratio.ingestion.sink.cassandra;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,17 +33,23 @@ import org.apache.flume.conf.Configurables;
 import org.apache.flume.event.EventBuilder;
 import org.apache.thrift.transport.TTransportException;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Test;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Charsets;
 
-public class CassandraDataTypesTestNG {
+@RunWith(JUnit4.class)
+public class CassandraDataTypesIT {
+
+    private static final Logger log = LoggerFactory.getLogger(CassandraDataTypesIT.class);
 
 	private final static String KEYSPACE = "keyspaceTest";
 	private final static String TABLE = "tableTest";
@@ -65,51 +72,65 @@ public class CassandraDataTypesTestNG {
 	private final static String UUID_FIELD = "uuid_field";
 	private final static String BIGINT_FIELD = "bigint_field";
 
-	private Context context;
-
 	private MemoryChannel channel;
 	private CassandraSink sink;
 
 	private Map<String, String> headers;
 
 	@BeforeClass
-	public void beforeClass() throws ConfigurationException, TTransportException, IOException, InterruptedException {
+	public static void beforeClass() throws ConfigurationException, TTransportException, IOException, InterruptedException {
 		EmbeddedCassandraServerHelper.startEmbeddedCassandra();
-		context = new Context();
-		context.put("table", TABLE);
-		context.put("port", "9142");
-		context.put("host", "localhost");
-		context.put("keyspace", KEYSPACE);
-		context.put("cluster", "Test Cluster");
-		context.put("batchSize", "1");
-		URL resourceUrl = getClass().getResource("/definitionAllTypes.json");
-		context.put("definitionFile", resourceUrl.getPath());
-		context.put("consistency", "QUORUM");
-		
-		context.put(
-				"keyspaceStatement",
-				"CREATE KEYSPACE IF NOT EXISTS keyspaceTest WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };");
-		context.put("tableStatement",
-				"CREATE TABLE if not exists keyspaceTest.tableTest ("
-						+ PRIMARY_KEY + " uuid, " + TEXT_FIELD + " text, "
-						+ VARCHAR_FIELD + " varchar, " + VARINT_FIELD
-						+ " varint, " + ASCII_FIELD + " ascii, "
-						+ BOOLEAN_FIELD + " boolean, " + DECIMAL_FIELD
-						+ " decimal, " + DOUBLE_FIELD + " double, "
-						+ FLOAT_FIELD + " float, " + INET_FIELD + " inet, "
-						+ INT_FIELD + " int, " + LIST_FIELD + " list<TEXT>, "
-						+ MAP_FIELD + " map<TEXT,TEXT>, " + SET_FIELD
-						+ " set<TEXT>, " + TIMESTAMP_FIELD + " timestamp, "
-						+ UUID_FIELD + " uuid, " + BIGINT_FIELD
-						+ " bigint, PRIMARY KEY (" + PRIMARY_KEY + "));");
-		
-		sink = new CassandraSink();
-		sink.configure(context);
+        int retry = 10;
+        while (retry > 0) {
+            try {
+                Socket socket = new Socket("localhost", 9142);
+                socket.getChannel().close();
+                socket.close();
+                break;
+            } catch (Exception ex) {
+                log.warn("Could not connect to Cassandra, retrying in 5 seconds...");
+                retry--;
+            }
+        }
+        Socket socket = new Socket("localhost", 9142);
+        socket.getChannel().close();
+        socket.close();
 	}
 
-	@BeforeMethod
+	@Before
 	public void before() throws TTransportException, IOException,
 			InterruptedException, ConfigurationException {
+        final Context context = new Context();
+        context.put("table", TABLE);
+        context.put("port", "9142");
+        context.put("host", "localhost");
+        context.put("keyspace", KEYSPACE);
+        context.put("cluster", "Test Cluster");
+        context.put("batchSize", "1");
+        URL resourceUrl = getClass().getResource("/definitionAllTypes.json");
+        context.put("definitionFile", resourceUrl.getPath());
+        context.put("consistency", "QUORUM");
+
+        context.put(
+                "keyspaceStatement",
+                "CREATE KEYSPACE IF NOT EXISTS keyspaceTest WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };");
+        context.put("tableStatement",
+                "CREATE TABLE if not exists keyspaceTest.tableTest ("
+                        + PRIMARY_KEY + " uuid, " + TEXT_FIELD + " text, "
+                        + VARCHAR_FIELD + " varchar, " + VARINT_FIELD
+                        + " varint, " + ASCII_FIELD + " ascii, "
+                        + BOOLEAN_FIELD + " boolean, " + DECIMAL_FIELD
+                        + " decimal, " + DOUBLE_FIELD + " double, "
+                        + FLOAT_FIELD + " float, " + INET_FIELD + " inet, "
+                        + INT_FIELD + " int, " + LIST_FIELD + " list<TEXT>, "
+                        + MAP_FIELD + " map<TEXT,TEXT>, " + SET_FIELD
+                        + " set<TEXT>, " + TIMESTAMP_FIELD + " timestamp, "
+                        + UUID_FIELD + " uuid, " + BIGINT_FIELD
+                        + " bigint, PRIMARY KEY (" + PRIMARY_KEY + "));");
+
+        sink = new CassandraSink();
+        sink.configure(context);
+
 		Context channelContext = new Context();
 		channelContext.put("capacity", "10000");
 		channelContext.put("transactionCapacity", "200");
@@ -369,13 +390,13 @@ public class CassandraDataTypesTestNG {
 		Assert.assertEquals(status, Status.BACKOFF);
 	}
 
-	@AfterMethod
+	@After
 	public void tearDown() {
 		sink.stop();
 	}
 
 	@AfterClass
-	public void afterClass() throws InterruptedException {
+	public static void afterClass() throws InterruptedException {
 		EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
 		EmbeddedCassandraServerHelper.stopEmbeddedCassandra();
 	}

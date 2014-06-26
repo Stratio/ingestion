@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import com.datastax.driver.core.DataType;
 
-public class EventParserJUnit4Test {
+public class EventParserTest {
 
 	private EventParser instance;
 

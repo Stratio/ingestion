@@ -38,6 +38,12 @@
 			<groupId>org.apache.flume</groupId>
 			<artifactId>flume-ng-core</artifactId>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.datastax.cassandra</groupId>
@@ -67,10 +73,16 @@
 			<artifactId>mockito-all</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.2</version>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.cassandraunit</groupId>
 			<artifactId>cassandra-unit</artifactId>
-			<version>2.0.2.0</version>
+			<version>2.0.2.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -88,13 +100,6 @@
 			<version>0.9.1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8.8</version>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -102,31 +107,33 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
 				<executions>
 					<execution>
+                        <id>tests</id>
 						<phase>test</phase>
 						<goals>
 							<goal>test</goal>
 						</goals>
 						<configuration>
-							<testNGArtifactName>none:none</testNGArtifactName>
-							<reportsDirectory>${project.build.directory}/surefire-reports/junit-junit4-results</reportsDirectory>
-							<includes>
-								<include>**/*JUnit4Test.java</include>
-							</includes>
+                            <skip>false</skip>
+							<reportsDirectory>${project.build.directory}/surefire-reports/test-results</reportsDirectory>
+                            <includes>
+                                <include>**/*Test.java</include>
+                            </includes>
 						</configuration>
 					</execution>
 					<execution>
-						<id>test-ng</id>
-						<phase>test</phase>
+						<id>integration-tests</id>
+						<phase>integration-test</phase>
 						<goals>
 							<goal>test</goal>
 						</goals>
 						<configuration>
-							<junitArtifactName>none:none</junitArtifactName>
-							<reportsDirectory>${project.build.directory}/surefire-reports/testng-results</reportsDirectory>
+                            <skip>false</skip>
+							<reportsDirectory>${project.build.directory}/surefire-reports/integration-test-results</reportsDirectory>
 							<includes>
-								<include>**/*TestNG.java</include>
+								<include>**/*IT.java</include>
 							</includes>
 						</configuration>
 					</execution>
