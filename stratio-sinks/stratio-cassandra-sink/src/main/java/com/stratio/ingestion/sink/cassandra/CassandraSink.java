@@ -31,12 +31,16 @@ import org.apache.flume.Transaction;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.ColumnMetadata;
 import com.datastax.driver.core.TableMetadata;
 import com.google.common.base.Strings;
 
 public class CassandraSink extends AbstractSink implements Configurable {
+
+    private static final Logger log = LoggerFactory.getLogger(CassandraSink.class);
 
 	private static final String DEFAULT_TABLE = "table_logs";
     private static final String DEFAULT_KEYSPACE = "keyspace_logs";
@@ -159,12 +163,12 @@ public class CassandraSink extends AbstractSink implements Configurable {
             transaction.commit();
             status = Status.READY;
         } catch (ChannelException e) {
-            e.printStackTrace();
+            log.error("Exception during process, rolling back.", e);
             transaction.rollback();
             status = Status.BACKOFF;
             this.sinkCounter.incrementConnectionFailedCount();
         } catch (Throwable t) {
-            t.printStackTrace();
+            log.error("Exception during process, rolling back.", t);
             transaction.rollback();
             status = Status.BACKOFF;
             if (t instanceof Error) {
