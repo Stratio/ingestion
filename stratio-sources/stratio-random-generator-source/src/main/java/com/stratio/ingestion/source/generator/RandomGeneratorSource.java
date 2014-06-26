@@ -76,6 +76,7 @@ public class RandomGeneratorSource extends AbstractSource implements
         StringBuilder randomString = new StringBuilder();
         for (GeneratorField field: generatorFields) {
             randomString.append(RandomFieldsGenerator.generateRandomField(field));
+            randomString.append(" ");
         }
         return randomString.toString();
     }
