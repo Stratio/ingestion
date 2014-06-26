@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>com.stratio.ingestion</groupId>
 		<artifactId>stratio-morphlines</artifactId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.1.1</version>
 	</parent>
 	<artifactId>stratio-nlp-morphline</artifactId>
 	<packaging>jar</packaging>
