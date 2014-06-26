@@ -23,6 +23,7 @@ import org.apache.flume.CounterGroup;
 import org.apache.flume.EventDeliveryException;
 import org.apache.flume.PollableSource;
 import org.apache.flume.conf.Configurable;
+import org.apache.flume.conf.Configurables;
 import org.apache.flume.event.EventBuilder;
 import org.apache.flume.source.AbstractSource;
 import org.slf4j.Logger;
@@ -31,6 +32,8 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Random;
 
@@ -40,10 +43,13 @@ public class RandomGeneratorSource extends AbstractSource implements
     private static final Logger logger = LoggerFactory
             .getLogger(RandomGeneratorSource.class);
     private static final String STREAM_DEFINITION_FILE = "generatorDefinitionFile";
+    private static final String MAXIMUM_EVENTS_NUMBER = "maxEventsNumber";
 
-    private long sequence;
     private CounterGroup counterGroup;
     private List<GeneratorField> generatorFields;
+    private boolean maxEventsEnabled = false;
+    private int maxEvents = 0;
+    private int eventsCount = 1;
 
     public RandomGeneratorSource() {
         counterGroup = new CounterGroup();
@@ -51,7 +57,12 @@ public class RandomGeneratorSource extends AbstractSource implements
 
     @Override
     public void configure(Context context) {
+        ensureRequiredFieldsNonNull(context);
         String columnDefinitionFile = context.getString(STREAM_DEFINITION_FILE);
+        if (maximumNumberOfEventsEnabled(context)) {
+            maxEventsEnabled = true;
+            maxEvents = Integer.parseInt(context.getParameters().get(MAXIMUM_EVENTS_NUMBER));
+        }
         RandomGeneratorDefinitionParser parser = new RandomGeneratorDefinitionParser(readJsonFromFile(new File(columnDefinitionFile)));
         GeneratorDefinition theStreamDefinition = parser.parse();
         this.generatorFields = theStreamDefinition.getFields();
@@ -59,17 +70,27 @@ public class RandomGeneratorSource extends AbstractSource implements
 
     @Override
     public Status process() throws EventDeliveryException {
-
         try {
-            String randomStringEvent = createRandomStringEvent();
-            getChannelProcessor().processEvent(
-                    EventBuilder.withBody(String.valueOf(randomStringEvent).getBytes()));
-            counterGroup.incrementAndGet("events.successful");
+            if (maxEventsEnabled) {
+                if (eventsCount < maxEvents) {
+                    processEvent();
+                    eventsCount++;
+                }
+            } else {
+               processEvent();
+            }
+
         } catch (ChannelException ex) {
             counterGroup.incrementAndGet("events.failed");
         }
-
         return Status.READY;
+    }
+
+    private void processEvent() {
+        String randomStringEvent = createRandomStringEvent();
+        getChannelProcessor().processEvent(
+                EventBuilder.withBody(randomStringEvent.getBytes()));
+        counterGroup.incrementAndGet("events.successful");
     }
 
     private String createRandomStringEvent() {
@@ -109,4 +130,12 @@ public class RandomGeneratorSource extends AbstractSource implements
         }
     }
 
+    private void ensureRequiredFieldsNonNull(Context context) {
+        Configurables.ensureRequiredNonNull(context, STREAM_DEFINITION_FILE);
+    }
+
+    private boolean maximumNumberOfEventsEnabled(Context context) {
+        return context.getParameters().containsKey(MAXIMUM_EVENTS_NUMBER)
+                && context.getParameters().get(MAXIMUM_EVENTS_NUMBER) != null;
+    }
 }

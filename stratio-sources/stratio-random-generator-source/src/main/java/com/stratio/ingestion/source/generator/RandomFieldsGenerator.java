@@ -47,7 +47,7 @@ public class RandomFieldsGenerator {
    private static String generateRandomString(GeneratorField generatorField) throws ChannelException {
        try {
         int length = Integer.parseInt(getPropertyValue(generatorField.getProperties(), 0));
-        return RandomStringUtils.randomAscii(length);
+        return RandomStringUtils.randomAlphanumeric(length);
        } catch(NumberFormatException nFEx) {
            throw new ChannelException(nFEx.getMessage());
        }
