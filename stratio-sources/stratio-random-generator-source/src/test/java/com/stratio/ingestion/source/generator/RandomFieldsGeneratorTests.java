@@ -16,17 +16,18 @@
 package com.stratio.ingestion.source.generator;
 
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import org.apache.flume.ChannelException;
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class RandomFieldsGeneratorTests {
 
@@ -112,5 +113,27 @@ public class RandomFieldsGeneratorTests {
         ipField.setType("ip");
         String randomIpValue = RandomFieldsGenerator.generateRandomField(ipField);
         assertTrue(InetAddressValidator.getInstance().isValid(randomIpValue));
+    }
+
+    @Test
+    public void testShouldGenerateProperDates() throws Exception {
+        GeneratorField stringField = new GeneratorField();
+        String dateFormat = "dd/MMM/yyyy:hh:mm:ss Z";
+        stringField.setType("date");
+        List<FieldProperty> properties = new ArrayList<>();
+        FieldProperty lengthProperty = new FieldProperty();
+        lengthProperty.setPropertyName("dateFormat");
+        lengthProperty.setPropertyValue(dateFormat);
+        properties.add(lengthProperty);
+        stringField.setProperties(properties);
+        String randomDateGenerated = RandomFieldsGenerator.generateRandomField(stringField);
+        DateFormat df = new SimpleDateFormat(dateFormat);
+        boolean thrown = false;
+        try {
+            df.parse(randomDateGenerated);
+        } catch (ParseException e) {
+            thrown = true;
+        }
+        assertFalse(thrown);
     }
 }

@@ -18,6 +18,7 @@ package com.stratio.ingestion.source.generator;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.flume.ChannelException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -35,6 +36,8 @@ public class RandomFieldsGenerator {
            case "list" : randomString.append(generateRandomElementFromList(generatorField));
                break;
            case "ip" : randomString.append(generateRandomIp());
+               break;
+           case "date" : randomString.append(generateRandomDate(generatorField));
                break;
 
        }
@@ -83,5 +86,11 @@ public class RandomFieldsGenerator {
         } catch(NumberFormatException nFEx) {
             throw new ChannelException(nFEx.getMessage());
         }
+    }
+
+    public static String generateRandomDate(GeneratorField generatorField) throws ChannelException {
+        String dateFormat = getPropertyValue(generatorField.getProperties(), 0);
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(dateFormat);
+        return sdf.format(new Date());
     }
 }

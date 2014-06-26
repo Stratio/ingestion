@@ -23,6 +23,14 @@
                              "propertyValue": "5"
                          }
                      ]
-        }
+        },
+        {"type" : "date",
+                 "properties": [
+                                 {
+                                     "propertyName": "dateFormat",
+                                     "propertyValue": "dd/MMM/yyyy:hh:mm:ss Z"
+                                 }
+                             ]
+                }
         ]
 }
