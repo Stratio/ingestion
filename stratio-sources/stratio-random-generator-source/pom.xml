@@ -36,11 +36,6 @@
 	<packaging>jar</packaging>
 	<name>Stratio random generator source</name>
 	
-	<properties>
-		<quartz.version>2.2.1</quartz.version>
-		<jersey-client.version>2.9</jersey-client.version>
-	</properties>
-
 	<repositories>
 		<repository>
 			<id>stratio-snapshots</id>
@@ -71,5 +66,12 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.4.0</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 </project>

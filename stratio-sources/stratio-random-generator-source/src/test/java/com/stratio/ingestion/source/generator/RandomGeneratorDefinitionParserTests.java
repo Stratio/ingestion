@@ -36,7 +36,7 @@ public class RandomGeneratorDefinitionParserTests {
         List<FieldProperty> listOfFieldPropertiesField1 = listOfStreamFields.get(0).getProperties();
         assertEquals(listOfFieldPropertiesField1.get(0).getPropertyName(), "values");
         assertEquals(listOfFieldPropertiesField1.get(0).getPropertyValue(), "testStream1, testStream2");
-        assertEquals(listOfStreamFields.get(1).getType(), "int");
+        assertEquals(listOfStreamFields.get(1).getType(), "integer");
         List<FieldProperty> listOfFieldPropertiesField2 = listOfStreamFields.get(1).getProperties();
         assertEquals(listOfFieldPropertiesField2.get(0).getPropertyName(), "length");
         assertEquals(listOfFieldPropertiesField2.get(0).getPropertyValue(), "4");
