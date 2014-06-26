@@ -39,7 +39,7 @@ agent.sources.requestMetrics.interceptors.morphline.morphlineId = morphline1
 agent.sinks.esearch.type = org.apache.flume.sink.elasticsearch.ElasticSearchSink
 agent.sinks.esearch.indexName = metrics
 agent.sinks.esearch.hostNames = localhost
-agent.sinks.esearch.serializer = com.stratio.ingestion.deserializer.elasticsearch.ElasticSearchSerializerWithMapping
+agent.sinks.esearch.serializer = com.stratio.ingestion.serializer.elasticsearch.ElasticSearchSerializerWithMapping
 agent.sinks.esearch.serializer.mappingFile = mapping.json
 
 # Use a channel which buffers events in file
