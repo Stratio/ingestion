@@ -17,6 +17,9 @@ package com.stratio.ingestion.sink.cassandra;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ConsistencyLevel;
@@ -28,6 +31,8 @@ import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.google.common.base.Strings;
 
 class CassandraRepository {
+
+    private static final Logger log = LoggerFactory.getLogger(CassandraRepository.class);
 
 	private final String table;
 	private final String keyspace;
@@ -96,12 +101,15 @@ class CassandraRepository {
 	}
 	
 	private void createDefaultKeyspace() {
-		session.execute("CREATE KEYSPACE IF NOT EXISTS "
-				+ keyspace
-				+ " WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };");
+        final String query = String.format(
+                "CREATE KEYSPACE IF NOT EXISTS %s WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };",
+                keyspace);
+        log.debug("Create default table statement: {}", query);
+		session.execute(query);
 	}
 	
 	private void createDefaultTable() {
+
 		StringBuilder columnType = new StringBuilder();
         // Convert HashTable of columns to string
         for (FieldDefinition field : definition.getFields()) {
@@ -110,8 +118,9 @@ class CassandraRepository {
             columnType.append(field.getCassandraType());
             columnType.append(',');
         }
-        String query = String.format("CREATE TABLE IF NOT EXISTS %s.%s (%s PRIMARY KEY (%s));",
+        final String query = String.format("CREATE TABLE IF NOT EXISTS %s.%s (%s PRIMARY KEY (%s));",
                 keyspace, table, columnType.toString(), primaryKey);
+        log.debug("Create default table statement: {}", query);
         session.execute(query);
 	}
 
