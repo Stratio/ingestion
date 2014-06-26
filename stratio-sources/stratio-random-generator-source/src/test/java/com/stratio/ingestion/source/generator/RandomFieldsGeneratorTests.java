@@ -110,7 +110,7 @@ public class RandomFieldsGeneratorTests {
     public void testShouldReturnAValidIP() throws Exception {
         GeneratorField ipField = new GeneratorField();
         ipField.setType("ip");
-        String randomIpValue = RandomFieldsGenerator.generateRandomIp();
+        String randomIpValue = RandomFieldsGenerator.generateRandomField(ipField);
         assertTrue(InetAddressValidator.getInstance().isValid(randomIpValue));
     }
 }

@@ -34,6 +34,8 @@ public class RandomFieldsGenerator {
                break;
            case "list" : randomString.append(generateRandomElementFromList(generatorField));
                break;
+           case "ip" : randomString.append(generateRandomIp());
+               break;
 
        }
       return randomString.toString();

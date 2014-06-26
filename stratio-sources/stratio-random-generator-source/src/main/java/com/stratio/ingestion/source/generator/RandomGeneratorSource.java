@@ -75,28 +75,9 @@ public class RandomGeneratorSource extends AbstractSource implements
     private String createRandomStringEvent() {
         StringBuilder randomString = new StringBuilder();
         for (GeneratorField field: generatorFields) {
-            String fieldType = field.getType();
-            switch (fieldType) {
-                case "string" : randomString.append(RandomStringUtils.randomAscii(5));
-                    randomString.append(" ");
-                    break;
-                case "int" : randomString.append(RandomStringUtils.randomNumeric(1));
-                    randomString.append(" ");
-                    break;
-                case "ip" : randomString.append(randomIp());
-                    randomString.append(" ");
-                    break;
-                default: randomString.append(RandomStringUtils.randomAscii(5));
-                    randomString.append(" ");
-                    break;
-            }
+            randomString.append(RandomFieldsGenerator.generateRandomField(field));
         }
         return randomString.toString();
-    }
-
-    private String randomIp() {
-        Random r = new Random();
-        return r.nextInt(256) + "." + r.nextInt(256) + "." + r.nextInt(256) + "." + r.nextInt(256);
     }
 
     @Override
