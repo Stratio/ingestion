@@ -24,7 +24,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -104,6 +103,22 @@ public class RandomFieldsGeneratorTests {
         listField.setProperties(properties);
         String randomListValue = RandomFieldsGenerator.generateRandomField(listField);
         boolean streamGeneratedFromList = (randomListValue.equals("testStream1") || randomListValue.equals("testStream2") || randomListValue.equals("testStream3"));
+        assertTrue(streamGeneratedFromList);
+    }
+
+    @Test
+    public void testShouldReturnAListOfStringsFromAFile() throws Exception {
+        GeneratorField listField = new GeneratorField();
+        listField.setType("list");
+        List<FieldProperty> properties = new ArrayList<>();
+        FieldProperty lengthProperty = new FieldProperty();
+        lengthProperty.setPropertyName("fromPath");
+        lengthProperty.setPropertyValue("fileWithRandomWords.txt");
+        properties.add(lengthProperty);
+        listField.setProperties(properties);
+        String randomListValue = RandomFieldsGenerator.generateRandomField(listField);
+        System.out.println(randomListValue);
+        boolean streamGeneratedFromList = (randomListValue.equals("lorem") || randomListValue.equals("ipsum") || randomListValue.equals("dolor") || randomListValue.equals("sit"));
         assertTrue(streamGeneratedFromList);
     }
 

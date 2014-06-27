@@ -18,9 +18,11 @@ package com.stratio.ingestion.source.generator;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.flume.ChannelException;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 public class RandomFieldsGenerator {
    static Random rand = new Random();
@@ -68,14 +70,35 @@ public class RandomFieldsGenerator {
         return fieldProperty.getPropertyValue();
     }
 
+    private static String getPropertyName(List<FieldProperty> properties, int propertyIndex) {
+        FieldProperty fieldProperty = properties.get(propertyIndex);
+        return fieldProperty.getPropertyName();
+    }
+
     private static String generateRandomElementFromList(GeneratorField generatorField) throws ChannelException {
-        try {
+        if (getPropertyName(generatorField.getProperties(), 0).equals("values"))
+            return getRandomElementFromListOfValues(generatorField);
+        else
+            return getRandomElementFromFile(generatorField);
+    }
+
+    private static String getRandomElementFromListOfValues(GeneratorField generatorField) {
+    try {
             String stringValues = getPropertyValue(generatorField.getProperties(), 0);
             String[] availableStrings = stringValues.split(",");
             int selectedRandomValue= rand.nextInt(availableStrings.length);
             return availableStrings[selectedRandomValue].trim();
         } catch(NumberFormatException nFEx) {
             throw new ChannelException(nFEx.getMessage());
+        }
+    }
+
+    private static String getRandomElementFromFile(GeneratorField generatorField) {
+        try {
+            String filePath = getPropertyValue(generatorField.getProperties(), 0);
+            return FileLoader.getRandomElementFromFile(filePath);
+        } catch(Exception ex) {
+            throw new ChannelException(ex.getMessage());
         }
     }
 

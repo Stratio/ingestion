@@ -31,7 +31,7 @@ public class RandomGeneratorDefinitionParserTests {
                 .getResourceAsStream("/generator.json")));
         GeneratorDefinition generatorDefinition = parser.parse();
         List<GeneratorField> listOfStreamFields = generatorDefinition.getFields();
-        assertEquals(listOfStreamFields.size(), 3);
+        assertEquals(listOfStreamFields.size(), 4);
         assertEquals(listOfStreamFields.get(0).getType(), "list");
         List<FieldProperty> listOfFieldPropertiesField1 = listOfStreamFields.get(0).getProperties();
         assertEquals(listOfFieldPropertiesField1.get(0).getPropertyName(), "values");
