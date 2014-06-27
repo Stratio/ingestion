@@ -18,11 +18,9 @@ package com.stratio.ingestion.source.generator;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.flume.ChannelException;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 public class RandomFieldsGenerator {
    static Random rand = new Random();
