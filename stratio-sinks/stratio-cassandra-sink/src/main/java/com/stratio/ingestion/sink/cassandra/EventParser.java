@@ -70,7 +70,7 @@ class EventParser {
 	
 	@SuppressWarnings("rawtypes")
 	public CassandraRow parse(Event event) {
-		List<CassandraField> fields = new ArrayList<CassandraField>();
+		List<CassandraField<?>> fields = new ArrayList<>();
 		
 		for (FieldDefinition def : this.definition.getFields()) {
 			if (event.getHeaders().containsKey(def.getColumnName())) {
@@ -135,13 +135,7 @@ class EventParser {
 		return new CassandraField<Map>(definition.getColumnName(), map);
 	}
 
-	final static CassandraField<Date> parseDateField(String field,
-			String columnName, String dateFormat) {
-		return new CassandraField<Date>(columnName,
-				parseDate(field, dateFormat));
-	}
-
-	final static Date parseDate(String rawValue, String dateFormat) {
+	private static Date parseDate(String rawValue, String dateFormat) {
         if (dateFormat == null) {
             if (StringUtils.isNumeric(rawValue)) {
                 return new Date(Long.parseLong(rawValue));
@@ -157,7 +151,7 @@ class EventParser {
 		}
 	}
 
-	final static InetAddress parseInetSocketAddress(String field) {
+	private static InetAddress parseInetSocketAddress(String field) {
 		try {
 			return InetAddress.getByName(field);
 		} catch (UnknownHostException e) {
@@ -195,38 +189,50 @@ class EventParser {
 
 	final static Object parseValue(String rawValue, DataType.Name type,
 			String dateFormat) {
-		if (type.equals(DataType.Name.DECIMAL)) {
-			return BigDecimal.valueOf(Double.parseDouble(rawValue.replaceAll(
-					"\\s+", "")));
-		} else if (type.equals(DataType.Name.ASCII)) {
-			return rawValue;
-		} else if (type.equals(DataType.Name.VARCHAR)) {
-			return rawValue;
-		} else if (type.equals(DataType.Name.COUNTER)) {
-			return Long.parseLong(rawValue.replaceAll("\\s+", ""));
-		} else if (type.equals(DataType.Name.VARINT)) {
-			return new BigInteger(rawValue.replaceAll("\\s+", ""));
-		} else if (type.equals(DataType.Name.BIGINT)) {
-			return Long.parseLong(rawValue.replaceAll("\\s+", ""));
-		} else if (type.equals(DataType.Name.BOOLEAN)) {
-			return Boolean.valueOf(rawValue);
-		} else if (type.equals(DataType.Name.TIMESTAMP)) {
-			return parseDate(rawValue, dateFormat);
-		} else if (type.equals(DataType.Name.DOUBLE)) {
-			return Double.valueOf(rawValue
-                    .replaceAll("\\s+", ""));
-		} else if (type.equals(DataType.Name.FLOAT)) {
-			return Float.valueOf(rawValue.replaceAll("\\s+", ""));
-		} else if (type.equals(DataType.Name.INET)) {
-			return parseInetSocketAddress(rawValue);
-		} else if (type.equals(DataType.Name.INT)) {
-			return Integer.parseInt(rawValue.replaceAll("\\s+", ""));
-		} else if (type.equals(DataType.Name.TEXT)) {
-			return rawValue;
-		} else if (type.equals(DataType.Name.UUID)) {
-			return UUID.fromString(rawValue);
-		}
-		throw new CassandraSinkException("Class not found for type: "
-				+ type.toString());
+        switch (type) {
+            case COUNTER:
+            case VARINT:
+            case INT:
+            case BIGINT:
+            case DOUBLE:
+            case FLOAT:
+            case DECIMAL:
+                rawValue = rawValue.replaceAll("\\s+", "");
+                break;
+        }
+
+        switch (type) {
+            case ASCII: //FIXME: What about non-ASCII?
+            case TEXT:  //FIXME: This is expected to be UTF-8
+            case VARCHAR: //FIXME: This is expected to be UTF-8
+                return rawValue;
+            case TIMESTAMP:
+                return parseDate(rawValue, dateFormat);
+            case UUID:
+            case TIMEUUID:
+                return UUID.fromString(rawValue);
+            case COUNTER:
+                return Long.valueOf(rawValue);
+            case VARINT:
+                return new BigInteger(rawValue);
+            case INT:
+                return Integer.valueOf(rawValue);
+            case BIGINT:
+                return new BigInteger(rawValue);
+            case FLOAT:
+                return Float.valueOf(rawValue);
+            case DOUBLE:
+                return Double.valueOf(rawValue);
+            case DECIMAL:
+                return new BigDecimal(rawValue);
+            case BOOLEAN:
+                return Boolean.valueOf(rawValue);
+            case INET:
+                return parseInetSocketAddress(rawValue);
+            default:
+                throw new CassandraSinkException(
+                        "Cassandra type not supported: " + type.toString()
+                );
+        }
 	}
 }

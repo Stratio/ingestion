@@ -20,15 +20,15 @@ import java.util.List;
 class CassandraRow {
 
     @SuppressWarnings("rawtypes")
-    private final List<CassandraField> fields;
+    private final List<CassandraField<?>> fields;
 
     @SuppressWarnings("rawtypes")
-    public CassandraRow(List<CassandraField> fields) {
+    public CassandraRow(List<CassandraField<?>> fields) {
         this.fields = fields;
     }
 
     @SuppressWarnings("rawtypes")
-    public List<CassandraField> getFields() {
+    public List<CassandraField<?>> getFields() {
         return this.fields;
     }
 
