@@ -21,13 +21,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.Map;
 
 import com.google.common.base.Charsets;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.conf.ComponentConfiguration;
@@ -216,18 +215,20 @@ final class TimestampedEvent extends SimpleEvent {
 	private final long timestamp;
 
 	TimestampedEvent(Event base) {
+        super();
 		setBody(base.getBody());
 		Map<String, String> headers = Maps.newHashMap(base.getHeaders());
 		String timestampString = headers.get("timestamp");
-		if (StringUtils.isBlank(timestampString)) {
+		if (StringUtils.trimToNull(timestampString) == null) {
 			timestampString = headers.get("@timestamp");
 		}
-		if (StringUtils.isBlank(timestampString)) {
+		if (StringUtils.trimToNull(timestampString) == null) {
 			this.timestamp = DateTimeUtils.currentTimeMillis();
-			headers.put("timestamp", Long.toString(timestamp));
 		} else {
 			this.timestamp = Long.parseLong(timestampString);
+
 		}
+        headers.put("timestamp", Long.toString(timestamp));
 		setHeaders(headers);
 	}
 
