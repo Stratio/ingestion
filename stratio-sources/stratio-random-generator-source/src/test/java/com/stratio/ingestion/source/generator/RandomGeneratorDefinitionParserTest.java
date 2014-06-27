@@ -23,7 +23,7 @@ import java.util.List;
 import static org.apache.commons.io.IOUtils.*;
 import static org.junit.Assert.assertEquals;
 
-public class RandomGeneratorDefinitionParserTests {
+public class RandomGeneratorDefinitionParserTest {
 
     @Test
     public void testParseDefinitionStreamFile() throws Exception {

@@ -28,7 +28,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class RandomFieldsGeneratorTests {
+public class RandomFieldsGeneratorTest {
 
     @Test
     public void testShouldGenerateRandomStringsWithTheProperLength() throws Exception {
@@ -113,7 +113,7 @@ public class RandomFieldsGeneratorTests {
         List<FieldProperty> properties = new ArrayList<>();
         FieldProperty lengthProperty = new FieldProperty();
         lengthProperty.setPropertyName("fromPath");
-        lengthProperty.setPropertyValue("stratio-sources/stratio-random-generator-source/src/test/resources/fileWithRandomWords.txt");
+        lengthProperty.setPropertyValue("src/test/resources/fileWithRandomWords.txt");
         properties.add(lengthProperty);
         listField.setProperties(properties);
         String randomListValue = RandomFieldsGenerator.generateRandomField(listField);
