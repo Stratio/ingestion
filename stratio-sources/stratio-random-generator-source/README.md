@@ -13,11 +13,70 @@ Random generator definition file
 
 See following a generator definition file. The available generator fields are:
 
- * string
- * integer
- * list
- * ip
- * date
+ * string: random string. The generator field must be specified by adding the following to the json config file:
+ ```json
+    {"type" : "string",
+        "properties": [
+                        {
+                            "propertyName": "length",
+                            "propertyValue": "[LENGTH_OF_THE_STRING]"
+                        }
+                    ]
+        }
+```
+
+ * integer: random integer. The generator field must be specified by adding the following to the json config file:
+
+ ```json
+    {"type" : "integer",
+        "properties": [
+                        {
+                            "propertyName": "length",
+                            "propertyValue": "[LENGTH_OF_THE_INTEGER]"
+                        }
+                    ]
+        }
+```
+ * list: defined-by-user list of values. This generator field can be defined with the following two options:
+    1. List defined within the json configuration file:
+```json
+{"type" : "list",
+         "properties": [
+                         {
+                             "propertyName": "values",
+                             "propertyValue": "value1, value2, value3"
+                         }
+                     ]
+         }
+```
+    2. List defined from an external file (the file should contain one string per line):
+```json
+{"type" : "list",
+         "properties": [
+                         {
+                             "propertyName": "fromFile",
+                             "propertyValue": "[PATH_TO_WORDS_FILE]"
+                         }
+                     ]
+        }
+```
+ * ip: random IP address. The generator field must be specified by adding the following to the json config file:
+ ```json
+ {"type" : "ip"}
+```
+ * date: random date. The generator field must be specified by adding the following to the json config file:
+```json
+{"type" : "date",
+    "properties": [
+                     {
+                         "propertyName": "dateFormat",
+                        "propertyValue": "dd/MMM/yyyy:hh:mm:ss Z"
+                     }
+                  ]
+}
+```
+
+ See following a json configuration file example:
 
 ```json
 {
@@ -114,4 +173,4 @@ bin/flume-ng agent --conf conf --conf-file streaming-random.conf --name agent -D
 Possible improvements
 ------
 * Atrribute to define the field separator
-* Specify list of values from file
+* Improve json configuration file parameters validation
