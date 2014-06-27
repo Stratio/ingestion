@@ -199,7 +199,22 @@
                     <version>2.5.4</version>
                     <configuration>
                         <effort>Max</effort>
+                        <threshold>Low</threshold>
+                        <includeTests>true</includeTests>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>findbugs-test</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <effort>Default</effort>
+                                <threshold>Default</threshold>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
 			</plugins>
 		</pluginManagement>
