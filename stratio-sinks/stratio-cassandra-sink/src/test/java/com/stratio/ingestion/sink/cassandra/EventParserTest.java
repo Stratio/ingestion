@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.cassandra.db.marshal.DateType;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Assert;
@@ -57,21 +58,51 @@ public class EventParserTest {
 
 	@Test
 	public void shoudParsePrimitiveTypes() throws Exception {
-		Integer integer = (Integer) EventParser.parseValue("1",
-				DataType.Name.valueOf("INT"), "");
-		Assert.assertEquals(new Integer(1), integer);
+		Object integer = EventParser.parseValue("1", DataType.Name.INT, "");
+        assertThat(integer)
+                .isInstanceOf(Integer.class)
+                .isEqualTo(1);
 
-		String string = (String) EventParser.parseValue("string",
-				DataType.Name.valueOf("TEXT"), "");
-		Assert.assertEquals("string", string);
+        Object _float = EventParser.parseValue("1", DataType.Name.FLOAT, "");
+        assertThat(_float)
+                .isInstanceOf(Float.class)
+                .isEqualTo(1f);
+        _float = EventParser.parseValue("1.0", DataType.Name.FLOAT, "");
+        assertThat(_float)
+                .isInstanceOf(Float.class)
+                .isEqualTo(1f);
+        _float = EventParser.parseValue(" 1 . 0 ", DataType.Name.FLOAT, "");
+        assertThat(_float)
+                .isInstanceOf(Float.class)
+                .isEqualTo(1f);
 
-		Boolean bool = (Boolean) EventParser.parseValue("true",
-				DataType.Name.valueOf("BOOLEAN"), "");
-		Assert.assertEquals(new Boolean(true), bool);
+        Object _double = EventParser.parseValue("1", DataType.Name.DOUBLE, "");
+        assertThat(_double)
+                .isInstanceOf(Double.class)
+                .isEqualTo(1.0);
+        _double = EventParser.parseValue("1.0", DataType.Name.DOUBLE, "");
+        assertThat(_double)
+                .isInstanceOf(Double.class)
+                .isEqualTo(1.0);
+        _double = EventParser.parseValue(" 1 . 0 ", DataType.Name.DOUBLE, "");
+        assertThat(_double)
+                .isInstanceOf(Double.class)
+                .isEqualTo(1.0);
 
-		InetAddress addr = (InetAddress) EventParser.parseValue("192.168.1.1",
-				DataType.Name.valueOf("INET"), "");
-		Assert.assertEquals(InetAddress.getByName("192.168.1.1"), addr);
+        Object string = EventParser.parseValue("string", DataType.Name.TEXT, "");
+        assertThat(string)
+                .isInstanceOf(String.class)
+                .isEqualTo("string");
+
+		Object bool = EventParser.parseValue("true", DataType.Name.BOOLEAN, "");
+        assertThat(bool)
+                .isInstanceOf(Boolean.class)
+                .isEqualTo(true);
+
+        Object addr = EventParser.parseValue("192.168.1.1", DataType.Name.INET, "");
+        assertThat(addr)
+                .isInstanceOf(InetAddress.class)
+                .isEqualTo(InetAddress.getByName("192.168.1.1"));
 	}
 
 	@SuppressWarnings("rawtypes")
