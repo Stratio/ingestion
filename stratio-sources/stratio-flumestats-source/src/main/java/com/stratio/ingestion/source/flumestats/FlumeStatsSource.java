@@ -56,9 +56,9 @@ import org.slf4j.LoggerFactory;
 public class FlumeStatsSource extends AbstractSource implements Configurable, PollableSource {
 
     private static final Logger log = LoggerFactory.getLogger(FlumeStatsSource.class);
-    private static final Integer QUEUE_SIZE = 10;
+    private static final Integer QUEUE_SIZE = 1000;
 
-    private static final Integer DEFAULT_FREQUENCY = 10;
+    private static final Integer DEFAULT_FREQUENCY = 1000;
     private static final String DEFAULT_JOBNAME = "Quartz Job";
     private static final String DEFAULT_HOST= "localhost";
     private static final Integer DEFAULT_PORT= 41414;

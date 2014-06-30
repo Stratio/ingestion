@@ -69,12 +69,12 @@ public class RequestJob implements Job {
             if (response != null) {
                 List<Event> eventList = processStatsResponse(response);
                 for (Event e : eventList) {
-                    queue.add(e);
+                    queue.put(e);
                 }
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Can't access to metrics at " + url);
         }
     }
 
@@ -122,6 +122,8 @@ public class RequestJob implements Job {
             Event event = new JSONEvent();
             event.setHeaders(headers);
             event.setBody("".getBytes());
+            
+            
             list.add(event);
         }
 

@@ -55,7 +55,6 @@ public class RequestJob implements Job {
     public static final String BODY = "body";
 
     private Map<String, Object> properties;
-    private Map<String, Object> headers;
     private LinkedBlockingQueue<Event> queue;
     private Client client;
     private MediaType mediaType;
@@ -82,6 +81,7 @@ public class RequestJob implements Job {
                     response = request.post(Entity.entity(
                             (String) properties.get(APPLICATION_TYPE), mediaType));
                     break;
+                default:
                 case "GET":
                     response = request.get();
                     break;
@@ -144,16 +144,15 @@ public class RequestJob implements Job {
         ObjectMapper mapper = new ObjectMapper();
         try {
             Map<String, Object> headers = mapper.readValue(jsonHeaders, Map.class);
+            for (Map.Entry<String, Object> entry : headers.entrySet()) {
+                request.header(entry.getKey(), entry.getKey());
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         } catch (JsonMappingException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        for (Map.Entry<String, Object> entry : headers.entrySet()) {
-            request.header(entry.getKey(), entry.getKey());
         }
 
         return request;
