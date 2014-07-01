@@ -36,9 +36,11 @@ public class DecompressDeserializer implements EventDeserializer {
     private static final String CONF_FORMAT = "format";
     private static final String CONF_DESERIALIZER = "deserializer";
     private static final String CONF_CHARSET = "charset";
+    private static final String CONF_BUFFER_LENGTH = "bufferLength";
     private static final String CONF_TRACKER_FILE = "trackerFile";
     private static final String DEFAULT_DESERIALIZER = "LINE";
     private static final String DEFAULT_CHARSET = "UTF-8";
+    private static final int DEFAULT_BUFFER_LENGTH = 1 * 1024 * 1024;
 
     private final ResettableDecompressInputStream decompressInputStream;
     private final EventDeserializer eventDeserializer;
@@ -72,7 +74,8 @@ public class DecompressDeserializer implements EventDeserializer {
         final String charsetString = context.getString(CONF_CHARSET, DEFAULT_CHARSET);
         final Charset charset = Charset.forName(charsetString);
 
-        this.decompressInputStream = new ResettableDecompressInputStream(resettableInputStream, compressionFormat, positionTracker, charset);
+        this.decompressInputStream = new ResettableDecompressInputStream(resettableInputStream, compressionFormat,
+                positionTracker, context.getInteger(CONF_BUFFER_LENGTH, DEFAULT_BUFFER_LENGTH), charset);
         this.eventDeserializer = EventDeserializerFactory.getInstance(deserializerType, deserializerContext, decompressInputStream);
         this.isOpen = true;
     }
@@ -99,7 +102,7 @@ public class DecompressDeserializer implements EventDeserializer {
     @Override
     public void reset() throws IOException {
         ensureOpen();
-        this.eventDeserializer.mark();
+        this.eventDeserializer.reset();
         //this.decompressInputStream.reset();
     }
 

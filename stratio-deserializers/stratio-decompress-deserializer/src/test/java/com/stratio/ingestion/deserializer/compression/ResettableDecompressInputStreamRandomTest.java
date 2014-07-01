@@ -78,6 +78,7 @@ public class ResettableDecompressInputStreamRandomTest {
 
         metaFile = File.createTempFile("meta_file", ".meta");
         metaFile.delete();
+        metaFile.deleteOnExit();
         resettableFileInputStream = new ResettableFileInputStream(
                 compressedFile,
                 DurablePositionTracker.getInstance(metaFile, compressedFile.getAbsolutePath()));
@@ -97,7 +98,8 @@ public class ResettableDecompressInputStreamRandomTest {
 
     @Test
     public void readSimple() throws IOException, CompressorException {
-        final ResettableDecompressInputStream resettableDecompressInputStream = new ResettableDecompressInputStream(resettableFileInputStream, CompressionFormat.GZIP, new TransientPositionTracker("DUMMY"));
+        final ResettableDecompressInputStream resettableDecompressInputStream = new ResettableDecompressInputStream(
+                resettableFileInputStream, CompressionFormat.GZIP, new TransientPositionTracker("DUMMY"), 10);
         final byte[] uncompressedBytes = new byte[rawBytesSize];
         int offset = 0;
         int read = 0;
@@ -110,7 +112,8 @@ public class ResettableDecompressInputStreamRandomTest {
 
     @Test
     public void readWithResets() throws IOException, CompressorException {
-        final ResettableDecompressInputStream resettableDecompressInputStream = new ResettableDecompressInputStream(resettableFileInputStream, CompressionFormat.GZIP, new TransientPositionTracker("DUMMY"));
+        final ResettableDecompressInputStream resettableDecompressInputStream = new ResettableDecompressInputStream(
+                resettableFileInputStream, CompressionFormat.GZIP, new TransientPositionTracker("DUMMY"), 10);
         final byte[] uncompressedBytes = new byte[rawBytesSize];
         int offset = 0;
         int markOffset = 0;
@@ -133,10 +136,45 @@ public class ResettableDecompressInputStreamRandomTest {
     }
 
     @Test
+    public void readWithResetsAndDifferentBuffers() throws IOException, CompressorException {
+        for (int bufferLength : new Integer[]{1, 10, 100, 1000, 10000, 100000}) {
+            final ResettableDecompressInputStream resettableDecompressInputStream = new ResettableDecompressInputStream(
+                    resettableFileInputStream, CompressionFormat.GZIP, new TransientPositionTracker("DUMMY"), bufferLength);
+            final byte[] uncompressedBytes = new byte[rawBytesSize];
+            int offset = 0;
+            int markOffset = 0;
+            int read = 0;
+            int i = 0;
+            while ((read = resettableDecompressInputStream
+                    .read(uncompressedBytes, offset, uncompressedBytes.length - offset)) != -1
+                    && offset < uncompressedBytes.length) {
+                System.out.println("READ: " + read);
+                offset += read;
+                if (i == 2) {
+                    resettableDecompressInputStream.mark();
+                    markOffset = offset;
+                }
+                if (i > 0 && i % (rawBytesSize / 8) == 0) {
+                    resettableDecompressInputStream.reset();
+                    offset = markOffset;
+                }
+                i++;
+            }
+            assertThat(uncompressedBytes).isEqualTo(rawBytes);
+
+            // Prepare for next iteration
+            metaFile.delete();
+            resettableFileInputStream = new ResettableFileInputStream(
+                    compressedFile,
+                    DurablePositionTracker.getInstance(metaFile, compressedFile.getAbsolutePath()));
+        }
+    }
+
+    @Test
     public void readWithFullResets() throws IOException, CompressorException {
         final PositionTracker positionTracker = new TransientPositionTracker("DUMMY");
         ResettableDecompressInputStream resettableDecompressInputStream = new ResettableDecompressInputStream(
-                resettableFileInputStream, CompressionFormat.GZIP, positionTracker);
+                resettableFileInputStream, CompressionFormat.GZIP, positionTracker, 10);
         final byte[] uncompressedBytes = new byte[rawBytesSize];
         int offset = 0;
         int markOffset = 0;
@@ -152,7 +190,7 @@ public class ResettableDecompressInputStreamRandomTest {
             if (i > 0 && i % (rawBytesSize / 8) == 0) {
                 resettableDecompressInputStream.close();
                 resettableDecompressInputStream = new ResettableDecompressInputStream(
-                        resettableFileInputStream, CompressionFormat.GZIP, positionTracker);
+                        resettableFileInputStream, CompressionFormat.GZIP, positionTracker, 10);
                 offset = markOffset;
             }
             i++;

@@ -37,6 +37,7 @@ public class ResettableDecompressInputStream extends ResettableInputStream {
     private BufferedInputStream bufferedInputStream;
     private final PositionTracker positionTracker;
 
+    private final int bufferLength;
     private ByteBuffer byteBuffer;
     private final CharsetDecoder charsetDecoder;
     private final CharBuffer charBuffer;
@@ -44,12 +45,12 @@ public class ResettableDecompressInputStream extends ResettableInputStream {
     private long position;
 
     public ResettableDecompressInputStream(final ResettableInputStream in, final CompressionFormat compressionFormat,
-                                           final PositionTracker positionTracker) throws IOException {
-        this(in, compressionFormat, positionTracker, Charsets.UTF_8);
+                                           final PositionTracker positionTracker, final int bufferLength) throws IOException {
+        this(in, compressionFormat, positionTracker, bufferLength, Charsets.UTF_8);
     }
 
     public ResettableDecompressInputStream(final ResettableInputStream in, final CompressionFormat compressionFormat,
-                                           final PositionTracker positionTracker, final Charset charset) throws IOException {
+                                           final PositionTracker positionTracker, final int bufferLength, final Charset charset) throws IOException {
         this.compressionFormat = compressionFormat;
         this.in = in;
         this.positionTracker = positionTracker;
@@ -58,14 +59,15 @@ public class ResettableDecompressInputStream extends ResettableInputStream {
             throw new IllegalStateException("ResettableInputStream must be at position 0");
         }
 
+        this.bufferLength = bufferLength;
+        this.byteBuffer = ByteBuffer.allocate(8);
+        this.charsetDecoder = charset.newDecoder();
+        this.charBuffer = CharBuffer.allocate(1);
+
         in.mark();
         initStreams();
 
         seek(positionTracker.getPosition());
-
-        this.byteBuffer = ByteBuffer.allocate(4);
-        this.charsetDecoder = charset.newDecoder();
-        this.charBuffer = CharBuffer.allocate(1);
     }
 
     private void initStreams() throws IOException {
@@ -82,7 +84,7 @@ public class ResettableDecompressInputStream extends ResettableInputStream {
             //} else {
                 decompressedInputStream = compressorStreamFactory.createCompressorInputStream(compressionFormat.getApacheFormat(), resettableInputStreamInputStream);
             //}
-            this.bufferedInputStream = new BufferedInputStream(decompressedInputStream, 1024 * 10);
+            this.bufferedInputStream = new BufferedInputStream(decompressedInputStream, bufferLength);
             this.position = 0;
         } catch (CompressorException ex) {
             throw new IOException(ex);
@@ -111,52 +113,50 @@ public class ResettableDecompressInputStream extends ResettableInputStream {
 
     @Override
     public int readChar() throws IOException {
-        bufferedInputStream.mark(4);
-        byteBuffer.clear();
         int totalBytesRead = 0;
-        while (byteBuffer.position() < 3) {
-            int bytesRead = bufferedInputStream.read(byteBuffer.array(), byteBuffer.position(), byteBuffer.capacity() - byteBuffer.position());
+        byteBuffer.clear();
+        while (totalBytesRead < 4) {
+            int bytesRead = bufferedInputStream.read(byteBuffer.array(), byteBuffer.position(), 1);
             if (bytesRead == -1) {
-                break;
+                return -1;
             }
             totalBytesRead += bytesRead;
+            position += bytesRead;
             byteBuffer.position(totalBytesRead);
-        }
-        if (totalBytesRead == 0) {
-            return -1;
-        }
-        byteBuffer.flip();
-        charBuffer.clear();
-        CoderResult coderResult = charsetDecoder.decode(byteBuffer, charBuffer, true);
-        if (coderResult.isMalformed() || coderResult.isUnmappable()) {
-            return '\uFFFD'; // Replacement character
-            //XXX: bufferedInputStream.reset();
-            //XXX: coderResult.throwException();
-        }
-        charBuffer.flip();
-        final int toSkip = byteBuffer.position();
-        position += toSkip;
-        if (coderResult.isOverflow()) {
-            bufferedInputStream.reset();
-            long skipped = 0;
-            while (skipped < toSkip) {
-                skipped += bufferedInputStream.skip(toSkip - skipped);
+            byteBuffer.flip();
+            charBuffer.clear();
+            CoderResult coderResult = charsetDecoder.decode(byteBuffer, charBuffer, true);
+            if (coderResult.isUnmappable()) {
+                return '\uFFFD'; // Replacement character
+                //XXX: coderResult.throwException();
             }
+            charBuffer.flip();
+            if (charBuffer.hasRemaining()) {
+                return charBuffer.get();
+            }
+            byteBuffer.rewind();
+            byteBuffer.compact();
         }
-        if (charBuffer.hasRemaining()) {
-            return charBuffer.get();
-        } else {
-            return -1;
-        }
+        return -1;
     }
 
     @Override
     public void mark() throws IOException {
         positionTracker.storePosition(position);
+        bufferedInputStream.mark(bufferLength);
     }
 
     @Override
     public void reset() throws IOException {
+        if (positionTracker.getPosition() > position - bufferLength) {
+            bufferedInputStream.reset();
+            position = positionTracker.getPosition();
+        } else {
+            resetFromScratch();
+        }
+    }
+
+    private void resetFromScratch() throws IOException {
         in.seek(0);
         if (in.tell() != 0) {
             throw new IllegalStateException("ResettableInputStream should be at position 0");
@@ -191,6 +191,7 @@ public class ResettableDecompressInputStream extends ResettableInputStream {
 
     @Override
     public void close() throws IOException {
+        positionTracker.close();
         positionTracker.close();
         in.close();
         bufferedInputStream.close();
