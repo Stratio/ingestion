@@ -26,6 +26,7 @@ import org.apache.flume.event.EventBuilder;
 import org.apache.flume.serialization.EventDeserializer;
 import org.apache.flume.serialization.EventDeserializerFactory;
 import org.apache.flume.serialization.ResettableInputStream;
+import org.fest.util.Files;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -57,11 +58,15 @@ public class DecompressDeserializerTest {
 
     @Test
     public void basic() throws IOException, CompressorException {
-        ResettableInputStream resettableInputStream = createResettableInputStream("ONE\nTWO\nTHREE\n");
+        ResettableInputStream resettableInputStream = createResettableInputStream("ONE\nTWO\nTHREE");
+
+        File trackerFile = File.createTempFile(".tracker_file", ".meta");
+        trackerFile.delete();
+        trackerFile.deleteOnExit();
 
         Context context = new Context();
         context.put("format", "gzip");
-        context.put("trackerFile", "/tmp/.tracker_file");
+        context.put("trackerFile", trackerFile.getAbsolutePath());
 
         EventDeserializer eventDeserializer = EventDeserializerFactory.getInstance(
                 "com.stratio.ingestion.deserializer.compression.DecompressDeserializer$Builder", context, resettableInputStream);
@@ -88,6 +93,7 @@ public class DecompressDeserializerTest {
         File trackerFile = File.createTempFile(".tracker_file", ".meta");
         log.debug("fullReset() - trackerFile = {}", trackerFile.getAbsolutePath());
         trackerFile.delete();
+        trackerFile.deleteOnExit();
 
         Context context = new Context();
         context.put("format", "gzip");
@@ -119,9 +125,13 @@ public class DecompressDeserializerTest {
 
     @Test
     public void eventDeserializerFactoryInstantiation() throws IOException, CompressorException {
+        File trackerFile = File.createTempFile(".tracker_file", ".meta");
+        trackerFile.delete();
+        trackerFile.deleteOnExit();
+
         Context context = new Context();
         context.put("format", "gzip");
-        context.put("trackerFile", "/tmp/.tracker_file");
+        context.put("trackerFile", trackerFile.getAbsolutePath());
         ResettableInputStream resettableInputStream = createResettableInputStream("ONE\nTWO\nTHREE\n");
         EventDeserializer eventDeserializer = EventDeserializerFactory.getInstance(
                 "com.stratio.ingestion.deserializer.compression.DecompressDeserializer$Builder", context, resettableInputStream);
