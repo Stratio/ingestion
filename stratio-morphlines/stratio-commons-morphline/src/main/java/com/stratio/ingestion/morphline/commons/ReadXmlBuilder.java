@@ -17,8 +17,6 @@ package com.stratio.ingestion.morphline.commons;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -39,13 +37,28 @@ import org.kitesdk.morphline.api.Record;
 import org.kitesdk.morphline.base.Configs;
 import org.kitesdk.morphline.stdio.AbstractParser;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.SAXException;
 
 import com.google.common.collect.Maps;
 import com.typesafe.config.Config;
 
+/**
+ * The readXml command parses an InputStream from field _attachment_body and put uses 
+ * XPath expressions to extract fields and add them into headers. 
+ * Example:
+ * {
+ *     readXml {
+ *        paths : {
+ *          book1 : "/catalog/book[@id='bk101']/author"
+ *          book2 : "/catalog/book[@id='bk102']/genre"
+ *        }
+ *      }
+ *    }
+ *
+ * If paths field is empty (paths : { } ) whole xml will be parsed into a String with name _xml.
+ */
 public class ReadXmlBuilder implements CommandBuilder {
 
     private static final String PATHS_CONF = "paths";
@@ -64,7 +77,7 @@ public class ReadXmlBuilder implements CommandBuilder {
 
         private final Map<String, String> stepMap;
         private final XPath xpath;
-
+        private boolean all = false;
         private DocumentBuilder docBuilder;
 
         protected ReadXml(CommandBuilder builder, Config config, Command parent, Command child,
@@ -87,6 +100,10 @@ public class ReadXmlBuilder implements CommandBuilder {
                 String path = entry.getValue().toString().trim();
                 stepMap.put(fieldName, path);
             }
+            
+            if(stepMap.size() == 0){
+                all = true;
+            }
 
             LOG.debug("stepMap: {}", stepMap);
         }
@@ -102,55 +119,37 @@ public class ReadXmlBuilder implements CommandBuilder {
                 LOG.error("Cannot parse body");
                 return false;
             }
-
             Record outputRecord = template.copy();
-            for (Map.Entry<String, String> entry : stepMap.entrySet()) {
-                XPathExpression expr = null;
-                try {
-                    expr = xpath.compile(entry.getValue());
-                    String field = (String)expr.evaluate(doc, XPathConstants.STRING);
-                    outputRecord.put(entry.getKey(), field);
-                    if (!getChild().process(outputRecord)) {
-                      return false;
-                    }
-                } catch (XPathExpressionException e) {
-                    LOG.error("Invalid XPATH expression -> " + expr);
+            
+            if(all){
+                outputRecord.put("_xml", XMLtoString(doc));
+                if (!getChild().process(outputRecord)) {
                     return false;
+                  }
+            } else {
+                for (Map.Entry<String, String> entry : stepMap.entrySet()) {
+                    XPathExpression expr = null;
+                    try {
+                        expr = xpath.compile(entry.getValue());
+                        String field = (String)expr.evaluate(doc, XPathConstants.STRING);
+                        outputRecord.put(entry.getKey(), field);
+                        if (!getChild().process(outputRecord)) {
+                          return false;
+                        }
+                    } catch (XPathExpressionException e) {
+                        LOG.error("Invalid XPATH expression -> " + expr);
+                        return false;
+                    }
                 }
             }
+              
             return true;
         }
-
-        public static void print(Node node, OutputStream os) {
-            PrintStream ps = new PrintStream(os);
-            switch (node.getNodeType()) {
-                case Node.ELEMENT_NODE:
-                    ps.print("<" + node.getNodeName());
-
-                    NamedNodeMap map = node.getAttributes();
-                    for (int i = 0; i < map.getLength(); i++) {
-                        ps.print(" " + map.item(i).getNodeName() + "=\""
-                                + map.item(i).getNodeValue() + "\"");
-                    }
-                    ps.println(">");
-                    return;
-                case Node.ATTRIBUTE_NODE:
-                    ps.println(node.getNodeName() + "=\"" + node.getNodeValue() + "\"");
-                    return;
-                case Node.TEXT_NODE:
-                    ps.println(node.getNodeValue());
-                    return;
-                case Node.CDATA_SECTION_NODE:
-                    ps.println(node.getNodeValue());
-                    return;
-                case Node.PROCESSING_INSTRUCTION_NODE:
-                    ps.println(node.getNodeValue());
-                    return;
-                case Node.DOCUMENT_NODE:
-                case Node.DOCUMENT_FRAGMENT_NODE:
-                    ps.println(node.getNodeName() + "=" + node.getNodeValue());
-                    return;
-            }
+        
+        public String XMLtoString(Document doc){
+            DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
+            LSSerializer lsSerializer = domImplementation.createLSSerializer();
+            return lsSerializer.writeToString(doc);
         }
     }
 }

@@ -16,11 +16,11 @@
 package com.stratio.ingestion.morphline.commons;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -56,9 +56,11 @@ public class ReadXmlTest {
 
     private static final String XML_FILE = "/xml/test.xml";
     private static final String MORPH_CONF_FILE = "/xml/readXml.conf";
+    private static final String MORPH_CONFALL_FILE = "/xml/readXmlAll.conf";
 
     private Document doc;
     private Config config;
+    private Config configAll;
 
     @Before
     public void setUp() throws ParserConfigurationException, SAXException, IOException {
@@ -73,6 +75,7 @@ public class ReadXmlTest {
         doc.getDocumentElement().normalize();
 
         config = parse(MORPH_CONF_FILE).getConfigList("commands").get(0).getConfig("readXml");
+        configAll = parse(MORPH_CONFALL_FILE).getConfigList("commands").get(0).getConfig("readXml");
     }
 
     @Test
@@ -110,6 +113,25 @@ public class ReadXmlTest {
 
         Record result = collectorChild.getRecords().get(0);
         assertEquals(result.get("book1").get(0),"Gambardella, Matthew");
+    }
+    
+    
+    @Test
+    public void testAll() throws FileNotFoundException{
+        final MorphlineContext context = new MorphlineContext.Builder().build();
+        Collector collectorParent = new Collector();
+        Collector collectorChild = new Collector();
+        final Command command = new ReadXmlBuilder().build(configAll, collectorParent, collectorChild,
+                context);
+
+        Record record = new Record();
+        record.put(Fields.ATTACHMENT_BODY,
+                new FileInputStream(new File(getClass().getResource(XML_FILE).getPath())));
+
+        command.process(record);
+
+        Record result = collectorChild.getRecords().get(0);
+        assertTrue(((String)result.get("_xml").get(0)).length() > 0);
     }
 
     protected Config parse(String file, Config... overrides) throws IOException {
