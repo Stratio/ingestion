@@ -54,9 +54,9 @@ import com.typesafe.config.ConfigValue;
 @RunWith(JUnit4.class)
 public class ReadXmlTest {
 
-    private static final String XML_FILE = "/xml/test.xml";
-    private static final String MORPH_CONF_FILE = "/xml/readXml.conf";
-    private static final String MORPH_CONFALL_FILE = "/xml/readXmlAll.conf";
+    private static final String XML_FILE = "/readxml/test.xml";
+    private static final String MORPH_CONF_FILE = "/readxml/readXml.conf";
+    private static final String MORPH_CONFALL_FILE = "/readxml/readXmlAll.conf";
 
     private Document doc;
     private Config config;

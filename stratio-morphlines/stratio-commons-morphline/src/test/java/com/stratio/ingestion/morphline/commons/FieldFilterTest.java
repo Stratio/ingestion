@@ -66,7 +66,7 @@ public class FieldFilterTest {
         Collector collectorParent = new Collector();
         Collector collectorChild = new Collector();
         final Command command = new FieldFilterBuilder().build(
-                parse("/onlyIncludeNoRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
+                parse("/fieldfilter/onlyIncludeNoRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
                 collectorParent, collectorChild, context
         );
 
@@ -93,7 +93,7 @@ public class FieldFilterTest {
         Collector collectorParent = new Collector();
         Collector collectorChild = new Collector();
         final Command command = new FieldFilterBuilder().build(
-                parse("/onlyExcludeNoRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
+                parse("/fieldfilter/onlyExcludeNoRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
                 collectorParent, collectorChild, context
         );
 
@@ -119,7 +119,7 @@ public class FieldFilterTest {
         Collector collectorParent = new Collector();
         Collector collectorChild = new Collector();
         final Command command = new FieldFilterBuilder().build(
-                parse("/includeAndExcludeNoRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
+                parse("/fieldfilter/includeAndExcludeNoRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
                 collectorParent, collectorChild, context
         );
 
@@ -146,7 +146,7 @@ public class FieldFilterTest {
         Collector collectorParent = new Collector();
         Collector collectorChild = new Collector();
         final Command command = new FieldFilterBuilder().build(
-                parse("/onlyIncludeRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
+                parse("/fieldfilter/onlyIncludeRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
                 collectorParent, collectorChild, context
         );
 
@@ -190,7 +190,7 @@ public class FieldFilterTest {
         Collector collectorParent = new Collector();
         Collector collectorChild = new Collector();
         final Command command = new FieldFilterBuilder().build(
-                parse("/onlyExcludeRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
+                parse("/fieldfilter/onlyExcludeRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
                 collectorParent, collectorChild, context
         );
 
@@ -230,7 +230,7 @@ public class FieldFilterTest {
         Collector collectorParent = new Collector();
         Collector collectorChild = new Collector();
         final Command command = new FieldFilterBuilder().build(
-                parse("/includeAndExcludeRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
+                parse("/fieldfilter/includeAndExcludeRegex.conf").getConfigList("commands").get(0).getConfig("fieldFilter"),
                 collectorParent, collectorChild, context
         );
 
