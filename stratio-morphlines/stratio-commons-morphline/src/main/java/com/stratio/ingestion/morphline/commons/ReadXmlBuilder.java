@@ -44,9 +44,10 @@ import org.xml.sax.SAXException;
 import com.google.common.collect.Maps;
 import com.typesafe.config.Config;
 
+//@formatter:off
 /**
  * The readXml command parses an InputStream from field _attachment_body and put uses 
- * XPath expressions to extract fields and add them into headers. 
+ * XPath expressions to extract fields and add them into headers.
  * Example:
  * {
  *     readXml {
@@ -56,9 +57,10 @@ import com.typesafe.config.Config;
  *        }
  *      }
  *    }
- *
+ * 
  * If paths field is empty (paths : { } ) whole xml will be parsed into a String with name _xml.
  */
+//@formatter:on
 public class ReadXmlBuilder implements CommandBuilder {
 
     private static final String PATHS_CONF = "paths";
@@ -100,8 +102,8 @@ public class ReadXmlBuilder implements CommandBuilder {
                 String path = entry.getValue().toString().trim();
                 stepMap.put(fieldName, path);
             }
-            
-            if(stepMap.size() == 0){
+
+            if (stepMap.size() == 0) {
                 all = true;
             }
 
@@ -120,21 +122,21 @@ public class ReadXmlBuilder implements CommandBuilder {
                 return false;
             }
             Record outputRecord = template.copy();
-            
-            if(all){
+
+            if (all) {
                 outputRecord.put("_xml", XMLtoString(doc));
                 if (!getChild().process(outputRecord)) {
                     return false;
-                  }
+                }
             } else {
                 for (Map.Entry<String, String> entry : stepMap.entrySet()) {
                     XPathExpression expr = null;
                     try {
                         expr = xpath.compile(entry.getValue());
-                        String field = (String)expr.evaluate(doc, XPathConstants.STRING);
+                        String field = (String) expr.evaluate(doc, XPathConstants.STRING);
                         outputRecord.put(entry.getKey(), field);
                         if (!getChild().process(outputRecord)) {
-                          return false;
+                            return false;
                         }
                     } catch (XPathExpressionException e) {
                         LOG.error("Invalid XPATH expression -> " + expr);
@@ -142,11 +144,11 @@ public class ReadXmlBuilder implements CommandBuilder {
                     }
                 }
             }
-              
+
             return true;
         }
-        
-        public String XMLtoString(Document doc){
+
+        public String XMLtoString(Document doc) {
             DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
             LSSerializer lsSerializer = domImplementation.createLSSerializer();
             return lsSerializer.writeToString(doc);
