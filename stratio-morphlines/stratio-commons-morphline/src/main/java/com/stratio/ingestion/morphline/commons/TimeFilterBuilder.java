@@ -33,7 +33,14 @@ import com.typesafe.config.Config;
 
 //@formatter:off
 /**
- * The timeFilter command discard records that are not betweet two specified dates.
+ * <p>The timeFilter command discard records that are not between two specified dates.</p>
+ * <ul>
+ * <li><em>field</em>: Name of field which include date value.</li>
+ * <li><em>dateFormat</em>: Pattern for a date. See <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a>.
+ * <li><em>from</em>: Initial date. (Exclusive).</li>
+ * <li><em>to</em>: End date. (Exclusive).</li>
+ * </ul>
+ * <code>
  * Example: 
  * { 
  *     timeFilter {
@@ -43,8 +50,7 @@ import com.typesafe.config.Config;
  *         to : "20/01/2015"
  *     } 
  * }
- * 
- * If paths field is empty (paths : { } ) whole xml will be parsed into a String with name _xml.
+ * </code>
  */
 //@formatter:on
 public class TimeFilterBuilder implements CommandBuilder {
