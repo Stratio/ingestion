@@ -16,6 +16,7 @@
 package com.stratio.ingestion.serializer.elasticsearch;
 
 import org.apache.flume.event.EventBuilder;
+import org.elasticsearch.common.joda.time.format.ISODateTimeFormat;
 import org.joda.time.DateTimeUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,12 +35,12 @@ public class TimestampedEventTest {
     public void checkTimestamp() {
         long now = System.currentTimeMillis();
         for (Map<String, String> headers : Arrays.asList(
-                ImmutableMap.of("timestamp", Long.toString(now)),
-                ImmutableMap.of("@timestamp", Long.toString(now))
+                ImmutableMap.of("@timestamp", Long.toString(now)),
+                ImmutableMap.of("@timestamp", ISODateTimeFormat.dateTime().withZoneUTC().print(now))
                 )) {
             final TimestampedEvent timestampedEvent = new TimestampedEvent(EventBuilder.withBody(new byte[0], headers));
             assertThat(timestampedEvent.getTimestamp()).isEqualTo(now);
-            assertThat(timestampedEvent.getHeaders().get("timestamp")).isEqualTo(Long.toString(now));
+            assertThat(timestampedEvent.getHeaders().get("@timestamp")).isEqualTo(ISODateTimeFormat.dateTime().withZoneUTC().print(now));
         }
 
         DateTimeUtils.setCurrentMillisFixed(now);
@@ -50,7 +51,7 @@ public class TimestampedEventTest {
         )) {
             final TimestampedEvent timestampedEvent = new TimestampedEvent(EventBuilder.withBody(new byte[0], headers));
             assertThat(timestampedEvent.getTimestamp()).isEqualTo(now);
-            assertThat(timestampedEvent.getHeaders().get("timestamp")).isEqualTo(Long.toString(now));
+            assertThat(timestampedEvent.getHeaders().get("@timestamp")).isEqualTo(ISODateTimeFormat.dateTime().withZoneUTC().print(now));
         }
         DateTimeUtils.setCurrentMillisSystem();
     }
