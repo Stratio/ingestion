@@ -91,7 +91,7 @@ public class TestElasticSearchSerializerWithMapping {
 	@Test
 	public void sameTimestampEventsShouldCreateOnlyOneIndexWithTheExpectedMapping() throws IOException {
 		Event event = createExampleEvent(System.currentTimeMillis());
-		String indexName = getIndexName(INDEX_PREFIX, Long.parseLong(event.getHeaders().get(TIMESTAMP_HEADER)));
+		String indexName = getIndexName(INDEX_PREFIX, new TimestampedEvent(event).getTimestamp());
 		
 		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event);	
 		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event);
@@ -105,9 +105,9 @@ public class TestElasticSearchSerializerWithMapping {
 	public void differentTimestampEventsShouldCreateDifferentIndecesWithTheExpectedMapping() throws IOException {
 		long timestamp = System.currentTimeMillis();
 		Event event1 = createExampleEvent(timestamp);
-		String indexName1 = getIndexName(INDEX_PREFIX, Long.parseLong(event1.getHeaders().get(TIMESTAMP_HEADER)));
+		String indexName1 = getIndexName(INDEX_PREFIX,  new TimestampedEvent(event1).getTimestamp());
 		Event event2 = createExampleEvent(timestamp + DAY_IN_MILLIS);
-		String indexName2 = getIndexName(INDEX_PREFIX, Long.parseLong(event2.getHeaders().get(TIMESTAMP_HEADER)));
+		String indexName2 = getIndexName(INDEX_PREFIX,  new TimestampedEvent(event2).getTimestamp());
 		
 		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event1);	
 		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event2);

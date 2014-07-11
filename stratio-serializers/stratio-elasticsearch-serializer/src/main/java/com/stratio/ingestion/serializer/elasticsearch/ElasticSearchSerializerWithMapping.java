@@ -39,7 +39,10 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.io.BytesStream;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.indices.IndexAlreadyExistsException;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -186,12 +189,7 @@ public class ElasticSearchSerializerWithMapping implements
 			throws IOException {
 		Map<String, String> headers = Maps.newHashMap(event.getHeaders());
 
-		String timestamp = headers.get("timestamp");
-		if (!StringUtils.isBlank(timestamp)
-				&& StringUtils.isBlank(headers.get("@timestamp"))) {
-			long timestampMs = Long.parseLong(timestamp);
-			builder.field("@timestamp", new Date(timestampMs));
-		}
+
 
 		for (Map.Entry<String,String> entry: headers.entrySet()) {
 			byte[] val = entry.getValue().getBytes(Charsets.UTF_8);
@@ -203,14 +201,12 @@ public class ElasticSearchSerializerWithMapping implements
 
 /**
  * {@link Event} implementation that has a timestamp. The timestamp is taken
- * from (in order of precedence):
- * <ol>
- * <li>The "timestamp" header of the base event, if present</li>
- * <li>The "@timestamp" header of the base event, if present</li>
- * <li>The current time in millis, otherwise</li>
- * </ol>
+ * from the "@timestamp" header or set to current time if "@timestamp" is not
+ * present or is invalid.
  */
 final class TimestampedEvent extends SimpleEvent {
+
+  private static final Logger log = LoggerFactory.getLogger(TimestampedEvent.class);
 
 	private final long timestamp;
 
@@ -218,17 +214,31 @@ final class TimestampedEvent extends SimpleEvent {
         super();
 		setBody(base.getBody());
 		Map<String, String> headers = Maps.newHashMap(base.getHeaders());
-		String timestampString = headers.get("timestamp");
-		if (StringUtils.trimToNull(timestampString) == null) {
-			timestampString = headers.get("@timestamp");
-		}
-		if (StringUtils.trimToNull(timestampString) == null) {
-			this.timestamp = DateTimeUtils.currentTimeMillis();
-		} else {
-			this.timestamp = Long.parseLong(timestampString);
 
-		}
-        headers.put("timestamp", Long.toString(timestamp));
+    String timestampHeader = headers.get("@timestamp");
+    Long ts = null;
+    if (!StringUtils.isBlank(timestampHeader)) {
+      try {
+        ts = Long.parseLong(timestampHeader);
+        headers.put("@timestamp", ISODateTimeFormat.dateTime().withZoneUTC().print(ts));
+      } catch (RuntimeException ex) {
+        log.trace("Could not parse timestamp as long: {}", timestampHeader);
+        try {
+          ts = ISODateTimeFormat.dateOptionalTimeParser().withZoneUTC().parseMillis(timestampHeader);
+        } catch (RuntimeException ex2) {
+          log.trace("Could not parse timestamp as dateOptionalTime: {}", timestampHeader);
+        }
+      }
+    }
+
+    if (ts == null) {
+      DateTime now = DateTime.now();
+      ts = now.getMillis();
+      headers.put("@timestamp", ISODateTimeFormat.dateTime().withZoneUTC().print(now));
+    }
+
+    this.timestamp = ts;
+
 		setHeaders(headers);
 	}
 
