@@ -15,25 +15,10 @@
  */
 package com.stratio.ingestion.source.snmptraps;
 
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_ADDRESS;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_AUTH;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_COMMUNITY;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_ENCRYPTION;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_PASSWD;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_SNMP_PORT;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_SNMP_TRAP_VERSION;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_SNMP_VERSION;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_TRAP_PORT;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_USERNAME;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.DEFAULT_ADDRESS;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.DEFAULT_AUTH;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.DEFAULT_ENCRYPTION;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.DEFAULT_SNMP_PORT;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.DEFAULT_SNMP_TRAP_VERSION;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.DEFAULT_SNMP_VERSION;
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.DEFAULT_TRAP_PORT;
+import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.*;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import org.apache.flume.Context;
 import org.apache.flume.EventDrivenSource;
@@ -57,11 +42,18 @@ import org.snmp4j.mp.MessageProcessingModel;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.security.AuthMD5;
 import org.snmp4j.security.AuthSHA;
+import org.snmp4j.security.Priv3DES;
+import org.snmp4j.security.PrivAES128;
+import org.snmp4j.security.PrivAES192;
+import org.snmp4j.security.PrivAES256;
+import org.snmp4j.security.PrivDES;
 import org.snmp4j.security.SecurityLevel;
 import org.snmp4j.security.SecurityModels;
 import org.snmp4j.security.SecurityProtocols;
 import org.snmp4j.security.USM;
 import org.snmp4j.security.UsmUser;
+import org.snmp4j.security.nonstandard.PrivAES192With3DESKeyExtension;
+import org.snmp4j.security.nonstandard.PrivAES256With3DESKeyExtension;
 import org.snmp4j.smi.OID;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.UdpAddress;
@@ -76,7 +68,6 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
     private static final Logger log = LoggerFactory.getLogger(SNMPSource.class);
 
     private String address;
-    private int snmpPort;
     private int snmpTrapPort;
     private String username;
     private String password;
@@ -84,9 +75,8 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
     private int trapVersion;
     private OID authMethod;
     private int securityMethod;
-    private String community;
-    private long timeout = 10000; // default 10 seconds
-    private int retries = 2; // default 2 retries
+    private String privacyProtocol;
+    private String privacyPassword;
     private SourceCounter sourceCounter;
 
     /** SNMP4J stuff **/
@@ -101,10 +91,9 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
     public void configure(Context context) {
         address = context.getString(CONF_ADDRESS, DEFAULT_ADDRESS);
         snmpTrapPort = context.getInteger(CONF_TRAP_PORT, DEFAULT_TRAP_PORT);
-        snmpPort = context.getInteger(CONF_SNMP_PORT, DEFAULT_SNMP_PORT);
 
         switch (Integer.valueOf(context.getString(CONF_SNMP_VERSION, DEFAULT_SNMP_VERSION)
-                .replace("V", "").replace("C", ""))) {
+                .replaceAll("(?i)V", "").replaceAll("(?i)C", ""))) {
             case 1:
                 version = SnmpConstants.version1;
                 break;
@@ -120,8 +109,8 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
         }
 
         switch (Integer.valueOf(context
-                .getString(CONF_SNMP_TRAP_VERSION, DEFAULT_SNMP_TRAP_VERSION).replace("V", "")
-                .replace("C", ""))) {
+                .getString(CONF_SNMP_TRAP_VERSION, DEFAULT_SNMP_TRAP_VERSION)
+                .replaceAll("(?i)V", "").replaceAll("(?i)C", ""))) {
             case 1:
                 trapVersion = SnmpConstants.version1;
                 break;
@@ -151,21 +140,23 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
         switch (context.getString(CONF_AUTH, DEFAULT_AUTH)) {
             case "AUTH_NOPRIV":
                 securityMethod = SecurityLevel.AUTH_NOPRIV;
+                username = context.getString(CONF_USERNAME);
+                password = context.getString(CONF_PASSWD);
                 break;
             case "NOAUTH_NOPRIV":
                 securityMethod = SecurityLevel.NOAUTH_NOPRIV;
                 break;
             case "AUTH_PRIV":
                 securityMethod = SecurityLevel.AUTH_PRIV;
+                username = context.getString(CONF_USERNAME);
+                password = context.getString(CONF_PASSWD);
+                privacyProtocol = context.getString(CONF_PRIV_PROTOCOL, DEFAULT_PRIV_PROTOCOL);
+                privacyPassword = context.getString(CONF_PRIV_PASSPHRASE);
                 break;
             default:
                 securityMethod = SecurityLevel.NOAUTH_NOPRIV;
                 break;
         }
-
-        username = context.getString(CONF_USERNAME);
-        password = context.getString(CONF_PASSWD);
-        community = context.getString(CONF_COMMUNITY);
 
         if (sourceCounter == null) {
             sourceCounter = new SourceCounter(getName());
@@ -193,9 +184,8 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
                 SecurityModels.getInstance().addSecurityModel(usm);
                 snmp.setLocalEngine(localEngineID, 0, 0);
 
-                // add auth
-                UsmUser user = new UsmUser(new OctetString(username), authMethod, new OctetString(
-                        password), null, null);
+                // add auth and privacy
+                UsmUser user = createUser();
                 snmp.getUSM().addUser(new OctetString(username), user);
 
             } else {
@@ -230,9 +220,8 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
                 SecurityModels.getInstance().addSecurityModel(usm);
                 trap_snmp.setLocalEngine(localEngineID, 0, 0);
 
-                // add auth
-                UsmUser user = new UsmUser(new OctetString(username), authMethod, new OctetString(
-                        password), null, null);
+                // add auth and Privacy
+                UsmUser user = createUser();
                 trap_snmp.getUSM().addUser(new OctetString(username), user);
 
             } else {
@@ -270,7 +259,7 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
             log.debug("couldn't listen to " + address + "----" + e);
             e.printStackTrace();
         }
-        
+
         sourceCounter.start();
 
     }
@@ -285,10 +274,45 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
             throw new RuntimeException(e);
         }
     }
-    
+
     @VisibleForTesting
     protected SourceCounter getSourceCounter() {
-      return sourceCounter;
+        return sourceCounter;
+    }
+
+    private UsmUser createUser() {
+        OID privacyOID = null;
+        OctetString privacyPasswd = null;
+        if (securityMethod == SecurityLevel.AUTH_PRIV) {
+            switch (privacyProtocol.toUpperCase(Locale.getDefault())) {
+                case "PRIVDES":
+                    privacyOID = PrivDES.ID;
+                    break;
+                case "PRIV3DES":
+                    privacyOID = Priv3DES.ID;
+                    break;
+                case "PRIVAES128":
+                    privacyOID = PrivAES128.ID;
+                    break;
+                case "PRIVAES192":
+                    privacyOID = PrivAES192.ID;
+                    break;
+                case "PRIVAES256":
+                    privacyOID = PrivAES256.ID;
+                    break;
+                case "PRIVAES192WITH3DESKEYEXTENSION":
+                    privacyOID = PrivAES192With3DESKeyExtension.ID;
+                    break;
+                case "PRIVAES256WITH3DESKEYEXTENSION":
+                    privacyOID = PrivAES256With3DESKeyExtension.ID;
+                    break;
+                default:
+                    log.debug("Privacy protocol " + privacyProtocol + " unsupported or invalid.");
+            }
+            privacyPasswd = new OctetString(privacyPassword);
+        }
+        return new UsmUser(new OctetString(username), authMethod, new OctetString(password),
+                privacyOID, privacyPasswd);
     }
 
 }
