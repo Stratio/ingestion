@@ -144,7 +144,9 @@ public class XmlXpathDeserializer implements EventDeserializer {
         ensureOpen();
         int index = currentIt.previousIndex();
         markIt = index >= 0 ? list.listIterator(currentIt.previousIndex()) : list.listIterator(0);
-        markIt.next();
+        if(markIt.hasNext()){
+            markIt.next();
+        }
     }
 
     @Override
@@ -152,7 +154,9 @@ public class XmlXpathDeserializer implements EventDeserializer {
         ensureOpen();
         int index = markIt.previousIndex();
         currentIt = index >= 0 ? list.listIterator(markIt.previousIndex()) : list.listIterator(0);
-        currentIt.next();
+        if(currentIt.hasNext()){
+            currentIt.next();
+        }
     }
 
     @Override
