@@ -57,10 +57,12 @@ public class ReadXmlTest {
     private static final String XML_FILE = "/readxml/test.xml";
     private static final String MORPH_CONF_FILE = "/readxml/readXml.conf";
     private static final String MORPH_CONFALL_FILE = "/readxml/readXmlAll.conf";
+    private static final String MORPH_CONFHEADER_FILE = "/readxml/readXmlHeader.conf";
 
     private Document doc;
     private Config config;
     private Config configAll;
+    private Config configHeader;
 
     @Before
     public void setUp() throws ParserConfigurationException, SAXException, IOException {
@@ -76,6 +78,8 @@ public class ReadXmlTest {
 
         config = parse(MORPH_CONF_FILE).getConfigList("commands").get(0).getConfig("readXml");
         configAll = parse(MORPH_CONFALL_FILE).getConfigList("commands").get(0).getConfig("readXml");
+        configHeader = parse(MORPH_CONFHEADER_FILE).getConfigList("commands").get(0)
+                .getConfig("readXml");
     }
 
     @Test
@@ -112,17 +116,16 @@ public class ReadXmlTest {
         command.process(record);
 
         Record result = collectorChild.getRecords().get(0);
-        assertEquals(result.get("book1").get(0),"Gambardella, Matthew");
+        assertEquals(result.get("book1").get(0), "Gambardella, Matthew");
     }
-    
-    
+
     @Test
-    public void testAll() throws FileNotFoundException{
+    public void testAll() throws FileNotFoundException {
         final MorphlineContext context = new MorphlineContext.Builder().build();
         Collector collectorParent = new Collector();
         Collector collectorChild = new Collector();
-        final Command command = new ReadXmlBuilder().build(configAll, collectorParent, collectorChild,
-                context);
+        final Command command = new ReadXmlBuilder().build(configAll, collectorParent,
+                collectorChild, context);
 
         Record record = new Record();
         record.put(Fields.ATTACHMENT_BODY,
@@ -131,7 +134,27 @@ public class ReadXmlTest {
         command.process(record);
 
         Record result = collectorChild.getRecords().get(0);
-        assertTrue(((String)result.get("_xml").get(0)).length() > 0);
+        assertTrue(((String) result.get("_xml").get(0)).length() > 0);
+    }
+
+    @Test
+    public void testSourceField() throws FileNotFoundException {
+        final MorphlineContext context = new MorphlineContext.Builder().build();
+        Collector collectorParent = new Collector();
+        Collector collectorChild = new Collector();
+        final Command command = new ReadXmlBuilder().build(configHeader, collectorParent,
+                collectorChild, context);
+
+        Record record = new Record();
+        record.put(
+                "field",
+                "<book id=\"bk101\"><author>Gambardella, Matthew</author><title>XML Developer's Guide</title><genre>Computer</genre><price>44.95</price><publish_date>2000-10-01</publish_date><description>An in-depth look at creating applications with XML.</description></book>");
+        record.put(Fields.ATTACHMENT_BODY,
+                new FileInputStream(new File(getClass().getResource(XML_FILE).getPath())));
+        command.process(record);
+
+        Record result = collectorChild.getRecords().get(0);
+        assertTrue(((String) result.get("book1").get(0)).equals("Gambardella, Matthew"));
     }
 
     protected Config parse(String file, Config... overrides) throws IOException {

@@ -19,8 +19,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.TransformerException;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -33,6 +38,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 @RunWith(JUnit4.class)
 public class XmlXpathDeserializerTest {
@@ -58,23 +65,39 @@ public class XmlXpathDeserializerTest {
     }
 
     @Test
-    public void testReset() throws IOException {
+    public void testReset() throws IOException{
         Context context = new Context();
         context.put("expression", "/bookstore/book/title");
         ResettableInputStream in = new ResettableTestStringInputStream(xmlContent);
         EventDeserializer des = new XmlXpathDeserializer(context, in);
         validateReset(des);
     }
+    
+    @Test
+    public void testDocument2String() throws Exception {    
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = factory.newDocumentBuilder();
+        InputSource is = new InputSource(new StringReader(xmlContent));
+        Document doc = docBuilder.parse(is);
+        
+        Context context = new Context();
+        context.put("expression", "/bookstore/book/title");
+        ResettableInputStream in = new ResettableTestStringInputStream(xmlContent);
+        XmlXpathDeserializer des = new XmlXpathDeserializer(context, in);
+        
+        Assert.assertNotNull(des.document2String(doc));
+        des.close();
+    }
 
     private void validateReadAndMark(EventDeserializer des) throws IOException {
         Event evt;
 
         evt = des.readEvent();
-        Assert.assertTrue(new String(evt.getBody()).contains("Giada De Laurentiis"));
+        Assert.assertTrue(new String(evt.getHeaders().get("element")).contains("Giada De Laurentiis"));
         des.mark();
 
         evt = des.readEvent();
-        Assert.assertTrue(new String(evt.getBody()).contains("J K. Rowling"));
+        Assert.assertTrue(new String(evt.getHeaders().get("element")).contains("J K. Rowling"));
         des.mark(); // reset!
 
         List<Event> readEvents = des.readEvents(2);

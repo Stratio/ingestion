@@ -58,14 +58,18 @@ public class XmlXpathDeserializer implements EventDeserializer {
     private static final Logger log = LoggerFactory.getLogger(XmlXpathDeserializer.class);
 
     private static final String CONF_XPATH_EXPRESSION = "expression";
+    private static final String CONF_ELEMENT = "outputField";
+    
+    private static final String DEFAULT_ELEMENT_FIELD = "element";
 
     private boolean isOpen;
     private String expression;
+    private String elementField;
+    private String body;
     private final XPath xpath;
     private XPathExpression expr;
     private DocumentBuilder docBuilder;
     private Document doc = null;
-    private ResettableInputStream resIn;
     private final ResettableInputStreamInputStream inStream;
     private List<String> list = null;
     private NodeList nodeList;
@@ -75,7 +79,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
             throws IOException {
 
         expression = context.getString(CONF_XPATH_EXPRESSION);
-        resIn = resettableInputStream;
+        elementField = context.getString(CONF_ELEMENT, DEFAULT_ELEMENT_FIELD);
         inStream = new ResettableInputStreamInputStream(resettableInputStream);
 
         xpath = XPathFactory.newInstance().newXPath();
@@ -91,6 +95,13 @@ public class XmlXpathDeserializer implements EventDeserializer {
         } catch (SAXException e) {
             log.error("Cannot parse body");
             e.printStackTrace();
+        }
+        
+        //Extract full xml to body
+        try {
+            body = document2String(doc);
+        } catch (TransformerException e1) {
+            e1.printStackTrace();
         }
 
         if (doc != null) {
@@ -122,7 +133,9 @@ public class XmlXpathDeserializer implements EventDeserializer {
             return null;
         } else {
             String event = currentIt.next();
-            return EventBuilder.withBody(event, Charsets.UTF_8);
+            Event ev = EventBuilder.withBody(body, Charsets.UTF_8);
+            ev.getHeaders().put(elementField, event);
+            return ev;
         }
     }
 
@@ -188,6 +201,15 @@ public class XmlXpathDeserializer implements EventDeserializer {
             e.printStackTrace();
         }
         return writer.toString();
+    }
+    
+    public String document2String(Document document) throws TransformerException{
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        StringWriter writer = new StringWriter();
+        transformer.transform(new DOMSource(document), new StreamResult(writer));
+        return writer.getBuffer().toString().replaceAll("\n|\r|\t| ", "");
     }
 
     public static class Builder implements EventDeserializer.Builder {

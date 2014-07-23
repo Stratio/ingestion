@@ -19,6 +19,7 @@ Sample Flume config
 	agent.sources.spoolSource.batchSize=100
 	agent.sources.spoolSource.deserializer=com.stratio.ingestion.deserializer.xmlxpath.XmlXpathDeserializer$Builder
 	agent.sources.spoolSource.deserializer.expression=/bookstore/book
+	agent.sources.spoolSource.deserializer.outputField=element
 
 	# Describe the sink
 	agent.sinks.logSink.type = logger

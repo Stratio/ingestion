@@ -17,6 +17,7 @@ package com.stratio.ingestion.morphline.commons;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -39,6 +40,7 @@ import org.kitesdk.morphline.stdio.AbstractParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.google.common.collect.Maps;
@@ -46,11 +48,12 @@ import com.typesafe.config.Config;
 
 //@formatter:off
 /**
- * The readXml command parses an InputStream from field _attachment_body and put uses 
- * XPath expressions to extract fields and add them into headers.
+ * The readXml command parses an InputStream from field specified by field parameter (_attachment_body by default) 
+ * and uses XPath expressions to extract fields and add them into headers.
  * Example:
  * {
  *     readXml {
+ *        field : source
  *        paths : {
  *          book1 : "/catalog/book[@id='bk101']/author"
  *          book2 : "/catalog/book[@id='bk102']/genre"
@@ -64,6 +67,7 @@ import com.typesafe.config.Config;
 public class ReadXmlBuilder implements CommandBuilder {
 
     private static final String PATHS_CONF = "paths";
+    private static final String CONF_FIELD = "source";
 
     @Override
     public Collection<String> getNames() {
@@ -80,6 +84,7 @@ public class ReadXmlBuilder implements CommandBuilder {
         private final Map<String, String> stepMap;
         private final XPath xpath;
         private boolean all = false;
+        private String field;
         private DocumentBuilder docBuilder;
 
         protected ReadXml(CommandBuilder builder, Config config, Command parent, Command child,
@@ -103,16 +108,13 @@ public class ReadXmlBuilder implements CommandBuilder {
                 stepMap.put(fieldName, path);
             }
 
+            field = getConfigs().getString(config, CONF_FIELD, null);
+
             if (stepMap.size() == 0) {
                 all = true;
             }
 
             LOG.debug("stepMap: {}", stepMap);
-            /*
-             * **************************************************+
-             */
-            
-            
         }
 
         @Override
@@ -121,7 +123,13 @@ public class ReadXmlBuilder implements CommandBuilder {
             removeAttachments(template);
             Document doc = null;
             try {
-                doc = docBuilder.parse(stream);
+                if (field == null) {
+                    doc = docBuilder.parse(stream);
+                } else if (record.get(field) != null) {
+                    InputSource is = new InputSource(new StringReader(String.valueOf(record.get(
+                            field).get(0))));
+                    doc = docBuilder.parse(is);
+                }
             } catch (SAXException e) {
                 LOG.error("Cannot parse body");
                 return false;
