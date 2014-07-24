@@ -58,11 +58,13 @@ public class ReadXmlTest {
     private static final String MORPH_CONF_FILE = "/readxml/readXml.conf";
     private static final String MORPH_CONFALL_FILE = "/readxml/readXmlAll.conf";
     private static final String MORPH_CONFHEADER_FILE = "/readxml/readXmlHeader.conf";
+    private static final String MORPH_CONFERROR_FILE = "/readxml/readXmlError.conf";
 
     private Document doc;
     private Config config;
     private Config configAll;
     private Config configHeader;
+    private Config configError;
 
     @Before
     public void setUp() throws ParserConfigurationException, SAXException, IOException {
@@ -79,6 +81,8 @@ public class ReadXmlTest {
         config = parse(MORPH_CONF_FILE).getConfigList("commands").get(0).getConfig("readXml");
         configAll = parse(MORPH_CONFALL_FILE).getConfigList("commands").get(0).getConfig("readXml");
         configHeader = parse(MORPH_CONFHEADER_FILE).getConfigList("commands").get(0)
+                .getConfig("readXml");
+        configError = parse(MORPH_CONFERROR_FILE).getConfigList("commands").get(0)
                 .getConfig("readXml");
     }
 
@@ -155,6 +159,22 @@ public class ReadXmlTest {
 
         Record result = collectorChild.getRecords().get(0);
         assertTrue(((String) result.get("book1").get(0)).equals("Gambardella, Matthew"));
+    }
+    
+    @Test
+    public void testNonExistentField() throws FileNotFoundException{
+        final MorphlineContext context = new MorphlineContext.Builder().build();
+        Collector collectorParent = new Collector();
+        Collector collectorChild = new Collector();
+        final Command command = new ReadXmlBuilder().build(configError, collectorParent,
+                collectorChild, context);
+
+        Record record = new Record();
+        record.put(Fields.ATTACHMENT_BODY,
+                new FileInputStream(new File(getClass().getResource(XML_FILE).getPath())));
+        command.process(record);
+
+        Record result = collectorChild.getRecords().get(0);
     }
 
     protected Config parse(String file, Config... overrides) throws IOException {

@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.TransformerException;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -65,35 +64,47 @@ public class XmlXpathDeserializerTest {
     }
 
     @Test
-    public void testReset() throws IOException{
+    public void testReset() throws IOException {
         Context context = new Context();
         context.put("expression", "/bookstore/book/title");
         ResettableInputStream in = new ResettableTestStringInputStream(xmlContent);
         EventDeserializer des = new XmlXpathDeserializer(context, in);
         validateReset(des);
     }
-    
+
     @Test
-    public void testDocument2String() throws Exception {    
+    public void testDocument2String() throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
         InputSource is = new InputSource(new StringReader(xmlContent));
         Document doc = docBuilder.parse(is);
-        
+
         Context context = new Context();
         context.put("expression", "/bookstore/book/title");
         ResettableInputStream in = new ResettableTestStringInputStream(xmlContent);
         XmlXpathDeserializer des = new XmlXpathDeserializer(context, in);
-        
+
         Assert.assertNotNull(des.document2String(doc));
         des.close();
+    }
+
+    @Test
+    public void testXPathStaticHeaders() throws IOException {
+        Context context = new Context();
+        context.put("expression", "/bookstore/book");
+        context.put("headers.book", "/bookstore/book[@category='CHILDREN']/title");
+        context.put("headers.author", "/bookstore/book[@category='CHILDREN']/author");
+        ResettableInputStream in = new ResettableTestStringInputStream(xmlContent);
+        EventDeserializer des = new XmlXpathDeserializer(context, in);
+        validateHeaders(des);
     }
 
     private void validateReadAndMark(EventDeserializer des) throws IOException {
         Event evt;
 
         evt = des.readEvent();
-        Assert.assertTrue(new String(evt.getHeaders().get("element")).contains("Giada De Laurentiis"));
+        Assert.assertTrue(new String(evt.getHeaders().get("element"))
+                .contains("Giada De Laurentiis"));
         des.mark();
 
         evt = des.readEvent();
@@ -134,6 +145,15 @@ public class XmlXpathDeserializerTest {
 
     }
 
+    private void validateHeaders(EventDeserializer des) throws IOException {
+        List<Event> events = des.readEvents(4);
+        Assert.assertTrue(events.size() == 4);
+
+        for (Event evt : events) {
+            Assert.assertEquals(evt.getHeaders().get("author"), "J K. Rowling");
+        }
+    }
+
     private String readFile(File file) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(file));
         try {
@@ -150,4 +170,5 @@ public class XmlXpathDeserializerTest {
             br.close();
         }
     }
+
 }

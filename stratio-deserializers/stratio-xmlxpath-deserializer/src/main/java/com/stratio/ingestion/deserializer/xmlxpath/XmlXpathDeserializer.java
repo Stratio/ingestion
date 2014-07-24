@@ -18,8 +18,11 @@ package com.stratio.ingestion.deserializer.xmlxpath;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -51,21 +54,39 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
+//@formatter:off
+/**
+* <p>XML XPath Deserializer. Read InputStream as XML compile a XPathExpression and create event for each element 
+* result of apply that expression to the xml in headers. Maintain whole xml in body.</p>.
+* <ul>
+* <li><em>outputField</em>: Output Field in header where put events. Default: element.</li>
+* <li><em>expression</em>: XPath expression. </li>
+* </ul>
+* 
+* <p>A special option is the chance to evaluate xpath expression for each event and add result in a header. For example:</p>
+* <code>
+* <li>headers.author= <XPathExpression> will put result of expression in author field of header.</li>
+* </code>
+*/
+//@formatter:on
 public class XmlXpathDeserializer implements EventDeserializer {
 
     private static final Logger log = LoggerFactory.getLogger(XmlXpathDeserializer.class);
 
     private static final String CONF_XPATH_EXPRESSION = "expression";
     private static final String CONF_ELEMENT = "outputField";
-    
+    private static final String CONF_HEADERS = "headers.";
+
     private static final String DEFAULT_ELEMENT_FIELD = "element";
 
     private boolean isOpen;
     private String expression;
     private String elementField;
     private String body;
+    private Map<String, String> staticHeaders;
     private final XPath xpath;
     private XPathExpression expr;
     private DocumentBuilder docBuilder;
@@ -80,6 +101,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
 
         expression = context.getString(CONF_XPATH_EXPRESSION);
         elementField = context.getString(CONF_ELEMENT, DEFAULT_ELEMENT_FIELD);
+        ImmutableMap<String, String> headers = context.getSubProperties(CONF_HEADERS);
         inStream = new ResettableInputStreamInputStream(resettableInputStream);
 
         xpath = XPathFactory.newInstance().newXPath();
@@ -96,13 +118,16 @@ public class XmlXpathDeserializer implements EventDeserializer {
             log.error("Cannot parse body");
             e.printStackTrace();
         }
-        
-        //Extract full xml to body
+
+        // Extract full xml to body
         try {
             body = document2String(doc);
         } catch (TransformerException e1) {
             e1.printStackTrace();
         }
+
+        // Add static fiels. These will be included in all events.
+        staticHeaders = evaluateStaticFields(headers);
 
         if (doc != null) {
             isOpen = true;
@@ -135,6 +160,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
             String event = currentIt.next();
             Event ev = EventBuilder.withBody(body, Charsets.UTF_8);
             ev.getHeaders().put(elementField, event);
+            ev.getHeaders().putAll(staticHeaders);
             return ev;
         }
     }
@@ -157,7 +183,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
         ensureOpen();
         int index = currentIt.previousIndex();
         markIt = index >= 0 ? list.listIterator(currentIt.previousIndex()) : list.listIterator(0);
-        if(markIt.hasNext()){
+        if (markIt.hasNext()) {
             markIt.next();
         }
     }
@@ -167,7 +193,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
         ensureOpen();
         int index = markIt.previousIndex();
         currentIt = index >= 0 ? list.listIterator(markIt.previousIndex()) : list.listIterator(0);
-        if(currentIt.hasNext()){
+        if (currentIt.hasNext()) {
             currentIt.next();
         }
     }
@@ -202,14 +228,36 @@ public class XmlXpathDeserializer implements EventDeserializer {
         }
         return writer.toString();
     }
-    
-    public String document2String(Document document) throws TransformerException{
+
+    public String document2String(Document document) throws TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(document), new StreamResult(writer));
         return writer.getBuffer().toString().replaceAll("\n|\r|\t| ", "");
+    }
+
+    /**
+     * From a properties, evaluate every xpath expression in value and put result in a map
+     * maintaining given key.
+     * 
+     * @param properties
+     * @return
+     */
+    private Map<String, String> evaluateStaticFields(ImmutableMap<String, String> properties) {
+        Map<String, String> headers = new HashMap<String, String>();
+        for (Entry<String, String> entry : properties.entrySet()) {
+            try {
+                XPathExpression expression = xpath.compile(entry.getValue());
+                String value = (String) expression.evaluate(doc, XPathConstants.STRING);
+                headers.put(entry.getKey(), value);
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return headers;
     }
 
     public static class Builder implements EventDeserializer.Builder {
