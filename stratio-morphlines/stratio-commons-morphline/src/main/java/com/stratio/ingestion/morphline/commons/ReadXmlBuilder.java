@@ -36,6 +36,7 @@ import org.kitesdk.morphline.api.CommandBuilder;
 import org.kitesdk.morphline.api.MorphlineContext;
 import org.kitesdk.morphline.api.Record;
 import org.kitesdk.morphline.base.Configs;
+import org.kitesdk.morphline.base.Fields;
 import org.kitesdk.morphline.stdio.AbstractParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.ls.DOMImplementationLS;
@@ -119,8 +120,6 @@ public class ReadXmlBuilder implements CommandBuilder {
 
         @Override
         protected boolean doProcess(Record record, InputStream stream) throws IOException {
-            Record template = record.copy();
-            removeAttachments(template);
             Document doc = null;
             try {
                 if (field == null) {
@@ -134,8 +133,7 @@ public class ReadXmlBuilder implements CommandBuilder {
                 LOG.error("Cannot parse body");
                 return false;
             }
-            Record outputRecord = template.copy();
-
+            Record outputRecord = record.copy();
             if (all) {
                 outputRecord.put("_xml", XMLtoString(doc));
                 if (!getChild().process(outputRecord)) {
@@ -148,13 +146,13 @@ public class ReadXmlBuilder implements CommandBuilder {
                         expr = xpath.compile(entry.getValue());
                         String field = (String) expr.evaluate(doc, XPathConstants.STRING);
                         outputRecord.put(entry.getKey(), field);
-                        if (!getChild().process(outputRecord)) {
-                            return false;
-                        }
                     } catch (XPathExpressionException e) {
                         LOG.error("Invalid XPATH expression -> " + expr);
                         return false;
                     }
+                }
+                if (!getChild().process(outputRecord)) {
+                    return false;
                 }
             }
 

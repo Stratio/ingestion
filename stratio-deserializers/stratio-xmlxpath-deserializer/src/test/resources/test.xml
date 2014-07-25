@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bookstore>
+<bookstore xmlns:cm="http://www.nessus.org/cm">
 	<book>
 	  <title lang="en" category="WEB">Everyday Italian</title>
 	  <author>Giada De Laurentiis</author>

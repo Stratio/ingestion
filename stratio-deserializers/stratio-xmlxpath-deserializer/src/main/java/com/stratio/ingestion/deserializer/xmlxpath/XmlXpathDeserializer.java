@@ -235,7 +235,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(document), new StreamResult(writer));
-        return writer.getBuffer().toString().replaceAll("\n|\r|\t| ", "");
+        return writer.getBuffer().toString().replaceAll("\n|\r|\t", "");
     }
 
     /**
