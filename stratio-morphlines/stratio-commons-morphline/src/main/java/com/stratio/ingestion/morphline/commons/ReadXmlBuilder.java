@@ -67,7 +67,7 @@ import com.typesafe.config.Config;
 //@formatter:on
 public class ReadXmlBuilder implements CommandBuilder {
 
-    private static final String PATHS_CONF = "paths";
+    private static final String CONF_PATHS = "paths";
     private static final String CONF_FIELD = "source";
 
     @Override
@@ -102,7 +102,7 @@ public class ReadXmlBuilder implements CommandBuilder {
                 e.printStackTrace();
             }
 
-            Config paths = getConfigs().getConfig(config, PATHS_CONF);
+            Config paths = getConfigs().getConfig(config, CONF_PATHS);
             for (Map.Entry<String, Object> entry : new Configs().getEntrySet(paths)) {
                 String fieldName = entry.getKey();
                 String path = entry.getValue().toString().trim();
