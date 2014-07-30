@@ -1,0 +1,26 @@
+---
+
+- name: Map repo directory
+  set_fact: ingestion_repo_dir=tmp/stratio-ingestion
+
+- name: Clone git repo
+  local_action: git repo=https://github.com/Stratio/stratio-ingestion.git version={{ stratio_ingestion_version }} update=yes dest={{ ingestion_repo_dir }}
+  sudo: False
+
+- name: Check version
+  local_action: shell mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v '^\[' chdir={{ ingestion_repo_dir }}
+  sudo: False
+  register: ingestion_version
+
+- name: Check if distro exists
+  local_action: stat path={{ ingestion_repo_dir }}/stratio-ingestion-all/target/stratio-ingestion-all-{{ ingestion_version.stdout }}-full.tar.gz
+  sudo: False
+  register: ingestion_distro_stat
+
+- name: Build distro
+  local_action: shell mvn package &> /dev/null chdir={{ ingestion_repo_dir }}
+  sudo: False
+  when: not {{ ingestion_distro_stat.stat.exists }}
+
+- name: Extract distro
+  shell: mkdir -p /opt/stratio/ingestion && cd /opt/stratio/ingestion && tar --strip-components 1 -xzf /vagrant/provisioning/{{ ingestion_repo_dir }}/stratio-ingestion-all/target/stratio-ingestion-all-{{ ingestion_version.stdout }}-full.tar.gz

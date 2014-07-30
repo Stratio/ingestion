@@ -1,0 +1,8 @@
+---
+elasticsearch_version: 1.3.1
+elasticsearch_apt_repos: []
+elasticsearch_install_java: false
+elasticsearch_cluster_name: stratiodemo
+#FIXME: The following is required by the role,
+#       but it should be made optional.
+elasticsearch_timezone: UTC

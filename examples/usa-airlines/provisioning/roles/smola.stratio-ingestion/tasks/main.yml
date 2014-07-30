@@ -1,0 +1,3 @@
+---
+# tasks file for stratio-ingestion
+- include: build.yml

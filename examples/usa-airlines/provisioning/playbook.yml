@@ -1,0 +1,9 @@
+---
+- hosts: stratiodemo
+  gather_facts: yes
+  vars_files:
+    - vars/main.yml
+  roles:
+    - briancoca.oracle_java7
+    - gpstathis.elasticsearch
+    - smola.stratio-ingestion

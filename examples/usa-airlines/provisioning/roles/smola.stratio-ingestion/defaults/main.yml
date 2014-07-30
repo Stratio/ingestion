@@ -1,0 +1,3 @@
+---
+# defaults file for stratio-ingestion
+stratio_ingestion_version: develop

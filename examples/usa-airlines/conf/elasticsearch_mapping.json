@@ -1,0 +1,25 @@
+{ 
+"properties" : {
+	"@timestamp": { "type": "date", "format": "dateOptionalTime", "store": true },
+	"Year": { "type": "integer" },
+	"Month": { "type": "integer" },
+	"DayofMonth": { "type": "integer" },
+	"DayofWeek": { "type": "integer" },
+	"UniqueCarrier": { "type": "string", "index": "not_analyzed" },
+	"Origin": { "type": "string", "index": "not_analyzed" },
+	"Dest": { "type": "string", "index": "not_analyzed" },
+	"ArrDelay": { "type": "integer" },
+	"DepDelay": { "type": "integer" },
+	"CarrierDelay": { "type": "integer" },
+	"WeatherDelay": { "type": "integer" },
+	"NASDelay": { "type": "integer" },
+	"SecurityDelay": { "type": "integer" },
+	"LateAircraftDelay": { "type": "integer" },
+	"AirTime": { "type": "integer" },
+	"Distance": { "type": "integer" },
+	"Cancelled": { "type": "boolean" },
+	"Diverted": { "type": "boolean" }
+},
+"_source": { "enabled": true },
+"_all": { "enabled": false }
+}
