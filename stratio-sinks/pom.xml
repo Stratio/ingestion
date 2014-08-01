@@ -33,6 +33,7 @@
 		<module>stratio-cassandra-sink</module>
 	        <module>stratio-mongodb-sink</module>
 		<module>stratio-jdbc-sink</module>
+		<module>stratio-kafka-sink</module>
 	</modules>
 
 </project>
