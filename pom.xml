@@ -40,7 +40,7 @@
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 
-		<flume.version>1.5.0.1</flume.version>
+		<flume.version>1.6.0-SNAPSHOT</flume.version>
 		<streaming.api.version>0.3.3</streaming.api.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
@@ -51,12 +51,8 @@
 		<commons.lang3.version>3.3.2</commons.lang3.version>
         <commons.io.version>2.1</commons.io.version>
         <slf4j.version>1.7.7</slf4j.version>
-        <kite.version>0.14.1</kite.version>
-        <!--
-            XXX: We need to use an old Guava. kite-morphlines (as of version 14) uses
-            the deprecated com.google.common.io.Closeables.closeQuietly(Ljava/io/Closeable;)V
-        -->
-        <guava.version>15.0</guava.version>
+        <kite.version>0.16.0</kite.version>
+        <guava.version>17.0</guava.version>
 	</properties>
 
 	<modules>
@@ -67,13 +63,6 @@
 	        <module>stratio-deserializers</module>
 		<module>stratio-ingestion-all</module>
     </modules>
-
-    <repositories>
-        <repository>
-            <id>cloudera-repo-releases</id>
-            <url>https://repository.cloudera.com/artifactory/repo/</url>
-        </repository>
-    </repositories>
 
 	<dependencyManagement>
 		<dependencies>
