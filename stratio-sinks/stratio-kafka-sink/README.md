@@ -3,16 +3,15 @@ Stratio Kafka Sink
 
 Kafka Sink.  Send events to Kafka.
 
-
-
 Configuration
 =============
 
 The available config parameters are:
 
-- `topic` *(string)*:  Name of topic where event will be sent to. Defaults to test.
-
+- `topic` *(string)*:  Name of topic where event will be sent to. Required.
+- `writeBody` *(boolean)*: true to send body in raw String format and false to send headers in json String format. Default: False (Send only headers).
 - `kafka.<producer-property>` *(string)*: This sink accept any kafka producer property. Just write it after prefix "kafka.". Example: kafka.metadata.broker.list
+
 
 
 Sample Complete-flow Flume config
@@ -41,7 +40,6 @@ The following file describes an example configuration of an Flume agent that use
     agent.channels.c1.type = file
     agent.channels.c1.checkpointDir = /home/user/flume/channel/check/
     agent.channels.c1.dataDirs = /home/user/flume/channel/data/
-    # Remember, transactionCapacity must be greater than sink.batchSize
     agent.channels.c1.transactionCapacity=10000
 
     # Bind the source and sink to the channel

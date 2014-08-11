@@ -79,6 +79,7 @@ public class KafkaSinkTest {
 
         Context kafkaContext = new Context();
         kafkaContext.put("topic", "test");
+        kafkaContext.put("writeBody", "false");
         kafkaContext.put("kafka.metadata.broker.list", "localhost:9092");
         kafkaContext.put("kafka.serializer.class", "kafka.serializer.StringEncoder");
 
@@ -131,21 +132,19 @@ public class KafkaSinkTest {
 
         kafkaSink.process();
 
-
         kafka.api.FetchRequest req = new FetchRequestBuilder().clientId(CLIENT_ID)
                 .addFetch("test", 0, 0L, 100).build();
         FetchResponse fetchResponse = simpleConsumer.fetch(req);
         ByteBufferMessageSet messageSet = fetchResponse.messageSet("test", 0);
-        
+
         Assert.assertTrue(messageSet.sizeInBytes() > 0);
-        for (MessageAndOffset messageAndOffset : messageSet)
-        {
-           ByteBuffer payload = messageAndOffset.message().payload();
-           byte[] bytes = new byte[payload.limit()];
-           payload.get(bytes);
-           String message = new String(bytes, "UTF-8");
-           Assert.assertNotNull(message);
-           Assert.assertEquals(message, "{\"myString\":\"foo\",\"myInt32\":32}");
+        for (MessageAndOffset messageAndOffset : messageSet) {
+            ByteBuffer payload = messageAndOffset.message().payload();
+            byte[] bytes = new byte[payload.limit()];
+            payload.get(bytes);
+            String message = new String(bytes, "UTF-8");
+            Assert.assertNotNull(message);
+            Assert.assertEquals(message, "{\"myString\":\"foo\",\"myInt32\":32}");
         }
     }
 }

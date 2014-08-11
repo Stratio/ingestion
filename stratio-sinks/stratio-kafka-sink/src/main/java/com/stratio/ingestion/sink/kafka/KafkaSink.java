@@ -29,6 +29,7 @@ import org.apache.flume.Transaction;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.conf.ConfigurationException;
 import org.apache.flume.sink.AbstractSink;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,16 +38,24 @@ import com.google.common.collect.ImmutableMap;
 //@formatter:off
 /**
 *
-* <p>Reads events from a channel and writes them to Kafka.</p>
+* <p>Reads events from a channel and writes them to Kafka. </p>.
 *
 * Configuration parameters are:
 *
 * <p>
 * <ul>
 * <li><tt>topic</tt>: Name of topic where event will be sent to. Defaults to <tt>test</tt>.</li>
+* <li><tt>writeBody</tt>: true to send body in raw String format and false to send headers in json String format. Default: False (Send only headers). </li>
 * <li><tt>kafka.<kafka-producer-property></tt>: This sink accept any kafka producer property. Just write it after prefix <tt>kafka.</tt>.</li>
 * </ul>
 * </p>
+* 
+* <code>
+* a.sinks.kafkaSink.topic = Test
+* a.sinks.kafkaSink.writeBody = false
+* a.sinks.kafkaSink.kafka.serializer = kafka.serializer.StringEncoder
+* a.sinks.kafkaSink.kafka.metadata.broker.list = localhost:9092
+* </code>
 *
 */
 //@formatter:on
@@ -54,24 +63,32 @@ public class KafkaSink extends AbstractSink implements Configurable {
 
     private static final Logger log = LoggerFactory.getLogger(KafkaSink.class);
     private static final String CONF_TOPIC = "topic";
+    private static final String CONF_WRITE_BODY = "writeBody";
     private static final String CONF_KAFKA = "kafka.";
-    
-    private static final String DEFAULT_TOPIC = "test";
+
+    private static final Boolean DEFAULT_WRITE_BODY = Boolean.FALSE;
 
     private String topic;
     private Producer<String, String> producer;
-    
+    private ObjectMapper mapper;
+    private boolean writeBody;
+
     @Override
     public void configure(Context context) {
-        topic = context.getString(CONF_TOPIC, DEFAULT_TOPIC);
+        topic = context.getString(CONF_TOPIC);
         if (topic == null) {
             throw new ConfigurationException("Kafka topic must be specified.");
         }
+
+        writeBody = context.getBoolean(CONF_WRITE_BODY, DEFAULT_WRITE_BODY);
+
         ImmutableMap<String, String> subProperties = context.getSubProperties(CONF_KAFKA);
         Properties properties = new Properties();
         properties.putAll(subProperties);
-        
+
         producer = new Producer<String, String>(new ProducerConfig(properties));
+
+        mapper = new ObjectMapper();
     }
 
     @Override
@@ -86,8 +103,15 @@ public class KafkaSink extends AbstractSink implements Configurable {
                 return Status.READY;
 
             }
-            producer.send(new KeyedMessage<String, String>(topic, new String(event
-                    .getBody())));
+
+            String data = null;
+            if(writeBody){
+                data = new String(event.getBody());
+            } else {
+                data = mapper.writeValueAsString(event.getHeaders());
+            }
+
+            producer.send(new KeyedMessage<String, String>(topic, data));
             tx.commit();
             return Status.READY;
         } catch (Exception e) {
@@ -96,7 +120,7 @@ public class KafkaSink extends AbstractSink implements Configurable {
                 return Status.BACKOFF;
             } catch (Exception e2) {
                 log.error("Rollback Exception:{}", e2);
-            }       
+            }
             log.error("KafkaSink Exception:{}", e);
             return Status.BACKOFF;
         } finally {
