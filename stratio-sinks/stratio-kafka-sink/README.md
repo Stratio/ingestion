@@ -36,7 +36,6 @@ The following file describes an example configuration of an Flume agent that use
     agent.sinks.kafkaSink.kafka.serializer.class = kafka.serializer.StringEncoder
 
     # Use a channel which buffers events in file
-    agent.channels = c1
     agent.channels.c1.type = file
     agent.channels.c1.checkpointDir = /home/user/flume/channel/check/
     agent.channels.c1.dataDirs = /home/user/flume/channel/data/
@@ -45,4 +44,4 @@ The following file describes an example configuration of an Flume agent that use
     # Bind the source and sink to the channel
     agent.sources.r1.channels = c1
     agent.sinks.kafkaSink.channel = c1
-
+```
