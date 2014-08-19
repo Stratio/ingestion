@@ -9,10 +9,15 @@ Stratio Ingestion consists of the following components:
 
 * Data transporter and collector: [Apache Flume](http://flume.apache.org/)
 * Data extractor and transformer: [Morphlines](http://kitesdk.org/docs/current/kite-morphlines/index.html)
+* Custom sources to read data from:
+    - REST
+    - FlumeStats
+    - SNMPTraps
 * Custom sinks to write the data to:
     - Cassandra
     - MongoDB
     - [Stratio Streaming](https://github.com/Stratio/stratio-streaming)
     - JDBC
+    - Kafka
 * Visual editor that makes the ETL flow design a child's play (TODO).
 
