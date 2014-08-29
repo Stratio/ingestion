@@ -15,6 +15,7 @@
  */
 package com.stratio.ingestion.source.redis;
 
+import com.google.common.collect.Maps;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.EventDrivenSource;
@@ -28,6 +29,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
 import java.nio.charset.Charset;
+import java.util.Map;
 
 /**
  *
@@ -39,7 +41,8 @@ import java.nio.charset.Charset;
  * <ul>
  * <li><tt>host</tt> <em>(string)</em>: Redist host. Default: localhost.</li>
  * <li><tt>port</tt> <em>(integer)</em>: Redis port. Default: 6379.</li>
- * <li><tt>channels</tt> <em>(string)</em>: Channels to subscribe. Comma separated channels values. Required.</li>
+ * <li><tt>subscribe</tt> <em>(string)</em>: Channels to subscribe. Comma separated channels values.</li>
+ * <li><tt>psubscribe</tt> <em>(string)</em>: Channels to subscribe with given pattern./li>
  * <li><tt></tt>charset</tt> <em>(string)</em>: Charset. Default: utf-8. </li>
  * </ul>
  * </p>
@@ -56,8 +59,9 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
     private Integer port;
     private String charset;
     private String [] channels;
+    private String [] patterns;
 
-    private boolean runFlag;
+    boolean pattern = false;
 
 	@Override
 	public void configure(Context context) {
@@ -66,11 +70,16 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
         port = context.getInteger(RedisConstants.CONF_PORT, RedisConstants.DEFAULT_PORT);
         charset = context.getString(RedisConstants.CONF_CHARSET, RedisConstants.DEFAULT_CHARSET);
         String rawChannels = context.getString(RedisConstants.CONF_CHANNELS);
-        if(null == rawChannels){
-            throw new RuntimeException("Channels must be not null.");
+        String rawPatterns = context.getString(RedisConstants.CONF_PCHANNELS);
+        if(null != rawChannels){
+            channels = rawChannels.trim().split(",");
+            pattern = false;
+        } else if (null != rawPatterns){
+            patterns = rawPatterns.trim().split(",");
+            pattern = true;
+        } else {
+            throw new RuntimeException("You must set " + RedisConstants.CONF_CHANNELS  + " or " + RedisConstants.CONF_PCHANNELS + " property.");
         }
-
-        channels = rawChannels.trim().split(",");
 
         log.info("Redis Source Configured");
 	}
@@ -83,8 +92,6 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
 
         jedis = new Jedis(host, port);
         log.info("Redis Connected. (host: " + host + ", port: " + String.valueOf(port) + ")");
-
-        runFlag = true;
 
         new Thread(new SubscribeManager()).start();
 	}
@@ -110,6 +117,10 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
 
                 @Override
                 public void onPMessage(String pattern, String channel, String message) {
+                    Map<String, String> headers = Maps.newHashMap();
+                    headers.put("channel", channel);
+                    Event event = EventBuilder.withBody(message, Charset.forName(charset), headers);
+                    channelProcessor.processEvent(event);
                 }
 
                 @Override
@@ -123,16 +134,29 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
                 }
 
                 @Override
-                public void onPUnsubscribe(String pattern, int subscribedChannels) {
+                public void onPUnsubscribe(String Pattern, int subscribedChannels) {
+                    log.info("onPUnSubscribe (Pattern: " + Pattern + ")");
                 }
 
                 @Override
                 public void onPSubscribe(String pattern, int subscribedChannels) {
+                    log.info("onPSubscribe (Pattern: " + pattern + ")");
                 }
             };
 
-            jedis.subscribe(jedisPubSub, channels);
+            if(pattern){
+                for(String pattern : patterns){
+                    log.info("Jedis is going to subscribe to pattern: " + pattern);
+                }
 
+                jedis.psubscribe(jedisPubSub, patterns);
+            } else {
+                for(String channel : channels){
+                    log.info("Jedis is going to subscribe to channel: " + channel);
+                }
+
+                jedis.subscribe(jedisPubSub, channels);
+            }
         }
     }
 	

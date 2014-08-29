@@ -18,7 +18,8 @@ package com.stratio.ingestion.source.redis;
 public class RedisConstants {
 	public static final String CONF_HOST = "host";
     public static final String CONF_PORT = "port";
-    public static final String CONF_CHANNELS = "channels";
+    public static final String CONF_CHANNELS = "subscribe";
+    public static final String CONF_PCHANNELS = "psubscribe";
     public static final String CONF_CHARSET = "charset";
 
 

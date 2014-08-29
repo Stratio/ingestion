@@ -1,7 +1,7 @@
 Stratio Redis Source
 ==============================
 
-A Flume source that read data from Redis Pub Sub system.
+A Flume source that read data from Redis Pub Sub system. Accept patterns.
 
 Configuration
 =============
@@ -10,7 +10,8 @@ Available config parameters:
 
 - `host` *(string)*: Redist host. Default: localhost.
 - `port` *(integer)*: Redis port. Default: 6379.
-- `channels` *(string)*: Channels to subscribe to. String or comma separated strings. Required.
+- `subscribe` *(string)*: Channels to subscribe to. String or comma separated strings.
+- `psubscribe` *(string)*: Channels to subscribe with given pattern. String or comma separated strings. Invalid if subscribe is assigned.
 - `charset`*(string)* : Charset. Default: uft-8.
 
 
@@ -28,7 +29,7 @@ agent.channels = c1
 # Describe the source
 agent.sources.pubsub.type=com.stratio.ingestion.source.redis.RedisSource
 agent.sources.pubsub.host=localhost
-agent.sources.pubsub.channels=channel1, channel2
+agent.sources.pubsub.subscribe=channel1,channel2
 
 
 # Describe the sink
@@ -36,11 +37,7 @@ agent.sinks.logSink.type = logger
 
 
 # Use a channel which buffers events in file
-agent.channels.c1.type = file
-agent.channels.c1.checkpointDir = /home/user/flume/channel/check/
-agent.channels.c1.dataDirs = /home/user/flume/channel/data/
-agent.channels.c1.transactionCapacity=10000
-
+agent.channels.c1.type = memory
 
 # Bind the source and sink to the channel
 agent.sources.pubsub.channels = c1
