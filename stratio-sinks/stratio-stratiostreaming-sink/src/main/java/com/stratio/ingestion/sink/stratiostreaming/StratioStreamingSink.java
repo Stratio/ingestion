@@ -17,10 +17,10 @@ package com.stratio.ingestion.sink.stratiostreaming;
 
 import com.stratio.streaming.api.IStratioStreamingAPI;
 import com.stratio.streaming.api.StratioStreamingAPIFactory;
+import com.stratio.streaming.api.messaging.ColumnNameType;
+import com.stratio.streaming.api.messaging.ColumnNameValue;
 import com.stratio.streaming.commons.constants.ColumnType;
 import com.stratio.streaming.commons.exceptions.StratioStreamingException;
-import com.stratio.streaming.messaging.ColumnNameType;
-import com.stratio.streaming.messaging.ColumnNameValue;
 import org.apache.commons.io.IOUtils;
 import org.apache.flume.*;
 import org.apache.flume.conf.Configurable;
