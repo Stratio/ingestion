@@ -26,11 +26,11 @@
 
 	<name>Stratio Ingestion</name>
 
-    <organization>
-        <name>Stratio</name>
-        <url>http://stratio.com</url>
-    </organization>
-    <inceptionYear>2014</inceptionYear>
+	<organization>
+		<name>Stratio</name>
+		<url>http://stratio.com</url>
+	</organization>
+	<inceptionYear>2014</inceptionYear>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -49,14 +49,12 @@
 		<elasticsearch.version>1.1.1</elasticsearch.version>
 		<tika.version>1.5</tika.version>
 		<commons.lang3.version>3.3.2</commons.lang3.version>
-        <commons.io.version>2.1</commons.io.version>
-        <slf4j.version>1.7.7</slf4j.version>
-        <kite.version>0.14.1</kite.version>
-        <!--
-            XXX: We need to use an old Guava. kite-morphlines (as of version 14) uses
-            the deprecated com.google.common.io.Closeables.closeQuietly(Ljava/io/Closeable;)V
-        -->
-        <guava.version>15.0</guava.version>
+		<commons.io.version>2.1</commons.io.version>
+		<slf4j.version>1.7.7</slf4j.version>
+		<kite.version>0.14.1</kite.version>
+		<!-- XXX: We need to use an old Guava. kite-morphlines (as of version 14) 
+			uses the deprecated com.google.common.io.Closeables.closeQuietly(Ljava/io/Closeable;)V -->
+		<guava.version>15.0</guava.version>
 	</properties>
 
 	<modules>
@@ -64,24 +62,24 @@
 		<module>stratio-sinks</module>
 		<module>stratio-morphlines</module>
 		<module>stratio-serializers</module>
-	        <module>stratio-deserializers</module>
+		<module>stratio-deserializers</module>
 		<module>stratio-ingestion-all</module>
-    </modules>
+	</modules>
 
-    <repositories>
-        <repository>
-            <id>cloudera-repo-releases</id>
-            <url>https://repository.cloudera.com/artifactory/repo/</url>
-        </repository>
-    </repositories>
+	<repositories>
+		<repository>
+			<id>cloudera-repo-releases</id>
+			<url>https://repository.cloudera.com/artifactory/repo/</url>
+		</repository>
+	</repositories>
 
 	<dependencyManagement>
 		<dependencies>
-            <dependency>
-                <groupId>org.apache.flume</groupId>
-                <artifactId>flume-ng-core</artifactId>
-                <version>${flume.version}</version>
-            </dependency>
+			<dependency>
+				<groupId>org.apache.flume</groupId>
+				<artifactId>flume-ng-core</artifactId>
+				<version>${flume.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.flume.flume-ng-sinks</groupId>
 				<artifactId>flume-ng-elasticsearch-sink</artifactId>
@@ -125,64 +123,62 @@
 				<scope>test</scope>
 				<version>${mockito.version}</version>
 			</dependency>
-            <dependency>
-                <groupId>org.easytesting</groupId>
-                <artifactId>fest-assert</artifactId>
-                <version>1.4</version>
-            </dependency>
+			<dependency>
+				<groupId>org.easytesting</groupId>
+				<artifactId>fest-assert</artifactId>
+				<version>1.4</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>${commons.lang3.version}</version>
 			</dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons.io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.typesafe</groupId>
-                <artifactId>config</artifactId>
-                <version>1.2.1</version>
-            </dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons.io.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.typesafe</groupId>
+				<artifactId>config</artifactId>
+				<version>1.2.1</version>
+			</dependency>
 
-            <!--
-                com.codahale.metrics are used by Cassandra Driver and Kite Morphlines,
-                Here we harmonize the version used
-            -->
-            <dependency>
-                <groupId>com.codahale.metrics</groupId>
-                <artifactId>metrics-core</artifactId>
-                <version>3.0.2</version>
-            </dependency>
-            <dependency>
-                <groupId>com.codahale.metrics</groupId>
-                <artifactId>metrics-healthchecks</artifactId>
-                <version>3.0.2</version>
-            </dependency>
+			<!-- com.codahale.metrics are used by Cassandra Driver and Kite Morphlines, 
+				Here we harmonize the version used -->
+			<dependency>
+				<groupId>com.codahale.metrics</groupId>
+				<artifactId>metrics-core</artifactId>
+				<version>3.0.2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.codahale.metrics</groupId>
+				<artifactId>metrics-healthchecks</artifactId>
+				<version>3.0.2</version>
+			</dependency>
 
-            <dependency>
-                <groupId>org.apache.hadoop</groupId>
-                <artifactId>hadoop-common</artifactId>
-                <version>2.2.0</version>
-            </dependency>
+			<dependency>
+				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-common</artifactId>
+				<version>2.2.0</version>
+			</dependency>
 
-            <!-- Use the same version as Stratio Streaming -->
-            <dependency>
-                <groupId>org.apache.zookeeper</groupId>
-                <artifactId>zookeeper</artifactId>
-                <version>3.4.5</version>
-            </dependency>
+			<!-- Use the same version as Stratio Streaming -->
+			<dependency>
+				<groupId>org.apache.zookeeper</groupId>
+				<artifactId>zookeeper</artifactId>
+				<version>3.4.5</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -193,61 +189,104 @@
 					<artifactId>maven-assembly-plugin</artifactId>
 					<version>2.4</version>
 				</plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>2.5.4</version>
-                    <configuration>
-                        <effort>Max</effort>
-                    </configuration>
-                </plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>findbugs-maven-plugin</artifactId>
+					<version>2.5.4</version>
+					<configuration>
+						<effort>Max</effort>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
-                    <properties>
-                        <owner>${project.organization.name}</owner>
-                        <email>${project.organization.url}</email>
-                        <failOnMissingHeader>true</failOnMissingHeader>
-                    </properties>
-                    <includes>
-                        <include>**/src/**</include>
-                        <include>**/*.xml</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/README</exclude>
-                        <exclude>**/src/test/resources/**</exclude>
-                        <exclude>**/src/main/resources/**</exclude>
-                        <!-- The following files were written by other authors -->
-                        <exclude>stratio-morphlines/stratio-commons-morphline/src/test/java/**/Collector.java</exclude>
-                        <exclude>**/src/test/java/**/TransientPositionTracker.java</exclude>
-                        <exclude>**/src/main/java/cue/lang/**</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                        <phase>process-resources</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <configuration>
-                    <xmlOutput>true</xmlOutput>
-                    <!-- Optional directory to put findbugs xdoc xml report -->
-                    <xmlOutputDirectory>target/site</xmlOutputDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>				
+					<argLine>${jacocoUT}</argLine>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>				
+					<argLine>${jacocoIT}</argLine>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.1.201405082137</version>
+				<executions>
+					<execution>
+						<id>pre-unittest</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${project.build.directory}/jacocoUT.exec</destFile>
+							<propertyName>jacocoUT</propertyName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pre-integrationtest</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${project.build.directory}/jacocoIT.exec</destFile>
+							<propertyName>jacocoIT</propertyName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
+					<properties>
+						<owner>${project.organization.name}</owner>
+						<email>${project.organization.url}</email>
+						<failOnMissingHeader>true</failOnMissingHeader>
+					</properties>
+					<includes>
+						<include>**/src/**</include>
+						<include>**/*.xml</include>
+					</includes>
+					<excludes>
+						<exclude>**/README</exclude>
+						<exclude>**/src/test/resources/**</exclude>
+						<exclude>**/src/main/resources/**</exclude>
+						<!-- The following files were written by other authors -->
+						<exclude>stratio-morphlines/stratio-commons-morphline/src/test/java/**/Collector.java</exclude>
+						<exclude>**/src/test/java/**/TransientPositionTracker.java</exclude>
+						<exclude>**/src/main/java/cue/lang/**</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>format</goal>
+						</goals>
+						<phase>process-resources</phase>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<configuration>
+					<xmlOutput>true</xmlOutput>
+					<!-- Optional directory to put findbugs xdoc xml report -->
+					<xmlOutputDirectory>target/site</xmlOutputDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 </project>
