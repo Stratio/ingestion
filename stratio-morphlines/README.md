@@ -12,6 +12,7 @@ Stratio Morphlines consists of several modules:
     - RelationalFilter: Drop fields if they don't accomplish a relational condition.
     - Rename: Rename a field.
     - TimeFilter: Filter a time field between specified dates.
+    - ContainsAnyOf: Command that succeeds if all field values of the given named fields contains any of the given values and fails otherwise. Multiple fields can be named, in which case a logical AND is applied to the results. 
 * GeoIP: 
 * NLP: 
 * WikipediaCleaner: 
