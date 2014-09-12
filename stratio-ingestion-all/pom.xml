@@ -36,7 +36,11 @@
             <version>${kite.version}</version>
             <type>pom</type>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-flume-sink_2.10</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.flume</groupId>
             <artifactId>flume-ng-configuration</artifactId>
