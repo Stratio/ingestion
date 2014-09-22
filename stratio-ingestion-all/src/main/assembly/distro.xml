@@ -24,7 +24,8 @@
     <baseDirectory>opt/sds/ingestion</baseDirectory>
     <fileSets>
         <fileSet>
-            <directory>${project.build.directory}/apache-flume-${flume.version}-bin</directory>
+            <directory>${project.build.directory}/apache-flume-1.5.0.1-bin</directory>
+            <!-- TODO: <directory>${project.build.directory}/apache-flume-${flume.version}-bin</directory> -->
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>**</include>
@@ -46,6 +47,10 @@
                 </includes>
                 <excludes>
                     <exclude>com.stratio.ingestion:stratio-ingestion-all</exclude>
+                    <exclude>org.apache.flume:flume-ng-tests</exclude>
+                    <exclude>org.apache.flume:flume-ng-dist</exclude>
+                    <exclude>org.apache.flume:flume-ng-log4jappender</exclude>
+                    <exclude>org.apache.flume:flume-ng-embedded-agent</exclude>
                 </excludes>
             </binaries>
         </moduleSet>
