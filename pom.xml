@@ -60,6 +60,7 @@
 	</properties>
 
 	<modules>
+		<module>flume</module>
 		<module>stratio-sources</module>
 		<module>stratio-sinks</module>
 		<module>stratio-morphlines</module>

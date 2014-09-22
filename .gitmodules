@@ -1,0 +1,3 @@
+[submodule "flume"]
+	path = flume
+	url = https://github.com/smola/flume.git
