@@ -164,7 +164,7 @@
                             <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <url>http://apache.rediris.es/flume/1.5.0.1/apache-flume-1.5.0.1-bin.tar.gz</url>
+                            <url>http://ftp.cixug.es/apache/flume/1.5.0.1/apache-flume-1.5.0.1-bin.tar.gz</url>
                             <unpack>true</unpack>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                             <md5>fa43105db822ce045f885a5ebc0f869e</md5>
