@@ -42,6 +42,7 @@
                 <unpack>false</unpack>
                 <includes>
                     <include>com.stratio.ingestion:*</include>
+                    <include>org.apache.flume:*</include>
                 </includes>
                 <excludes>
                     <exclude>com.stratio.ingestion:stratio-ingestion-all</exclude>
