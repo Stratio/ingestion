@@ -46,6 +46,10 @@
                 </includes>
                 <excludes>
                     <exclude>com.stratio.ingestion:stratio-ingestion-all</exclude>
+                    <exclude>org.apache.flume:flume-ng-tests</exclude>
+                    <exclude>org.apache.flume:flume-ng-dist</exclude>
+                    <exclude>org.apache.flume:flume-ng-log4jappender</exclude>
+                    <exclude>org.apache.flume:flume-ng-embedded-agent</exclude>
                 </excludes>
             </binaries>
         </moduleSet>

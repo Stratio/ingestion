@@ -183,7 +183,6 @@
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/main/assembly/flume-plugin.xml</descriptor>
                                 <descriptor>src/main/assembly/full.xml</descriptor>
                             </descriptors>
                         </configuration>
