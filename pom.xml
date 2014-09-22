@@ -264,6 +264,7 @@
 						<exclude>stratio-morphlines/stratio-commons-morphline/src/test/java/**/Collector.java</exclude>
 						<exclude>**/src/test/java/**/TransientPositionTracker.java</exclude>
 						<exclude>**/src/main/java/cue/lang/**</exclude>
+						<exclude>flume/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
