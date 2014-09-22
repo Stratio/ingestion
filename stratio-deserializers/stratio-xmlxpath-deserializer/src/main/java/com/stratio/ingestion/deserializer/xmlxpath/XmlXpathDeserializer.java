@@ -16,6 +16,7 @@
 package com.stratio.ingestion.deserializer.xmlxpath;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +46,8 @@ import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
 import org.apache.flume.serialization.EventDeserializer;
-import org.apache.flume.serialization.ResettableInputStream;
+import org.apache.flume.serialization.Seekable;
+import org.apache.flume.serialization.SeekableInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -91,18 +93,20 @@ public class XmlXpathDeserializer implements EventDeserializer {
     private XPathExpression expr;
     private DocumentBuilder docBuilder;
     private Document doc = null;
-    private final ResettableInputStreamInputStream inStream;
+    private final InputStream inStream;
+    private final Seekable seekable;
     private List<String> list = null;
     private NodeList nodeList;
     private ListIterator<String> markIt, currentIt;
 
-    XmlXpathDeserializer(Context context, ResettableInputStream resettableInputStream)
+    XmlXpathDeserializer(Context context, InputStream seekableInputStream)
             throws IOException {
 
         expression = context.getString(CONF_XPATH_EXPRESSION);
         elementField = context.getString(CONF_ELEMENT, DEFAULT_ELEMENT_FIELD);
         ImmutableMap<String, String> headers = context.getSubProperties(CONF_HEADERS);
-        inStream = new ResettableInputStreamInputStream(resettableInputStream);
+        inStream = seekableInputStream;
+        seekable = (Seekable) seekableInputStream;
 
         xpath = XPathFactory.newInstance().newXPath();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -263,9 +267,13 @@ public class XmlXpathDeserializer implements EventDeserializer {
     public static class Builder implements EventDeserializer.Builder {
 
         @Override
-        public EventDeserializer build(Context context, ResettableInputStream resettableInputStream) {
+        public EventDeserializer build(Context context, InputStream in) {
+            if (!(in instanceof Seekable)) {
+                throw new IllegalArgumentException(
+                        "Cannot use this deserializer without a Seekable input stream");
+            }
             try {
-                return new XmlXpathDeserializer(context, resettableInputStream);
+                return new XmlXpathDeserializer(context, in);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

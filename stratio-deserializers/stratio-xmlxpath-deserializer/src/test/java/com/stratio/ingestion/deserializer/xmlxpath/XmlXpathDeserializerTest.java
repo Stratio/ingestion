@@ -15,23 +15,10 @@
  */
 package com.stratio.ingestion.deserializer.xmlxpath;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.URL;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.serialization.EventDeserializer;
-import org.apache.flume.serialization.ResettableInputStream;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -40,26 +27,25 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.util.List;
+
 @RunWith(JUnit4.class)
 public class XmlXpathDeserializerTest {
 
     private static final Logger log = LoggerFactory.getLogger(XmlXpathDeserializerTest.class);
 
-    private String xmlContent;
-
-    @Before
-    public void setUp() throws IOException {
-        URL url = getClass().getResource("/test.xml");
-        File file = new File(url.getPath());
-        xmlContent = readFile(file);
+    private InputStream getTestInputStream() {
+        return getClass().getResourceAsStream("/test.xml");
     }
 
     @Test
     public void testReadsAndMark() throws IOException {
         Context context = new Context();
         context.put("expression", "/bookstore/book");
-        ResettableInputStream in = new ResettableTestStringInputStream(xmlContent);
-        EventDeserializer des = new XmlXpathDeserializer(context, in);
+        EventDeserializer des = new XmlXpathDeserializer(context, getTestInputStream());
         validateReadAndMark(des);
     }
 
@@ -67,8 +53,7 @@ public class XmlXpathDeserializerTest {
     public void testReset() throws IOException {
         Context context = new Context();
         context.put("expression", "/bookstore/book/title");
-        ResettableInputStream in = new ResettableTestStringInputStream(xmlContent);
-        EventDeserializer des = new XmlXpathDeserializer(context, in);
+        EventDeserializer des = new XmlXpathDeserializer(context, getTestInputStream());
         validateReset(des);
     }
 
@@ -76,13 +61,12 @@ public class XmlXpathDeserializerTest {
     public void testDocument2String() throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xmlContent));
+        InputSource is = new InputSource(getTestInputStream());
         Document doc = docBuilder.parse(is);
 
         Context context = new Context();
         context.put("expression", "/bookstore/book/title");
-        ResettableInputStream in = new ResettableTestStringInputStream(xmlContent);
-        XmlXpathDeserializer des = new XmlXpathDeserializer(context, in);
+        XmlXpathDeserializer des = new XmlXpathDeserializer(context, getTestInputStream());
 
         Assert.assertNotNull(des.document2String(doc));
         des.close();
@@ -94,8 +78,7 @@ public class XmlXpathDeserializerTest {
         context.put("expression", "/bookstore/book");
         context.put("headers.book", "/bookstore/book[@category='CHILDREN']/title");
         context.put("headers.author", "/bookstore/book[@category='CHILDREN']/author");
-        ResettableInputStream in = new ResettableTestStringInputStream(xmlContent);
-        EventDeserializer des = new XmlXpathDeserializer(context, in);
+        EventDeserializer des = new XmlXpathDeserializer(context, getTestInputStream());
         validateHeaders(des);
     }
 
