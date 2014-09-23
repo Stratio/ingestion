@@ -17,10 +17,11 @@
 -->
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
-    <id>full</id>
+    <id>bin</id>
     <formats>
         <format>tar.gz</format>
     </formats>
+    <baseDirectory>${assembly.baseDirectory}</baseDirectory>
     <fileSets>
         <fileSet>
             <directory>${project.build.directory}/apache-flume-1.5.0.1-bin</directory>
@@ -34,26 +35,6 @@
             </excludes>
         </fileSet>
     </fileSets>
-    <moduleSets>
-        <moduleSet>
-            <useAllReactorProjects>true</useAllReactorProjects>
-            <binaries>
-                <outputDirectory>/lib</outputDirectory>
-                <unpack>false</unpack>
-                <includes>
-                    <include>com.stratio.ingestion:*</include>
-                    <include>org.apache.flume:*</include>
-                </includes>
-                <excludes>
-                    <exclude>com.stratio.ingestion:stratio-ingestion-all</exclude>
-                    <exclude>org.apache.flume:flume-ng-tests</exclude>
-                    <exclude>org.apache.flume:flume-ng-dist</exclude>
-                    <exclude>org.apache.flume:flume-ng-log4jappender</exclude>
-                    <exclude>org.apache.flume:flume-ng-embedded-agent</exclude>
-                </excludes>
-            </binaries>
-        </moduleSet>
-    </moduleSets>
     <dependencySets>
         <dependencySet>
             <outputDirectory>/lib</outputDirectory>
