@@ -29,6 +29,77 @@
 	<packaging>pom</packaging>
 
     <dependencies>
+        <!-- Include our modules -->
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-xmlxpath-deserializer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-commons-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-nlp-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-wikipediacleaner-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-geoip-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-elasticsearch-serializer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-redis-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-rest-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-snmptraps-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-flumestats-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-cassandra-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-mongodb-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-jdbc-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-stratiostreaming-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Include all Kite Morphlines for the full distribution -->
         <dependency>
             <groupId>org.kitesdk</groupId>
@@ -41,6 +112,7 @@
             <artifactId>spark-streaming-flume-sink_2.10</artifactId>
             <version>${spark.version}</version>
         </dependency>
+        <!-- Include full flume distro -->
         <dependency>
             <groupId>org.apache.flume</groupId>
             <artifactId>flume-ng-configuration</artifactId>
@@ -107,6 +179,11 @@
             <version>${flume.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.flume.flume-ng-sinks</groupId>
+            <artifactId>flume-ng-kafka-sink</artifactId>
+            <version>${flume.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.flume.flume-ng-sources</groupId>
             <artifactId>flume-scribe-source</artifactId>
             <version>${flume.version}</version>
@@ -135,12 +212,6 @@
             <groupId>org.apache.flume.flume-ng-clients</groupId>
             <artifactId>flume-ng-log4jappender</artifactId>
             <version>${flume.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.flume.flume-ng-clients</groupId>
-            <artifactId>flume-ng-log4jappender</artifactId>
-            <version>${flume.version}</version>
-            <classifier>jar-with-dependencies</classifier>
         </dependency>
         <dependency>
             <groupId>org.apache.flume</groupId>
@@ -183,7 +254,7 @@
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/main/assembly/full.xml</descriptor>
+                                <descriptor>src/main/assembly/bin.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>
@@ -194,28 +265,19 @@
 
     <profiles>
         <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <assembly.baseDirectory>stratio-ingestion-${project.version}</assembly.baseDirectory>
+            </properties>
+        </profile>
+        <profile>
             <id>stratio-distro</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>distro-assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                                <configuration>
-                                    <descriptors>
-                                        <descriptor>src/main/assembly/distro.xml</descriptor>
-                                    </descriptors>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
+            <properties>
+                <assembly.baseDirectory>opt/sds/ingestion</assembly.baseDirectory>
+            </properties>
         </profile>
     </profiles>
 

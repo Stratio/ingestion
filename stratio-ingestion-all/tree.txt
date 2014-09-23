@@ -1,0 +1,187 @@
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building stratio-ingestion-all 0.2.0-alpha-1
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.1:tree (default-cli) @ stratio-ingestion-all ---
+[INFO] com.stratio.ingestion:stratio-ingestion-all:pom:0.2.0-alpha-1
+[INFO] +- org.kitesdk:kite-morphlines-all:pom:0.16.0:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-core:jar:0.16.0:compile
+[INFO] |  |  +- com.typesafe:config:jar:1.2.1:compile (version managed from 1.0.2)
+[INFO] |  |  +- com.codahale.metrics:metrics-core:jar:3.0.2:compile
+[INFO] |  |  \- com.codahale.metrics:metrics-healthchecks:jar:3.0.2:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-avro:jar:0.16.0:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-json:jar:0.16.0:compile
+[INFO] |  |  \- com.fasterxml.jackson.core:jackson-databind:jar:2.3.1:compile
+[INFO] |  |     +- com.fasterxml.jackson.core:jackson-annotations:jar:2.3.0:compile
+[INFO] |  |     \- com.fasterxml.jackson.core:jackson-core:jar:2.3.1:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-saxon:jar:0.16.0:compile
+[INFO] |  |  +- net.sf.saxon:Saxon-HE:jar:9.5.1-5:compile
+[INFO] |  |  \- org.ccil.cowan.tagsoup:tagsoup:jar:1.2.1:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-hadoop-core:jar:0.16.0:compile
+[INFO] |  |  \- org.kitesdk:kite-hadoop-compatibility:jar:0.16.0:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-hadoop-parquet-avro:jar:0.16.0:compile
+[INFO] |  |  \- com.twitter:parquet-avro:jar:1.4.1:compile
+[INFO] |  |     +- com.twitter:parquet-column:jar:1.4.1:compile
+[INFO] |  |     |  +- com.twitter:parquet-common:jar:1.4.1:compile
+[INFO] |  |     |  \- com.twitter:parquet-encoding:jar:1.4.1:compile
+[INFO] |  |     |     \- com.twitter:parquet-generator:jar:1.4.1:compile
+[INFO] |  |     +- com.twitter:parquet-hadoop:jar:1.4.1:compile
+[INFO] |  |     |  \- com.twitter:parquet-jackson:jar:1.4.1:compile
+[INFO] |  |     \- com.twitter:parquet-format:jar:2.0.0:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-hadoop-sequencefile:jar:0.16.0:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-hadoop-rcfile:jar:0.16.0:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-tika-core:jar:0.16.0:compile
+[INFO] |  |  \- org.apache.tika:tika-core:jar:1.4:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-tika-decompress:jar:0.16.0:compile
+[INFO] |  |  \- org.apache.commons:commons-compress:jar:1.4.1:compile
+[INFO] |  |     \- org.tukaani:xz:jar:1.0:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-solr-core:jar:0.16.0:compile
+[INFO] |  |  +- org.apache.solr:solr-core:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.solr:solr-solrj:jar:4.6.1:compile
+[INFO] |  |  |  |  +- org.noggit:noggit:jar:0.5:compile
+[INFO] |  |  |  |  \- org.codehaus.woodstox:wstx-asl:jar:3.2.7:runtime
+[INFO] |  |  |  +- org.apache.lucene:lucene-core:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-codecs:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-analyzers-common:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-analyzers-kuromoji:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-analyzers-phonetic:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-highlighter:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-memory:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-misc:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-join:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-queryparser:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-spatial:jar:4.6.1:compile
+[INFO] |  |  |  |  \- com.spatial4j:spatial4j:jar:0.3:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-suggest:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-grouping:jar:4.6.1:compile
+[INFO] |  |  |  +- org.apache.lucene:lucene-queries:jar:4.6.1:compile
+[INFO] |  |  |  +- com.carrotsearch:hppc:jar:0.5.2:compile
+[INFO] |  |  |  +- com.googlecode.concurrentlinkedhashmap:concurrentlinkedhashmap-lru:jar:1.2:compile
+[INFO] |  |  |  +- commons-fileupload:commons-fileupload:jar:1.2.1:compile
+[INFO] |  |  |  +- org.apache.hadoop:hadoop-annotations:jar:2.2.0:compile
+[INFO] |  |  |  |  \- jdk.tools:jdk.tools:jar:1.7:system
+[INFO] |  |  |  +- org.apache.hadoop:hadoop-auth:jar:2.2.0:compile
+[INFO] |  |  |  +- org.apache.hadoop:hadoop-common:jar:2.2.0:compile
+[INFO] |  |  |  +- org.apache.hadoop:hadoop-hdfs:jar:2.2.0:compile
+[INFO] |  |  |  +- org.restlet.jee:org.restlet:jar:2.1.1:compile
+[INFO] |  |  |  +- org.restlet.jee:org.restlet.ext.servlet:jar:2.1.1:compile
+[INFO] |  |  |  \- org.apache.httpcomponents:httpmime:jar:4.2.6:compile
+[INFO] |  |  \- org.slf4j:jcl-over-slf4j:jar:1.6.1:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-solr-cell:jar:0.16.0:compile
+[INFO] |  |  +- org.apache.tika:tika-xmp:jar:1.4:compile
+[INFO] |  |  |  +- org.apache.tika:tika-parsers:jar:1.4:compile
+[INFO] |  |  |  |  +- org.gagravarr:vorbis-java-tika:jar:0.1:compile
+[INFO] |  |  |  |  |  \- org.gagravarr:vorbis-java-core:jar:tests:0.1:runtime
+[INFO] |  |  |  |  +- edu.ucar:netcdf:jar:4.2-min:compile
+[INFO] |  |  |  |  +- org.apache.james:apache-mime4j-core:jar:0.7.2:compile
+[INFO] |  |  |  |  +- org.apache.james:apache-mime4j-dom:jar:0.7.2:compile
+[INFO] |  |  |  |  +- org.apache.pdfbox:pdfbox:jar:1.8.1:compile
+[INFO] |  |  |  |  |  +- org.apache.pdfbox:fontbox:jar:1.8.1:compile
+[INFO] |  |  |  |  |  \- org.apache.pdfbox:jempbox:jar:1.8.1:compile
+[INFO] |  |  |  |  +- org.bouncycastle:bcmail-jdk15:jar:1.45:compile
+[INFO] |  |  |  |  +- org.bouncycastle:bcprov-jdk15:jar:1.45:compile
+[INFO] |  |  |  |  +- org.apache.poi:poi:jar:3.9:compile
+[INFO] |  |  |  |  +- org.apache.poi:poi-scratchpad:jar:3.9:compile
+[INFO] |  |  |  |  +- org.apache.poi:poi-ooxml:jar:3.9:compile
+[INFO] |  |  |  |  |  +- org.apache.poi:poi-ooxml-schemas:jar:3.9:compile
+[INFO] |  |  |  |  |  |  \- org.apache.xmlbeans:xmlbeans:jar:2.3.0:compile
+[INFO] |  |  |  |  |  \- dom4j:dom4j:jar:1.6.1:compile
+[INFO] |  |  |  |  +- org.ow2.asm:asm-debug-all:jar:4.1:compile
+[INFO] |  |  |  |  +- com.googlecode.mp4parser:isoparser:jar:1.0-RC-1:compile
+[INFO] |  |  |  |  |  \- org.aspectj:aspectjrt:jar:1.6.11:compile
+[INFO] |  |  |  |  +- com.drewnoakes:metadata-extractor:jar:2.6.2:compile
+[INFO] |  |  |  |  +- de.l3s.boilerpipe:boilerpipe:jar:1.1.0:compile
+[INFO] |  |  |  |  +- rome:rome:jar:0.9:compile
+[INFO] |  |  |  |  |  \- jdom:jdom:jar:1.0:compile
+[INFO] |  |  |  |  +- org.gagravarr:vorbis-java-core:jar:0.1:compile
+[INFO] |  |  |  |  \- com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3:compile
+[INFO] |  |  |  \- com.adobe.xmp:xmpcore:jar:5.1.2:compile
+[INFO] |  |  \- org.apache.solr:solr-cell:jar:4.6.1:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-twitter:jar:0.16.0:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-maxmind:jar:0.16.0:compile
+[INFO] |  |  \- com.maxmind.db:maxmind-db:jar:0.3.3:compile
+[INFO] |  +- org.kitesdk:kite-morphlines-metrics-servlets:jar:0.16.0:compile
+[INFO] |  |  +- com.codahale.metrics:metrics-servlets:jar:3.0.2:compile
+[INFO] |  |  |  +- com.codahale.metrics:metrics-json:jar:3.0.2:compile
+[INFO] |  |  |  \- com.codahale.metrics:metrics-jvm:jar:3.0.2:compile
+[INFO] |  |  \- org.eclipse.jetty:jetty-servlet:jar:8.1.14.v20131031:compile
+[INFO] |  |     \- org.eclipse.jetty:jetty-security:jar:8.1.14.v20131031:compile
+[INFO] |  |        \- org.eclipse.jetty:jetty-server:jar:8.1.14.v20131031:compile
+[INFO] |  |           +- org.eclipse.jetty.orbit:javax.servlet:jar:3.0.0.v201112011016:compile
+[INFO] |  |           +- org.eclipse.jetty:jetty-continuation:jar:8.1.14.v20131031:compile
+[INFO] |  |           \- org.eclipse.jetty:jetty-http:jar:8.1.14.v20131031:compile
+[INFO] |  |              \- org.eclipse.jetty:jetty-io:jar:8.1.14.v20131031:compile
+[INFO] |  |                 \- org.eclipse.jetty:jetty-util:jar:8.1.14.v20131031:compile
+[INFO] |  \- org.kitesdk:kite-morphlines-useragent:jar:0.16.0:compile
+[INFO] |     \- ua_parser:ua-parser:jar:1.3.0:compile
+[INFO] |        \- org.yaml:snakeyaml:jar:1.10:compile
+[INFO] +- org.apache.flume:flume-ng-configuration:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  +- org.slf4j:slf4j-api:jar:1.7.7:compile
+[INFO] |  +- org.slf4j:slf4j-log4j12:jar:1.6.1:compile
+[INFO] |  \- com.google.guava:guava:jar:17.0:compile
+[INFO] +- org.apache.flume:flume-ng-sdk:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  +- org.apache.avro:avro:jar:1.7.4:compile
+[INFO] |  |  \- com.thoughtworks.paranamer:paranamer:jar:2.3:compile
+[INFO] |  +- org.apache.avro:avro-ipc:jar:1.7.4:compile
+[INFO] |  |  \- org.apache.velocity:velocity:jar:1.7:compile
+[INFO] |  +- io.netty:netty:jar:3.5.12.Final:compile
+[INFO] |  \- org.apache.thrift:libthrift:jar:0.7.0:compile
+[INFO] +- org.apache.flume:flume-ng-core:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  +- commons-io:commons-io:jar:2.1:compile
+[INFO] |  +- commons-codec:commons-codec:jar:1.8:compile
+[INFO] |  +- log4j:log4j:jar:1.2.17:compile
+[INFO] |  +- commons-cli:commons-cli:jar:1.2:compile
+[INFO] |  +- commons-lang:commons-lang:jar:2.5:compile
+[INFO] |  +- joda-time:joda-time:jar:2.1:compile
+[INFO] |  +- org.mortbay.jetty:servlet-api:jar:2.5-20110124:compile
+[INFO] |  +- org.mortbay.jetty:jetty-util:jar:6.1.26:compile
+[INFO] |  +- org.mortbay.jetty:jetty:jar:6.1.26:compile
+[INFO] |  +- com.google.code.gson:gson:jar:2.2.2:compile
+[INFO] |  \- org.apache.mina:mina-core:jar:2.0.4:compile
+[INFO] +- org.apache.flume:flume-ng-embedded-agent:jar:1.6.0-SNAPSHOT:compile
+[INFO] +- org.apache.flume:flume-ng-node:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  +- log4j:apache-log4j-extras:jar:1.1:compile
+[INFO] |  +- org.codehaus.jackson:jackson-core-asl:jar:1.9.3:compile
+[INFO] |  \- org.codehaus.jackson:jackson-mapper-asl:jar:1.9.3:compile
+[INFO] +- org.apache.flume.flume-ng-channels:flume-file-channel:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  +- commons-collections:commons-collections:jar:3.2.1:compile
+[INFO] |  +- com.google.protobuf:protobuf-java:jar:2.5.0:compile
+[INFO] |  +- org.mapdb:mapdb:jar:0.9.9:compile
+[INFO] |  \- org.xerial.snappy:snappy-java:jar:1.1.0:compile
+[INFO] +- org.apache.flume.flume-ng-channels:flume-spillable-memory-channel:jar:1.6.0-SNAPSHOT:compile
+[INFO] +- org.apache.flume.flume-ng-channels:flume-jdbc-channel:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  +- commons-dbcp:commons-dbcp:jar:1.4:compile
+[INFO] |  |  \- commons-pool:commons-pool:jar:1.5.4:compile
+[INFO] |  \- org.apache.derby:derby:jar:10.8.2.2:compile
+[INFO] +- org.apache.flume.flume-ng-sinks:flume-hdfs-sink:jar:1.6.0-SNAPSHOT:compile
+[INFO] +- org.apache.flume.flume-ng-sinks:flume-irc-sink:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  \- org.schwering:irclib:jar:1.10:compile
+[INFO] +- org.apache.flume.flume-ng-sinks:flume-ng-hbase-sink:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  \- org.hbase:asynchbase:jar:1.5.0:compile
+[INFO] |     +- com.stumbleupon:async:jar:1.4.0:compile
+[INFO] |     \- org.apache.zookeeper:zookeeper:jar:3.4.5:compile
+[INFO] +- org.apache.flume.flume-ng-sinks:flume-ng-elasticsearch-sink:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  \- org.apache.httpcomponents:httpclient:jar:4.2.1:compile
+[INFO] |     +- org.apache.httpcomponents:httpcore:jar:4.2.1:compile
+[INFO] |     \- commons-logging:commons-logging:jar:1.1.1:compile
+[INFO] +- org.apache.flume.flume-ng-sinks:flume-ng-morphline-solr-sink:jar:1.6.0-SNAPSHOT:compile
+[INFO] +- org.apache.flume.flume-ng-sources:flume-scribe-source:jar:1.6.0-SNAPSHOT:compile
+[INFO] +- org.apache.flume.flume-ng-sources:flume-jms-source:jar:1.6.0-SNAPSHOT:compile
+[INFO] +- org.apache.flume.flume-ng-sources:flume-twitter-source:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  +- org.twitter4j:twitter4j-core:jar:3.0.3:compile
+[INFO] |  +- org.twitter4j:twitter4j-media-support:jar:3.0.3:compile
+[INFO] |  \- org.twitter4j:twitter4j-stream:jar:3.0.3:compile
+[INFO] +- org.apache.flume.flume-ng-legacy-sources:flume-avro-source:jar:1.6.0-SNAPSHOT:compile
+[INFO] +- org.apache.flume.flume-ng-legacy-sources:flume-thrift-source:jar:1.6.0-SNAPSHOT:compile
+[INFO] +- org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:1.6.0-SNAPSHOT:compile
+[INFO] +- org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:jar-with-dependencies:1.6.0-SNAPSHOT:compile
+[INFO] \- org.apache.flume:flume-tools:jar:1.6.0-SNAPSHOT:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 6.791s
+[INFO] Finished at: Thu Sep 04 16:53:25 CEST 2014
+[INFO] Final Memory: 18M/292M
+[INFO] ------------------------------------------------------------------------
