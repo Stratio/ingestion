@@ -59,16 +59,6 @@
 	        <spark.version>1.1.0</spark.version>
 	</properties>
 
-	<modules>
-		<module>flume</module>
-		<module>stratio-sources</module>
-		<module>stratio-sinks</module>
-		<module>stratio-morphlines</module>
-		<module>stratio-serializers</module>
-		<module>stratio-deserializers</module>
-		<module>stratio-ingestion-all</module>
-	</modules>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -287,5 +277,33 @@
 			</plugin>
 		</plugins>
 	</build>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>flume</module>
+                <module>stratio-sources</module>
+                <module>stratio-sinks</module>
+                <module>stratio-morphlines</module>
+                <module>stratio-serializers</module>
+                <module>stratio-deserializers</module>
+                <module>stratio-ingestion-all</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>travis-test</id>
+            <modules>
+                <module>stratio-sources</module>
+                <module>stratio-sinks</module>
+                <module>stratio-morphlines</module>
+                <module>stratio-serializers</module>
+                <module>stratio-deserializers</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
