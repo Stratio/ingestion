@@ -47,11 +47,10 @@ import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
 import org.apache.flume.serialization.EventDeserializer;
 import org.apache.flume.serialization.Seekable;
-import org.apache.flume.serialization.SeekableInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -125,7 +124,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
 
         // Extract full xml to body
         try {
-            body = document2String(doc);
+            body = documentToString(doc);
         } catch (TransformerException e1) {
             e1.printStackTrace();
         }
@@ -146,8 +145,8 @@ public class XmlXpathDeserializer implements EventDeserializer {
         }
 
         for (int i = 0; i < nodeList.getLength(); i++) {
-            Element el = (Element) nodeList.item(i);
-            String eventSt = element2String(el);
+            Node node = nodeList.item(i);
+            String eventSt = nodeToString(node);
             list.add(eventSt);
         }
 
@@ -217,14 +216,14 @@ public class XmlXpathDeserializer implements EventDeserializer {
         }
     }
 
-    public String element2String(Element el) {
+    public String nodeToString(Node node) {
         StringWriter writer = new StringWriter();
         TransformerFactory tfactory = TransformerFactory.newInstance();
         Transformer xform;
         try {
             xform = tfactory.newTransformer();
             xform.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            Source src = new DOMSource(el);
+            Source src = new DOMSource(node);
             Result result = new StreamResult(writer);
             xform.transform(src, result);
         } catch (TransformerException e) {
@@ -233,7 +232,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
         return writer.toString();
     }
 
-    public String document2String(Document document) throws TransformerException {
+    public String documentToString(Document document) throws TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");

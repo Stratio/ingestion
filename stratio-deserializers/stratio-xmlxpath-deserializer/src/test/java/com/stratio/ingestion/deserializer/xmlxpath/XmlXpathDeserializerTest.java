@@ -18,6 +18,7 @@ package com.stratio.ingestion.deserializer.xmlxpath;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.serialization.EventDeserializer;
+import org.apache.flume.serialization.SeekableFileInputStream;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,29 +32,30 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.util.List;
+import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
 public class XmlXpathDeserializerTest {
 
     private static final Logger log = LoggerFactory.getLogger(XmlXpathDeserializerTest.class);
 
-    private InputStream getTestInputStream() {
-        return getClass().getResourceAsStream("/test.xml");
+    private InputStream getTestInputStream() throws IOException {
+      return new SeekableFileInputStream("src/test/resources/test.xml");
     }
 
     @Test
     public void testReadsAndMark() throws IOException {
         Context context = new Context();
         context.put("expression", "/bookstore/book");
-        EventDeserializer des = new XmlXpathDeserializer(context, getTestInputStream());
+        EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
         validateReadAndMark(des);
     }
 
     @Test
     public void testReset() throws IOException {
         Context context = new Context();
-        context.put("expression", "/bookstore/book/title");
-        EventDeserializer des = new XmlXpathDeserializer(context, getTestInputStream());
+        context.put("expression", "/bookstore/book/title/text()");
+        EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
         validateReset(des);
     }
 
@@ -68,7 +70,7 @@ public class XmlXpathDeserializerTest {
         context.put("expression", "/bookstore/book/title");
         XmlXpathDeserializer des = new XmlXpathDeserializer(context, getTestInputStream());
 
-        Assert.assertNotNull(des.document2String(doc));
+        Assert.assertNotNull(des.documentToString(doc));
         des.close();
     }
 
@@ -78,7 +80,7 @@ public class XmlXpathDeserializerTest {
         context.put("expression", "/bookstore/book");
         context.put("headers.book", "/bookstore/book[@category='CHILDREN']/title");
         context.put("headers.author", "/bookstore/book[@category='CHILDREN']/author");
-        EventDeserializer des = new XmlXpathDeserializer(context, getTestInputStream());
+        EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
         validateHeaders(des);
     }
 
@@ -86,20 +88,18 @@ public class XmlXpathDeserializerTest {
         Event evt;
 
         evt = des.readEvent();
-        Assert.assertTrue(new String(evt.getHeaders().get("element"))
-                .contains("Giada De Laurentiis"));
+        assertTrue(evt.getHeaders().get("element").contains("Giada De Laurentiis"));
         des.mark();
 
         evt = des.readEvent();
-        Assert.assertTrue(new String(evt.getHeaders().get("element")).contains("J K. Rowling"));
+        assertTrue(evt.getHeaders().get("element").contains("J K. Rowling"));
         des.mark(); // reset!
 
         List<Event> readEvents = des.readEvents(2);
-        Assert.assertTrue(readEvents.size() == 2);
+        assertEquals(2, readEvents.size());
 
         evt = des.readEvent();
-        Assert.assertNull("Event should be null because there are no more books " + "left to read",
-                evt);
+        assertNull("Event should be null because there are no more books " + "left to read", evt);
 
         des.mark();
         des.mark();
@@ -107,24 +107,26 @@ public class XmlXpathDeserializerTest {
     }
 
     private void validateReset(EventDeserializer des) throws IOException {
-        Event evt;
-
-        des.readEvent();
+        Event evt = des.readEvent();
+        assertEquals("Everyday Italian", evt.getHeaders().get("element"));
         des.mark();
 
-        des.readEvents(3);
+        List<Event> events = des.readEvents(3);
+        assertEquals(3, events.size());
+        assertEquals("Harry Potter", events.get(0).getHeaders().get("element"));
+        assertEquals("XQuery Kick Start", events.get(1).getHeaders().get("element"));
+        assertEquals("Learning XML", events.get(2).getHeaders().get("element"));
+
         des.reset(); // reset!
 
-        List<Event> readEvents = des.readEvents(3);
-        Assert.assertTrue(readEvents.size() == 3);
-        des.mark();
-        for (Event e : readEvents) {
-            Assert.assertNotNull(e);
-        }
+        events = des.readEvents(3);
+        assertEquals(3, events.size());
+        assertEquals("Harry Potter", events.get(0).getHeaders().get("element"));
+        assertEquals("XQuery Kick Start", events.get(1).getHeaders().get("element"));
+        assertEquals("Learning XML", events.get(2).getHeaders().get("element"));
 
         evt = des.readEvent();
-        Assert.assertNull("Event should be null because there are no more books " + "left to read",
-                evt);
+        Assert.assertNull("Event should be null because there are no more books " + "left to read", evt);
 
     }
 
