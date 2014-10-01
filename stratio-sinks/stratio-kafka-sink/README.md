@@ -30,7 +30,7 @@ The following file describes an example configuration of an Flume agent that use
     agent.sources.r1.spoolDir = /home/flume/data/files/
 
     # Describe the sink
-    agent.sinks.kafkaSink.type = com.stratio.ingestion.sink.kafka.kafkaSink
+    agent.sinks.kafkaSink.type = com.stratio.ingestion.sink.kafka.KafkaSink
     agent.sinks.kafkaSink.topic = test
     agent.sinks.kafkaSink.kafka.metadata.broker.list = localhost:9092
     agent.sinks.kafkaSink.kafka.serializer.class = kafka.serializer.StringEncoder
