@@ -185,6 +185,11 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flume.flume-ng-sources</groupId>
+            <artifactId>flume-kafka-source</artifactId>
+            <version>${flume.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flume.flume-ng-sources</groupId>
             <artifactId>flume-scribe-source</artifactId>
             <version>${flume.version}</version>
         </dependency>
