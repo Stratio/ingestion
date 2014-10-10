@@ -1,11 +1,8 @@
-Stratio Ingestion
-=================
-
-[![Build Status](https://travis-ci.org/Stratio/stratio-ingestion.svg?branch=develop)](https://travis-ci.org/Stratio/stratio-ingestion)
-
-
 FLUME-INGESTION
 ===================
+
+
+[![Build Status](https://travis-ci.org/Stratio/stratio-ingestion.svg?branch=develop)](https://travis-ci.org/Stratio/stratio-ingestion)
 
 
 Flume Ingestion is a fork of Apache Flume (1.6), where you can find:
