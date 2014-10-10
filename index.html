@@ -10,7 +10,7 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <title>Flume-ingestion by Stratio</title>
+    <title>Flume-Ingestion by Stratio</title>
   </head>
 
   <body>
@@ -18,7 +18,7 @@
       <div class="inner">
 
         <header>
-          <h1>Flume-ingestion</h1>
+          <h1>Flume-Ingestion</h1>
           <h2>Flume - Ingestion, an Apache Flume distribution</h2>
         </header>
 
@@ -31,41 +31,100 @@
         <hr>
 
         <section id="main_content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+          <h1>
+<a name="flume-ingestion" class="anchor" href="#flume-ingestion"><span class="octicon octicon-link"></span></a>FLUME-INGESTION</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p><a href="https://travis-ci.org/Stratio/flume-ingestion"><img src="https://travis-ci.org/Stratio/flume-ingestion.svg?branch=develop" alt="Build Status"></a></p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<p>Flume Ingestion is a fork of Apache Flume (1.6), where you can find:</p>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p><strong>Several bug fixes</strong></p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<ul>
+<li>Some of them really important, such as unicode support</li>
+</ul>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p><strong>Several enhancements of Flume's sources &amp; sinks</strong></p>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<ul>
+<li>ElasticSearch mapper, for example</li>
+</ul>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p><strong>Custom sources and sinks, developed by Stratio</strong></p>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<ul>
+<li>SNMP (v1, v2c and 3)</li>
+<li>redis, Kafka (0.8.1.1)</li>
+<li>MongoDB, JDBC and Cassandra</li>
+<li>Stratio Streaming (Complex Event Processing engine)</li>
+<li>REST client, Flume agents stats</li>
+</ul>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<h2>
+<a name="flume-ingestion-components" class="anchor" href="#flume-ingestion-components"><span class="octicon octicon-link"></span></a>Flume Ingestion components</h2>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<ul>
+<li>Data transporter and collector: <a href="http://flume.apache.org/">Apache Flume</a>
+</li>
+<li>Data extractor and transformer: <a href="http://kitesdk.org/docs/current/kite-morphlines/index.html">Morphlines</a>
+</li>
+<li>Custom sources to read data from:
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<ul>
+<li>REST</li>
+<li>FlumeStats</li>
+<li>SNMPTraps</li>
+</ul>
+</li>
+<li>Custom sinks to write the data to:
+
+<ul>
+<li>Cassandra</li>
+<li>MongoDB</li>
+<li><a href="https://github.com/Stratio/stratio-streaming">Stratio Streaming</a></li>
+<li>JDBC</li>
+<li>Kafka</li>
+</ul>
+</li>
+<li>Visual editor that makes the ETL flow design a child's play (TODO).</li>
+</ul>
+
+<h2>
+<a name="what-is-apache-flume" class="anchor" href="#what-is-apache-flume"><span class="octicon octicon-link"></span></a>What is Apache Flume?</h2>
+
+<p>Apache Flume is a distributed, reliable, and available system for efficiently collecting, aggregating and moving large amounts of log data from many different sources to a centralized data store.</p>
+
+<p>Its use is not only designed for logs, in fact you can find a myriad of sources, sinks and transformations.</p>
+
+<p>In addition, a sink could be a big data storage but also another real-time system (Apache Kafka, Spark Streaming).</p>
+
+<h2>
+<a name="interesting-facts-about-flume-ingestion" class="anchor" href="#interesting-facts-about-flume-ingestion"><span class="octicon octicon-link"></span></a>Interesting facts about Flume-Ingestion</h2>
+
+<ul>
+<li><p>Flume Ingestion is Apache Flume "on steroids" :)</p></li>
+<li><p>We are extensively using Kite SDK (morphlines) in order to do a better T from ETL, and so we have also developed a bunch of custom transformations.</p></li>
+<li><p>Stratio ingestion is fully open source and we work very close to the Flume community.</p></li>
+</ul>
+
+<h2>
+<a name="flume-ingestion-faq" class="anchor" href="#flume-ingestion-faq"><span class="octicon octicon-link"></span></a>Flume Ingestion FAQ</h2>
+
+<p><strong>Can I use Flume Ingestion for aggregating data (time-based rollups, for example)?</strong></p>
+
+<p><em>This is not a good idea from our experience, we use to combine Flume + Spark Streaming in order to do that (custom development)</em></p>
+
+<p><strong>Is Flume Ingestion multipersistence?</strong></p>
+
+<p><em>Yes, you can write data to JDBC sources, mongoDB, Apache Cassandra, ElasticSearch, Apache Kafka, among others.</em></p>
+
+<p><strong>Can I send data to streaming-cep-engine?</strong></p>
+
+<p><em>Of course, we have developed a sink in order to send events from Flume to an existing stream in our CEP engine.  The sink will create the stream if it does not exist in the engine.</em></p>
         </section>
 
         <footer>
-          Flume-ingestion is maintained by <a href="https://github.com/Stratio">Stratio</a><br>
+          Flume-Ingestion is maintained by <a href="https://github.com/Stratio">Stratio</a><br>
           This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
         </footer>
 
