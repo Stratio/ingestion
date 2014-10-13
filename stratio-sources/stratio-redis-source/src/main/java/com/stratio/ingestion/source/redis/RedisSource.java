@@ -90,7 +90,7 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
 
         channelProcessor = getChannelProcessor();
 
-        jedis = new Jedis(host, port);
+        jedis = new Jedis(host, port, 0);
         log.info("Redis Connected. (host: " + host + ", port: " + String.valueOf(port) + ")");
 
         new Thread(new SubscribeManager()).start();
