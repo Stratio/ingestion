@@ -1,23 +1,145 @@
 [INFO] Scanning for projects...
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building stratio-ingestion-all 0.2.0-alpha-1
+[INFO] Building stratio-ingestion-all 0.2.0-SNAPSHOT
 [INFO] ------------------------------------------------------------------------
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-node/1.6.0-SNAPSHOT/maven-metadata.xml
+782/782 B               Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-node/1.6.0-SNAPSHOT/maven-metadata.xml (782 B at 0.6 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-node/1.6.0-SNAPSHOT/flume-ng-node-1.6.0-20141023.024322-29.pom
+4/5 KB      5/5 KB            Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-node/1.6.0-SNAPSHOT/flume-ng-node-1.6.0-20141023.024322-29.pom (5 KB at 9.9 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/flume-hdfs-sink/1.6.0-SNAPSHOT/maven-metadata.xml
+799/799 B               Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/flume-hdfs-sink/1.6.0-SNAPSHOT/maven-metadata.xml (799 B at 0.6 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/flume-hdfs-sink/1.6.0-SNAPSHOT/flume-hdfs-sink-1.6.0-20141023.024334-29.pom
+4/6 KB      6/6 KB            Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/flume-hdfs-sink/1.6.0-SNAPSHOT/flume-hdfs-sink-1.6.0-20141023.024334-29.pom (6 KB at 2.9 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/1.6.0-SNAPSHOT/maven-metadata.xml
+609/609 B               Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/1.6.0-SNAPSHOT/maven-metadata.xml (609 B at 0.6 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/1.6.0-SNAPSHOT/flume-ng-sinks-1.6.0-20141023.024325-29.pom
+1/3 KB      3/3 KB   3/3 KB            Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/1.6.0-SNAPSHOT/flume-ng-sinks-1.6.0-20141023.024325-29.pom (3 KB at 1.3 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/flume-irc-sink/1.6.0-SNAPSHOT/maven-metadata.xml
+798/798 B               Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/flume-irc-sink/1.6.0-SNAPSHOT/maven-metadata.xml (798 B at 0.9 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/flume-irc-sink/1.6.0-SNAPSHOT/flume-irc-sink-1.6.0-20141023.024334-29.pom
+1/3 KB      3/3 KB            Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-sinks/flume-irc-sink/1.6.0-SNAPSHOT/flume-irc-sink-1.6.0-20141023.024334-29.pom (3 KB at 5.2 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-jdbc-channel/1.6.0-SNAPSHOT/maven-metadata.xml
+805/805 B               Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-jdbc-channel/1.6.0-SNAPSHOT/maven-metadata.xml (805 B at 0.8 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-jdbc-channel/1.6.0-SNAPSHOT/flume-jdbc-channel-1.6.0-20141023.024328-29.pom
+1/3 KB      3/3 KB            Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-jdbc-channel/1.6.0-SNAPSHOT/flume-jdbc-channel-1.6.0-20141023.024328-29.pom (3 KB at 2.0 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/1.6.0-SNAPSHOT/maven-metadata.xml
+612/612 B               Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/1.6.0-SNAPSHOT/maven-metadata.xml (612 B at 0.5 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/1.6.0-SNAPSHOT/flume-ng-channels-1.6.0-20141023.024310-29.pom
+2/2 KB               Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/1.6.0-SNAPSHOT/flume-ng-channels-1.6.0-20141023.024310-29.pom (2 KB at 3.0 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-file-channel/1.6.0-SNAPSHOT/maven-metadata.xml
+805/805 B               Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-file-channel/1.6.0-SNAPSHOT/maven-metadata.xml (805 B at 0.8 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-file-channel/1.6.0-SNAPSHOT/flume-file-channel-1.6.0-20141023.024328-29.pom
+1/6 KB      5/6 KB   6/6 KB            Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-file-channel/1.6.0-SNAPSHOT/flume-file-channel-1.6.0-20141023.024328-29.pom (6 KB at 7.1 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-spillable-memory-channel/1.6.0-SNAPSHOT/maven-metadata.xml
+817/817 B               Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-spillable-memory-channel/1.6.0-SNAPSHOT/maven-metadata.xml (817 B at 0.8 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-spillable-memory-channel/1.6.0-SNAPSHOT/flume-spillable-memory-channel-1.6.0-20141023.024328-29.pom
+3/3 KB      3/3 KB            Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-channels/flume-spillable-memory-channel/1.6.0-SNAPSHOT/flume-spillable-memory-channel-1.6.0-20141023.024328-29.pom (3 KB at 4.7 KB/sec)
 [INFO] 
 [INFO] --- maven-dependency-plugin:2.1:tree (default-cli) @ stratio-ingestion-all ---
-[INFO] com.stratio.ingestion:stratio-ingestion-all:pom:0.2.0-alpha-1
-[INFO] +- org.kitesdk:kite-morphlines-all:pom:0.16.0:compile
+Downloading: http://scala-tools.org/repo-releases/com/stratio/ingestion/stratio-sources/0.2.0-SNAPSHOT/maven-metadata.xml
+Downloading: http://nexus.strat.io:8081/nexus/content/repositories/snapshots/com/stratio/ingestion/stratio-sources/0.2.0-SNAPSHOT/maven-metadata.xml
+                  Downloading: http://nexus.strat.io:8081/nexus/content/repositories/snapshots/com/stratio/ingestion/stratio-ingestion-parent/0.2.0-SNAPSHOT/maven-metadata.xml
+Downloading: http://scala-tools.org/repo-releases/com/stratio/ingestion/stratio-ingestion-parent/0.2.0-SNAPSHOT/maven-metadata.xml
+                  Downloading: https://oosnmp.net/dist/release/com/stratio/ingestion/stratio-sources/0.2.0-SNAPSHOT/maven-metadata.xml
+         Downloading: https://oosnmp.net/dist/release/com/stratio/ingestion/stratio-ingestion-parent/0.2.0-SNAPSHOT/maven-metadata.xml
+         Downloading: http://scala-tools.org/repo-releases/com/stratio/ingestion/stratio-sinks/0.2.0-SNAPSHOT/maven-metadata.xml
+         Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-core/1.6.0-SNAPSHOT/maven-metadata.xml
+782/782 B               Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-core/1.6.0-SNAPSHOT/maven-metadata.xml (782 B at 0.6 KB/sec)
+Downloading: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-core/1.6.0-SNAPSHOT/flume-ng-core-1.6.0-20141023.024310-29.pom
+1/11 KB     5/11 KB   9/11 KB   11/11 KB   11/11 KB              Downloaded: http://repository.apache.org/snapshots/org/apache/flume/flume-ng-core/1.6.0-SNAPSHOT/flume-ng-core-1.6.0-20141023.024310-29.pom (11 KB at 12.7 KB/sec)
+Downloading: https://repository.cloudera.com/artifactory/libs-snapshot-local/org/apache/flume/flume-ng-sinks/1.6.0-SNAPSHOT/maven-metadata.xml
+           Downloading: https://repository.cloudera.com/artifactory/libs-snapshot-local/org/apache/flume/flume-parent/1.6.0-SNAPSHOT/maven-metadata.xml
+           Downloading: https://repository.cloudera.com/artifactory/libs-snapshot-local/org/apache/flume/flume-ng-core/1.6.0-SNAPSHOT/maven-metadata.xml
+           [INFO] com.stratio.ingestion:stratio-ingestion-all:pom:0.2.0-SNAPSHOT
+[INFO] +- com.stratio.ingestion:stratio-xmlxpath-deserializer:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  \- com.google.guava:guava:jar:17.0:compile
+[INFO] +- com.stratio.ingestion:stratio-commons-morphline:jar:0.2.0-SNAPSHOT:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-core:jar:0.16.0:compile
-[INFO] |  |  +- com.typesafe:config:jar:1.2.1:compile (version managed from 1.0.2)
 [INFO] |  |  +- com.codahale.metrics:metrics-core:jar:3.0.2:compile
 [INFO] |  |  \- com.codahale.metrics:metrics-healthchecks:jar:3.0.2:compile
+[INFO] |  +- commons-io:commons-io:jar:2.1:compile
+[INFO] |  +- org.apache.xmlbeans:xmlbeans-xpath:jar:2.6.0:compile
+[INFO] |  |  \- org.apache.xmlbeans:xmlbeans:jar:2.4.0:compile
+[INFO] |  |     \- stax:stax-api:jar:1.0.1:compile
+[INFO] |  \- net.sf.saxon:Saxon-HE:jar:9.5.1-5:compile
+[INFO] +- com.stratio.ingestion:stratio-nlp-morphline:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  +- com.typesafe:config:jar:1.2.1:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.3.1:compile
+[INFO] |  |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.3.0:compile
+[INFO] |  |  \- com.fasterxml.jackson.core:jackson-core:jar:2.3.1:compile
+[INFO] |  \- org.apache.tika:tika-core:jar:1.5:compile
+[INFO] +- com.stratio.ingestion:stratio-wikipediacleaner-morphline:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  +- org.jsoup:jsoup:jar:1.7.3:compile
+[INFO] |  \- info.bliki.wiki:bliki-core:jar:3.0.19:compile
+[INFO] |     +- commons-httpclient:commons-httpclient:jar:3.1:compile
+[INFO] |     \- org.apache.commons:commons-compress:jar:1.4.1:compile
+[INFO] |        \- org.tukaani:xz:jar:1.0:compile
+[INFO] +- com.stratio.ingestion:stratio-geoip-morphline:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  \- com.maxmind.db:maxmind-db:jar:0.3.2:compile
+[INFO] +- com.stratio.ingestion:stratio-elasticsearch-serializer:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  +- org.elasticsearch:elasticsearch:jar:1.3.2:compile
+[INFO] |  |  +- org.apache.lucene:lucene-core:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-analyzers-common:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-codecs:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-queries:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-memory:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-highlighter:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-queryparser:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-sandbox:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-suggest:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-misc:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-join:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-grouping:jar:4.9.0:compile
+[INFO] |  |  +- org.apache.lucene:lucene-spatial:jar:4.9.0:compile
+[INFO] |  |  |  \- com.spatial4j:spatial4j:jar:0.4.1:compile
+[INFO] |  |  +- org.antlr:antlr-runtime:jar:3.5:compile
+[INFO] |  |  +- org.ow2.asm:asm:jar:4.1:compile
+[INFO] |  |  \- org.ow2.asm:asm-commons:jar:4.1:compile
+[INFO] |  +- org.apache.commons:commons-lang3:jar:3.3.2:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.7:compile
+[INFO] +- com.stratio.ingestion:stratio-redis-source:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  \- redis.clients:jedis:jar:2.5.2:compile
+[INFO] |     \- org.apache.commons:commons-pool2:jar:2.0:compile
+[INFO] +- com.stratio.ingestion:stratio-rest-source:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  +- org.quartz-scheduler:quartz:jar:2.2.1:compile
+[INFO] |  |  \- c3p0:c3p0:jar:0.9.1.1:compile
+[INFO] |  \- org.glassfish.jersey.core:jersey-client:jar:2.9:compile
+[INFO] |     +- org.glassfish.jersey.core:jersey-common:jar:2.9:compile
+[INFO] |     |  +- javax.annotation:javax.annotation-api:jar:1.2:compile
+[INFO] |     |  +- org.glassfish.jersey.bundles.repackaged:jersey-guava:jar:2.9:compile
+[INFO] |     |  \- org.glassfish.hk2:osgi-resource-locator:jar:1.0.1:compile
+[INFO] |     +- javax.ws.rs:javax.ws.rs-api:jar:2.0:compile
+[INFO] |     +- org.glassfish.hk2:hk2-api:jar:2.3.0-b05:compile
+[INFO] |     |  +- org.glassfish.hk2:hk2-utils:jar:2.3.0-b05:compile
+[INFO] |     |  \- org.glassfish.hk2.external:aopalliance-repackaged:jar:2.3.0-b05:compile
+[INFO] |     +- org.glassfish.hk2.external:javax.inject:jar:2.3.0-b05:compile
+[INFO] |     \- org.glassfish.hk2:hk2-locator:jar:2.3.0-b05:compile
+[INFO] |        \- org.javassist:javassist:jar:3.18.1-GA:compile
+[INFO] +- com.stratio.ingestion:stratio-snmptraps-source:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  +- org.snmp4j:snmp4j:jar:2.3.0:compile
+[INFO] |  \- org.snmp4j:snmp4j-agent:jar:2.2.0:compile
+[INFO] +- com.stratio.ingestion:stratio-flumestats-source:jar:0.2.0-SNAPSHOT:compile
+[INFO] +- com.stratio.ingestion:stratio-cassandra-sink:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  +- com.datastax.cassandra:cassandra-driver-core:jar:2.0.2:compile
+[INFO] |  +- org.easytesting:fest-assert:jar:1.4:compile
+[INFO] |  |  \- org.easytesting:fest-util:jar:1.1.6:compile
+[INFO] |  \- joda-time:joda-time:jar:2.3:compile
+[INFO] +- com.stratio.ingestion:stratio-mongodb-sink:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  \- org.mongodb:mongo-java-driver:jar:2.12.2:compile
+[INFO] +- com.stratio.ingestion:stratio-jdbc-sink:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  \- org.jooq:jooq-meta:jar:3.3.2:compile
+[INFO] |     \- org.jooq:jooq:jar:3.3.2:compile
+[INFO] +- com.stratio.ingestion:stratio-stratiostreaming-sink:jar:0.2.0-SNAPSHOT:compile
+[INFO] |  \- com.stratio.streaming:streaming-api:jar:0.4.0:compile
+[INFO] |     +- com.stratio.streaming:streaming-commons:jar:0.4.0:compile
+[INFO] |     +- org.mockito:mockito-all:jar:1.9.5:test (scope managed from compile)
+[INFO] |     \- com.netflix.curator:curator-test:jar:1.3.3:compile
+[INFO] |        \- org.apache.commons:commons-math:jar:2.2:compile
+[INFO] +- org.kitesdk:kite-morphlines-all:pom:0.16.0:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-avro:jar:0.16.0:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-json:jar:0.16.0:compile
-[INFO] |  |  \- com.fasterxml.jackson.core:jackson-databind:jar:2.3.1:compile
-[INFO] |  |     +- com.fasterxml.jackson.core:jackson-annotations:jar:2.3.0:compile
-[INFO] |  |     \- com.fasterxml.jackson.core:jackson-core:jar:2.3.1:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-saxon:jar:0.16.0:compile
-[INFO] |  |  +- net.sf.saxon:Saxon-HE:jar:9.5.1-5:compile
 [INFO] |  |  \- org.ccil.cowan.tagsoup:tagsoup:jar:1.2.1:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-hadoop-core:jar:0.16.0:compile
 [INFO] |  |  \- org.kitesdk:kite-hadoop-compatibility:jar:0.16.0:compile
@@ -33,30 +155,14 @@
 [INFO] |  +- org.kitesdk:kite-morphlines-hadoop-sequencefile:jar:0.16.0:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-hadoop-rcfile:jar:0.16.0:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-tika-core:jar:0.16.0:compile
-[INFO] |  |  \- org.apache.tika:tika-core:jar:1.4:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-tika-decompress:jar:0.16.0:compile
-[INFO] |  |  \- org.apache.commons:commons-compress:jar:1.4.1:compile
-[INFO] |  |     \- org.tukaani:xz:jar:1.0:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-solr-core:jar:0.16.0:compile
 [INFO] |  |  +- org.apache.solr:solr-core:jar:4.6.1:compile
 [INFO] |  |  |  +- org.apache.solr:solr-solrj:jar:4.6.1:compile
 [INFO] |  |  |  |  +- org.noggit:noggit:jar:0.5:compile
 [INFO] |  |  |  |  \- org.codehaus.woodstox:wstx-asl:jar:3.2.7:runtime
-[INFO] |  |  |  +- org.apache.lucene:lucene-core:jar:4.6.1:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-codecs:jar:4.6.1:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-analyzers-common:jar:4.6.1:compile
 [INFO] |  |  |  +- org.apache.lucene:lucene-analyzers-kuromoji:jar:4.6.1:compile
 [INFO] |  |  |  +- org.apache.lucene:lucene-analyzers-phonetic:jar:4.6.1:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-highlighter:jar:4.6.1:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-memory:jar:4.6.1:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-misc:jar:4.6.1:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-join:jar:4.6.1:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-queryparser:jar:4.6.1:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-spatial:jar:4.6.1:compile
-[INFO] |  |  |  |  \- com.spatial4j:spatial4j:jar:0.3:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-suggest:jar:4.6.1:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-grouping:jar:4.6.1:compile
-[INFO] |  |  |  +- org.apache.lucene:lucene-queries:jar:4.6.1:compile
 [INFO] |  |  |  +- com.carrotsearch:hppc:jar:0.5.2:compile
 [INFO] |  |  |  +- com.googlecode.concurrentlinkedhashmap:concurrentlinkedhashmap-lru:jar:1.2:compile
 [INFO] |  |  |  +- commons-fileupload:commons-fileupload:jar:1.2.1:compile
@@ -86,7 +192,6 @@
 [INFO] |  |  |  |  +- org.apache.poi:poi-scratchpad:jar:3.9:compile
 [INFO] |  |  |  |  +- org.apache.poi:poi-ooxml:jar:3.9:compile
 [INFO] |  |  |  |  |  +- org.apache.poi:poi-ooxml-schemas:jar:3.9:compile
-[INFO] |  |  |  |  |  |  \- org.apache.xmlbeans:xmlbeans:jar:2.3.0:compile
 [INFO] |  |  |  |  |  \- dom4j:dom4j:jar:1.6.1:compile
 [INFO] |  |  |  |  +- org.ow2.asm:asm-debug-all:jar:4.1:compile
 [INFO] |  |  |  |  +- com.googlecode.mp4parser:isoparser:jar:1.0-RC-1:compile
@@ -101,7 +206,6 @@
 [INFO] |  |  \- org.apache.solr:solr-cell:jar:4.6.1:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-twitter:jar:0.16.0:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-maxmind:jar:0.16.0:compile
-[INFO] |  |  \- com.maxmind.db:maxmind-db:jar:0.3.3:compile
 [INFO] |  +- org.kitesdk:kite-morphlines-metrics-servlets:jar:0.16.0:compile
 [INFO] |  |  +- com.codahale.metrics:metrics-servlets:jar:3.0.2:compile
 [INFO] |  |  |  +- com.codahale.metrics:metrics-json:jar:3.0.2:compile
@@ -117,10 +221,10 @@
 [INFO] |  \- org.kitesdk:kite-morphlines-useragent:jar:0.16.0:compile
 [INFO] |     \- ua_parser:ua-parser:jar:1.3.0:compile
 [INFO] |        \- org.yaml:snakeyaml:jar:1.10:compile
+[INFO] +- org.apache.spark:spark-streaming-flume-sink_2.10:jar:1.1.0:compile
+[INFO] |  \- org.scala-lang:scala-library:jar:2.10.4:compile
 [INFO] +- org.apache.flume:flume-ng-configuration:jar:1.6.0-SNAPSHOT:compile
-[INFO] |  +- org.slf4j:slf4j-api:jar:1.7.7:compile
-[INFO] |  +- org.slf4j:slf4j-log4j12:jar:1.6.1:compile
-[INFO] |  \- com.google.guava:guava:jar:17.0:compile
+[INFO] |  \- org.slf4j:slf4j-log4j12:jar:1.6.1:compile
 [INFO] +- org.apache.flume:flume-ng-sdk:jar:1.6.0-SNAPSHOT:compile
 [INFO] |  +- org.apache.avro:avro:jar:1.7.4:compile
 [INFO] |  |  \- com.thoughtworks.paranamer:paranamer:jar:2.3:compile
@@ -129,12 +233,10 @@
 [INFO] |  +- io.netty:netty:jar:3.5.12.Final:compile
 [INFO] |  \- org.apache.thrift:libthrift:jar:0.7.0:compile
 [INFO] +- org.apache.flume:flume-ng-core:jar:1.6.0-SNAPSHOT:compile
-[INFO] |  +- commons-io:commons-io:jar:2.1:compile
 [INFO] |  +- commons-codec:commons-codec:jar:1.8:compile
 [INFO] |  +- log4j:log4j:jar:1.2.17:compile
 [INFO] |  +- commons-cli:commons-cli:jar:1.2:compile
 [INFO] |  +- commons-lang:commons-lang:jar:2.5:compile
-[INFO] |  +- joda-time:joda-time:jar:2.1:compile
 [INFO] |  +- org.mortbay.jetty:servlet-api:jar:2.5-20110124:compile
 [INFO] |  +- org.mortbay.jetty:jetty-util:jar:6.1.26:compile
 [INFO] |  +- org.mortbay.jetty:jetty:jar:6.1.26:compile
@@ -144,7 +246,13 @@
 [INFO] +- org.apache.flume:flume-ng-node:jar:1.6.0-SNAPSHOT:compile
 [INFO] |  +- log4j:apache-log4j-extras:jar:1.1:compile
 [INFO] |  +- org.codehaus.jackson:jackson-core-asl:jar:1.9.3:compile
-[INFO] |  \- org.codehaus.jackson:jackson-mapper-asl:jar:1.9.3:compile
+[INFO] |  +- org.codehaus.jackson:jackson-mapper-asl:jar:1.9.3:compile
+[INFO] |  +- org.apache.curator:curator-framework:jar:2.6.0:compile
+[INFO] |  |  +- org.apache.curator:curator-client:jar:2.6.0:compile
+[INFO] |  |  \- org.apache.zookeeper:zookeeper:jar:3.4.5:compile
+[INFO] |  |     +- jline:jline:jar:0.9.94:compile
+[INFO] |  |     \- org.jboss.netty:netty:jar:3.2.2.Final:compile
+[INFO] |  \- org.apache.curator:curator-recipes:jar:2.6.0:compile
 [INFO] +- org.apache.flume.flume-ng-channels:flume-file-channel:jar:1.6.0-SNAPSHOT:compile
 [INFO] |  +- commons-collections:commons-collections:jar:3.2.1:compile
 [INFO] |  +- com.google.protobuf:protobuf-java:jar:2.5.0:compile
@@ -160,13 +268,18 @@
 [INFO] |  \- org.schwering:irclib:jar:1.10:compile
 [INFO] +- org.apache.flume.flume-ng-sinks:flume-ng-hbase-sink:jar:1.6.0-SNAPSHOT:compile
 [INFO] |  \- org.hbase:asynchbase:jar:1.5.0:compile
-[INFO] |     +- com.stumbleupon:async:jar:1.4.0:compile
-[INFO] |     \- org.apache.zookeeper:zookeeper:jar:3.4.5:compile
+[INFO] |     \- com.stumbleupon:async:jar:1.4.0:compile
 [INFO] +- org.apache.flume.flume-ng-sinks:flume-ng-elasticsearch-sink:jar:1.6.0-SNAPSHOT:compile
 [INFO] |  \- org.apache.httpcomponents:httpclient:jar:4.2.1:compile
 [INFO] |     +- org.apache.httpcomponents:httpcore:jar:4.2.1:compile
 [INFO] |     \- commons-logging:commons-logging:jar:1.1.1:compile
 [INFO] +- org.apache.flume.flume-ng-sinks:flume-ng-morphline-solr-sink:jar:1.6.0-SNAPSHOT:compile
+[INFO] +- org.apache.flume.flume-ng-sinks:flume-ng-kafka-sink:jar:1.6.0-SNAPSHOT:compile
+[INFO] |  \- org.apache.kafka:kafka_2.10:jar:0.8.1.1:compile
+[INFO] |     +- com.yammer.metrics:metrics-core:jar:2.2.0:compile
+[INFO] |     +- net.sf.jopt-simple:jopt-simple:jar:3.2:compile
+[INFO] |     \- com.101tec:zkclient:jar:0.3:compile
+[INFO] +- org.apache.flume.flume-ng-sources:flume-kafka-source:jar:1.6.0-SNAPSHOT:compile
 [INFO] +- org.apache.flume.flume-ng-sources:flume-scribe-source:jar:1.6.0-SNAPSHOT:compile
 [INFO] +- org.apache.flume.flume-ng-sources:flume-jms-source:jar:1.6.0-SNAPSHOT:compile
 [INFO] +- org.apache.flume.flume-ng-sources:flume-twitter-source:jar:1.6.0-SNAPSHOT:compile
@@ -176,12 +289,11 @@
 [INFO] +- org.apache.flume.flume-ng-legacy-sources:flume-avro-source:jar:1.6.0-SNAPSHOT:compile
 [INFO] +- org.apache.flume.flume-ng-legacy-sources:flume-thrift-source:jar:1.6.0-SNAPSHOT:compile
 [INFO] +- org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:1.6.0-SNAPSHOT:compile
-[INFO] +- org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:jar-with-dependencies:1.6.0-SNAPSHOT:compile
 [INFO] \- org.apache.flume:flume-tools:jar:1.6.0-SNAPSHOT:compile
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 6.791s
-[INFO] Finished at: Thu Sep 04 16:53:25 CEST 2014
-[INFO] Final Memory: 18M/292M
+[INFO] Total time: 29.170s
+[INFO] Finished at: Thu Oct 23 16:32:49 CEST 2014
+[INFO] Final Memory: 28M/496M
 [INFO] ------------------------------------------------------------------------
