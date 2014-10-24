@@ -170,23 +170,11 @@ public class StratioStreamingSink
     }
 
     private ColumnType parseStreamField(String field) {
-        ColumnType columnType;
-        switch (field) {
-            case "string" : columnType =  ColumnType.STRING;
-                            break;
-            case "boolean" : columnType = ColumnType.BOOLEAN;
-                            break;
-            case "double" : columnType = ColumnType.DOUBLE;
-                            break;
-            case "integer" : columnType = ColumnType.INTEGER;
-                            break;
-            case "long" : columnType = ColumnType.LONG;
-                            break;
-            case "float" : columnType = ColumnType.FLOAT;
-                            break;
-            default: columnType = ColumnType.STRING;
-                      break;
+        try {
+          return ColumnType.valueOf(field.toUpperCase(Locale.ENGLISH));
+        } catch (IllegalArgumentException ex) {
+          //TODO: log something
         }
-        return columnType;
+        return ColumnType.STRING;
     }
 }

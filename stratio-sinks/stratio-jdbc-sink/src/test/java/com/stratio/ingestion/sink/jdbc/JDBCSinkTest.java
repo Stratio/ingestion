@@ -80,7 +80,7 @@ public class JDBCSinkTest {
         Transaction tx = channel.getTransaction();
         tx.begin();
 
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<String, String>();
         headers.put("myString", "bar"); // Overwrites the value defined in JSON body
         headers.put("myInteger", "64");
         headers.put("myBoolean", "true");
@@ -148,7 +148,7 @@ public class JDBCSinkTest {
         Transaction tx = channel.getTransaction();
         tx.begin();
 
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<String, String>();
         headers.put("myString", "bar"); // Overwrites the value defined in JSON body
         headers.put("myInteger", "64");
         headers.put("myBoolean", "true");
@@ -221,7 +221,7 @@ public class JDBCSinkTest {
         Transaction tx = channel.getTransaction();
         tx.begin();
 
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<String, String>();
         headers.put("myString", "bar"); // Overwrites the value defined in JSON body
         headers.put("myInteger", "64");
         headers.put("myBoolean", "true");

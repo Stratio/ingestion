@@ -88,7 +88,7 @@ public class FieldFilterBuilder implements CommandBuilder {
         @Override
         protected boolean doProcess(Record record) {
             final ListMultimap<String, Object> entries = record.getFields();
-            List<String> toRemove = new ArrayList<>();
+            List<String> toRemove = new ArrayList<String>();
             if (this.isRegex) {
                 for (final String field : entries.keySet()) {
                     if (!includeFields.isEmpty() && includePattern.matcher(field).matches()) {

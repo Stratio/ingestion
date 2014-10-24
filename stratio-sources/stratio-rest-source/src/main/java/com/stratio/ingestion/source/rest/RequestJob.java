@@ -76,15 +76,12 @@ public class RequestJob implements Job {
             request = addHeaders(request, (String) properties.get(HEADERS));
 
             Response response = null;
-            switch ((String) properties.get(METHOD)) {
-                case "POST":
-                    response = request.post(Entity.entity(
-                            (String) properties.get(APPLICATION_TYPE), mediaType));
-                    break;
-                default:
-                case "GET":
-                    response = request.get();
-                    break;
+            final String method = (String) properties.get(METHOD);
+            if ("POST".equals(method)) {
+              response = request.post(Entity.entity(
+                  (String) properties.get(APPLICATION_TYPE), mediaType));
+            } else {
+              response = request.get();
             }
 
             if (response != null) {
@@ -120,13 +117,10 @@ public class RequestJob implements Job {
      */
     public Builder setApplicationType(WebTarget targetURL, String applicationType) {
         Builder builder = null;
-        switch (applicationType) {
-            case "TEXT":
-                mediaType = MediaType.TEXT_PLAIN_TYPE;
-                break;
-            default: // Json
-                mediaType = MediaType.APPLICATION_JSON_TYPE;
-                break;
+        if ("TEXT".equals(applicationType)) {
+          mediaType = MediaType.TEXT_PLAIN_TYPE;
+        } else {
+          mediaType = MediaType.APPLICATION_JSON_TYPE;
         }
         builder = targetURL.request(mediaType);
 

@@ -191,7 +191,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
     }
     
 	private ColumnDefinition getColumnDefinition(TableMetadata tableMetadata) {
-		List<FieldDefinition> fields = new ArrayList<>();
+		List<FieldDefinition> fields = new ArrayList<FieldDefinition>();
 		for (ColumnMetadata column : tableMetadata.getColumns()) {
 			FieldDefinition field = new FieldDefinition();
 			field.setColumnName(column.getName());

@@ -19,6 +19,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>org.apache.flume</groupId>
+		<artifactId>flume-parent</artifactId>
+		<version>1.6.0-SNAPSHOT</version>
+		<relativePath>./flume</relativePath>
+	</parent>
+
 	<groupId>com.stratio.ingestion</groupId>
 	<artifactId>stratio-ingestion-parent</artifactId>
 	<version>0.2.0-SNAPSHOT</version>
@@ -36,8 +43,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 
 		<flume.version>1.6.0-SNAPSHOT</flume.version>
@@ -174,10 +181,6 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.4</version>
-				</plugin>
-				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>findbugs-maven-plugin</artifactId>
 					<version>2.5.4</version>
@@ -285,13 +288,11 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>flume</module>
                 <module>stratio-sources</module>
                 <module>stratio-sinks</module>
                 <module>stratio-morphlines</module>
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
-                <module>stratio-ingestion-all</module>
             </modules>
         </profile>
         <profile>

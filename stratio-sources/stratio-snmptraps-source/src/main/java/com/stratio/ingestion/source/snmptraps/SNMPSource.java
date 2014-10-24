@@ -125,37 +125,30 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
                 break;
         }
 
-        switch (context.getString(CONF_ENCRYPTION, DEFAULT_ENCRYPTION)) {
-            case "SHA":
-                authMethod = AuthSHA.ID;
-                break;
-            case "MD5":
-                authMethod = AuthMD5.ID;
-                break;
-            default:
-                authMethod = AuthMD5.ID;
-                break;
+        final String hashAlgo = context.getString(CONF_ENCRYPTION, DEFAULT_ENCRYPTION);
+        if ("SHA".equals(hashAlgo)) {
+          authMethod = AuthSHA.ID;
+        } else if ("MD5".equals(hashAlgo)) {
+          authMethod = AuthMD5.ID;
+        } else {
+          authMethod = AuthMD5.ID;
         }
 
-        switch (context.getString(CONF_AUTH, DEFAULT_AUTH)) {
-            case "AUTH_NOPRIV":
-                securityMethod = SecurityLevel.AUTH_NOPRIV;
-                username = context.getString(CONF_USERNAME);
-                password = context.getString(CONF_PASSWD);
-                break;
-            case "NOAUTH_NOPRIV":
-                securityMethod = SecurityLevel.NOAUTH_NOPRIV;
-                break;
-            case "AUTH_PRIV":
-                securityMethod = SecurityLevel.AUTH_PRIV;
-                username = context.getString(CONF_USERNAME);
-                password = context.getString(CONF_PASSWD);
-                privacyProtocol = context.getString(CONF_PRIV_PROTOCOL, DEFAULT_PRIV_PROTOCOL);
-                privacyPassword = context.getString(CONF_PRIV_PASSPHRASE);
-                break;
-            default:
-                securityMethod = SecurityLevel.NOAUTH_NOPRIV;
-                break;
+        final String auth = context.getString(CONF_AUTH, DEFAULT_AUTH);
+        if ("AUTH_NOPRIV".equals(auth)) {
+          securityMethod = SecurityLevel.AUTH_NOPRIV;
+          username = context.getString(CONF_USERNAME);
+          password = context.getString(CONF_PASSWD);
+        } else if ("NOAUTH_NOPRIV".equals(auth)) {
+          securityMethod = SecurityLevel.NOAUTH_NOPRIV;
+        } else if ("AUTH_PRIV".equals(auth)) {
+          securityMethod = SecurityLevel.AUTH_PRIV;
+          username = context.getString(CONF_USERNAME);
+          password = context.getString(CONF_PASSWD);
+          privacyProtocol = context.getString(CONF_PRIV_PROTOCOL, DEFAULT_PRIV_PROTOCOL);
+          privacyPassword = context.getString(CONF_PRIV_PASSPHRASE);
+        } else {
+          securityMethod = SecurityLevel.NOAUTH_NOPRIV;
         }
 
         if (sourceCounter == null) {
@@ -284,31 +277,24 @@ public class SNMPSource extends AbstractSource implements EventDrivenSource, Con
         OID privacyOID = null;
         OctetString privacyPasswd = null;
         if (securityMethod == SecurityLevel.AUTH_PRIV) {
-            switch (privacyProtocol.toUpperCase(Locale.getDefault())) {
-                case "PRIVDES":
-                    privacyOID = PrivDES.ID;
-                    break;
-                case "PRIV3DES":
-                    privacyOID = Priv3DES.ID;
-                    break;
-                case "PRIVAES128":
-                    privacyOID = PrivAES128.ID;
-                    break;
-                case "PRIVAES192":
-                    privacyOID = PrivAES192.ID;
-                    break;
-                case "PRIVAES256":
-                    privacyOID = PrivAES256.ID;
-                    break;
-                case "PRIVAES192WITH3DESKEYEXTENSION":
-                    privacyOID = PrivAES192With3DESKeyExtension.ID;
-                    break;
-                case "PRIVAES256WITH3DESKEYEXTENSION":
-                    privacyOID = PrivAES256With3DESKeyExtension.ID;
-                    break;
-                default:
-                    log.debug("Privacy protocol " + privacyProtocol + " unsupported or invalid.");
-            }
+            final String privacyProtocolUpper = privacyProtocol.toUpperCase(Locale.ENGLISH);
+                if ("PRIVDES".equals(privacyProtocolUpper)) {
+                  privacyOID = PrivDES.ID;
+                } else if ("PRIV3DES".equals(privacyProtocolUpper)) {
+                  privacyOID = Priv3DES.ID;
+                } else if ("PRIVAES128".equals(privacyProtocolUpper)) {
+                  privacyOID = PrivAES128.ID;
+                } else if  ("PRIVAES192".equals(privacyProtocolUpper)) {
+                  privacyOID = PrivAES192.ID;
+                } else if ("PRIVAES256".equals(privacyProtocolUpper)) {
+                  privacyOID = PrivAES256.ID;
+                } else if  ("PRIVAES192WITH3DESKEYEXTENSION".equals(privacyProtocolUpper)) {
+                  privacyOID = PrivAES192With3DESKeyExtension.ID;
+                } else if ("PRIVAES256WITH3DESKEYEXTENSION".equals(privacyProtocolUpper)) {
+                  privacyOID = PrivAES256With3DESKeyExtension.ID;
+                } else {
+                    log.debug("Privacy protocol " + privacyProtocolUpper + " unsupported or invalid.");
+                }
             privacyPasswd = new OctetString(privacyPassword);
         }
         return new UsmUser(new OctetString(username), authMethod, new OctetString(password),

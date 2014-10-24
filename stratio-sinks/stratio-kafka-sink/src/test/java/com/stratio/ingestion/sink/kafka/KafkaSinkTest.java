@@ -117,7 +117,7 @@ public class KafkaSinkTest {
         jsonBody.put("myString", "foo");
         jsonBody.put("myInt32", 32);
 
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<String, String>();
         headers.put("myString", "bar");
         headers.put("myInt64", "64");
         headers.put("myBoolean", "true");

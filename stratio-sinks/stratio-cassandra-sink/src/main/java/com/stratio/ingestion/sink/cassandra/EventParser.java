@@ -70,7 +70,7 @@ class EventParser {
 	
 	@SuppressWarnings("rawtypes")
 	public CassandraRow parse(Event event) {
-		List<CassandraField<?>> fields = new ArrayList<>();
+		List<CassandraField<?>> fields = new ArrayList<CassandraField<?>>();
 		
 		for (FieldDefinition def : this.definition.getFields()) {
 			if (event.getHeaders().containsKey(def.getColumnName())) {

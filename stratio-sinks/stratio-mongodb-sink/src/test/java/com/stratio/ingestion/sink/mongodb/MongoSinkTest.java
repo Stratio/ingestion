@@ -113,7 +113,7 @@ public class MongoSinkTest {
         jsonBody.put("myString", "foo");
         jsonBody.put("myInt32", 32);
 
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<String, String>();
         headers.put("myString", "bar"); // Overwrites the value defined in JSON body
         headers.put("myInt64", "64");
         headers.put("myBoolean", "true");

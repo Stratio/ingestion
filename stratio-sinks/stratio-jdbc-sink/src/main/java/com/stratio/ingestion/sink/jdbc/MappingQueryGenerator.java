@@ -50,7 +50,7 @@ class MappingQueryGenerator implements QueryGenerator {
         InsertSetStep insert = dslContext.insertInto(this.table);
         int mappedEvents = 0;
         for (Event event : events) {
-            Map<Field, Object> fieldValues = new HashMap<>();
+            Map<Field, Object> fieldValues = new HashMap<Field, Object>();
             for (Map.Entry<String, String> entry : event.getHeaders().entrySet()) {
                 Field field = null;
                 for (Field f: this.table.fields()) {

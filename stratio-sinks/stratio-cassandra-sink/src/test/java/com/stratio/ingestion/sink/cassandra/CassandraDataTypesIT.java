@@ -140,7 +140,7 @@ public class CassandraDataTypesIT {
 		sink.setChannel(channel);
 		
 		sink.start();
-		headers = new HashMap<>();
+		headers = new HashMap<String, String>();
 		headers.put(PRIMARY_KEY, UUID.randomUUID().toString());
 	}
 

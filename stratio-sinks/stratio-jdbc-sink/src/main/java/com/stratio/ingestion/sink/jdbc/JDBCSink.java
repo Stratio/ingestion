@@ -96,8 +96,12 @@ public class JDBCSink extends AbstractSink implements Configurable {
 
         try {
             Class.forName(driver).newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        } catch (ClassNotFoundException ex) {
             throw new JDBCSinkException(ex);
+        } catch (InstantiationException ex) {
+          throw new JDBCSinkException(ex);
+        } catch (IllegalAccessException ex) {
+          throw new JDBCSinkException(ex);
         }
         connection = null;
         try {
@@ -188,7 +192,7 @@ public class JDBCSink extends AbstractSink implements Configurable {
     }
 
     private List<Event> takeEventsFromChannel(Channel channel, int eventsToTake) {
-        List<Event> events = new ArrayList<>();
+        List<Event> events = new ArrayList<Event>();
         for (int i = 0; i < eventsToTake; i++) {
             this.sinkCounter.incrementEventDrainAttemptCount();
             events.add(channel.take());

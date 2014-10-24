@@ -109,7 +109,7 @@ public class EventParserTest {
     @Test
     public void parseWithoutMapping() {
         final EventParser eventParser = new EventParser(MappingDefinition.load("/full_map.json"));
-        Map<String,String> headers = new HashMap<>();
+        Map<String,String> headers = new HashMap<String, String>();
         headers.put("myString", "\"bar\""); // Overwrites the value defined in JSON body
         headers.put("myInt64", "64");
         headers.put("myBoolean", "true");

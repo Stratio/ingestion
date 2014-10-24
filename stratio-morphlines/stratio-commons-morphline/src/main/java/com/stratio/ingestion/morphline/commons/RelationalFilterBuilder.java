@@ -96,9 +96,20 @@ public class RelationalFilterBuilder  implements CommandBuilder {
             Object refObject = null;
             try {
                 refObject = Class.forName(classname).getConstructor(String.class).newInstance(reference);
-            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException | NoSuchMethodException | SecurityException
-                    | ClassNotFoundException e) {
+            } catch (InstantiationException e) {
+              //TODO: Use proper logging
+              e.printStackTrace();
+            } catch (IllegalAccessException e) {
+              e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+              e.printStackTrace();
+            } catch (InvocationTargetException e) {
+              e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+              e.printStackTrace();
+            } catch (SecurityException e) {
+              e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
             
@@ -111,27 +122,21 @@ public class RelationalFilterBuilder  implements CommandBuilder {
         private boolean checkCondition(Object current, Object refObject){
             boolean result = false;
             int comparationResult = compare(current, refObject);
-            switch(operator){
-                case ">":
-                    result =  comparationResult > 0;
-                    break;
-                case ">=":
-                    result = comparationResult >= 0;
-                    break;
-                case "<":
-                    result = comparationResult < 0;
-                    break;
-                case "<=":
-                    result = comparationResult <= 0;
-                    break;
-                case "==":
-                    result = comparationResult == 0;
-                    break;
-                case "<>":
-                    result = comparationResult != 0;
-                    break;
+            if (">".equals(operator)) {
+              result = comparationResult > 0;
+            } else if (">=".equals(operator)) {
+              result = comparationResult >= 0;
+            } else if ("<".equals(operator)) {
+              result = comparationResult < 0;
+            } else if ("<=".equals(operator)) {
+              result = comparationResult <= 0;
+            } else if ("==".equals(operator)) {
+              result = comparationResult == 0;
+            } else if ("<>".equals(operator)) {
+              result = comparationResult != 0;
+            } else {
+              //TODO: Use proper logging
             }
-            
             return result;
         }
         

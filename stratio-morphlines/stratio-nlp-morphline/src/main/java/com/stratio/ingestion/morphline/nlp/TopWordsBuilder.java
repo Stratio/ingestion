@@ -18,6 +18,7 @@ package com.stratio.ingestion.morphline.nlp;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Map;
 
 import org.kitesdk.morphline.api.Command;
 import org.kitesdk.morphline.api.CommandBuilder;
@@ -25,6 +26,7 @@ import org.kitesdk.morphline.api.MorphlineContext;
 import org.kitesdk.morphline.api.Record;
 import org.kitesdk.morphline.base.AbstractCommand;
 
+import com.google.common.collect.ImmutableMap;
 import com.typesafe.config.Config;
 
 import cue.lang.Counter;
@@ -87,67 +89,45 @@ public class TopWordsBuilder implements CommandBuilder {
 	}
 	
 	private final static class StopWordsFinder {
-		
-		public static StopWords find(String language) {
-			switch (language) {
-			case "es":
-				return StopWords.Spanish;
-			case "en":
-				return StopWords.English;
-			case "ca":
-				return StopWords.Catalan;
-			case "de":
-				return StopWords.German;
-			case "ar":
-				return StopWords.Arabic;
-			case "hr":
-				return StopWords.Croatian;
-			case "cs":
-				return StopWords.Czech;
-			case "nl":
-				return StopWords.Dutch;
-			case "da":
-				return StopWords.Danish;
-			case "eo":
-				return StopWords.Esperanto;
-			case "fi":
-				return StopWords.Finnish;
-			case "fr":
-				return StopWords.French;
-			case "el":
-				return StopWords.Greek;
-			case "hi":
-				return StopWords.Hindi;
-			case "hu":
-				return StopWords.Hungarian;
-			case "it":
-				return StopWords.Italian;
-			case "la":
-				return StopWords.Latin;
-			case "no":
-				return StopWords.Norwegian;
-			case "pl":
-				return StopWords.Polish;
-			case "pt":
-				return StopWords.Portuguese;
-			case "ro":
-				return StopWords.Romanian;
-			case "ru":
-				return StopWords.Russian;
-			case "sl":
-				return StopWords.Slovenian;
-			case "sk":
-				return StopWords.Slovak;
-			case "sv":
-				return StopWords.Swedish;
-			case "he":
-				return StopWords.Hebrew;
-			case "tk":
-				return StopWords.Turkish;
-			default:
-				return StopWords.Custom;
-			}
+
+    private static Map<String,StopWords> stopWordsMap = ImmutableMap.<String, StopWords>builder()
+        .put("es", StopWords.Spanish)
+        .put("en", StopWords.English)
+        .put("ca", StopWords.Catalan)
+        .put("de", StopWords.German)
+        .put("ar", StopWords.Arabic)
+        .put("hr", StopWords.Croatian)
+			  .put("cs", StopWords.Czech)
+        .put("nl", StopWords.Dutch)
+        .put("da", StopWords.Danish)
+        .put("eo", StopWords.Esperanto)
+        .put("fi", StopWords.Finnish)
+			  .put("fr", StopWords.French)
+        .put("el", StopWords.Greek)
+        .put("hi", StopWords.Hindi)
+        .put("hu", StopWords.Hungarian)
+        .put("it", StopWords.Italian)
+			  .put("la", StopWords.Latin)
+        .put("no", StopWords.Norwegian)
+        .put("pl", StopWords.Polish)
+        .put("pt", StopWords.Portuguese)
+        .put("ro", StopWords.Romanian)
+        .put("ru", StopWords.Russian)
+			  .put("sl", StopWords.Slovenian)
+			  .put("sk", StopWords.Slovak)
+			  .put("sv", StopWords.Swedish)
+			  .put("he", StopWords.Hebrew)
+			  .put("tk", StopWords.Turkish)
+        .build();
+
+        public static StopWords find(String language) {
+          StopWords result = stopWordsMap.get(language);
+          if (result == null) {
+            return StopWords.Custom;
+          }
+          return result;
+        }
+
 		}
-	}
-	
+
 }

@@ -111,7 +111,7 @@ public class MongoSinkDynamicTest {
         Transaction tx = channel.getTransaction();
         tx.begin();
 
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<String, String>();
         headers.put("myString", "test1");
         Event event = EventBuilder.withBody(new byte[0], headers);
         channel.put(event);

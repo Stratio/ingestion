@@ -42,7 +42,7 @@ class TemplateQueryGenerator implements QueryGenerator {
     public TemplateQueryGenerator(final SQLDialect sqlDialect, final String sql) {
         final Matcher m = PARAMETER_PATTERN.matcher(sql);
 
-        parameters = new ArrayList<>();
+        parameters = new ArrayList<Parameter>();
 
         while (m.find()) {
             final String part = m.group("part").toUpperCase(Locale.ENGLISH);
@@ -64,7 +64,7 @@ class TemplateQueryGenerator implements QueryGenerator {
     }
 
     public boolean executeQuery(final DSLContext dslContext, final List<Event> events) {
-        List<Query> queries = new ArrayList<>();
+        List<Query> queries = new ArrayList<Query>();
         for (int i = 0; i < events.size(); i++) {
             final Object[] bindings = new Object[this.parameters.size()];
             for (int j = 0; j < this.parameters.size(); j++) {

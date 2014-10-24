@@ -92,7 +92,7 @@ class MappingDefinition implements Serializable {
         } else {
             this.bodyField = DEFAULT_BODY_FIELD;
         }
-        List<FieldDefinition> fields = new ArrayList<>();
+        List<FieldDefinition> fields = new ArrayList<FieldDefinition>();
         if (jsonSchema.has(PROPERTIES)) {
             for (Map.Entry<String, JsonNode> entry : ImmutableList.copyOf(jsonSchema.get(PROPERTIES).fields())) {
                 FieldDefinition fieldDefinition = new FieldDefinition();
@@ -162,7 +162,9 @@ class MappingDefinition implements Serializable {
                 log.debug("Loaded mapping definition from resource: {}", path);
             }
             return new MappingDefinition(new ObjectMapper().readTree(mappingInputstream));
-        } catch (IOException | IllegalArgumentException ex) {
+        } catch (IOException ex) {
+            throw new MongoSinkException(ex);
+        } catch (IllegalArgumentException ex) {
             throw new MongoSinkException(ex);
         } finally {
             try {

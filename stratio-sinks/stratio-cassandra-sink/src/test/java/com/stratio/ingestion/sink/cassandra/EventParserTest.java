@@ -262,8 +262,8 @@ public class EventParserTest {
         List<CassandraRow> parsedEvents = eventParser.parse(events);
         assertThat(parsedEvents).isEqualTo(
                 Arrays.asList(
-                    new CassandraRow(Arrays.<CassandraField<?>>asList(new CassandraField<>("int_field", 1))),
-                    new CassandraRow(Arrays.<CassandraField<?>>asList(new CassandraField<>("text_field", "string")))
+                    new CassandraRow(Arrays.<CassandraField<?>>asList(new CassandraField<Integer>("int_field", 1))),
+                    new CassandraRow(Arrays.<CassandraField<?>>asList(new CassandraField<String>("text_field", "string")))
                 )
         );
     }

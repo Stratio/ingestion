@@ -144,30 +144,22 @@ public class CalculatorBuilder implements CommandBuilder {
                 opRight = (BigDecimal) op2;
             }
 
-            switch (String.valueOf(operator)) {
-                case "+":
-                    result = opLeft.add(opRight);
-                    break;
-                case "-":
-                    result = opLeft.subtract(opRight);
-                    break;
-                case "*":
-                    result = opLeft.multiply(opRight);
-                    break;
-                case "/":
-                    result = opLeft.divide(opRight);
-                    break;
-                case "^":
-                    result = opLeft.pow(opRight.intValue());
-                    break;
-                case "sqrt":
-                    result = new BigDecimal(Math.sqrt(opLeft.doubleValue()));
-                    break;
-                case "%":
-                    result = opLeft.remainder(opRight);
-                    break;
-                default:
-                    throw new RuntimeException("Incorrect operator");
+            if ("+".equals(operator)) {
+              result = opLeft.add(opRight);
+            } else if ("-".equals(operator)) {
+              result = opLeft.subtract(opRight);
+            } else if ("*".equals(operator)) {
+              result = opLeft.multiply(opRight);
+            } else if ("/".equals(operator)) {
+              result = opLeft.divide(opRight);
+            } else if ("^".equals(operator)) {
+              result = opLeft.pow(opRight.intValue());
+            } else if ("sqrt".equals(operator)) {
+              result = new BigDecimal(Math.sqrt(opLeft.doubleValue()));
+            } else if ("%".equals(operator)) {
+              result = opLeft.remainder(opRight);
+            } else {
+              throw new RuntimeException("Incorrect operator");
             }
 
             return result;
