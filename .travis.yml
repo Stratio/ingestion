@@ -6,7 +6,10 @@ jdk:
 cache:
   directories:
     - $HOME/.m2
+install:
+  - cd stratio-ingestion-dist
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script:
-  - mvn clean install -DskipTests
+  - cd stratio-ingestion-dist
   - mvn test -Ptravis-test
   - mvn package -DskipTests
