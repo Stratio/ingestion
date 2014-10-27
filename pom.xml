@@ -278,6 +278,16 @@
 					<xmlOutputDirectory>target/site</xmlOutputDirectory>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.rat</groupId>
+				<artifactId>apache-rat-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>verify.rat</id>
+						<phase>none</phase>
+					</execution>
+				</executions>
+        		</plugin>
 		</plugins>
 	</build>
 
