@@ -197,6 +197,9 @@
 				<version>2.17</version>
 				<configuration>				
 					<argLine>${jacocoUT}</argLine>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
 				</configuration>
 			</plugin>
 			<plugin>
