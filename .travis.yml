@@ -7,9 +7,11 @@ cache:
   directories:
     - $HOME/.m2
 install:
-  - cd stratio-ingestion-dist
+  - pushd stratio-ingestion-dist
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - popd
 script:
-  - cd stratio-ingestion-dist
   - mvn test -Ptravis-test
+  - pushd stratio-ingestion-dist
   - mvn package -DskipTests
+  - popd
