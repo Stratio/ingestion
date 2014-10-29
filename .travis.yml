@@ -8,10 +8,10 @@ cache:
     - $HOME/.m2
 install:
   - pushd stratio-ingestion-dist
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn install -Dhadoop.profile=hbase-98 -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - popd
 script:
-  - mvn test -Ptravis-test
+  - mvn test -Dhadoop.profile=hbase-98 -Ptravis-test
   - pushd stratio-ingestion-dist
-  - mvn package -DskipTests
+  - mvn package -Dhadoop.profile=hbase-98 -DskipTests
   - popd
