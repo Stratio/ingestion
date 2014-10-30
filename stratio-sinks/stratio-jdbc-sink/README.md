@@ -20,7 +20,7 @@ Get it with Maven
    <dependency>
      <groupId>com.stratio.ingestion</groupId>
      <artifactId>stratio-jdbc-sink</artifactId>
-     <version>0.2.0-SNAPSHOT</version>
+     <version>0.2.1</version>
    </dependency>
 ```
 
