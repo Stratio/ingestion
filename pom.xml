@@ -52,7 +52,7 @@
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<jackson.databind.version>2.3.1</jackson.databind.version>
-		<datastax.version>2.0.2</datastax.version>
+		<datastax.version>2.1.2</datastax.version>
 		<elasticsearch.version>1.3.2</elasticsearch.version>
 		<mongodb.version>2.12.4</mongodb.version>
 		<tika.version>1.5</tika.version>
