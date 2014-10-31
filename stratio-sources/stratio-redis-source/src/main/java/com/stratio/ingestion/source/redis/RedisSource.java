@@ -15,7 +15,10 @@
  */
 package com.stratio.ingestion.source.redis;
 
-import com.google.common.collect.Maps;
+import java.nio.charset.Charset;
+import java.util.Map;
+
+import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.EventDrivenSource;
@@ -25,11 +28,13 @@ import org.apache.flume.event.EventBuilder;
 import org.apache.flume.source.AbstractSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPubSub;
 
-import java.nio.charset.Charset;
-import java.util.Map;
+import com.google.common.collect.Maps;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisPubSub;
 
 /**
  *
@@ -54,7 +59,7 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
 
     private ChannelProcessor channelProcessor;
 	
-	private Jedis jedis;
+    private JedisPool jedisPool;
     private String host;
     private Integer port;
     private String charset;
@@ -90,7 +95,7 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
 
         channelProcessor = getChannelProcessor();
 
-        jedis = new Jedis(host, port, 0);
+        init();
         log.info("Redis Connected. (host: " + host + ", port: " + String.valueOf(port) + ")");
 
         new Thread(new SubscribeManager()).start();
@@ -99,7 +104,7 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
 	@Override
 	public synchronized void stop() {
         super.stop();
-        jedis.close();
+        jedisPool.destroy();
 	}
 
     private class SubscribeManager implements Runnable {
@@ -148,16 +153,53 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
                 for(String pattern : patterns){
                     log.info("Jedis is going to subscribe to pattern: " + pattern);
                 }
-
-                jedis.psubscribe(jedisPubSub, patterns);
+                jedisPool.getResource().psubscribe(jedisPubSub, patterns);
             } else {
                 for(String channel : channels){
                     log.info("Jedis is going to subscribe to channel: " + channel);
                 }
 
-                jedis.subscribe(jedisPubSub, channels);
+                jedisPool.getResource().subscribe(jedisPubSub, channels);
             }
         }
     }
-	
+
+    private void init() {
+        try {
+            JedisPoolConfig poolConfig = new JedisPoolConfig();
+            poolConfig.setTestOnBorrow(true);
+            poolConfig.setMaxTotal(100);
+            poolConfig.setMaxIdle(10);
+            poolConfig.setMinIdle(2);
+            poolConfig.setMaxWaitMillis(100);
+            poolConfig.setTestWhileIdle(true);
+            poolConfig.setTestOnReturn(true);
+            poolConfig.setMinEvictableIdleTimeMillis(10000);
+            poolConfig.setTimeBetweenEvictionRunsMillis(5000);
+            poolConfig.setNumTestsPerEvictionRun(10);
+            // create JEDIS pool
+            this.jedisPool = new JedisPool(poolConfig, host, port);
+            // check connection
+            checkConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }
+
+
+    /**
+     * This method can throw an exception if connection to REDIS cannot be
+     * established
+     */
+    private void checkConnection() {
+        // get connection from the pool
+        Jedis cache = jedisPool.getResource();
+        // ping redis server
+        if (!"PONG".equals(cache.ping())) {
+            throw new IllegalStateException("Cannot ping REDIS server");
+        }
+        // return connection
+        this.jedisPool.returnResource(cache);
+    }
 }
