@@ -53,6 +53,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
@@ -112,21 +113,20 @@ public class XmlXpathDeserializer implements EventDeserializer {
         try {
             docBuilder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            throw new IOException("Creating DocumentBuilder failed", e);
         }
 
         try {
             doc = docBuilder.parse(inStream);
         } catch (SAXException e) {
-            log.error("Cannot parse body");
-            e.printStackTrace();
+            throw new IOException("Cannot parse body", e);
         }
 
         // Extract full xml to body
         try {
             body = documentToString(doc);
-        } catch (TransformerException e1) {
-            e1.printStackTrace();
+        } catch (TransformerException e) {
+          throw new IOException("Cannot serialize XML", e);
         }
 
         // Add static fiels. These will be included in all events.
@@ -141,7 +141,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
             nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
             list = new ArrayList<String>(nodeList.getLength());
         } catch (XPathExpressionException e) {
-            e.printStackTrace();
+            throw new IOException("Applying XPath expression failed", e);
         }
 
         for (int i = 0; i < nodeList.getLength(); i++) {

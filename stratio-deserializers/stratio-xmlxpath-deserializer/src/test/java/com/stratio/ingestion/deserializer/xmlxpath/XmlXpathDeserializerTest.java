@@ -20,6 +20,7 @@ import org.apache.flume.Event;
 import org.apache.flume.serialization.EventDeserializer;
 import org.apache.flume.serialization.SeekableFileInputStream;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -40,7 +41,11 @@ public class XmlXpathDeserializerTest {
     private static final Logger log = LoggerFactory.getLogger(XmlXpathDeserializerTest.class);
 
     private InputStream getTestInputStream() throws IOException {
-      return new SeekableFileInputStream("src/test/resources/test.xml");
+      return getTestInputStream("test.xml");
+    }
+
+    private InputStream getTestInputStream(final String path) throws IOException {
+      return new SeekableFileInputStream("src/test/resources/" + path);
     }
 
     @Test
@@ -82,6 +87,27 @@ public class XmlXpathDeserializerTest {
         context.put("headers.author", "/bookstore/book[@category='CHILDREN']/author");
         EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
         validateHeaders(des);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testBadXML() throws IOException {
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(new Context(), getTestInputStream("bad.xml"));
+    }
+
+    @Test()
+    public void testXPathWithNS() throws IOException {
+      Context context = new Context();
+      context.put("expression", "/bookstore/book/title");
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream("ns.xml"));
+      List<Event> events = des.readEvents(4);
+      assertEquals(4, events.size());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testBadXPath() throws IOException {
+      Context context = new Context();
+      context.put("expression", "ñ/b\ngnklñ13");
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
     }
 
     private void validateReadAndMark(EventDeserializer des) throws IOException {
