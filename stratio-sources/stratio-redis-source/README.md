@@ -1,7 +1,7 @@
 Stratio Redis Source
 ==============================
 
-A Flume source that read data from Redis Pub Sub system. Accept patterns.
+A Flume source that read data from Redis Pub Sub system with connection Pool. Accept patterns.
 
 Configuration
 =============
@@ -13,6 +13,8 @@ Available config parameters:
 - `subscribe` *(string)*: Channels to subscribe to. String or comma separated strings.
 - `psubscribe` *(string)*: Channels to subscribe with given pattern. String or comma separated strings. Invalid if subscribe is assigned.
 - `charset`*(string)* : Charset. Default: uft-8.
+- `pool.<property>`: Prefix for pool properties. Set whatever property you want to the connection pool.
+
 
 
 Sample Complete-flow Flume config
@@ -30,6 +32,7 @@ agent.channels = c1
 agent.sources.pubsub.type=com.stratio.ingestion.source.redis.RedisSource
 agent.sources.pubsub.host=localhost
 agent.sources.pubsub.subscribe=channel1,channel2
+agent.sources.pubsub.pool.testOnBorrow=true
 
 
 # Describe the sink

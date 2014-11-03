@@ -29,16 +29,20 @@ import org.apache.flume.source.AbstractSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
+import redis.clients.jedis.exceptions.JedisConnectionException;
+
+import static com.stratio.ingestion.source.redis.RedisConstants.*;
 
 /**
  *
- * Redis Subscribe Source
+ * Redis Subscribe Source with connection Pool.
  *
  * Configuration parameters are:
  *
@@ -49,6 +53,7 @@ import redis.clients.jedis.JedisPubSub;
  * <li><tt>subscribe</tt> <em>(string)</em>: Channels to subscribe. Comma separated channels values.</li>
  * <li><tt>psubscribe</tt> <em>(string)</em>: Channels to subscribe with given pattern./li>
  * <li><tt></tt>charset</tt> <em>(string)</em>: Charset. Default: utf-8. </li>
+ * <li><tt>pool.<property></tt></li>: Prefix for pool properties. Set whatever property you want to Jedis Pool.
  * </ul>
  * </p>
  *
@@ -65,17 +70,18 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
     private String charset;
     private String [] channels;
     private String [] patterns;
+    private Map<String, String> poolProps;
 
     boolean pattern = false;
 
 	@Override
 	public void configure(Context context) {
 
-        host = context.getString(RedisConstants.CONF_HOST, RedisConstants.DEFAULT_HOST);
-        port = context.getInteger(RedisConstants.CONF_PORT, RedisConstants.DEFAULT_PORT);
-        charset = context.getString(RedisConstants.CONF_CHARSET, RedisConstants.DEFAULT_CHARSET);
-        String rawChannels = context.getString(RedisConstants.CONF_CHANNELS);
-        String rawPatterns = context.getString(RedisConstants.CONF_PCHANNELS);
+        host = context.getString(RedisConstants.CONF_HOST, DEFAULT_HOST);
+        port = context.getInteger(RedisConstants.CONF_PORT, DEFAULT_PORT);
+        charset = context.getString(RedisConstants.CONF_CHARSET, DEFAULT_CHARSET);
+        String rawChannels = context.getString(CONF_CHANNELS);
+        String rawPatterns = context.getString(CONF_PCHANNELS);
         if(null != rawChannels){
             channels = rawChannels.trim().split(",");
             pattern = false;
@@ -83,8 +89,10 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
             patterns = rawPatterns.trim().split(",");
             pattern = true;
         } else {
-            throw new RuntimeException("You must set " + RedisConstants.CONF_CHANNELS  + " or " + RedisConstants.CONF_PCHANNELS + " property.");
+            throw new RuntimeException("You must set " + CONF_CHANNELS  + " or " + CONF_PCHANNELS + " property.");
         }
+
+        poolProps = context.getSubProperties("pool.");
 
         log.info("Redis Source Configured");
 	}
@@ -98,7 +106,7 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
         init();
         log.info("Redis Connected. (host: " + host + ", port: " + String.valueOf(port) + ")");
 
-        new Thread(new SubscribeManager()).start();
+        new SubscribeManager().run();
 	}
 	
 	@Override
@@ -109,9 +117,12 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
 
     private class SubscribeManager implements Runnable {
 
+        Jedis subscriber;
+
         @Override
         public void run() {
             log.info("Subscribe Manager Thread is started.");
+            subscriber = jedisPool.getResource();
 
             JedisPubSub jedisPubSub = new JedisPubSub() {
                 @Override
@@ -149,17 +160,29 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
                 }
             };
 
-            if(pattern){
-                for(String pattern : patterns){
-                    log.info("Jedis is going to subscribe to pattern: " + pattern);
+            while (true) {
+                if (pattern) {
+                    for (String pattern : patterns) {
+                        log.info("Jedis is going to subscribe to pattern: " + pattern);
+                    }
+                    try {
+                        subscriber.psubscribe(jedisPubSub, patterns);
+                    } catch (JedisConnectionException ex) {
+                        jedisPool.returnBrokenResource(subscriber);
+                        subscriber = jedisPool.getResource();
+                    }
+                } else {
+                    for (String channel : channels) {
+                        log.info("Jedis is going to subscribe to channel: " + channel);
+                    }
+                    try {
+                        subscriber.subscribe(jedisPubSub, channels);
+                    } catch (JedisConnectionException ex) {
+                        jedisPool.returnBrokenResource(subscriber);
+                        subscriber = jedisPool.getResource();
+                        log.info("Active connections: " + jedisPool.getNumActive());
+                    }
                 }
-                jedisPool.getResource().psubscribe(jedisPubSub, patterns);
-            } else {
-                for(String channel : channels){
-                    log.info("Jedis is going to subscribe to channel: " + channel);
-                }
-
-                jedisPool.getResource().subscribe(jedisPubSub, channels);
             }
         }
     }
@@ -167,16 +190,69 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
     private void init() {
         try {
             JedisPoolConfig poolConfig = new JedisPoolConfig();
-            poolConfig.setTestOnBorrow(true);
-            poolConfig.setMaxTotal(100);
-            poolConfig.setMaxIdle(10);
-            poolConfig.setMinIdle(2);
-            poolConfig.setMaxWaitMillis(100);
-            poolConfig.setTestWhileIdle(true);
-            poolConfig.setTestOnReturn(true);
-            poolConfig.setMinEvictableIdleTimeMillis(10000);
-            poolConfig.setTimeBetweenEvictionRunsMillis(5000);
-            poolConfig.setNumTestsPerEvictionRun(10);
+            String prop;
+
+            if((prop = poolProps.get(CONF_TESTONBORROW)) == null){
+                poolConfig.setTestOnBorrow(DEFAULT_TESTONBORROW);
+            } else {
+                log.info("Setting testOnBorrow property to " + prop);
+                poolConfig.setTestOnBorrow(Boolean.valueOf(prop));
+            }
+            if((prop = poolProps.get(CONF_MAXTOTAL)) == null){
+                poolConfig.setMaxTotal(DEFAULT_MAXTOTAL);
+            } else {
+                log.info("Setting maxTotal property to " + prop);
+                poolConfig.setMaxTotal(Integer.valueOf(prop));
+            }
+            if((prop = poolProps.get(CONF_MAXIDLE)) == null){
+                poolConfig.setMaxTotal(DEFAULT_MAXIDLE);
+            } else {
+                log.info("Setting maxIdle property to " + prop);
+                poolConfig.setMaxIdle(Integer.valueOf(prop));
+            }
+            if((prop = poolProps.get(CONF_MINIDLE)) == null){
+                poolConfig.setMinIdle(DEFAULT_MINIDLE);
+            } else {
+                log.info("Setting minIdle property to " + prop);
+                poolConfig.setMinIdle(Integer.valueOf(prop));
+            }
+            if((prop = poolProps.get(CONF_MAXWAITINMILLIS)) == null){
+                poolConfig.setMaxWaitMillis(DEFAULT_MAXWAITINMILLIS);
+            } else {
+                log.info("Setting maxWaitInMillis property to " + prop);
+                poolConfig.setMaxWaitMillis(Integer.valueOf(prop));
+            }
+            if((prop = poolProps.get(CONF_TESTWHILEIDLE)) == null){
+                poolConfig.setTestWhileIdle(DEFAULT_TESTWHILEIDLE);
+            } else {
+                log.info("Setting testWhileIdle property to " + prop);
+                poolConfig.setTestWhileIdle(Boolean.valueOf(prop));
+            }
+            if((prop = poolProps.get(CONF_TESTONRETURN)) == null){
+                poolConfig.setTestOnReturn(DEFAULT_TESTONRETURN);
+            } else {
+                log.info("Setting testOnReturn property to " + prop);
+                poolConfig.setTestOnReturn(Boolean.valueOf(prop));
+            }
+            if((prop = poolProps.get(CONF_MINEVICTABLEIDLETIMEINMILLIS)) == null){
+                poolConfig.setMinEvictableIdleTimeMillis(DEFAULT_MINEVICTABLEIDLETIMEINMILLIS);
+            } else {
+                log.info("Setting minEvictableIdleTimeInMillis property to " + prop);
+                poolConfig.setMinEvictableIdleTimeMillis(Integer.valueOf(prop));
+            }
+            if((prop = poolProps.get(CONF_TIMEBETWEETNEVICTIONRUNSMILLIS)) == null){
+                poolConfig.setTimeBetweenEvictionRunsMillis(DEFAULT_TIMEBETWEETNEVICTIONRUNSMILLIS);
+            } else {
+                log.info("Setting timeBetweenEvictionRunMillis property to " + prop);
+                poolConfig.setTimeBetweenEvictionRunsMillis(Integer.valueOf(prop));
+            }
+            if((prop = poolProps.get(CONF_NUMTESTSPEREVICTIONRUN)) == null){
+                poolConfig.setNumTestsPerEvictionRun(DEFAULT_NUMTESTSPEREVICTIONRUN);
+            } else {
+                log.info("Setting numTestsPerEvictionRun property to " + prop);
+                poolConfig.setNumTestsPerEvictionRun(Integer.valueOf(prop));
+            }
+
             // create JEDIS pool
             this.jedisPool = new JedisPool(poolConfig, host, port);
             // check connection
