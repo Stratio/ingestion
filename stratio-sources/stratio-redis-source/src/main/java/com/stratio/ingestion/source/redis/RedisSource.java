@@ -255,27 +255,10 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
 
             // create JEDIS pool
             this.jedisPool = new JedisPool(poolConfig, host, port);
-            // check connection
-            checkConnection();
+
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
-    }
-
-
-    /**
-     * This method can throw an exception if connection to REDIS cannot be
-     * established
-     */
-    private void checkConnection() {
-        // get connection from the pool
-        Jedis cache = jedisPool.getResource();
-        // ping redis server
-        if (!"PONG".equals(cache.ping())) {
-            throw new IllegalStateException("Cannot ping REDIS server");
-        }
-        // return connection
-        this.jedisPool.returnResource(cache);
     }
 }
