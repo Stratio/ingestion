@@ -33,6 +33,7 @@
 		<module>stratio-flumestats-source</module>
 		<module>stratio-snmptraps-source</module>
 		<module>stratio-redis-source</module>
-	</modules>
+        <module>stratio-irc-source</module>
+    </modules>
 
 </project>
