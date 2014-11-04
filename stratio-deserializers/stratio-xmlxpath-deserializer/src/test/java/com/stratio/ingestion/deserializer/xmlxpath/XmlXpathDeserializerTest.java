@@ -20,7 +20,6 @@ import org.apache.flume.Event;
 import org.apache.flume.serialization.EventDeserializer;
 import org.apache.flume.serialization.SeekableFileInputStream;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -97,10 +96,13 @@ public class XmlXpathDeserializerTest {
     @Test()
     public void testXPathWithNS() throws IOException {
       Context context = new Context();
-      context.put("expression", "/bookstore/book/title");
+      context.put("expression", "/bookstore/book");
       EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream("ns.xml"));
       List<Event> events = des.readEvents(4);
       assertEquals(4, events.size());
+      for (final Event event : events) {
+        assertNotNull(event);
+      }
     }
 
     @Test(expected = RuntimeException.class)
@@ -162,23 +164,6 @@ public class XmlXpathDeserializerTest {
 
         for (Event evt : events) {
             Assert.assertEquals(evt.getHeaders().get("author"), "J K. Rowling");
-        }
-    }
-
-    private String readFile(File file) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        try {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-
-            while (line != null) {
-                sb.append(line);
-                sb.append("\n");
-                line = br.readLine();
-            }
-            return sb.toString();
-        } finally {
-            br.close();
         }
     }
 
