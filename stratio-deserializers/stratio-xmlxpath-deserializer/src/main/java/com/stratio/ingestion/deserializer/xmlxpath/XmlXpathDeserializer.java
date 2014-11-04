@@ -18,6 +18,7 @@ package com.stratio.ingestion.deserializer.xmlxpath;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
+import org.apache.flume.conf.ConfigurationException;
 import org.apache.flume.event.EventBuilder;
 import org.apache.flume.serialization.EventDeserializer;
 import org.apache.flume.serialization.Seekable;
@@ -78,81 +80,85 @@ public class XmlXpathDeserializer implements EventDeserializer {
     private static final Logger log = LoggerFactory.getLogger(XmlXpathDeserializer.class);
 
     private static final String CONF_XPATH_EXPRESSION = "expression";
-    private static final String CONF_ELEMENT = "outputField";
-    private static final String CONF_HEADERS = "headers.";
+    private static final String CONF_OUTPUT_HEADER = "outputHeader";
+    private static final String CONF_OUTPUT_BODY = "outputBody";
 
-    private static final String DEFAULT_ELEMENT_FIELD = "element";
+    private static final boolean DEFAULT_OUTPUT_BODY = true;
 
     private boolean isOpen;
-    private String elementField;
+    private String outputHeader;
+    private boolean outputBody;
     private String body;
-    private Map<String, String> staticHeaders;
     private final XPath xpath;
     private Document doc = null;
     private List<String> list = null;
     private ListIterator<String> markIt, currentIt;
 
-    XmlXpathDeserializer(Context context, InputStream seekableInputStream)
-            throws IOException {
-
-        final String expression = context.getString(CONF_XPATH_EXPRESSION);
-        elementField = context.getString(CONF_ELEMENT, DEFAULT_ELEMENT_FIELD);
-        final ImmutableMap<String, String> headers = context.getSubProperties(CONF_HEADERS);
-        final InputStream inStream = seekableInputStream;
-
-        xpath = XPathFactory.newInstance().newXPath();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder;
+    XmlXpathDeserializer(Context context, InputStream in) throws IOException {
         try {
+          final String expression = context.getString(CONF_XPATH_EXPRESSION);
+
+          outputBody = context.getBoolean(CONF_OUTPUT_BODY, DEFAULT_OUTPUT_BODY);
+          if (!outputBody) {
+            if (!context.containsKey(CONF_OUTPUT_HEADER)) {
+              throw new ConfigurationException(
+                  String.format("Either %s must be false or %s must be defined", CONF_OUTPUT_BODY, CONF_OUTPUT_HEADER));
+            }
+            outputHeader = context.getString(CONF_OUTPUT_HEADER);
+          }
+
+          xpath = XPathFactory.newInstance().newXPath();
+          DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+          DocumentBuilder docBuilder;
+          try {
             docBuilder = factory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
+          } catch (ParserConfigurationException e) {
             throw new IOException("Creating DocumentBuilder failed", e);
-        }
+          }
 
-        try {
-            doc = docBuilder.parse(inStream);
-        } catch (SAXException e) {
+          try {
+            doc = docBuilder.parse(in);
+          } catch (SAXException e) {
             throw new IOException("Cannot parse body", e);
-        }
+          }
 
-        try {
-          inStream.close();
-        } catch (IOException ex) {
-          log.warn("Error while closing input stream");
-        }
-
-        // Extract full xml to body
-        try {
+          // Extract full xml to body
+          try {
             body = documentToString(doc);
-        } catch (TransformerException e) {
-          throw new IOException("Cannot serialize XML", e);
-        }
+          } catch (TransformerException e) {
+            throw new IOException("Cannot serialize XML", e);
+          }
 
-        // Add static fiels. These will be included in all events.
-        staticHeaders = evaluateStaticFields(headers);
-
-        if (doc != null) {
+          if (doc != null) {
             isOpen = true;
-        }
+          }
 
-        NodeList nodeList;
-        try {
+          NodeList nodeList;
+          try {
             final XPathExpression expr = xpath.compile(expression);
             nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
             list = new ArrayList<String>(nodeList.getLength());
             log.debug("XPath expression matched {} elements", list.size());
-        } catch (XPathExpressionException e) {
+          } catch (XPathExpressionException e) {
             throw new IOException("Applying XPath expression failed", e);
-        }
+          }
 
-        for (int i = 0; i < nodeList.getLength(); i++) {
+          for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             String eventSt = nodeToString(node);
             list.add(eventSt);
-        }
+          }
 
-        markIt = list.listIterator();
-        currentIt = list.listIterator();
+          markIt = list.listIterator();
+          currentIt = list.listIterator();
+
+        } finally {
+          try {
+            in.close();
+          } catch (IOException ex) {
+            log.warn("Error while closing input stream");
+          }
+        }
     }
 
     @Override
@@ -161,11 +167,14 @@ public class XmlXpathDeserializer implements EventDeserializer {
         if (!currentIt.hasNext()) {
             return null;
         } else {
-            String event = currentIt.next();
-            Event ev = EventBuilder.withBody(body, Charsets.UTF_8);
-            ev.getHeaders().put(elementField, event);
-            ev.getHeaders().putAll(staticHeaders);
-            return ev;
+            final String node = currentIt.next();
+            if (outputBody) {
+              return EventBuilder.withBody(node, Charsets.UTF_8);
+            } else {
+              final Event event = EventBuilder.withBody(body, Charsets.UTF_8);
+              event.getHeaders().put(outputHeader, node);
+              return event;
+            }
         }
     }
 
