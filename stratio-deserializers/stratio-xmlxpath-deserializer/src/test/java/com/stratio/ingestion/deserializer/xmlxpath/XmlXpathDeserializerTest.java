@@ -40,7 +40,11 @@ public class XmlXpathDeserializerTest {
     private static final Logger log = LoggerFactory.getLogger(XmlXpathDeserializerTest.class);
 
     private InputStream getTestInputStream() throws IOException {
-      return new SeekableFileInputStream("src/test/resources/test.xml");
+      return getTestInputStream("test.xml");
+    }
+
+    private InputStream getTestInputStream(final String path) throws IOException {
+      return new SeekableFileInputStream("src/test/resources/" + path);
     }
 
     @Test
@@ -60,6 +64,16 @@ public class XmlXpathDeserializerTest {
     }
 
     @Test
+    public void testHeader() throws IOException {
+      Context context = new Context();
+      context.put("expression", "/bookstore/book");
+      context.put("outputHeader", "myHeader");
+      context.put("outputBody", "false");
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
+      validateReadAndMarkWithHeader(des);
+    }
+
+    @Test
     public void testDocument2String() throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
@@ -74,25 +88,69 @@ public class XmlXpathDeserializerTest {
         des.close();
     }
 
-    @Test
-    public void testXPathStaticHeaders() throws IOException {
-        Context context = new Context();
-        context.put("expression", "/bookstore/book");
-        context.put("headers.book", "/bookstore/book[@category='CHILDREN']/title");
-        context.put("headers.author", "/bookstore/book[@category='CHILDREN']/author");
-        EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
-        validateHeaders(des);
+    @Test(expected = RuntimeException.class)
+    public void testBadXML() throws IOException {
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(new Context(), getTestInputStream("bad.xml"));
+    }
+
+    @Test()
+    public void testXPathWithNS() throws IOException {
+      Context context = new Context();
+      context.put("expression", "/bookstore/book");
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream("ns.xml"));
+      List<Event> events = des.readEvents(4);
+      assertEquals(4, events.size());
+      for (final Event event : events) {
+        assertNotNull(event);
+      }
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testBadXPath() throws IOException {
+      Context context = new Context();
+      context.put("expression", "ñ/b\ngnklñ13");
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testNoOutputNoHeader() throws IOException {
+      Context context = new Context();
+      context.put("outputBody", "false");
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
     }
 
     private void validateReadAndMark(EventDeserializer des) throws IOException {
         Event evt;
 
         evt = des.readEvent();
-        assertTrue(evt.getHeaders().get("element").contains("Giada De Laurentiis"));
+        assertTrue(new String(evt.getBody()).contains("Giada De Laurentiis"));
         des.mark();
 
         evt = des.readEvent();
-        assertTrue(evt.getHeaders().get("element").contains("J K. Rowling"));
+        assertTrue(new String(evt.getBody()).contains("J K. Rowling"));
+        des.mark(); // reset!
+
+        List<Event> readEvents = des.readEvents(2);
+        assertEquals(2, readEvents.size());
+
+        evt = des.readEvent();
+        assertNull("Event should be null because there are no more books " + "left to read", evt);
+
+        des.mark();
+        des.mark();
+        des.close();
+    }
+
+    private void validateReadAndMarkWithHeader(EventDeserializer des) throws IOException {
+        Event evt;
+
+        evt = des.readEvent();
+        System.out.println(evt.getHeaders().get("myHeader"));
+        assertTrue(evt.getHeaders().get("myHeader").contains("Giada De Laurentiis"));
+        des.mark();
+
+        evt = des.readEvent();
+        assertTrue(evt.getHeaders().get("myHeader").contains("J K. Rowling"));
         des.mark(); // reset!
 
         List<Event> readEvents = des.readEvents(2);
@@ -108,22 +166,22 @@ public class XmlXpathDeserializerTest {
 
     private void validateReset(EventDeserializer des) throws IOException {
         Event evt = des.readEvent();
-        assertEquals("Everyday Italian", evt.getHeaders().get("element"));
+        assertEquals("Everyday Italian", new String(evt.getBody()));
         des.mark();
 
         List<Event> events = des.readEvents(3);
         assertEquals(3, events.size());
-        assertEquals("Harry Potter", events.get(0).getHeaders().get("element"));
-        assertEquals("XQuery Kick Start", events.get(1).getHeaders().get("element"));
-        assertEquals("Learning XML", events.get(2).getHeaders().get("element"));
+        assertEquals("Harry Potter", new String(events.get(0).getBody()));
+        assertEquals("XQuery Kick Start", new String(events.get(1).getBody()));
+        assertEquals("Learning XML", new String(events.get(2).getBody()));
 
         des.reset(); // reset!
 
         events = des.readEvents(3);
         assertEquals(3, events.size());
-        assertEquals("Harry Potter", events.get(0).getHeaders().get("element"));
-        assertEquals("XQuery Kick Start", events.get(1).getHeaders().get("element"));
-        assertEquals("Learning XML", events.get(2).getHeaders().get("element"));
+        assertEquals("Harry Potter", new String(events.get(0).getBody()));
+        assertEquals("XQuery Kick Start", new String(events.get(1).getBody()));
+        assertEquals("Learning XML", new String(events.get(2).getBody()));
 
         evt = des.readEvent();
         Assert.assertNull("Event should be null because there are no more books " + "left to read", evt);
@@ -136,23 +194,6 @@ public class XmlXpathDeserializerTest {
 
         for (Event evt : events) {
             Assert.assertEquals(evt.getHeaders().get("author"), "J K. Rowling");
-        }
-    }
-
-    private String readFile(File file) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        try {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-
-            while (line != null) {
-                sb.append(line);
-                sb.append("\n");
-                line = br.readLine();
-            }
-            return sb.toString();
-        } finally {
-            br.close();
         }
     }
 
