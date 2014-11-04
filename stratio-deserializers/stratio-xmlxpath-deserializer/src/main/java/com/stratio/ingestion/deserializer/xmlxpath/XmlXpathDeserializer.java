@@ -53,7 +53,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
@@ -85,31 +84,25 @@ public class XmlXpathDeserializer implements EventDeserializer {
     private static final String DEFAULT_ELEMENT_FIELD = "element";
 
     private boolean isOpen;
-    private String expression;
     private String elementField;
     private String body;
     private Map<String, String> staticHeaders;
     private final XPath xpath;
-    private XPathExpression expr;
-    private DocumentBuilder docBuilder;
     private Document doc = null;
-    private final InputStream inStream;
-    private final Seekable seekable;
     private List<String> list = null;
-    private NodeList nodeList;
     private ListIterator<String> markIt, currentIt;
 
     XmlXpathDeserializer(Context context, InputStream seekableInputStream)
             throws IOException {
 
-        expression = context.getString(CONF_XPATH_EXPRESSION);
+        final String expression = context.getString(CONF_XPATH_EXPRESSION);
         elementField = context.getString(CONF_ELEMENT, DEFAULT_ELEMENT_FIELD);
-        ImmutableMap<String, String> headers = context.getSubProperties(CONF_HEADERS);
-        inStream = seekableInputStream;
-        seekable = (Seekable) seekableInputStream;
+        final ImmutableMap<String, String> headers = context.getSubProperties(CONF_HEADERS);
+        final InputStream inStream = seekableInputStream;
 
         xpath = XPathFactory.newInstance().newXPath();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder;
         try {
             docBuilder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
@@ -120,6 +113,12 @@ public class XmlXpathDeserializer implements EventDeserializer {
             doc = docBuilder.parse(inStream);
         } catch (SAXException e) {
             throw new IOException("Cannot parse body", e);
+        }
+
+        try {
+          inStream.close();
+        } catch (IOException ex) {
+          log.warn("Error while closing input stream");
         }
 
         // Extract full xml to body
@@ -136,10 +135,12 @@ public class XmlXpathDeserializer implements EventDeserializer {
             isOpen = true;
         }
 
+        NodeList nodeList;
         try {
-            expr = xpath.compile(expression);
+            final XPathExpression expr = xpath.compile(expression);
             nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
             list = new ArrayList<String>(nodeList.getLength());
+            log.debug("XPath expression matched {} elements", list.size());
         } catch (XPathExpressionException e) {
             throw new IOException("Applying XPath expression failed", e);
         }
@@ -204,8 +205,6 @@ public class XmlXpathDeserializer implements EventDeserializer {
     @Override
     public void close() throws IOException {
         if (isOpen) {
-            reset();
-            inStream.close();
             isOpen = false;
         }
     }
