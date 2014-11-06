@@ -65,6 +65,17 @@ class CassandraRepository {
 		this.consistencyLevel = consistencyLevel;
 		this.definition = definition;
 	}
+
+    public CassandraRepository(String user, String password, String host, String table, String keyspace,
+            int port, String clusterName, String consistencyLevel,
+            ColumnDefinition definition) {
+        this.table = table;
+        this.keyspace = keyspace;
+        this.cluster = buildCluster(user, password, port, clusterName, host);
+        this.session = this.cluster.connect();
+        this.consistencyLevel = consistencyLevel;
+        this.definition = definition;
+    }
 	
 	public TableMetadata createStructure() {
 		KeyspaceMetadata keyspaceMetadata = session.getCluster().getMetadata()
@@ -148,6 +159,12 @@ class CassandraRepository {
 		return Cluster.builder().addContactPoints(hosts).withPort(port)
 				.withClusterName(clusterName).build();
 	}
+
+    private static final Cluster buildCluster(String username, String password, int port, String clusterName,
+            String... hosts) {
+        return Cluster.builder().addContactPoints(hosts).withPort(port)
+                .withClusterName(clusterName).withCredentials(username, password).build();
+    }
 
 	@SuppressWarnings("rawtypes")
 	private static final Insert buildInsert(CassandraRow row, String keyspace,

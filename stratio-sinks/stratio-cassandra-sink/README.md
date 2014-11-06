@@ -17,6 +17,10 @@ The available config parameters are:
 
 - table: The table name. (Default: table_logs)
 
+- username: Database user. (Optional)
+
+- password: Database password. (Optional)
+
 - primaryKey: The primary key of the table. (Optional)
 
 - batchSize: The size to batch insert statement. We recommend 100 as an optimum value to this property. Please do not forget increase the channel.capacity property on your channel component over the sink.batchSize property. (Default: 100)

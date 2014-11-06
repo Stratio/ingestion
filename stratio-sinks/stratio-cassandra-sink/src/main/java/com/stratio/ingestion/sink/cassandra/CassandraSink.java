@@ -63,6 +63,8 @@ public class CassandraSink extends AbstractSink implements Configurable {
     private static final String CONF_PORT = "port";
     private static final String CONF_CLUSTER = "cluster";
     private static final String CONF_HOST = "host";
+    private static final String CONF_USERNAME = "username";
+    private static final String CONF_PASSWORD = "password";
     private static final String CONF_BATCH_SIZE = "batchSize";
     private static final String CONF_COLUMN_DEFINITION_FILE = "definitionFile";
     private static final String CONF_CONSISTENCY_LEVEL = "consistency";
@@ -106,6 +108,8 @@ public class CassandraSink extends AbstractSink implements Configurable {
         String host = context.getString(CONF_HOST, DEFAULT_HOST);
         String keyspace = context.getString(CONF_KEYSPACE, DEFAULT_KEYSPACE);
         int port = context.getInteger(CONF_PORT, DEFAULT_PORT);
+        String username = context.getString(CONF_USERNAME);
+        String password = context.getString(CONF_PASSWORD);
         String clusterName = context.getString(CONF_CLUSTER, DEFAULT_CLUSTER);
         String consistency = context.getString(
         		CONF_CONSISTENCY_LEVEL, DEFAULT_CONSISTENCY_LEVEL);
@@ -114,8 +118,14 @@ public class CassandraSink extends AbstractSink implements Configurable {
         	this.parser = new EventParser(readJsonFromFile(new File(columnDefinitionFile)));
         }
         ColumnDefinition definition = this.parser == null ? null : this.parser.getDefinition();
-        this.repository = new CassandraRepository(host, table, keyspace,
-                port, clusterName, consistency, definition);
+        if(Strings.isNullOrEmpty(username) && Strings.isNullOrEmpty(password)){ //Unauthorized
+            this.repository = new CassandraRepository(host, table, keyspace,
+                    port, clusterName, consistency, definition);
+        } else { //Unauthorized
+            this.repository = new CassandraRepository(username, password, host, table, keyspace,
+                    port, clusterName, consistency, definition);
+        }
+
         setOptionalRepoConfiguration(context);
         
         this.batchsize = context.getInteger(CONF_BATCH_SIZE, DEFAULT_BATCH_SIZE);
