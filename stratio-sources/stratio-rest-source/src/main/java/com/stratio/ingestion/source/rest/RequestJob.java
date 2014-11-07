@@ -16,6 +16,8 @@
 package com.stratio.ingestion.source.rest;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -24,6 +26,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.apache.flume.Event;
@@ -52,12 +55,12 @@ public class RequestJob implements Job {
     public static final String METHOD = "method";
     public static final String URL = "url";
     public static final String HEADERS = "headers";
-    public static final String BODY = "body";
 
-    private Map<String, Object> properties;
+    private Map<String, String> properties;
     private LinkedBlockingQueue<Event> queue;
     private Client client;
     private MediaType mediaType;
+    private JobExecutionContext context;
 
     /**
      * {@inheritDoc}
@@ -66,32 +69,65 @@ public class RequestJob implements Job {
      */
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
+        this.context = context;
         SchedulerContext schedulerContext = null;
         try {
+            log.debug("Executing quartz job");
             schedulerContext = context.getScheduler().getContext();
             initProperties(schedulerContext);
 
-            WebTarget target = client.target((String) properties.get(URL));
-            Builder request = setApplicationType(target, (String) properties.get(APPLICATION_TYPE));
-            request = addHeaders(request, (String) properties.get(HEADERS));
+            WebTarget target = client.target(properties.get(URL));
+            Builder request = setApplicationType(target, properties.get(APPLICATION_TYPE));
+            request = addHeaders(request, properties.get(HEADERS));
 
             Response response = null;
-            final String method = (String) properties.get(METHOD);
+            final String method = properties.get(METHOD);
             if ("POST".equals(method)) {
-              response = request.post(Entity.entity(
-                  (String) properties.get(APPLICATION_TYPE), mediaType));
+              response = request.post(Entity.entity(properties.get(APPLICATION_TYPE), mediaType));
             } else {
               response = request.get();
             }
 
             if (response != null) {
                 String responseString = response.readEntity(String.class);
-                queue.add(EventBuilder.withBody(responseString, Charsets.UTF_8));
+                queue.add(EventBuilder.withBody(responseString, Charsets.UTF_8,
+                        responseToHeaders(response.getStringHeaders())));
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Convert Multivalued Headers to Plain Map Headers accepted by Flume Event.
+     * @param map multivaluedMap.
+     * @return plain Map.
+     */
+    private Map<String, String> responseToHeaders(MultivaluedMap<String, String> map){
+        Map<String,String> newMap =new HashMap<String,String>();
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            newMap.put(entry.getKey(), multiValueHeaderToString(entry.getValue()));
+        }
+        return newMap;
+    }
+
+    /**
+     * Convert a multivalue header to String.
+     * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2">w3.org</a>
+     * @param list
+     * @return
+     */
+    private String multiValueHeaderToString(List<String> list) {
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<list.size();++i){
+            sb.append(list.get(i));
+            if(i!=list.size()-1){
+                sb.append(", ");
+            }
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -102,7 +138,7 @@ public class RequestJob implements Job {
     @SuppressWarnings("unchecked")
     public void initProperties(SchedulerContext context) {
         queue = (LinkedBlockingQueue<Event>) context.get("queue");
-        properties = (Map<String, Object>) context.get("properties");
+        properties = (Map<String, String>) context.get("properties");
         client = (Client) context.get("client");
 
     }
@@ -116,7 +152,7 @@ public class RequestJob implements Job {
      * @return
      */
     public Builder setApplicationType(WebTarget targetURL, String applicationType) {
-        Builder builder = null;
+        Builder builder;
         if ("TEXT".equals(applicationType)) {
           mediaType = MediaType.TEXT_PLAIN_TYPE;
         } else {
@@ -139,7 +175,7 @@ public class RequestJob implements Job {
         try {
             Map<String, Object> headers = mapper.readValue(jsonHeaders, Map.class);
             for (Map.Entry<String, Object> entry : headers.entrySet()) {
-                request.header(entry.getKey(), entry.getKey());
+                request.header(entry.getKey(), entry.getValue());
             }
         } catch (JsonParseException e) {
             e.printStackTrace();
@@ -151,5 +187,4 @@ public class RequestJob implements Job {
 
         return request;
     }
-
 }

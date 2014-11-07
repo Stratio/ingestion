@@ -35,6 +35,7 @@ import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
+import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,20 +70,30 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     private static final String DEFAULT_JOBNAME = "Quartz Job";
     private static final String DEFAULT_METHOD = "GET";
     private static final String DEFAULT_APPLICATION_TYPE = "JSON";
-    private static final String DEFAULT_HEADERS = "";
+    private static final String DEFAULT_HEADERS = "{}";
     private static final String DEFAULT_BODY = "";
 
-    private static final String CONF_FREQUENCY = "frequency";
-    private static final String CONF_URL = "url";
-    private static final String CONF_METHOD = "method";
-    private static final String CONF_APPLICATION_TYPE = "applicationType";
-    private static final String CONF_HEADERS = "headers";
-    private static final String CONF_BODY = "body";
+    protected static final String CONF_FREQUENCY = "frequency";
+    protected static final String CONF_URL = "url";
+    protected static final String CONF_METHOD = "method";
+    protected static final String CONF_APPLICATION_TYPE = "applicationType";
+    protected static final String CONF_HEADERS = "headers";
+    protected static final String CONF_BODY = "body";
 
     private LinkedBlockingQueue<Event> queue = new LinkedBlockingQueue<Event>(QUEUE_SIZE);
     private int frequency;
-    private Client client;
-    private Map<String, Object> properties = new HashMap<String, Object>();
+    private final Client client;
+    private JobDetail jobDetail;
+    private Scheduler scheduler;
+    private Map<String, String> properties = new HashMap<String, String>();
+
+    public RestSource(){
+        client = ClientBuilder.newClient();
+    }
+
+    public RestSource(Client client){
+        this.client = client;
+    }
 
     /**
      * {@inheritDoc}
@@ -99,10 +110,6 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
                 context.getString(CONF_APPLICATION_TYPE, DEFAULT_APPLICATION_TYPE).toUpperCase());
         properties.put(CONF_HEADERS, context.getString(CONF_HEADERS, DEFAULT_HEADERS));
         properties.put(CONF_BODY, context.getString(CONF_BODY, DEFAULT_BODY));
-
-        if (queue != null) {
-            log.error("QUEUE ISNOT NULL");
-        }
     }
 
     /**
@@ -110,8 +117,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
      */
     @Override
     public void start() {
-        client = ClientBuilder.newClient();
-        JobDetail job = JobBuilder.newJob(RequestJob.class).withIdentity(DEFAULT_JOBNAME).build();
+        this.jobDetail = JobBuilder.newJob(RequestJob.class).withIdentity(DEFAULT_JOBNAME).build();
 
         // Create an scheduled trigger with interval in seconds
         Trigger trigger = TriggerBuilder
@@ -122,17 +128,17 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
                                 .repeatForever()).build();
 
         // Put needed object in scheduler context and start the job.
-        Scheduler scheduler;
         try {
             scheduler = new StdSchedulerFactory().getScheduler();
             scheduler.getContext().put("client", client);
             scheduler.getContext().put("queue", queue);
             scheduler.getContext().put("properties", properties);
             scheduler.start();
-            scheduler.scheduleJob(job, trigger);
+            scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -162,6 +168,11 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     @Override
     public void stop() {
         client.close();
+        try {
+            scheduler.interrupt(jobDetail.getKey());
+        } catch (UnableToInterruptJobException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
