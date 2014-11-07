@@ -46,8 +46,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.8.2</artifactId>
-			<version>0.8.1</version>
+			<artifactId>kafka_2.10</artifactId>
+			<version>0.8.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
