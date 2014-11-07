@@ -118,7 +118,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
         	this.parser = new EventParser(readJsonFromFile(new File(columnDefinitionFile)));
         }
         ColumnDefinition definition = this.parser == null ? null : this.parser.getDefinition();
-        if(Strings.isNullOrEmpty(username) && Strings.isNullOrEmpty(password)){ //Unauthorized
+        if(Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)){ //Unauthorized
             this.repository = new CassandraRepository(host, table, keyspace,
                     port, clusterName, consistency, definition);
         } else { //Unauthorized

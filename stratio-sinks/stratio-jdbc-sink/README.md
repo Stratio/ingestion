@@ -4,26 +4,6 @@ Stratio JDBC Sink
 Stratio JDBC Sink saves Flume events to any database with a JDBC driver.
 It can operate either with automatic headers-to-tables mapping or with custom SQL queries.
 
-Get it
-======
-
-Get the tarball
----------------
-
-Download the latest release and extract it in the `plugins.d` directory of your Flume distribution.
-
-
-Get it with Maven
------------------
-
-```xml
-   <dependency>
-     <groupId>com.stratio.ingestion</groupId>
-     <artifactId>stratio-jdbc-sink</artifactId>
-     <version>0.3.0-SNAPSHOT</version>
-   </dependency>
-```
-
 
 Configuration
 =============
@@ -33,6 +13,10 @@ The available config parameters are:
 - `driver` *(string, required)*: The driver class (e.g. `org.h2.Driver`, `org.postgresql.Driver`). **NOTE: Stratio JDBC Sink does not include any JDBC driver. You must add a JDBC driver to your Flume classpath.**
 
 - `connectionString` *(string, required)*: A valid connection string to a database. Check the documentation for your JDBC driver for more information.
+
+- `username` *(string)*: A valid database username.
+
+- `password` *(string)*: Password.
 
 - `sqlDialect` *(string, required)*: The SQL dialect of your database. This should be one of the following: `CUBRID`, `DERBY`, `FIREBIRD`, `H2`, `HSQLDB`, `MARIADB`, `MYSQL`, `POSTGRES`, `SQLITE`. 
 

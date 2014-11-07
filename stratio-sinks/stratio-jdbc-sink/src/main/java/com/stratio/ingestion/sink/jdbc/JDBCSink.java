@@ -35,6 +35,8 @@ import org.jooq.impl.DefaultConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 /**
  * Saves Flume events to any database with a JDBC driver. It can operate either
  * with automatic headers-to-tables mapping or with custom SQL queries.
@@ -49,6 +51,8 @@ import org.slf4j.LoggerFactory;
  * <li><tt>connectionString</tt> <em>(string, required)</em>: A valid
  *      connection string to a database. Check the documentation for your JDBC driver
  *      for more information.</li>
+ * <li><tt>username</tt> <em>(string)</em>: A valid database username.</li>
+ * <li><tt>password</tt> <em>(string)</em>: Password.</li>
  * <li><tt>sqlDialect</tt> <em>(string, required)</em>: The SQL dialect of your
  *      database. This should be one of the following: <tt>CUBRID</tt>, <tt>DERBY</tt>,
  *      <tt>FIREBIRD</tt>, <tt>H2</tt>, <tt>HSQLDB</tt>, <tt>MARIADB</tt>, <tt>MYSQL</tt>,
@@ -76,6 +80,8 @@ public class JDBCSink extends AbstractSink implements Configurable {
     private static final String CONF_TABLE = "table";
     private static final String CONF_BATCH_SIZE = "batchSize";
     private static final String CONF_SQL = "sql";
+    private static final String CONF_USER = "username";
+    private static final String CONF_PASSWORD = "password";
 
     private Connection connection;
     private DSLContext create;
@@ -103,9 +109,17 @@ public class JDBCSink extends AbstractSink implements Configurable {
         } catch (IllegalAccessException ex) {
           throw new JDBCSinkException(ex);
         }
+        String username = context.getString(CONF_USER);
+        String password = context.getString(CONF_PASSWORD);
+
         connection = null;
         try {
-            connection = DriverManager.getConnection(connectionString);
+            if(Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)){ //Non authorized
+                connection = DriverManager.getConnection(connectionString);
+            } else { //Authorized
+                connection = DriverManager.getConnection(connectionString, username, password);
+            }
+
         } catch (SQLException ex) {
             throw new JDBCSinkException(ex);
         }
