@@ -20,7 +20,7 @@ Get it with Maven
    <dependency>
      <groupId>com.stratio.ingestion</groupId>
      <artifactId>stratio-mongodb-sink</artifactId>
-     <version>0.2.0-SNAPSHOT</version>
+     <version>0.2.2</version>
    </dependency>
 ```
 
