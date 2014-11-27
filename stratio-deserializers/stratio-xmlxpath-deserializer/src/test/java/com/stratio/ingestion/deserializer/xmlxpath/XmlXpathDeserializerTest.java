@@ -18,7 +18,9 @@ package com.stratio.ingestion.deserializer.xmlxpath;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.serialization.EventDeserializer;
+import org.apache.flume.serialization.PositionTracker;
 import org.apache.flume.serialization.SeekableFileInputStream;
+import org.apache.flume.serialization.TransientPositionTracker;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +53,7 @@ public class XmlXpathDeserializerTest {
     public void testReadsAndMark() throws IOException {
         Context context = new Context();
         context.put("expression", "/bookstore/book");
-        EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
+        EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream(), new TransientPositionTracker("target"));
         validateReadAndMark(des);
     }
 
@@ -59,8 +61,37 @@ public class XmlXpathDeserializerTest {
     public void testReset() throws IOException {
         Context context = new Context();
         context.put("expression", "/bookstore/book/title/text()");
-        EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
+        EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream(), new TransientPositionTracker("target"));
         validateReset(des);
+    }
+
+    @Test
+    public void testHardReset() throws IOException {
+        Context context = new Context();
+        context.put("expression", "/bookstore/book/title/text()");
+        PositionTracker positionTracker = new TransientPositionTracker("target");
+        EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream(), positionTracker);
+        Event evt = des.readEvent();
+        assertEquals("Everyday Italian", new String(evt.getBody()));
+        des.mark();
+        des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream(), positionTracker);
+
+        List<Event> events = des.readEvents(3);
+        assertEquals(3, events.size());
+        assertEquals("Harry Potter", new String(events.get(0).getBody()));
+        assertEquals("XQuery Kick Start", new String(events.get(1).getBody()));
+        assertEquals("Learning XML", new String(events.get(2).getBody()));
+
+        des.reset(); // reset!
+
+        events = des.readEvents(3);
+        assertEquals(3, events.size());
+        assertEquals("Harry Potter", new String(events.get(0).getBody()));
+        assertEquals("XQuery Kick Start", new String(events.get(1).getBody()));
+        assertEquals("Learning XML", new String(events.get(2).getBody()));
+
+        evt = des.readEvent();
+        Assert.assertNull("Event should be null because there are no more books " + "left to read", evt);
     }
 
     @Test
@@ -69,7 +100,7 @@ public class XmlXpathDeserializerTest {
       context.put("expression", "/bookstore/book");
       context.put("outputHeader", "myHeader");
       context.put("outputBody", "false");
-      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream(), new TransientPositionTracker("target"));
       validateReadAndMarkWithHeader(des);
     }
 
@@ -82,7 +113,7 @@ public class XmlXpathDeserializerTest {
 
         Context context = new Context();
         context.put("expression", "/bookstore/book/title");
-        XmlXpathDeserializer des = new XmlXpathDeserializer(context, getTestInputStream());
+        XmlXpathDeserializer des = new XmlXpathDeserializer(context, getTestInputStream(), new TransientPositionTracker("target"));
 
         Assert.assertNotNull(des.documentToString(doc));
         des.close();
@@ -90,14 +121,14 @@ public class XmlXpathDeserializerTest {
 
     @Test(expected = RuntimeException.class)
     public void testBadXML() throws IOException {
-      EventDeserializer des = new XmlXpathDeserializer.Builder().build(new Context(), getTestInputStream("bad.xml"));
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(new Context(), getTestInputStream("bad.xml"), new TransientPositionTracker("target"));
     }
 
     @Test()
     public void testXPathWithNS() throws IOException {
       Context context = new Context();
       context.put("expression", "/bookstore/book");
-      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream("ns.xml"));
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream("ns.xml"), new TransientPositionTracker("target"));
       List<Event> events = des.readEvents(4);
       assertEquals(4, events.size());
       for (final Event event : events) {
@@ -109,14 +140,14 @@ public class XmlXpathDeserializerTest {
     public void testBadXPath() throws IOException {
       Context context = new Context();
       context.put("expression", "ñ/b\ngnklñ13");
-      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream(), new TransientPositionTracker("target"));
     }
 
     @Test(expected = RuntimeException.class)
     public void testNoOutputNoHeader() throws IOException {
       Context context = new Context();
       context.put("outputBody", "false");
-      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream());
+      EventDeserializer des = new XmlXpathDeserializer.Builder().build(context, getTestInputStream(), new TransientPositionTracker("target"));
     }
 
     private void validateReadAndMark(EventDeserializer des) throws IOException {

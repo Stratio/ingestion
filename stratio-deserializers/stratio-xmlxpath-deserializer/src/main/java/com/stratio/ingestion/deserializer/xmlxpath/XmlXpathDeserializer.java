@@ -18,11 +18,9 @@ package com.stratio.ingestion.deserializer.xmlxpath;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -48,6 +46,7 @@ import org.apache.flume.Event;
 import org.apache.flume.conf.ConfigurationException;
 import org.apache.flume.event.EventBuilder;
 import org.apache.flume.serialization.EventDeserializer;
+import org.apache.flume.serialization.PositionTracker;
 import org.apache.flume.serialization.Seekable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +61,7 @@ import com.google.common.collect.Lists;
 
 //@formatter:off
 /**
-* <p>XML XPath Deserializer. Read InputStream as XML compile a XPathExpression and create event for each element 
+* <p>XML XPath Deserializer. Read InputStream as XML compile a XPathExpression and create event for each element
 * result of apply that expression to the xml in headers. Maintain whole xml in body.</p>.
 * <ul>
 * <li><em>outputField</em>: Output Field in header where put events. Default: element.</li>
@@ -86,15 +85,17 @@ public class XmlXpathDeserializer implements EventDeserializer {
     private static final boolean DEFAULT_OUTPUT_BODY = true;
 
     private boolean isOpen;
-    private String outputHeader;
-    private boolean outputBody;
-    private String body;
-    private final XPath xpath;
-    private Document doc = null;
-    private List<String> list = null;
-    private ListIterator<String> markIt, currentIt;
+    private final String outputHeader;
+    private final boolean outputBody;
+    private final String body;
+    private final List<String> nodes;
+    private final int nodesSize;
+    private int currentIndex;
+    private final PositionTracker positionTracker;
 
-    XmlXpathDeserializer(Context context, InputStream in) throws IOException {
+    XmlXpathDeserializer(final Context context, final InputStream in, final PositionTracker positionTracker) throws IOException {
+        this.positionTracker = positionTracker;
+
         try {
           final String expression = context.getString(CONF_XPATH_EXPRESSION);
 
@@ -105,9 +106,11 @@ public class XmlXpathDeserializer implements EventDeserializer {
                   String.format("Either %s must be false or %s must be defined", CONF_OUTPUT_BODY, CONF_OUTPUT_HEADER));
             }
             outputHeader = context.getString(CONF_OUTPUT_HEADER);
+          } else {
+              outputHeader = null;
           }
 
-          xpath = XPathFactory.newInstance().newXPath();
+          final XPath xpath = XPathFactory.newInstance().newXPath();
           DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
           DocumentBuilder docBuilder;
           try {
@@ -116,6 +119,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
             throw new IOException("Creating DocumentBuilder failed", e);
           }
 
+            final Document doc;
           try {
             doc = docBuilder.parse(in);
           } catch (SAXException e) {
@@ -137,8 +141,8 @@ public class XmlXpathDeserializer implements EventDeserializer {
           try {
             final XPathExpression expr = xpath.compile(expression);
             nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-            list = new ArrayList<String>(nodeList.getLength());
-            log.debug("XPath expression matched {} elements", list.size());
+            nodes = new ArrayList<String>(nodeList.getLength());
+            log.debug("XPath expression matched {} elements", nodes.size());
           } catch (XPathExpressionException e) {
             throw new IOException("Applying XPath expression failed", e);
           }
@@ -146,11 +150,11 @@ public class XmlXpathDeserializer implements EventDeserializer {
           for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             String eventSt = nodeToString(node);
-            list.add(eventSt);
+            nodes.add(eventSt);
           }
 
-          markIt = list.listIterator();
-          currentIt = list.listIterator();
+            nodesSize = nodes.size();
+            currentIndex = (int) positionTracker.getPosition();
 
         } finally {
           try {
@@ -164,10 +168,11 @@ public class XmlXpathDeserializer implements EventDeserializer {
     @Override
     public Event readEvent() throws IOException {
         ensureOpen();
-        if (!currentIt.hasNext()) {
+        if (currentIndex >= nodesSize) {
             return null;
         } else {
-            final String node = currentIt.next();
+            final String node = nodes.get(currentIndex);
+            currentIndex++;
             if (outputBody) {
               return EventBuilder.withBody(node, Charsets.UTF_8);
             } else {
@@ -186,6 +191,8 @@ public class XmlXpathDeserializer implements EventDeserializer {
             Event event = readEvent();
             if (event != null) {
                 events.add(event);
+            } else {
+                break;
             }
         }
         return events;
@@ -194,27 +201,20 @@ public class XmlXpathDeserializer implements EventDeserializer {
     @Override
     public void mark() throws IOException {
         ensureOpen();
-        int index = currentIt.previousIndex();
-        markIt = index >= 0 ? list.listIterator(currentIt.previousIndex()) : list.listIterator(0);
-        if (markIt.hasNext()) {
-            markIt.next();
-        }
+        positionTracker.storePosition(currentIndex);
     }
 
     @Override
     public void reset() throws IOException {
         ensureOpen();
-        int index = markIt.previousIndex();
-        currentIt = index >= 0 ? list.listIterator(markIt.previousIndex()) : list.listIterator(0);
-        if (currentIt.hasNext()) {
-            currentIt.next();
-        }
+        currentIndex = (int) positionTracker.getPosition();
     }
 
     @Override
     public void close() throws IOException {
         if (isOpen) {
             isOpen = false;
+            positionTracker.close();
         }
     }
 
@@ -224,7 +224,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
         }
     }
 
-    public String nodeToString(Node node) {
+    public static String nodeToString(Node node) {
         StringWriter writer = new StringWriter();
         TransformerFactory tfactory = TransformerFactory.newInstance();
         Transformer xform;
@@ -240,7 +240,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
         return writer.toString();
     }
 
-    public String documentToString(Document document) throws TransformerException {
+    public static String documentToString(Document document) throws TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
@@ -249,38 +249,16 @@ public class XmlXpathDeserializer implements EventDeserializer {
         return writer.getBuffer().toString().replaceAll("\n|\r|\t", "");
     }
 
-    /**
-     * From a properties, evaluate every xpath expression in value and put result in a map
-     * maintaining given key.
-     * 
-     * @param properties
-     * @return
-     */
-    private Map<String, String> evaluateStaticFields(ImmutableMap<String, String> properties) {
-        Map<String, String> headers = new HashMap<String, String>();
-        for (Entry<String, String> entry : properties.entrySet()) {
-            try {
-                XPathExpression expression = xpath.compile(entry.getValue());
-                String value = (String) expression.evaluate(doc, XPathConstants.STRING);
-                headers.put(entry.getKey(), value);
-            } catch (XPathExpressionException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return headers;
-    }
-
     public static class Builder implements EventDeserializer.Builder {
 
         @Override
-        public EventDeserializer build(Context context, InputStream in) {
+        public EventDeserializer build(final Context context, final InputStream in, final PositionTracker positionTracker) {
             if (!(in instanceof Seekable)) {
                 throw new IllegalArgumentException(
                         "Cannot use this deserializer without a Seekable input stream");
             }
             try {
-                return new XmlXpathDeserializer(context, in);
+                return new XmlXpathDeserializer(context, in, positionTracker);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
