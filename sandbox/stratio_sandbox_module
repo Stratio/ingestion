@@ -1,0 +1,59 @@
+#!/bin/sh
+#
+# Provisioning script for Stratio Sandbox.
+# More info at https://github.com/Stratio/sandbox
+#
+
+
+##############
+## SERVICES ##
+##############
+
+echo -e 'Installing Stratio Ingestion...'
+
+yum -y -q --nogpgcheck install stratio-ingestion
+
+echo -e 'Disabling services...'
+chkconfig zookeeper off
+chkconfig kafka off
+chkconfig cassandra off
+chkconfig mongod off
+
+echo -e 'Enabling ElasticSearch...'
+chkconfig elasticsearch on
+service elasticsearch restart
+
+
+############
+## KIBANA ##
+############
+
+KIBANA_VERSION=3.1.2
+KIBANA_INSTALL=/var/www/html
+KIBANA_TARBALL="kibana-${KIBANA_VERSION}.tar.gz"
+KIBANA_DOWNLOAD_DIR=/home/vagrant/downloads
+KIBANA_DOWNLOAD_URL="https://download.elasticsearch.org/kibana/kibana/${KIBANA_TARBALL}"
+
+if [ ! -d "/var/www/html/kibana" ]; then
+	echo -e 'Downloading Kibana...'
+	mkdir -p "${KIBANA_DOWNLOAD_DIR}"
+	wget -q "${KIBANA_DOWNLOAD_URL}" -O "${KIBANA_DOWNLOAD_DIR}/${KIBANA_TARBALL}"
+	echo -e 'Extracting Kibana...'
+	mkdir -p "${KIBANA_INSTALL}"
+	cd "${KIBANA_INSTALL}"
+	tar xf "${KIBANA_DOWNLOAD_DIR}/${KIBANA_TARBALL}"
+	ln -s kibana-${KIBANA_VERSION} kibana
+fi
+
+#######################
+## KIBANA DASHBOARDS ##
+#######################
+
+cp -f /opt/sds/ingestion/examples/*/dashboards/*.json "${KIBANA_INSTALL}/kibana/app/dashboards"
+chmod -R 777 "${KIBANA_INSTALL}/kibana/app/dashboards"
+
+#####################
+## WELCOME MESSAGE ##
+#####################
+
+
