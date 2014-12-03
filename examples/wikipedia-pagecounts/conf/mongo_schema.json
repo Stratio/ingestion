@@ -1,0 +1,13 @@
+{
+	"additionalProperties": false,
+	"bodyField": "",
+	"bodyType": "null",
+	"properties": {
+		"_id": { "type": "string" },
+		"title": { "type": "string" },
+		"timestamp": { "type": "date" },
+                "reqs": { "type": "int32"},
+		"size": { "type": "int32" },
+		"proj_lang": { "type": "string"	}
+	}
+}
