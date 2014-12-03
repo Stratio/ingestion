@@ -49,7 +49,7 @@ fi
 echo -e 'Installing Kibana dashboards...'
 
 #FIXME: Until we get packaged examples
-wget -q https://raw.githubusercontent.com/Stratio/flume-ingestion/feature/sandbox/examples/wikipedia-pagecounts/dashboards/wikipedia_demo_main.json -O "${KIBANA_INSTALL}/kibana/app/dashboards/"
+wget -q https://raw.githubusercontent.com/Stratio/flume-ingestion/feature/sandbox/examples/wikipedia-pagecounts/dashboards/wikipedia_demo_main.json -O "${KIBANA_INSTALL}/kibana/app/dashboards/wikipedia_demo_main.json"
 
 #cp -f /opt/sds/ingestion/examples/*/dashboards/*.json "${KIBANA_INSTALL}/kibana/app/dashboards"
 chmod -R 777 "${KIBANA_INSTALL}/kibana/app/dashboards"
