@@ -1,0 +1,65 @@
+#!/bin/bash
+#
+# Provisioning script for Stratio Sandbox.
+# More info at https://github.com/Stratio/sandbox
+#
+
+
+##############
+## SERVICES ##
+##############
+
+echo -e 'Installing Stratio Ingestion...'
+
+yum_install stratio-ingestion
+
+echo -e 'Installing Apache HTTPD 2 server...'
+yum_install httpd
+
+echo -e 'Enabling ElasticSearch...'
+chkconfig elasticsearch on
+service elasticsearch restart
+
+##############
+## EXAMPLES ##
+##############
+
+echo -e 'Installing unzip...'
+yum_install unzip
+
+echo -e 'Installing examples...'
+#FIXME: This should be part of the Ingestion package
+TMPDIR=$(mktemp --directory)
+cd "${TMPDIR}"
+download "https://github.com/Stratio/flume-ingestion/zipball/feature/sandbox" "flume-ingestion.zip"
+unzip -qq flume-ingestion.zip
+cp -rf Stratio-flume-ingestion*/examples /opt/sds/ingestion/
+
+############
+## KIBANA ##
+############
+
+KIBANA_VERSION=3.1.2
+KIBANA_INSTALL=/var/www/html
+KIBANA_TARBALL="kibana-${KIBANA_VERSION}.tar.gz"
+KIBANA_DOWNLOAD_URL="https://download.elasticsearch.org/kibana/kibana/${KIBANA_TARBALL}"
+
+if [ ! -e "/var/www/html/kibana" ]; then
+	echo -e 'Downloading Kibana...'
+	mkdir -p "${DOWNLOADS_DIR}"
+	download "${KIBANA_DOWNLOAD_URL}" "${DOWNLOADS_DIR}/${KIBANA_TARBALL}"
+	echo -e 'Extracting Kibana...'
+	mkdir -p "${KIBANA_INSTALL}"
+	cd "${KIBANA_INSTALL}"
+	tar xf "${DOWNLOADS_DIR}/${KIBANA_TARBALL}"
+	ln -s kibana-${KIBANA_VERSION} kibana
+fi
+
+#######################
+## KIBANA DASHBOARDS ##
+#######################
+
+echo -e 'Installing Kibana dashboards...'
+cp -f /opt/sds/ingestion/examples/*/dashboards/*.json "${KIBANA_INSTALL}/kibana/app/dashboards"
+chmod -R 777 "${KIBANA_INSTALL}/kibana/app/dashboards"
+
