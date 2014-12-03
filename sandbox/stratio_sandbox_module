@@ -15,6 +15,8 @@ yum_install stratio-ingestion
 
 echo -e 'Installing Apache HTTPD 2 server...'
 yum_install httpd
+chkconfig httpd on
+service httpd restart
 
 echo -e 'Enabling ElasticSearch...'
 chkconfig elasticsearch on
