@@ -33,7 +33,7 @@ echo -e 'Installing examples...'
 #FIXME: This should be part of the Ingestion package
 TMPDIR=$(mktemp --directory)
 cd "${TMPDIR}"
-download "https://github.com/Stratio/flume-ingestion/zipball/feature/sandbox" "flume-ingestion.zip"
+download "https://github.com/Stratio/flume-ingestion/zipball/develop" "flume-ingestion.zip"
 unzip -qq flume-ingestion.zip
 cp -rf Stratio-flume-ingestion*/examples /opt/sds/ingestion/
 
