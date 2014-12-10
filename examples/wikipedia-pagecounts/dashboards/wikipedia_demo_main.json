@@ -10,16 +10,7 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "alemania"
-        },
-        "1": {
-          "id": 1,
-          "color": "#EAB839",
-          "alias": "",
-          "pin": false,
-          "type": "lucene",
-          "enable": true,
-          "query": "francia"
+          "query": "*"
         },
         "7": {
           "id": 7,
@@ -28,18 +19,30 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "españa"
+          "query": "Wikipedia"
         }
       },
       "ids": [
-        0,
-        1,
-        7
+        7,
+        0
       ]
     },
     "filter": {
-      "list": {},
-      "ids": []
+      "list": {
+        "0": {
+          "from": "2007-12-09T16:33:35.098Z",
+          "to": "now",
+          "type": "time",
+          "field": "timestamp",
+          "mandate": "must",
+          "active": true,
+          "alias": "",
+          "id": 0
+        }
+      },
+      "ids": [
+        0
+      ]
     }
   },
   "rows": [
@@ -56,7 +59,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "fulltitle",
+          "field": "title",
           "exclude": [],
           "missing": true,
           "other": true,
@@ -76,13 +79,13 @@
             "mode": "all",
             "ids": [
               0,
-              1,
               7
             ]
           },
           "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "reqs"
+          "valuefield": "reqs",
+          "title": "Absolute popularity"
         },
         {
           "span": 4,
@@ -104,23 +107,22 @@
             "mode": "all",
             "ids": [
               0,
-              1,
               7
             ]
           },
           "annotate": {
-            "enable": false,
+            "enable": true,
             "query": "*",
             "size": 20,
-            "field": "_type",
+            "field": "title",
             "sort": [
               "_score",
               "desc"
             ]
           },
-          "auto_int": false,
+          "auto_int": true,
           "resolution": 100,
-          "interval": "1d",
+          "interval": "30d",
           "intervals": [
             "auto",
             "1s",
@@ -157,7 +159,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "Evolución de las visitas"
+          "title": "Visits evolution"
         }
       ],
       "notice": false
@@ -229,19 +231,57 @@
       "editable": true,
       "collapse": false,
       "collapsable": true,
-      "panels": [],
+      "panels": [
+        {
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "table",
+          "loadingEditor": false,
+          "size": 100,
+          "pages": 5,
+          "offset": 0,
+          "sort": [
+            "_score",
+            "desc"
+          ],
+          "overflow": "min-height",
+          "fields": [],
+          "highlight": [],
+          "sortable": true,
+          "header": true,
+          "paging": true,
+          "field_list": true,
+          "all_fields": true,
+          "trimFactor": 300,
+          "localTime": false,
+          "timeField": "@timestamp",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0,
+              7
+            ]
+          },
+          "style": {
+            "font-size": "9pt"
+          },
+          "normTimes": true
+        }
+      ],
       "notice": false
     }
   ],
   "editable": true,
   "index": {
     "interval": "none",
-    "pattern": "[logstash-]YYYY.MM.DD",
-    "default": "wikipedia",
-    "warm_fields": false
+    "pattern": "[flume_wikipedia_demo-]YYYY.MM.DD",
+    "default": "_all",
+    "warm_fields": true
   },
   "style": "dark",
-  "failover": false,
+  "failover": true,
   "panel_hints": true,
   "loader": {
     "save_gist": false,
@@ -265,16 +305,16 @@
       "query": "*",
       "pinned": true,
       "history": [
+        "Wikipedia",
+        "*",
+        "alemania",
         "españa",
         "francia",
-        "alemania",
         "colombia",
         "venezuela",
         "java",
-        "*",
         "la",
-        "SecurityDelay:[0 TO 100000]",
-        "NASDelay:[0 TO 100000]"
+        "SecurityDelay:[0 TO 100000]"
       ],
       "remember": 10,
       "enable": true
@@ -282,7 +322,7 @@
     {
       "type": "filtering",
       "collapse": true,
-      "notice": false,
+      "notice": true,
       "enable": true
     }
   ],
@@ -321,5 +361,5 @@
       "filter_id": 0
     }
   ],
-  "refresh": false
+  "refresh": "10s"
 }
