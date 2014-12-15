@@ -33,16 +33,16 @@ Running the example
 
 
 - Edit `conf/flume-conf-elasticsearch.properties` to set up your ElasticSearch cluster hostnames (`a.sinks.snk.hostNames`) and cluster name (`a.sinks.snk.clusterName`). By default, they are `127.0.0.1` and `elasticsearch` respectively.
-- Run `DB=elasticsearch bin/run_example.bash`.
+- Run `DB=elasticsearch bin/run_example.sh`.
 
 ### MongoDB
 
 - Edit `conf/flume-conf-mongodb.properties` to set up your MongoDB URI (`a.sinks.snk.mongoUri`). By default, it is `mongodb://127.0.0.1:27017/flume_wikipedia_demo.wikipedia_demo`.
-- Run `DB=mongodb bin/run_example.bash`.
+- Run `DB=mongodb bin/run_example.sh`.
 
 #### Cassandra
 
 - Edit `conf/flume-conf-cassandra.properties` to set up your Cassandra host (`a.sinks.snk.host`) and cluster name (`a.sinks.snk.clusterName`). By default, they are `127.0.0.1` and `Test Cluster` respectively.
-- Run `DB=cassandra bin/run_example.bash`.
+- Run `DB=cassandra bin/run_example.sh`.
 
 
