@@ -35,13 +35,13 @@ Flume Ingestion components
     - REST
     - FlumeStats
     - SNMPTraps
+    - IRC 
 * Custom sinks to write the data to:
     - Cassandra
     - MongoDB
     - [Stratio Streaming](https://github.com/Stratio/stratio-streaming)
     - JDBC
     - Kafka
-* Visual editor that makes the ETL flow design a child's play (TODO).
 
 
 What is Apache Flume?
@@ -52,6 +52,16 @@ Apache Flume is a distributed, reliable, and available system for efficiently co
 Its use is not only designed for logs, in fact you can find a myriad of sources, sinks and transformations.
 
 In addition, a sink could be a big data storage but also another real-time system (Apache Kafka, Spark Streaming).
+
+Compile & Package
+--------------------------
+
+```
+$ cd stratio-ingestion-dist
+$ mvn clean compile package
+```
+
+Distribution will be available at stratio-ingestion-dist/target/stratio-ingestion-0.3.0-SNAPSHOT-bin.tar.gz
 
 
 Interesting facts about Flume-Ingestion
