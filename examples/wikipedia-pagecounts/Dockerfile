@@ -7,4 +7,6 @@ RUN sed -i -e "s~127.0.0.1~cassandra~g" /demo/conf/flume-conf-cassandra.properti
 RUN sed -i -e "s~127.0.0.1~mongodb~g" /demo/conf/flume-conf-mongodb.properties
 RUN sed -i -e "s~127.0.0.1~elasticsearch~g" /demo/conf/flume-conf-elasticsearch.properties
 
-CMD ["/bin/bash"]
+VOLUME ["/demo/data", "/demo/logs"]
+
+CMD ["/demo/bin/run_docker.sh"]

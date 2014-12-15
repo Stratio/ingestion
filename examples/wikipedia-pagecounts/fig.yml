@@ -9,6 +9,8 @@ elasticsearch:
   net: bridge
   environment:
     ES_CORS_ENABLED: "true"
+  volumes:
+    - /tmp/docker-ingestion-demo/elasticsearch:/data
 kibana:
   image: stratio/kibana
   net: bridge
@@ -18,9 +20,11 @@ ingestiondemo:
   build: .
   #image: stratio/ingestion-wikipedia-demo:latest
   net: bridge
-  command: /bin/bash
   links:
     #- mongodb:mongodb
     #- cassandra:cassandra
     - elasticsearch:elasticsearch
     - kibana:kibana
+  volumes:
+    - /tmp/docker-ingestion-demo/ingestiondemo/data:/demo/data
+    - /tmp/docker-ingestion-demo/ingestiondemo/logs:/demo/logs

@@ -13,6 +13,7 @@ YEAR_START=${YEAR_START:-2007}
 YEAR_END=${YEAR_END:-$(date +%Y)}
 MONTH_START=${MONTH_START:-1}
 MONTH_END=${MONTH_END:-12}
+FILTER_LANG=${FILTER_LANG:-en}
 
 MAX_FEED=${MAX_FEED:-9999999}
 ADDED_FILES=0
@@ -51,7 +52,9 @@ for YEAR in $(seq $YEAR_START $YEAR_END) ; do
 					log "ERROR wget"
 					exit 1
 				fi
-				gunzip "${TMP_DIR}/${FILE}"
+				#gunzip "${TMP_DIR}/${FILE}"
+				#mv "$TMP_DIR/$UNCOMPRESSED_FILE" "$SPOOL_DIR/$UNCOMPRESSED_FILE"
+				zcat "${TMP_DIR}/${FILE}" | grep ^${FILTER_LANG} | grep -v "1 1$" > "$TMP_DIR/$UNCOMPRESSED_FILE"
 				mv "$TMP_DIR/$UNCOMPRESSED_FILE" "$SPOOL_DIR/$UNCOMPRESSED_FILE"
 			fi
 		done
