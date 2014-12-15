@@ -1,18 +1,26 @@
-mongodb:
-  image: mongo:2.6
-  net: bridge
-cassandra:
-  image: spotify/cassandra
-  net: bridge
+#mongodb:
+#  image: mongo:2.6
+#  net: bridge
+#cassandra:
+#  image: spotify/cassandra
+#  net: bridge
 elasticsearch:
-  image: dockerfile/elasticsearch
+  image: stratio/elasticsearch
   net: bridge
+  environment:
+    ES_CORS_ENABLED: "true"
+kibana:
+  image: stratio/kibana
+  net: bridge
+  links:
+    - elasticsearch:elasticsearch
 ingestiondemo:
   build: .
   #image: stratio/ingestion-wikipedia-demo:latest
   net: bridge
   command: /bin/bash
   links:
-    - mongodb:mongodb
-    - cassandra:cassandra
+    #- mongodb:mongodb
+    #- cassandra:cassandra
     - elasticsearch:elasticsearch
+    - kibana:kibana
