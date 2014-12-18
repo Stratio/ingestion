@@ -57,6 +57,8 @@ Compile & Package
 --------------------------
 
 ```
+$ git submodule init
+$ git submodule update
 $ cd stratio-ingestion-dist
 $ mvn clean compile package
 ```
