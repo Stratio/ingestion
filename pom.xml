@@ -69,9 +69,20 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- If ingestion version for a flume module is resolved you must add here the module -->
 			<dependency>
 				<groupId>org.apache.flume</groupId>
 				<artifactId>flume-ng-core</artifactId>
+				<version>${flume.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.flume</groupId>
+				<artifactId>flume-ng-configuration</artifactId>
+				<version>${flume.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.flume</groupId>
+				<artifactId>flume-ng-sdk</artifactId>
 				<version>${flume.version}</version>
 			</dependency>
 			<dependency>
