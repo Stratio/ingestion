@@ -18,7 +18,6 @@ package com.stratio.ingestion.sink.mongodb;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Map;
 
 class FieldDefinition implements Serializable {
@@ -30,7 +29,8 @@ class FieldDefinition implements Serializable {
     private String mappedName;
     private DateFormat dateFormat;
     private String encoding;
-    private Map<String,FieldDefinition> documentMapping;
+    private Map<String, FieldDefinition> documentMapping;
+    private String delimiter;
 
     public FieldDefinition() {
         super();
@@ -40,12 +40,10 @@ class FieldDefinition implements Serializable {
         this.type = type;
     }
 
-    public FieldDefinition( String fieldName,MongoDataType type) {
+    public FieldDefinition(String fieldName, MongoDataType type) {
         this.type = type;
         this.fieldName = fieldName;
     }
-
-
 
     public MongoDataType getType() {
         return this.type;
@@ -63,13 +61,23 @@ class FieldDefinition implements Serializable {
         return this.dateFormat;
     }
 
-    public String getEncoding() { return this.encoding; }
+    public String getEncoding() {
+        return this.encoding;
+    }
 
-    public Map<String,FieldDefinition> getDocumentMapping() {
+    public Map<String, FieldDefinition> getDocumentMapping() {
         return documentMapping;
     }
 
-    public void setDocumentMapping(Map<String,FieldDefinition> documentMapping) {
+    public String getDelimiter() {
+        return delimiter;
+    }
+
+    public void setDelimiter(String delimiter) {
+        this.delimiter = delimiter;
+    }
+
+    public void setDocumentMapping(Map<String, FieldDefinition> documentMapping) {
         this.documentMapping = documentMapping;
     }
 
@@ -93,7 +101,9 @@ class FieldDefinition implements Serializable {
         this.dateFormat = dateFormat;
     }
 
-    public void setEncoding(String encoding) { this.encoding = encoding; }
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
 
     @Override
     public int hashCode() {

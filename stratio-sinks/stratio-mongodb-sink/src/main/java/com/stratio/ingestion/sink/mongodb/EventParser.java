@@ -15,12 +15,17 @@
  */
 package com.stratio.ingestion.sink.mongodb;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.BaseEncoding;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
-import com.mongodb.util.JSONParseException;
+import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Event;
 import org.bson.types.ObjectId;
@@ -28,10 +33,12 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.Charset;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.*;
+import com.google.common.base.Charsets;
+import com.google.common.io.BaseEncoding;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
+import com.mongodb.util.JSONParseException;
 
 class EventParser {
 
@@ -61,59 +68,61 @@ class EventParser {
             }
         }
         switch (fd.getType()) {
-            case DOUBLE:
-                return Double.parseDouble(stringValue);
-            case STRING:
-                return stringValue;
-            case OBJECT:
-            case ARRAY:
-                //TODO: should we use customizable array representation?
-                //TODO: should we check that the result is indeed an array or object?
-                return JSON.parse(stringValue);
-            case BINARY:
-                final String encoding = (fd.getEncoding() == null) ? DEFAULT_BINARY_ENCODING : fd.getEncoding().toLowerCase(Locale.ENGLISH);
-                if ("base64".equals(encoding)) {
-                    return BaseEncoding.base64().decode(stringValue);
+        case DOUBLE:
+            return Double.parseDouble(stringValue);
+        case STRING:
+            return stringValue;
+        case OBJECT:
+        case ARRAY:
+            //TODO: should we use customizable array representation?
+            //TODO: should we check that the result is indeed an array or object?
+            return JSON.parse(stringValue);
+        case BINARY:
+            final String encoding = (fd.getEncoding() == null) ?
+                    DEFAULT_BINARY_ENCODING :
+                    fd.getEncoding().toLowerCase(Locale.ENGLISH);
+            if ("base64".equals(encoding)) {
+                return BaseEncoding.base64().decode(stringValue);
+            } else {
+                throw new UnsupportedOperationException("Unsupported encoding for binary type: " + encoding);
+            }
+            //TODO: case "UNDEFINED":
+        case OBJECTID:
+            return new ObjectId(stringValue);
+        case BOOLEAN:
+            return Boolean.parseBoolean(stringValue);
+        case DATE:
+            DateFormat dateFormat = fd.getDateFormat();
+            if (dateFormat == null) {
+                if (StringUtils.isNumeric(stringValue)) {
+                    return new Date(Long.parseLong(stringValue));
                 } else {
-                    throw new UnsupportedOperationException("Unsupported encoding for binary type: " + encoding);
+                    return ISODateTimeFormat.dateOptionalTimeParser().parseDateTime(stringValue).toDate();
                 }
-                //TODO: case "UNDEFINED":
-            case OBJECTID:
-                return new ObjectId(stringValue);
-            case BOOLEAN:
-                return Boolean.parseBoolean(stringValue);
-            case DATE:
-                DateFormat dateFormat = fd.getDateFormat();
-                if (dateFormat == null) {
-                    if (StringUtils.isNumeric(stringValue)) {
-                        return new Date(Long.parseLong(stringValue));
-                    } else {
-                        return ISODateTimeFormat.dateOptionalTimeParser().parseDateTime(stringValue).toDate();
-                    }
-                } else {
-                    try {
-                        return dateFormat.parse(stringValue);
-                    } catch (ParseException ex) {
-                        //XXX: Default to string
-                        log.warn("Could not parse date, defaulting to String: {}", stringValue);
-                        return stringValue;
-                    }
+            } else {
+                try {
+                    return dateFormat.parse(stringValue);
+                } catch (ParseException ex) {
+                    //XXX: Default to string
+                    log.warn("Could not parse date, defaulting to String: {}", stringValue);
+                    return stringValue;
                 }
-            case NULL:
-                //TODO: Check if this is valid
-                return null;
-            //TODO: case "REGEX":
-            //TODO: case "JAVASCRIPT":
-            //TODO: case "SYMBOL":
-            //TODO: case "JAVASCRIPT_SCOPE":
-            case INT32:
-                return Integer.parseInt(stringValue);
-            case INT64:
-                return Long.parseLong(stringValue);
-            case DOCUMENT:
-                return populateDocument(fd, stringValue);
-            default:
-                throw new UnsupportedOperationException("Unsupported type: " + fd.getType().name());
+            }
+        case NULL:
+            //TODO: Check if this is valid
+            return null;
+        //TODO: case "REGEX":
+        //TODO: case "JAVASCRIPT":
+        //TODO: case "SYMBOL":
+        //TODO: case "JAVASCRIPT_SCOPE":
+        case INT32:
+            return Integer.parseInt(stringValue);
+        case INT64:
+            return Long.parseLong(stringValue);
+        case DOCUMENT:
+            return populateDocument(fd, stringValue);
+        default:
+            throw new UnsupportedOperationException("Unsupported type: " + fd.getType().name());
         }
     }
 
@@ -180,22 +189,26 @@ class EventParser {
     }
 
     private DBObject populateDocument(FieldDefinition fd, String document) {
-        DBObject dbObject = new BasicDBObject();
-        String[] documentAsArrray = document.split("#");
-//        if (documentAsArrray.length==2){
-
-        Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>(fd.getDocumentMapping());
-        int i = 0;
-        for (Map.Entry<String, FieldDefinition> documentField : documentMapping.entrySet()) {
-            if (DOCUMENT_TYPE.equalsIgnoreCase(documentField.getValue().getType().name())) {
-                dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), StringUtils.join(Arrays.copyOfRange(documentAsArrray, i, documentAsArrray.length), "#")));
-                i += documentField.getValue().getDocumentMapping().size();
-            } else {
-                dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), documentAsArrray[i++]));
-
+        DBObject dbObject = null;
+        final String delimiter = fd.getDelimiter();
+        if (!StringUtils.isEmpty(delimiter)) {
+            String[] documentAsArrray = document.split(delimiter);
+            dbObject = new BasicDBObject();
+            Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>(
+                    fd.getDocumentMapping());
+            int i = 0;
+            for (Map.Entry<String, FieldDefinition> documentField : documentMapping.entrySet()) {
+                if (DOCUMENT_TYPE.equalsIgnoreCase(documentField.getValue().getType().name())) {
+                    dbObject.put(documentField.getKey(), parseValue(documentField.getValue(),
+                            StringUtils.join(Arrays.copyOfRange(documentAsArrray, i, documentAsArrray.length), "#")));
+                    i += documentField.getValue().getDocumentMapping().size();
+                } else {
+                    dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), documentAsArrray[i++]));
+                }
             }
+        } else {
+            throw new MongoSinkException("Delimiter char must be set");
         }
-//        }
 
         return dbObject;
     }

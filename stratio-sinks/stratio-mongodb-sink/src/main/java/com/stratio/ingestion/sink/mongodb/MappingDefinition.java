@@ -15,18 +15,28 @@
  */
 package com.stratio.ingestion.sink.mongodb;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Closeables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.*;
 
 class MappingDefinition implements Serializable {
 
@@ -49,6 +59,7 @@ class MappingDefinition implements Serializable {
     private static final String DEFAULT_BODY_ENCODING = "UTF-8"; // For BINARY it defaults to "raw".
     private static final String DEFAULT_BODY_FIELD = "data";
     private static final String DOCUMENT_MAPPING = "documentMapping";
+    private static final String DELIMITER_CHAR = "delimiter";
 
     private final boolean additionalProperties;
     private final List<FieldDefinition> fields;
@@ -109,32 +120,25 @@ class MappingDefinition implements Serializable {
         populateDateFormatField(entry, fieldDefinition);
         populateDocumentType(entry, fieldDefinition);
 
-//        if (fieldDefinition.getType().equals(MongoDataType.DOCUMENT) && entry.getValue().has(DOCUMENT_MAPPING)) {
-//            JsonNode documentMapping = entry.getValue().get(DOCUMENT_MAPPING);
-//            Map<String, String> documentMap = new LinkedHashMap<String, String>();
-//            Iterator<Map.Entry<String, JsonNode>> entryIterator = documentMapping.fields();
-//            Map.Entry<String, JsonNode> field = null;
-//            while (entryIterator.hasNext()) {
-//                field = entryIterator.next();
-//                documentMap.put(field.getKey(), field.getValue().asText());
-//            }
-//            fieldDefinition.setDocumentMapping(documentMap);
-//        }
         return fieldDefinition;
     }
 
     private void populateDocumentType(Map.Entry<String, JsonNode> entry, FieldDefinition fieldDefinition) {
         if (fieldDefinition.getType().equals(MongoDataType.DOCUMENT) && entry.getValue().has(DOCUMENT_MAPPING)) {
-            JsonNode documentMapping = entry.getValue().get(DOCUMENT_MAPPING);
-            Map<String, FieldDefinition> documentFieldDefinitionMap = new LinkedHashMap<String, FieldDefinition>();
-            Iterator<Map.Entry<String, JsonNode>> entryIterator = documentMapping.fields();
-            Map.Entry<String, JsonNode> field = null;
-            while (entryIterator.hasNext()) {
-                field = entryIterator.next();
-                documentFieldDefinitionMap.put(field.getKey(), populateFieldDefinition(field));
+            if (entry.getValue().has(DELIMITER_CHAR)) {
+                fieldDefinition.setDelimiter(entry.getValue().get(DELIMITER_CHAR).asText());
+                JsonNode documentMapping = entry.getValue().get(DOCUMENT_MAPPING);
+                Map<String, FieldDefinition> documentFieldDefinitionMap = new LinkedHashMap<String, FieldDefinition>();
+                Iterator<Map.Entry<String, JsonNode>> entryIterator = documentMapping.fields();
+                Map.Entry<String, JsonNode> field = null;
+                while (entryIterator.hasNext()) {
+                    field = entryIterator.next();
+                    documentFieldDefinitionMap.put(field.getKey(), populateFieldDefinition(field));
+                }
+                fieldDefinition.setDocumentMapping(documentFieldDefinitionMap);
+            } else {
+                throw new MongoSinkException("Delimiter char must be set into schema");
             }
-            fieldDefinition.setDocumentMapping(documentFieldDefinitionMap);
-
         }
     }
 

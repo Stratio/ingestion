@@ -140,15 +140,40 @@ public class EventParserTest {
         assertThat(dbObject.get("myArr")).isEqualTo(dbList);
     }
 
-    @Test
-    public void parseValidDocumentType() {
+    @Test(expected = MongoSinkException.class)
+    public void parseDocumentTypeWithNoValidSeparator() {
         EventParser eventParser = new EventParser();
         DBObject dbObject = buildExpectedObject();
         FieldDefinition fieldDefinition = definition(MongoDataType.DOCUMENT);
+
         Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>();
         documentMapping.put("field1", new FieldDefinition(MongoDataType.STRING));
         documentMapping.put("field2", new FieldDefinition(MongoDataType.ARRAY));
         FieldDefinition fieldDefinition2 = definition(MongoDataType.DOCUMENT);
+        documentMapping.put("field3", fieldDefinition2);
+        documentMapping.put("field6", new FieldDefinition(MongoDataType.STRING));
+        Map<String, FieldDefinition> documentMapping2 = new LinkedHashMap<String, FieldDefinition>();
+        documentMapping2.put("field4", new FieldDefinition(MongoDataType.STRING));
+        documentMapping2.put("field5", new FieldDefinition(MongoDataType.ARRAY));
+        fieldDefinition.setDocumentMapping(documentMapping);
+        fieldDefinition2.setDocumentMapping(documentMapping2);
+
+        assertThat(eventParser.parseValue(fieldDefinition, "Point1#[111.11,222.22]#Point2#[111.11,222.22]#Point3"))
+                .isEqualTo(
+                        dbObject);
+    }
+
+    @Test
+    public void parseDocumentTypeWithValidSeparator() {
+        EventParser eventParser = new EventParser();
+        DBObject dbObject = buildExpectedObject();
+        FieldDefinition fieldDefinition = definition(MongoDataType.DOCUMENT);
+        fieldDefinition.setDelimiter("#");
+        Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>();
+        documentMapping.put("field1", new FieldDefinition(MongoDataType.STRING));
+        documentMapping.put("field2", new FieldDefinition(MongoDataType.ARRAY));
+        FieldDefinition fieldDefinition2 = definition(MongoDataType.DOCUMENT);
+        fieldDefinition2.setDelimiter("#");
         documentMapping.put("field3", fieldDefinition2);
         documentMapping.put("field6", new FieldDefinition(MongoDataType.STRING));
         Map<String, FieldDefinition> documentMapping2 = new LinkedHashMap<String, FieldDefinition>();
