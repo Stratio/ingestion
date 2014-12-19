@@ -32,6 +32,8 @@ enum MongoDataType {
     //SYMBOL
     //JAVASCRIPT_SCOPE
     INT32,
-    INT64
+    INT64,
+    GEO,
+    DOCUMENT
 
 }

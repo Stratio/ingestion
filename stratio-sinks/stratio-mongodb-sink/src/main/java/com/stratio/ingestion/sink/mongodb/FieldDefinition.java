@@ -18,6 +18,8 @@ package com.stratio.ingestion.sink.mongodb;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
 
 class FieldDefinition implements Serializable {
 
@@ -28,6 +30,22 @@ class FieldDefinition implements Serializable {
     private String mappedName;
     private DateFormat dateFormat;
     private String encoding;
+    private Map<String,FieldDefinition> documentMapping;
+
+    public FieldDefinition() {
+        super();
+    }
+
+    public FieldDefinition(MongoDataType type) {
+        this.type = type;
+    }
+
+    public FieldDefinition( String fieldName,MongoDataType type) {
+        this.type = type;
+        this.fieldName = fieldName;
+    }
+
+
 
     public MongoDataType getType() {
         return this.type;
@@ -46,6 +64,14 @@ class FieldDefinition implements Serializable {
     }
 
     public String getEncoding() { return this.encoding; }
+
+    public Map<String,FieldDefinition> getDocumentMapping() {
+        return documentMapping;
+    }
+
+    public void setDocumentMapping(Map<String,FieldDefinition> documentMapping) {
+        this.documentMapping = documentMapping;
+    }
 
     public void setType(MongoDataType type) {
         this.type = type;
@@ -78,6 +104,7 @@ class FieldDefinition implements Serializable {
         result = prime * result + (this.dateFormat == null ? 0 : this.dateFormat.hashCode());
         result = prime * result + (this.encoding == null ? 0 : this.encoding.hashCode());
         result = prime * result + (this.type == null ? 0 : this.type.hashCode());
+
         return result;
     }
 
@@ -128,6 +155,7 @@ class FieldDefinition implements Serializable {
         } else if (!this.type.equals(other.type)) {
             return false;
         }
+
         return true;
     }
 }

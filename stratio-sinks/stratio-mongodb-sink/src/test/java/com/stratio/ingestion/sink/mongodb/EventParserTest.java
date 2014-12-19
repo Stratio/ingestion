@@ -31,6 +31,7 @@ import org.junit.runners.JUnit4;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -48,15 +49,15 @@ public class EventParserTest {
     public void parseValue() {
         final EventParser eventParser = new EventParser();
         assertThat(eventParser.parseValue(definition(MongoDataType.STRING), "foo")).isEqualTo("foo");
-        assertThat(eventParser.parseValue(definition(MongoDataType.INT32), "32")).isEqualTo(32);
-        assertThat(eventParser.parseValue(definition(MongoDataType.INT64), "64")).isEqualTo(64L);
-        assertThat(eventParser.parseValue(definition(MongoDataType.DOUBLE), "1.0")).isEqualTo(1.0);
-        assertThat(eventParser.parseValue(definition(MongoDataType.BOOLEAN), "true")).isEqualTo(true);
+        assertThat(eventParser.parseValue(definition(MongoDataType.INT32),  "32")).isEqualTo(32);
+        assertThat(eventParser.parseValue(definition(MongoDataType.INT64),  "64")).isEqualTo(64L);
+        assertThat(eventParser.parseValue(definition(MongoDataType.DOUBLE),  "1.0")).isEqualTo(1.0);
+        assertThat(eventParser.parseValue(definition(MongoDataType.BOOLEAN),  "true")).isEqualTo(true);
         final DateTime now = DateTime.now().toDateTime(DateTimeZone.UTC);
-        assertThat(eventParser.parseValue(definition(MongoDataType.DATE), Long.toString(now.getMillis()))).isEqualTo(now.toDate());
-        assertThat((eventParser.parseValue(definition(MongoDataType.DATE), ISODateTimeFormat.dateTime().print(now)))).isEqualTo(now.toDate());
-        assertThat(eventParser.parseValue(definition(MongoDataType.NULL), "full")).isNull();
-        assertThat(eventParser.parseValue(definition(MongoDataType.OBJECTID), "507c7f79bcf86cd7994f6c0e")).isEqualTo(new ObjectId("507c7f79bcf86cd7994f6c0e"));
+        assertThat(eventParser.parseValue(definition(MongoDataType.DATE),  Long.toString(now.getMillis()))).isEqualTo(now.toDate());
+        assertThat((eventParser.parseValue(definition(MongoDataType.DATE),  ISODateTimeFormat.dateTime().print(now)))).isEqualTo(now.toDate());
+        assertThat(eventParser.parseValue(definition(MongoDataType.NULL),  "full")).isNull();
+        assertThat(eventParser.parseValue(definition(MongoDataType.OBJECTID),  "507c7f79bcf86cd7994f6c0e")).isEqualTo(new ObjectId("507c7f79bcf86cd7994f6c0e"));
 
         BasicDBList dbList = new BasicDBList();
         dbList.add(1);
@@ -65,10 +66,10 @@ public class EventParserTest {
         DBObject dbObject = new BasicDBObject();
         dbObject.put("abc", 123);
         dbObject.put("myArray", dbList);
-        assertThat(eventParser.parseValue(definition(MongoDataType.OBJECT), "{ \"abc\": 123, \"myArray\": [1, 2, 3] }"))
+        assertThat(eventParser.parseValue(definition(MongoDataType.OBJECT),  "{ \"abc\": 123, \"myArray\": [1, 2, 3] }"))
                 .isEqualTo(dbObject);
 
-        assertThat(eventParser.parseValue(definition(MongoDataType.BINARY), "U3RyYXRpbw=="))
+        assertThat(eventParser.parseValue(definition(MongoDataType.BINARY),  "U3RyYXRpbw=="))
                 .isEqualTo("Stratio".getBytes(Charsets.UTF_8));
     }
 
@@ -129,6 +130,56 @@ public class EventParserTest {
         dbList.add(1.0);
         dbList.add("str");
         assertThat(dbObject.get("myArr")).isEqualTo(dbList);
+    }
+
+
+    @Test
+    public void parseValidGeoType(){
+        EventParser eventParser = new EventParser();
+        DBObject dbObject = new BasicDBObject();
+        BasicDBList locList = new BasicDBList();
+        locList.add(111.11);
+        locList.add(222.22);
+        dbObject.put("type", "Point");
+        dbObject.put("loc", locList);
+        FieldDefinition definition = definition(MongoDataType.GEO);
+
+        assertThat(eventParser.parseValue(definition,  "Point#111.11, 222.22"))
+                .isEqualTo(dbObject);
+    }
+
+    @Test
+    public void parseValidDocumentType(){
+        EventParser eventParser = new EventParser();
+        DBObject dbObject = buildExpectedObject();
+        FieldDefinition fieldDefinition = definition(MongoDataType.DOCUMENT);
+        Map<String,FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>();
+        documentMapping.put("field1",new FieldDefinition(MongoDataType.STRING));
+        documentMapping.put("field2",new FieldDefinition(MongoDataType.ARRAY));
+        FieldDefinition fieldDefinition2 = definition(MongoDataType.DOCUMENT);
+        documentMapping.put("field3",fieldDefinition2);
+        Map<String,FieldDefinition> documentMapping2 = new LinkedHashMap<String, FieldDefinition>();
+        documentMapping2.put("field4",new FieldDefinition(MongoDataType.STRING));
+        documentMapping.put("field5",new FieldDefinition(MongoDataType.STRING));
+        fieldDefinition.setDocumentMapping(documentMapping);
+        fieldDefinition2.setDocumentMapping(documentMapping2);
+
+        assertThat(eventParser.parseValue(fieldDefinition,  "Point1#[111.11,222.22]#Point2"))
+                .isEqualTo(dbObject);
+    }
+
+    private DBObject buildExpectedObject() {
+        DBObject dbObject = new BasicDBObject();
+        BasicDBObject object2 = new BasicDBObject();
+        BasicDBList locList = new BasicDBList();
+        locList.add(111.11);
+        locList.add(222.22);
+        dbObject.put("field1", "Point1");
+        dbObject.put("field2", locList);
+        object2.put("field4", "Point2");
+        object2.put("field5", locList);
+        dbObject.put("field3", object2);
+        return dbObject;
     }
 
 }

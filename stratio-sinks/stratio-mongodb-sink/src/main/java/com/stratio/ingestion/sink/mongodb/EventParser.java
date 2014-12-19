@@ -39,15 +39,15 @@ class EventParser {
 
     private static final String DEFAULT_BINARY_ENCODING = "base64";
 
-	private final MappingDefinition definition;
+    private final MappingDefinition definition;
 
     public EventParser() {
         this(new MappingDefinition());
     }
 
-	public EventParser(final MappingDefinition mappingDefinition) {
-		this.definition = mappingDefinition;
-	}
+    public EventParser(final MappingDefinition mappingDefinition) {
+        this.definition = mappingDefinition;
+    }
 
     public Object parseValue(final FieldDefinition fd, final String stringValue) {
         if (fd == null || fd.getType() == null) {
@@ -70,13 +70,13 @@ class EventParser {
                 //TODO: should we check that the result is indeed an array or object?
                 return JSON.parse(stringValue);
             case BINARY:
-                final String encoding = (fd.getEncoding() == null)? DEFAULT_BINARY_ENCODING : fd.getEncoding().toLowerCase(Locale.ENGLISH);
+                final String encoding = (fd.getEncoding() == null) ? DEFAULT_BINARY_ENCODING : fd.getEncoding().toLowerCase(Locale.ENGLISH);
                 if ("base64".equals(encoding)) {
                     return BaseEncoding.base64().decode(stringValue);
                 } else {
                     throw new UnsupportedOperationException("Unsupported encoding for binary type: " + encoding);
                 }
-            //TODO: case "UNDEFINED":
+                //TODO: case "UNDEFINED":
             case OBJECTID:
                 return new ObjectId(stringValue);
             case BOOLEAN:
@@ -109,12 +109,16 @@ class EventParser {
                 return Integer.parseInt(stringValue);
             case INT64:
                 return Long.parseLong(stringValue);
+            case GEO:
+                return populateGeoObject(stringValue);
+            case DOCUMENT:
+                return populateDocument(fd,stringValue);
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + fd.getType().name());
         }
     }
 
-	public DBObject parse(Event event) {
+    public DBObject parse(Event event) {
 
         DBObject dbObject = new BasicDBObject();
         if (definition.getBodyType() != MongoDataType.NULL) {
@@ -140,9 +144,9 @@ class EventParser {
             }
         }
 
-		final Map<String, String> eventHeaders = event.getHeaders();
+        final Map<String, String> eventHeaders = event.getHeaders();
         if (definition.allowsAdditionalProperties()) {
-            for (final Map.Entry<String,String> headerEntry : eventHeaders.entrySet()) {
+            for (final Map.Entry<String, String> headerEntry : eventHeaders.entrySet()) {
                 final String fieldName = headerEntry.getKey();
                 final String fieldValue = headerEntry.getValue();
                 FieldDefinition def = definition.getFieldDefinitionByName(fieldName);
@@ -166,14 +170,43 @@ class EventParser {
         }
 
         return dbObject;
-	}
+    }
 
-	public List<DBObject> parse(List<Event> events) {
-		List<DBObject> rows = new ArrayList<DBObject>(events.size());
-		for (Event event : events) {
-			rows.add(this.parse(event));
-		}
-		return rows;
-	}
+    public List<DBObject> parse(List<Event> events) {
+        List<DBObject> rows = new ArrayList<DBObject>(events.size());
+        for (Event event : events) {
+            rows.add(this.parse(event));
+        }
+        return rows;
+    }
 
+    private DBObject populateGeoObject(String loc) {
+        DBObject geoLoc = new BasicDBObject();
+        String[]locAsArray= loc.split("#");
+        if (locAsArray.length==2){
+            geoLoc.put("type", locAsArray[0]);
+            geoLoc.put("loc", extractGeoLoc(locAsArray[1]));
+        }
+        return geoLoc;
+    }
+
+    private Double[] extractGeoLoc(String geoLoc) {
+        String[] geoLocSplit = geoLoc.split(",");
+        return new Double[]{Double.valueOf(geoLocSplit[0]),Double.valueOf(geoLocSplit[1])};
+    }
+
+    private DBObject populateDocument(FieldDefinition fd, String document) {
+        DBObject dbObject = new BasicDBObject();
+        String[]documentAsArrray= document.split("#");
+//        if (documentAsArrray.length==2){
+
+            Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>(fd.getDocumentMapping());
+            int i=0;
+            for (Map.Entry<String, FieldDefinition> documentField : documentMapping.entrySet()) {
+                dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), documentAsArrray[i++]));
+            }
+//        }
+
+        return dbObject;
+    }
 }
