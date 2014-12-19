@@ -104,6 +104,7 @@ class FieldDefinition implements Serializable {
         result = prime * result + (this.dateFormat == null ? 0 : this.dateFormat.hashCode());
         result = prime * result + (this.encoding == null ? 0 : this.encoding.hashCode());
         result = prime * result + (this.type == null ? 0 : this.type.hashCode());
+        result = prime * result + (this.documentMapping == null ? 0 : this.documentMapping.hashCode());
 
         return result;
     }
@@ -153,6 +154,14 @@ class FieldDefinition implements Serializable {
                 return false;
             }
         } else if (!this.type.equals(other.type)) {
+            return false;
+        }
+
+        if (this.documentMapping == null) {
+            if (other.documentMapping != null) {
+                return false;
+            }
+        } else if (!this.documentMapping.equals(other.documentMapping)) {
             return false;
         }
 

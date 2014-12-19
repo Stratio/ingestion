@@ -38,6 +38,7 @@ class EventParser {
     private static final Logger log = LoggerFactory.getLogger(EventParser.class);
 
     private static final String DEFAULT_BINARY_ENCODING = "base64";
+    private static final String DOCUMENT_TYPE = "document";
 
     private final MappingDefinition definition;
 
@@ -109,10 +110,8 @@ class EventParser {
                 return Integer.parseInt(stringValue);
             case INT64:
                 return Long.parseLong(stringValue);
-            case GEO:
-                return populateGeoObject(stringValue);
             case DOCUMENT:
-                return populateDocument(fd,stringValue);
+                return populateDocument(fd, stringValue);
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + fd.getType().name());
         }
@@ -180,31 +179,22 @@ class EventParser {
         return rows;
     }
 
-    private DBObject populateGeoObject(String loc) {
-        DBObject geoLoc = new BasicDBObject();
-        String[]locAsArray= loc.split("#");
-        if (locAsArray.length==2){
-            geoLoc.put("type", locAsArray[0]);
-            geoLoc.put("loc", extractGeoLoc(locAsArray[1]));
-        }
-        return geoLoc;
-    }
-
-    private Double[] extractGeoLoc(String geoLoc) {
-        String[] geoLocSplit = geoLoc.split(",");
-        return new Double[]{Double.valueOf(geoLocSplit[0]),Double.valueOf(geoLocSplit[1])};
-    }
-
     private DBObject populateDocument(FieldDefinition fd, String document) {
         DBObject dbObject = new BasicDBObject();
-        String[]documentAsArrray= document.split("#");
+        String[] documentAsArrray = document.split("#");
 //        if (documentAsArrray.length==2){
 
-            Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>(fd.getDocumentMapping());
-            int i=0;
-            for (Map.Entry<String, FieldDefinition> documentField : documentMapping.entrySet()) {
+        Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>(fd.getDocumentMapping());
+        int i = 0;
+        for (Map.Entry<String, FieldDefinition> documentField : documentMapping.entrySet()) {
+            if (DOCUMENT_TYPE.equalsIgnoreCase(documentField.getValue().getType().name())) {
+                dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), StringUtils.join(Arrays.copyOfRange(documentAsArrray, i, documentAsArrray.length), "#")));
+                i += documentField.getValue().getDocumentMapping().size();
+            } else {
                 dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), documentAsArrray[i++]));
+
             }
+        }
 //        }
 
         return dbObject;
