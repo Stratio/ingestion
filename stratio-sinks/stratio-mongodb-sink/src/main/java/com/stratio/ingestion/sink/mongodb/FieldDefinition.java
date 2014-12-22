@@ -16,31 +16,26 @@
 package com.stratio.ingestion.sink.mongodb;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Map;
 
-class FieldDefinition implements Serializable {
+abstract class FieldDefinition implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -7630057866092766830L;
 
-    private MongoDataType type;
-    private String fieldName;
-    private String mappedName;
-    private DateFormat dateFormat;
-    private String encoding;
-    private Map<String, FieldDefinition> documentMapping;
-    private String delimiter;
+    protected MongoDataType type;
 
-    public FieldDefinition() {
+    protected String fieldName;
+
+    protected String mappedName;
+
+    protected FieldDefinition() {
         super();
     }
 
-    public FieldDefinition(MongoDataType type) {
+    protected FieldDefinition(MongoDataType type) {
         this.type = type;
     }
 
-    public FieldDefinition(String fieldName, MongoDataType type) {
+    protected FieldDefinition(String fieldName, MongoDataType type) {
         this.type = type;
         this.fieldName = fieldName;
     }
@@ -57,30 +52,6 @@ class FieldDefinition implements Serializable {
         return this.mappedName;
     }
 
-    public DateFormat getDateFormat() {
-        return this.dateFormat;
-    }
-
-    public String getEncoding() {
-        return this.encoding;
-    }
-
-    public Map<String, FieldDefinition> getDocumentMapping() {
-        return documentMapping;
-    }
-
-    public String getDelimiter() {
-        return delimiter;
-    }
-
-    public void setDelimiter(String delimiter) {
-        this.delimiter = delimiter;
-    }
-
-    public void setDocumentMapping(Map<String, FieldDefinition> documentMapping) {
-        this.documentMapping = documentMapping;
-    }
-
     public void setType(MongoDataType type) {
         this.type = type;
     }
@@ -91,90 +62,5 @@ class FieldDefinition implements Serializable {
 
     public void setMappedName(String mappedName) {
         this.mappedName = mappedName;
-    }
-
-    public void setDateFormat(String dateFormat) {
-        setDateFormat(new SimpleDateFormat(dateFormat));
-    }
-
-    public void setDateFormat(DateFormat dateFormat) {
-        this.dateFormat = dateFormat;
-    }
-
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (this.fieldName == null ? 0 : this.fieldName.hashCode());
-        result = prime * result + (this.mappedName == null ? 0 : this.mappedName.hashCode());
-        result = prime * result + (this.dateFormat == null ? 0 : this.dateFormat.hashCode());
-        result = prime * result + (this.encoding == null ? 0 : this.encoding.hashCode());
-        result = prime * result + (this.type == null ? 0 : this.type.hashCode());
-        result = prime * result + (this.documentMapping == null ? 0 : this.documentMapping.hashCode());
-
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (this.getClass() != obj.getClass()) {
-            return false;
-        }
-        FieldDefinition other = (FieldDefinition) obj;
-        if (this.fieldName == null) {
-            if (other.fieldName != null) {
-                return false;
-            }
-        } else if (!this.fieldName.equals(other.fieldName)) {
-            return false;
-        }
-        if (this.mappedName == null) {
-            if (other.mappedName != null) {
-                return false;
-            }
-        } else if (!this.mappedName.equals(other.mappedName)) {
-            return false;
-        }
-        if (this.dateFormat == null) {
-            if (other.dateFormat != null) {
-                return false;
-            }
-        } else if (!this.dateFormat.equals(other.dateFormat)) {
-            return false;
-        }
-        if (this.encoding == null) {
-            if (other.encoding != null) {
-                return false;
-            }
-        } else if (!this.encoding.equals(other.encoding)) {
-            return false;
-        }
-        if (this.type == null) {
-            if (other.type != null) {
-                return false;
-            }
-        } else if (!this.type.equals(other.type)) {
-            return false;
-        }
-
-        if (this.documentMapping == null) {
-            if (other.documentMapping != null) {
-                return false;
-            }
-        } else if (!this.documentMapping.equals(other.documentMapping)) {
-            return false;
-        }
-
-        return true;
     }
 }

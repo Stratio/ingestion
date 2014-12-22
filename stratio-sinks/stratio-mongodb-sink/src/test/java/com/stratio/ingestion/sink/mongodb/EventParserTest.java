@@ -41,8 +41,18 @@ import com.mongodb.util.JSONParseException;
 public class EventParserTest {
 
     private FieldDefinition definition(MongoDataType type) {
-        FieldDefinition def = new FieldDefinition();
-        def.setType(type);
+        FieldDefinition def;
+        switch (type) {
+        case DATE:
+            def = new DateFieldDefinition();
+            break;
+        case DOCUMENT:
+            def = new DocumentFieldDefinition();
+            break;
+        default:
+            def = new SimpleFieldDefinition(type);
+        }
+
         return def;
     }
 
@@ -82,7 +92,7 @@ public class EventParserTest {
     @Test
     public void parseValueForDate() {
         final EventParser eventParser = new EventParser();
-        FieldDefinition fd = definition(MongoDataType.DATE);
+        DateFieldDefinition fd = (DateFieldDefinition) definition(MongoDataType.DATE);
         fd.setDateFormat("yyyy/MM/dd");
         assertThat(eventParser.parseValue(fd, "2004/03/13")).isEqualTo(new Date(104, 2, 13));
     }
@@ -128,7 +138,7 @@ public class EventParserTest {
         DBObject dbObject = eventParser.parse(EventBuilder.withBody(new byte[0], headers));
         assertThat(dbObject.get("myString")).isEqualTo("bar");
         assertThat(dbObject.get("myInt64"))
-                .isEqualTo(64); //XXX: If auto-mapped, 64 will be recognized as int32, not int64
+                .isEqualTo(64); // XXX: If auto-mapped, 64 will be recognized as int32, not int64
         assertThat(dbObject.get("myBoolean")).isEqualTo(true);
         assertThat(dbObject.get("myDouble")).isEqualTo(1.0);
         assertThat(dbObject.get("myNull")).isEqualTo("foobar");
@@ -144,17 +154,17 @@ public class EventParserTest {
     public void parseDocumentTypeWithNoValidSeparator() {
         EventParser eventParser = new EventParser();
         DBObject dbObject = buildExpectedObject();
-        FieldDefinition fieldDefinition = definition(MongoDataType.DOCUMENT);
+        DocumentFieldDefinition fieldDefinition = (DocumentFieldDefinition) definition(MongoDataType.DOCUMENT);
 
         Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>();
-        documentMapping.put("field1", new FieldDefinition(MongoDataType.STRING));
-        documentMapping.put("field2", new FieldDefinition(MongoDataType.ARRAY));
-        FieldDefinition fieldDefinition2 = definition(MongoDataType.DOCUMENT);
+        documentMapping.put("field1", new SimpleFieldDefinition(MongoDataType.STRING));
+        documentMapping.put("field2", new SimpleFieldDefinition(MongoDataType.ARRAY));
+        DocumentFieldDefinition fieldDefinition2 = (DocumentFieldDefinition) definition(MongoDataType.DOCUMENT);
         documentMapping.put("field3", fieldDefinition2);
-        documentMapping.put("field6", new FieldDefinition(MongoDataType.STRING));
+        documentMapping.put("field6", new SimpleFieldDefinition(MongoDataType.STRING));
         Map<String, FieldDefinition> documentMapping2 = new LinkedHashMap<String, FieldDefinition>();
-        documentMapping2.put("field4", new FieldDefinition(MongoDataType.STRING));
-        documentMapping2.put("field5", new FieldDefinition(MongoDataType.ARRAY));
+        documentMapping2.put("field4", new SimpleFieldDefinition(MongoDataType.STRING));
+        documentMapping2.put("field5", new SimpleFieldDefinition(MongoDataType.ARRAY));
         fieldDefinition.setDocumentMapping(documentMapping);
         fieldDefinition2.setDocumentMapping(documentMapping2);
 
@@ -167,18 +177,18 @@ public class EventParserTest {
     public void parseDocumentTypeWithValidSeparator() {
         EventParser eventParser = new EventParser();
         DBObject dbObject = buildExpectedObject();
-        FieldDefinition fieldDefinition = definition(MongoDataType.DOCUMENT);
+        DocumentFieldDefinition fieldDefinition = (DocumentFieldDefinition) definition(MongoDataType.DOCUMENT);
         fieldDefinition.setDelimiter("#");
         Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>();
-        documentMapping.put("field1", new FieldDefinition(MongoDataType.STRING));
-        documentMapping.put("field2", new FieldDefinition(MongoDataType.ARRAY));
-        FieldDefinition fieldDefinition2 = definition(MongoDataType.DOCUMENT);
+        documentMapping.put("field1", new SimpleFieldDefinition(MongoDataType.STRING));
+        documentMapping.put("field2", new SimpleFieldDefinition(MongoDataType.ARRAY));
+        DocumentFieldDefinition fieldDefinition2 = (DocumentFieldDefinition) definition(MongoDataType.DOCUMENT);
         fieldDefinition2.setDelimiter("#");
         documentMapping.put("field3", fieldDefinition2);
-        documentMapping.put("field6", new FieldDefinition(MongoDataType.STRING));
+        documentMapping.put("field6", new SimpleFieldDefinition(MongoDataType.STRING));
         Map<String, FieldDefinition> documentMapping2 = new LinkedHashMap<String, FieldDefinition>();
-        documentMapping2.put("field4", new FieldDefinition(MongoDataType.STRING));
-        documentMapping2.put("field5", new FieldDefinition(MongoDataType.ARRAY));
+        documentMapping2.put("field4", new SimpleFieldDefinition(MongoDataType.STRING));
+        documentMapping2.put("field5", new SimpleFieldDefinition(MongoDataType.ARRAY));
         fieldDefinition.setDocumentMapping(documentMapping);
         fieldDefinition2.setDocumentMapping(documentMapping2);
 

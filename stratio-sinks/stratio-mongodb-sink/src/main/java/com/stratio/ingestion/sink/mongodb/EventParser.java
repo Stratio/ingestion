@@ -62,7 +62,7 @@ class EventParser {
             try {
                 return JSON.parse(stringValue);
             } catch (JSONParseException ex) {
-                //XXX: Default to String
+                // XXX: Default to String
                 log.trace("Could not parse as JSON, defaulting to String: {}", stringValue);
                 return stringValue;
             }
@@ -74,25 +74,25 @@ class EventParser {
             return stringValue;
         case OBJECT:
         case ARRAY:
-            //TODO: should we use customizable array representation?
-            //TODO: should we check that the result is indeed an array or object?
+            // TODO: should we use customizable array representation?
+            // TODO: should we check that the result is indeed an array or object?
             return JSON.parse(stringValue);
         case BINARY:
-            final String encoding = (fd.getEncoding() == null) ?
-                    DEFAULT_BINARY_ENCODING :
-                    fd.getEncoding().toLowerCase(Locale.ENGLISH);
+            SimpleFieldDefinition sfd = (SimpleFieldDefinition) fd;
+            final String encoding = (sfd.getEncoding() == null) ? DEFAULT_BINARY_ENCODING : sfd.getEncoding()
+                    .toLowerCase(Locale.ENGLISH);
             if ("base64".equals(encoding)) {
                 return BaseEncoding.base64().decode(stringValue);
             } else {
                 throw new UnsupportedOperationException("Unsupported encoding for binary type: " + encoding);
             }
-            //TODO: case "UNDEFINED":
+            // TODO: case "UNDEFINED":
         case OBJECTID:
             return new ObjectId(stringValue);
         case BOOLEAN:
             return Boolean.parseBoolean(stringValue);
         case DATE:
-            DateFormat dateFormat = fd.getDateFormat();
+            DateFormat dateFormat = ((DateFieldDefinition) fd).getDateFormat();
             if (dateFormat == null) {
                 if (StringUtils.isNumeric(stringValue)) {
                     return new Date(Long.parseLong(stringValue));
@@ -103,24 +103,24 @@ class EventParser {
                 try {
                     return dateFormat.parse(stringValue);
                 } catch (ParseException ex) {
-                    //XXX: Default to string
+                    // XXX: Default to string
                     log.warn("Could not parse date, defaulting to String: {}", stringValue);
                     return stringValue;
                 }
             }
         case NULL:
-            //TODO: Check if this is valid
+            // TODO: Check if this is valid
             return null;
-        //TODO: case "REGEX":
-        //TODO: case "JAVASCRIPT":
-        //TODO: case "SYMBOL":
-        //TODO: case "JAVASCRIPT_SCOPE":
+            // TODO: case "REGEX":
+            // TODO: case "JAVASCRIPT":
+            // TODO: case "SYMBOL":
+            // TODO: case "JAVASCRIPT_SCOPE":
         case INT32:
             return Integer.parseInt(stringValue);
         case INT64:
             return Long.parseLong(stringValue);
         case DOCUMENT:
-            return populateDocument(fd, stringValue);
+            return populateDocument((DocumentFieldDefinition) fd, stringValue);
         default:
             throw new UnsupportedOperationException("Unsupported type: " + fd.getType().name());
         }
@@ -137,7 +137,7 @@ class EventParser {
                 Charset charset = Charset.forName(definition.getBodyEncoding());
                 obj = new String(event.getBody(), charset);
             } else {
-                FieldDefinition fd = new FieldDefinition();
+                SimpleFieldDefinition fd = new SimpleFieldDefinition();
                 fd.setType(definition.getBodyType());
                 fd.setEncoding(definition.getBodyEncoding());
                 obj = parseValue(fd, new String(event.getBody(), Charsets.UTF_8));
@@ -188,7 +188,7 @@ class EventParser {
         return rows;
     }
 
-    private DBObject populateDocument(FieldDefinition fd, String document) {
+    private DBObject populateDocument(DocumentFieldDefinition fd, String document) {
         DBObject dbObject = null;
         final String delimiter = fd.getDelimiter();
         if (!StringUtils.isEmpty(delimiter)) {
@@ -201,7 +201,7 @@ class EventParser {
                 if (DOCUMENT_TYPE.equalsIgnoreCase(documentField.getValue().getType().name())) {
                     dbObject.put(documentField.getKey(), parseValue(documentField.getValue(),
                             StringUtils.join(Arrays.copyOfRange(documentAsArrray, i, documentAsArrray.length), "#")));
-                    i += documentField.getValue().getDocumentMapping().size();
+                    i += ((DocumentFieldDefinition) documentField.getValue()).getDocumentMapping().size();
                 } else {
                     dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), documentAsArrray[i++]));
                 }

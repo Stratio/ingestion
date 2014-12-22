@@ -113,17 +113,26 @@ class MappingDefinition implements Serializable {
 
     private FieldDefinition populateFieldDefinition(Map.Entry<String, JsonNode> entry) {
         String type = entry.getValue().get(TYPE).asText().toUpperCase(Locale.ENGLISH);
-        FieldDefinition fieldDefinition = new FieldDefinition(entry.getKey(), MongoDataType.valueOf(type));
 
-        populateMappedFromField(entry, fieldDefinition);
-        populateEncodingField(entry, fieldDefinition);
-        populateDateFormatField(entry, fieldDefinition);
-        populateDocumentType(entry, fieldDefinition);
+        FieldDefinition fieldDefinition = null;
+        switch (MongoDataType.valueOf(type)) {
+        case DATE:
+            fieldDefinition = new DateFieldDefinition(entry.getKey());
+            populateDateFormatField(entry, (DateFieldDefinition) fieldDefinition);
+            break;
+        case DOCUMENT:
+            fieldDefinition = new DocumentFieldDefinition(entry.getKey());
+            populateDocumentType(entry, (DocumentFieldDefinition) fieldDefinition);
+            break;
+        default:
+            fieldDefinition = new SimpleFieldDefinition(MongoDataType.valueOf(type));
+            populateMappedFromField(entry, (SimpleFieldDefinition) fieldDefinition);
+        }
 
         return fieldDefinition;
     }
 
-    private void populateDocumentType(Map.Entry<String, JsonNode> entry, FieldDefinition fieldDefinition) {
+    private void populateDocumentType(Map.Entry<String, JsonNode> entry, DocumentFieldDefinition fieldDefinition) {
         if (fieldDefinition.getType().equals(MongoDataType.DOCUMENT) && entry.getValue().has(DOCUMENT_MAPPING)) {
             if (entry.getValue().has(DELIMITER_CHAR)) {
                 fieldDefinition.setDelimiter(entry.getValue().get(DELIMITER_CHAR).asText());
@@ -142,19 +151,16 @@ class MappingDefinition implements Serializable {
         }
     }
 
-    private void populateDateFormatField(Map.Entry<String, JsonNode> entry, FieldDefinition fieldDefinition) {
-        if (fieldDefinition.getType().equals(MongoDataType.DATE) && entry.getValue().has(DATE_FORMAT)) {
+    private void populateDateFormatField(Map.Entry<String, JsonNode> entry, DateFieldDefinition fieldDefinition) {
+        if (entry.getValue().has(DATE_FORMAT)) {
             fieldDefinition.setDateFormat(entry.getValue().get(DATE_FORMAT).asText());
         }
     }
 
-    private void populateEncodingField(Map.Entry<String, JsonNode> entry, FieldDefinition fieldDefinition) {
+    private void populateMappedFromField(Map.Entry<String, JsonNode> entry, SimpleFieldDefinition fieldDefinition) {
         if (fieldDefinition.getType().equals(MongoDataType.BINARY) && entry.getValue().has(ENCODING)) {
             fieldDefinition.setEncoding(entry.getValue().get(ENCODING).asText());
         }
-    }
-
-    private void populateMappedFromField(Map.Entry<String, JsonNode> entry, FieldDefinition fieldDefinition) {
         if (entry.getValue().has(MAPPED_FROM)) {
             fieldDefinition.setFieldName(entry.getValue().get(MAPPED_FROM).asText());
             fieldDefinition.setMappedName(entry.getKey());
