@@ -29,6 +29,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>stratio-batch-rest-source</module>
 		<module>stratio-rest-source</module>
 		<module>stratio-flumestats-source</module>
 		<module>stratio-snmptraps-source</module>
