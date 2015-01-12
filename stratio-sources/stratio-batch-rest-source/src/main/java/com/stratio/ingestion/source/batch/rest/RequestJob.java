@@ -13,22 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.source.batch.rest.request;
+package com.stratio.ingestion.source.batch.rest;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
 import org.apache.http.HttpStatus;
@@ -36,7 +29,6 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ObjectNode;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -52,7 +44,7 @@ import com.sun.jersey.api.client.WebResource;
 /**
  * RequestJob. Quartz Job that make a request to a RESTful service.
  */
-public class RequestJob implements Job {
+public class RequestJob extends AbstractJob implements Job {
 
     private static final Logger log = LoggerFactory.getLogger(RequestJob.class);
 
@@ -60,12 +52,6 @@ public class RequestJob implements Job {
     public static final String METHOD = "method";
     public static final String URL = "url";
     public static final String HEADERS = "headers";
-    public static final String DATE_FIELD = "date";
-    public static final String SUBJECT_FIELD = "subject";
-    public static final String CHECKPOINT_VALUE_FIELD = "checkpointValue";
-    public static final String DATE_PATTERN_FIELD = "datePattern";
-    public static final String CHECKPOINT_ENABLED_FIELD = "checkpointEnabled";
-    public static final String CHECKPOINT_FIELD = "checkpoint";
 
     private Map<String, String> properties;
     private LinkedBlockingQueue<Event> queue;
@@ -113,7 +99,8 @@ public class RequestJob implements Job {
                 JsonNode element = null;
                 while (elements.hasNext()) {
                     element = elements.next();
-                    if (isValidEvent(element)) {
+                    if (isValid(element, properties.get(CONF_CHECKPOINT_TYPE), properties.get
+                            (CONF_CHECKPOINT_VALUE), properties.get(CONF_CHECKPOINT_FIELD), properties)) {
                         queue.add(EventBuilder.withBody(element.toString(), Charsets.UTF_8,
                                 responseToHeaders(response.getHeaders())));
                     }
@@ -126,69 +113,14 @@ public class RequestJob implements Job {
         }
     }
 
-    private boolean isValidEvent(JsonNode element) {
-        boolean isValid = Boolean.TRUE;
-        Date checkpointValue = null;
-        try {
-            final String checkpointAsString = properties.get
-                    (CHECKPOINT_VALUE_FIELD);
-            if (StringUtils.isEmpty(checkpointAsString)) {
-                checkpointValue = new Date(0);
-            } else {
-                checkpointValue = new SimpleDateFormat(properties.get(DATE_PATTERN_FIELD)).parse(checkpointAsString);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (checkpointValue != null) {
-            isValid = getEventDate(element).getTime() >= checkpointValue.getTime();
-        }
-        return isValid;
-    }
-
     private void addCheckpoint(ClientResponse response, ObjectMapper mapper, JsonNode element) {
-        if (isCheckpointEnabled() && isValidEvent(element)) {
+        if (isCheckpointEnabled(properties.get(CONF_CHECKPOINT_ENABLED)) && isValid(element,
+                properties.get(CONF_CHECKPOINT_TYPE), properties.get(CONF_CHECKPOINT_VALUE),
+                properties.get(CONF_CHECKPOINT_FIELD), properties)) {
             queue.add(EventBuilder.withBody(populateCheckpoint(mapper, element).toString(), Charsets.UTF_8,
                     responseToHeaders(response.getHeaders())));
-            updateLastEventProperty(element);
+            updateLastEventProperty(element, properties, properties.get(CONF_CHECKPOINT_FIELD));
         }
-    }
-
-    private boolean isCheckpointEnabled() {
-        boolean isCheck = Boolean.FALSE;
-        final String valueAsString = properties.get(CHECKPOINT_ENABLED_FIELD);
-        if (!StringUtils.isEmpty(valueAsString)) {
-            isCheck = Boolean.valueOf(valueAsString);
-        }
-        return isCheck;
-    }
-
-    private void updateLastEventProperty(JsonNode element) {
-        final Date date = getEventDate(element);
-        if (date != null) {
-            properties
-                    .put(CHECKPOINT_VALUE_FIELD, new SimpleDateFormat(properties.get(DATE_PATTERN_FIELD)).format(date));
-        }
-    }
-
-    private Date getEventDate(JsonNode element) {
-        final String dateAsText = element.get
-                (DATE_FIELD).asText();
-        Date date = null;
-        try {
-            date = new SimpleDateFormat(properties.get(DATE_PATTERN_FIELD)).parse(dateAsText);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
-
-    private ObjectNode populateCheckpoint(ObjectMapper mapper, JsonNode element) {
-        ObjectNode objectNode = mapper.createObjectNode();
-        objectNode.put(DATE_FIELD, element.get(DATE_FIELD));
-        objectNode.put(SUBJECT_FIELD, element.get(SUBJECT_FIELD));
-        objectNode.put(CHECKPOINT_FIELD, "true");
-        return objectNode;
     }
 
     private ClientResponse getResponse(WebResource.Builder request) {
@@ -201,39 +133,6 @@ public class RequestJob implements Job {
         }
 
         return response;
-    }
-
-    /**
-     * Convert Multivalued Headers to Plain Map Headers accepted by Flume Event.
-     *
-     * @param map multivaluedMap.
-     * @return plain Map.
-     */
-    private Map<String, String> responseToHeaders(MultivaluedMap<String, String> map) {
-        Map<String, String> newMap = new HashMap<String, String>();
-        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            newMap.put(entry.getKey(), multiValueHeaderToString(entry.getValue()));
-        }
-        return newMap;
-    }
-
-    /**
-     * Convert a multivalue header to String.
-     *
-     * @param list
-     * @return
-     * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2">w3.org</a>
-     */
-    private String multiValueHeaderToString(List<String> list) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < list.size(); ++i) {
-            sb.append(list.get(i));
-            if (i != list.size() - 1) {
-                sb.append(", ");
-            }
-        }
-
-        return sb.toString();
     }
 
     /**

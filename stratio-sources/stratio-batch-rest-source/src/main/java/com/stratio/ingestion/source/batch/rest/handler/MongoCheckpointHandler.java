@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.source.batch.rest.checkpoint;
+package com.stratio.ingestion.source.batch.rest.handler;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.UnknownHostException;
 
@@ -27,26 +29,29 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.WriteConcern;
+import com.stratio.ingestion.source.batch.rest.MongoSourceException;
+import com.stratio.ingestion.source.batch.rest.checkpoint.CheckpointType;
 
 /**
  * Created by eambrosio on 30/12/14.
  */
-public class MongoCheckpointRetrieval extends CheckpointRetrieval {
+public class MongoCheckpointHandler extends CheckpointHandler {
 
-    private static final java.lang.String MONGO_URI = "mongoURI";
-    private static final String CONF_CHECKPOINT_FIELD = "checkpointField";
-    private static final String CONF_CHECKPOINT_TYPE = "checkpointType";
+    protected static final String MONGO_URI = "mongoURI";
+    protected static final String CONF_CHECKPOINT_FIELD = "checkpointField";
+    protected static final String CONF_CHECKPOINT_TYPE = "checkpointType";
 
     private MongoClient mongoClient;
     private MongoClientURI mongoClientURI;
     private DB mongoDb;
     private DBCollection mongoCollection;
     private String checkpointField;
-    private String checkpointType;
+    private CheckpointType checkpointType;
 
-    public MongoCheckpointRetrieval(Context context) {
-        this.checkpointField = context.getString(CONF_CHECKPOINT_FIELD);
-        this.checkpointType = context.getString(CONF_CHECKPOINT_TYPE);
+    public MongoCheckpointHandler(Context context, CheckpointType checkpointType) {
+        this.checkpointField = checkNotNull(context.getString(CONF_CHECKPOINT_FIELD), "Expected non-null"
+                + " checkpoint field");
+        this.checkpointType = checkNotNull(checkpointType, "Expected non-null checkpoint type");
 
         this.mongoClientURI = new MongoClientURI(
                 context.getString(MONGO_URI),
@@ -65,19 +70,28 @@ public class MongoCheckpointRetrieval extends CheckpointRetrieval {
     }
 
     @Override
-    public Object getLastCheckpoint() {
-        final DBCursor cursor = mongoCollection.find().skip((int) (mongoCollection.count() - 1));
-        Object checkpoint = null;
-        while (cursor.hasNext()) {
-            DBObject object = cursor.next();
-            checkpoint = object.get(checkpointField);
+    public String getLastCheckpoint(Context context) {
+        String checkpoint;
+        DBCursor cursor;
+        Object field = null;
+        final long count = mongoCollection.count();
+        if (count > 0) {
+            try {
+
+                cursor = mongoCollection.find().skip((int) (count - 1));
+                while (cursor.hasNext()) {
+                    DBObject object = cursor.next();
+                    field = object.get(checkpointField);
+                }
+                checkpoint = checkpointType.populateCheckpoint(field, context);
+
+            } catch (Exception e) {
+                throw new MongoSourceException("Error accesing DB. Verify db/collection name.");
+            }
+        } else {
+            checkpoint = checkpointType.populateDefaultCheckpoint(context);
         }
-        String checkpointAsString = null;
-        try {
-            checkpoint = Class.forName(checkpointType).cast(checkpoint);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
         return checkpoint;
     }
 

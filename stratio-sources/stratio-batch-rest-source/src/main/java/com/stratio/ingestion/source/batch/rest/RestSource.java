@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.source.batch.rest.request;
+package com.stratio.ingestion.source.batch.rest;
 
-import java.lang.reflect.InvocationTargetException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -40,7 +37,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.stratio.ingestion.source.batch.rest.checkpoint.CheckpointRetrieval;
+import com.stratio.ingestion.source.batch.rest.handler.CheckpointHandler;
 import com.sun.jersey.api.client.Client;
 
 /**
@@ -82,9 +79,10 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     protected static final String CONF_BODY = "body";
     protected static final String CONF_DATE_PATTERN = "datePattern";
     protected static final String CONF_CHECKPOINT_VALUE = "checkpointValue";
+    protected static final String CONF_CHECKPOINT_TYPE_VALUE = "checkpointType";
     protected static final String CONF_CHECKPOINT_ENABLED = "checkpointEnabled";
+    protected static final String CONF_CHECKPOINT_RETRIEVAL_CLASS = "checkpointRetrievalClass";
     protected static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
-    protected static final String CONF_CHECKPOINT_RETRIEVAL = "checkpointRetrieval";
 
     private LinkedBlockingQueue<Event> queue = new LinkedBlockingQueue<Event>(QUEUE_SIZE);
     private int frequency;
@@ -92,7 +90,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     private JobDetail jobDetail;
     private Scheduler scheduler;
     private Map<String, String> properties = new HashMap<>();
-    private CheckpointRetrieval checkpointRetrival;
+    private CheckpointHandler checkpointRetrival;
 
     public RestSource() {
         client = new Client();
@@ -124,23 +122,16 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
 
     private void initCheckpointRetrieval(Context context) {
         final Boolean isCheckpointEnabled = new Boolean(context.getString(CONF_CHECKPOINT_ENABLED, "false"));
-        Class<?> retrievalClass = null;
+        Class<?> retrievalClass;
         if (isCheckpointEnabled) {
             try {
-                retrievalClass = Class.forName(context.getString(CONF_CHECKPOINT_RETRIEVAL));
-                checkpointRetrival = (CheckpointRetrieval) retrievalClass.getDeclaredConstructor(Context.class)
-                        .newInstance(context);
+                retrievalClass = Class.forName(context.getString(CONF_CHECKPOINT_RETRIEVAL_CLASS));
+                checkpointRetrival = (CheckpointHandler) retrievalClass.getDeclaredConstructor(Context.class,
+                        Class.forName(context.getString(CONF_CHECKPOINT_TYPE_VALUE))).newInstance(context);
 
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                throw new MongoSourceException("Error invoking checkpoint retrieval. Verify checkpointRetrievalClass "
+                        + "and/or checkpointType property values");
             }
             properties.put(CONF_CHECKPOINT_ENABLED, isCheckpointEnabled.toString());
             properties.put(CONF_DATE_PATTERN, context.getString(CONF_DATE_PATTERN, ISO_8601_DATE_FORMAT));
@@ -149,16 +140,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     }
 
     private void getLastCheckpoint(Context context) {
-        final Object lastCheckpoint = checkpointRetrival.getLastCheckpoint();
-
-        if (lastCheckpoint != null) {
-            if (lastCheckpoint instanceof Date) {
-                properties.put(CONF_CHECKPOINT_VALUE, new SimpleDateFormat(properties.get(CONF_DATE_PATTERN)).format(
-                        lastCheckpoint));
-            }
-        } else {
-            properties.put(CONF_CHECKPOINT_VALUE, context.getString(CONF_CHECKPOINT_VALUE, String.valueOf(0)));
-        }
+        properties.put(CONF_CHECKPOINT_VALUE, checkpointRetrival.getLastCheckpoint(context));
     }
 
     /**

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.source.batch.rest.request;
+package com.stratio.ingestion.source.batch.rest;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.any;
@@ -36,6 +36,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.quartz.JobExecutionContext;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
@@ -56,30 +57,13 @@ public class RequestJobTest {
     @Mock
     Map<String, String> properties;
 
+    @Mock
+    JobExecutionContext context;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-    }
-
-    @Test
-    public void addEventsToQueueWithNonSetLastEventProperty() throws Exception {
-        final String responseAsString =
-                "[{\"version\":1,\"date\":\"2014-12-16T16:32:33+00:00\",\"data\":{\"name\":\"John\",\"surname\":\"Doe\"}},"
-                        + "{\"version\":1,\"date\":\"2014-12-16T16:32:33+00:00\",\"data\":{\"name\":\"John\",\"surname\":\"Doe\"}},{\"version\":1,"
-                        + "\"date\":\"2014-12-16T16:32:33+00:00\",\"data\":{\"name\":\"John\",\"surname\":\"Doe\"}}]";
-        when(response.getStatus()).thenReturn(200);
-        when(response.getEntity(String.class)).thenReturn(responseAsString);
-        when(queue.add(any(Event.class))).thenReturn(Boolean.TRUE).thenReturn(Boolean.TRUE).thenReturn(Boolean.TRUE);
-        when(properties.get("checkpointValue")).thenReturn(null, null, null, null);
-        when(properties.get("datePattern")).thenReturn("yyyy-MM-dd'T'HH:mm:ssXXX");
-        when(properties.get("checkpointEnabled")).thenReturn("true", "true", "true", "true");
-        mockHeaders();
-
-        requestJob.addEventsToQueue(response);
-
-        verify(queue, times(4)).add(any(Event.class));
-        verify(properties).put(eq("checkpointValue"), any(String.class));
     }
 
     @Test
@@ -97,14 +81,20 @@ public class RequestJobTest {
                         "2014-12-18T16:32:33+00:00",
                         "2014-12-18T16:32:33+00:00",
                         "2014-12-18T16:32:33+00:00");
-        when(properties.get("datePattern")).thenReturn(DATE_PATTERN);
+        when(properties.get("datePattern"))
+                .thenReturn(DATE_PATTERN, DATE_PATTERN, DATE_PATTERN, DATE_PATTERN);
+        when(properties.get("checkpointField")).thenReturn("date", "date", "date", "date");
+        when(properties.get("checkpointType")).thenReturn("com.stratio.ingestion.source.batch.rest.checkpoint"
+                + ".DateCheckpointType", "com.stratio.ingestion.source.batch.rest.checkpoint"
+                + ".DateCheckpointType", "com.stratio.ingestion.source.batch.rest.checkpoint"
+                + ".DateCheckpointType");
         when(properties.get("checkpointEnabled")).thenReturn("true", "true", "true", "true");
         mockHeaders();
 
         requestJob.addEventsToQueue(response);
 
         verify(queue, times(2)).add(any(Event.class));
-        verify(properties, times(1)).put(eq("checkpointValue"), eq("2014-12-19T17:32:33+01:00"));
+        verify(properties, times(1)).put(eq("checkpointValue"), eq("2014-12-19T16:32:33+00:00"));
 
     }
 
@@ -123,7 +113,13 @@ public class RequestJobTest {
                         "2014-12-18T16:32:33+00:00",
                         "2014-12-18T16:32:33+00:00",
                         "2014-12-18T16:32:33+00:00");
-        when(properties.get("datePattern")).thenReturn(DATE_PATTERN);
+        when(properties.get("datePattern"))
+                .thenReturn(DATE_PATTERN, DATE_PATTERN, DATE_PATTERN, DATE_PATTERN);
+        when(properties.get("checkpointField")).thenReturn("date", "date", "date", "date");
+        when(properties.get("checkpointType")).thenReturn("com.stratio.ingestion.source.batch.rest.checkpoint"
+                + ".DateCheckpointType", "com.stratio.ingestion.source.batch.rest.checkpoint"
+                + ".DateCheckpointType", "com.stratio.ingestion.source.batch.rest.checkpoint"
+                + ".DateCheckpointType");
         when(properties.get("checkpointEnabled")).thenReturn("true", "true", "true", "true");
         mockHeaders();
 

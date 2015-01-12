@@ -13,12 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.source.batch.rest.checkpoint;
+package com.stratio.ingestion.source.batch.rest;
 
 /**
- * Created by eambrosio on 30/12/14.
+ * Created by eambrosio on 5/01/15.
  */
-public abstract class CheckpointRetrieval {
+public class MongoSourceException extends RuntimeException {
 
-    public abstract Object getLastCheckpoint();
+    public MongoSourceException(String message) {
+        super(message);
+    }
+
+    public MongoSourceException(Throwable cause) {
+        super(cause);
+    }
+
+    public MongoSourceException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }
