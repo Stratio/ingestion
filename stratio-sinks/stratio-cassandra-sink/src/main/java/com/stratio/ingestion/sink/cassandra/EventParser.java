@@ -218,7 +218,7 @@ class EventParser {
             case INT:
                 return Integer.valueOf(rawValue);
             case BIGINT:
-                return new BigInteger(rawValue);
+                return Long.valueOf(rawValue);
             case FLOAT:
                 return Float.valueOf(rawValue);
             case DOUBLE:
