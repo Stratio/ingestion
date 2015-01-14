@@ -48,7 +48,7 @@
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 
 		<flume.version>1.6.0-SNAPSHOT</flume.version>
-		<streaming.api.version>0.5.0</streaming.api.version>
+		<streaming.api.version>0.6.1</streaming.api.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.10.8</mockito.version>
 		<jackson.databind.version>2.3.1</jackson.databind.version>
