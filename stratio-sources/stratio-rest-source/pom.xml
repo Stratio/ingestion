@@ -38,7 +38,7 @@
 	
 	<properties>
 		<quartz.version>2.2.1</quartz.version>
-		<jersey-client.version>2.9</jersey-client.version>
+		<jersey-client.version>1.18.1</jersey-client.version>
 	</properties>
 
 	<repositories>
@@ -70,7 +70,7 @@
 			<version>${quartz.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
+			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-client</artifactId>
 			<version>${jersey-client.version}</version>
 		</dependency>
@@ -78,6 +78,10 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easytesting</groupId>
+			<artifactId>fest-assert</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -19,9 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.EventDeliveryException;
@@ -39,6 +36,9 @@ import org.quartz.UnableToInterruptJobException;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.stratio.ingestion.source.rest.handler.RestSourceHandler;
+import com.sun.jersey.api.client.Client;
 
 /**
  * 
@@ -79,6 +79,10 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     protected static final String CONF_APPLICATION_TYPE = "applicationType";
     protected static final String CONF_HEADERS = "headers";
     protected static final String CONF_BODY = "body";
+    protected static final String CONF_HANDLER = "handler";
+    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.handler.JsonRestSourceHandler";
+    protected static final String DEFAULT_JSON_PATH = "";
+    protected static final String CONF_PATH = "jsonPath";
 
     private LinkedBlockingQueue<Event> queue = new LinkedBlockingQueue<Event>(QUEUE_SIZE);
     private int frequency;
@@ -86,9 +90,10 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     private JobDetail jobDetail;
     private Scheduler scheduler;
     private Map<String, String> properties = new HashMap<String, String>();
+    private RestSourceHandler handler;
 
     public RestSource(){
-        client = ClientBuilder.newClient();
+        client =new Client();
     }
 
     public RestSource(Client client){
@@ -110,6 +115,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
                 context.getString(CONF_APPLICATION_TYPE, DEFAULT_APPLICATION_TYPE).toUpperCase());
         properties.put(CONF_HEADERS, context.getString(CONF_HEADERS, DEFAULT_HEADERS));
         properties.put(CONF_BODY, context.getString(CONF_BODY, DEFAULT_BODY));
+        handler = initHandler(context);
     }
 
     /**
@@ -133,12 +139,28 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
             scheduler.getContext().put("client", client);
             scheduler.getContext().put("queue", queue);
             scheduler.getContext().put("properties", properties);
+            scheduler.getContext().put("handler", handler);
             scheduler.start();
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private RestSourceHandler initHandler(Context context) {
+        RestSourceHandler handler = null;
+        try {
+            handler = (RestSourceHandler) Class.forName((String) properties.get("handler")).newInstance();
+            handler.configure(context);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return handler;
     }
 
     /**
@@ -167,7 +189,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
      */
     @Override
     public void stop() {
-        client.close();
+        client.destroy();
         try {
             scheduler.interrupt(jobDetail.getKey());
         } catch (UnableToInterruptJobException e) {
