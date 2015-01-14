@@ -73,7 +73,7 @@ public class RestJobTest {
         when(webResource.accept(any(MediaType.class))).thenReturn(builder);
         when(context.getScheduler()).thenReturn(scheduler);
         when(scheduler.getContext()).thenReturn(schedulerContext);
-        queue = new LinkedBlockingQueue<>(10);
+        queue = new LinkedBlockingQueue<Event>(10);
         when(schedulerContext.get("queue")).thenReturn(queue);
         when(schedulerContext.get("client")).thenReturn(client);
 

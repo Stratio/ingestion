@@ -44,7 +44,7 @@ public class DefaultRestSourceHandler implements RestSourceHandler {
     }
 
     @Override public List<Event> getEvents(String body, Map<String, String> headers) {
-        List<Event> events = new ArrayList<>(0);
+        List<Event> events = new ArrayList<Event>(0);
         events.add(EventBuilder.withBody(body, Charsets.UTF_8, headers));
 
         return events;

@@ -51,7 +51,7 @@ public class JsonRestSourceHandler implements RestSourceHandler {
 
     @Override public List<Event> getEvents(String body, Map<String, String> headers) {
 
-        List<Event> events = new ArrayList<>(0);
+        List<Event> events = new ArrayList<Event>(0);
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode jsonNode = mapper.readTree(body);
