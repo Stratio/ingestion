@@ -18,6 +18,8 @@ package com.stratio.ingestion.sink.cassandra;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -40,6 +42,8 @@ import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
 import com.google.common.base.Charsets;
 
 @RunWith(JUnit4.class)
@@ -78,32 +82,32 @@ public class CassandraDataTypesIT {
 			InterruptedException {
         final Context context = new Context();
 				final InetSocketAddress contactPoint = CassandraTestHelper.getCassandraContactPoint();
-        context.put("table", TABLE);
+        context.put("table", KEYSPACE + "." + TABLE);
         context.put("port", Integer.toString(contactPoint.getPort()));
         context.put("host", contactPoint.getAddress().getHostAddress());
-        context.put("keyspace", KEYSPACE);
         context.put("cluster", "Test Cluster");
         context.put("batchSize", "1");
-        URL resourceUrl = getClass().getResource("/definitionAllTypes.json");
-        context.put("definitionFile", resourceUrl.getPath());
         context.put("consistency", "QUORUM");
 
-        context.put(
-                "keyspaceStatement",
-                "CREATE KEYSPACE IF NOT EXISTS keyspaceTest WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };");
-        context.put("tableStatement",
-                "CREATE TABLE if not exists keyspaceTest.tableTest ("
-                        + PRIMARY_KEY + " uuid, " + TEXT_FIELD + " text, "
-                        + VARCHAR_FIELD + " varchar, " + VARINT_FIELD
-                        + " varint, " + ASCII_FIELD + " ascii, "
-                        + BOOLEAN_FIELD + " boolean, " + DECIMAL_FIELD
-                        + " decimal, " + DOUBLE_FIELD + " double, "
-                        + FLOAT_FIELD + " float, " + INET_FIELD + " inet, "
-                        + INT_FIELD + " int, " + LIST_FIELD + " list<TEXT>, "
-                        + MAP_FIELD + " map<TEXT,TEXT>, " + SET_FIELD
-                        + " set<TEXT>, " + TIMESTAMP_FIELD + " timestamp, "
-                        + UUID_FIELD + " uuid, " + BIGINT_FIELD
-                        + " bigint, PRIMARY KEY (" + PRIMARY_KEY + "));");
+				Cluster cluster = Cluster.builder()
+				.addContactPointsWithPorts(Collections.singletonList(contactPoint))
+				.build();
+				Session session = cluster.connect();
+				session.execute("CREATE KEYSPACE IF NOT EXISTS keyspaceTest WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };");
+				session.execute("CREATE TABLE if not exists keyspaceTest.tableTest ("
+						+ PRIMARY_KEY + " uuid, " + TEXT_FIELD + " text, "
+						+ VARCHAR_FIELD + " varchar, " + VARINT_FIELD
+						+ " varint, " + ASCII_FIELD + " ascii, "
+						+ BOOLEAN_FIELD + " boolean, " + DECIMAL_FIELD
+						+ " decimal, " + DOUBLE_FIELD + " double, "
+						+ FLOAT_FIELD + " float, " + INET_FIELD + " inet, "
+						+ INT_FIELD + " int, " + LIST_FIELD + " list<TEXT>, "
+						+ MAP_FIELD + " map<TEXT,TEXT>, " + SET_FIELD
+						+ " set<TEXT>, " + TIMESTAMP_FIELD + " timestamp, "
+						+ UUID_FIELD + " uuid, " + BIGINT_FIELD
+						+ " bigint, PRIMARY KEY (" + PRIMARY_KEY + "));");
+			session.close();
+		cluster.close();
 
         sink = new CassandraSink();
         sink.configure(context);
@@ -128,147 +132,158 @@ public class CassandraDataTypesIT {
 	}
 
 	@Test
-	public void textFieldAllowsText() throws EventDeliveryException {
+	public void textFieldAllowsText() {
 		testFieldType(TEXT_FIELD, "text", Status.READY);
 	}
 
 	@Test
-	public void intFieldAllowsIntegers() throws EventDeliveryException {
+	public void intFieldAllowsIntegers() {
 		testFieldType(INT_FIELD, "123", Status.READY);
 	}
 	
 	@Test
-	public void intFieldDoesNotAllowText() throws EventDeliveryException {
+	public void intFieldDoesNotAllowText() {
 		testFieldType(INT_FIELD, "text", Status.BACKOFF);
 	}
 
 	@Test
-	public void varcharFieldAllowsText() throws EventDeliveryException {
+	public void varcharFieldAllowsText() {
 		testFieldType(VARCHAR_FIELD, "varchar", Status.READY);
 	}
 
 	@Test
-	public void varintFieldAllowsIntegers() throws EventDeliveryException {
+	public void varintFieldAllowsIntegers() {
 		testFieldType(VARINT_FIELD, "123", Status.READY);
 	}
 
 	@Test
-	public void varintFieldDoesNotAllowText() throws EventDeliveryException {
+	public void varintFieldDoesNotAllowText() {
 		testFieldType(VARINT_FIELD, "text", Status.BACKOFF);
 	}
 
 	@Test
-	public void asciiFieldAllowsText() throws EventDeliveryException {
+	public void asciiFieldAllowsText() {
 		testFieldType(ASCII_FIELD, "abcd", Status.READY);
 	}
 
 	@Test
-	public void booleanFieldAllowsAnything() throws EventDeliveryException {
+	public void booleanFieldAllowsAnything() {
 		testFieldType(BOOLEAN_FIELD, "false", Status.READY);
 	}
 
 	@Test
-	public void decimalFieldAllowsFloats() throws EventDeliveryException {
+	public void decimalFieldAllowsFloats() {
 		testFieldType(DECIMAL_FIELD, "123.45", Status.READY);
 	}
 
 	@Test
-	public void decimalFieldAllowsIntegers() throws EventDeliveryException {
+	public void decimalFieldAllowsIntegers() {
 		testFieldType(DECIMAL_FIELD, "123", Status.READY);
 	}
 
 	@Test
-	public void decimalFieldDoesNotAllowText() throws EventDeliveryException {
+	public void decimalFieldDoesNotAllowText() {
 		testFieldType(DECIMAL_FIELD, "text", Status.BACKOFF);
 	}
 
 	@Test
-	public void doubleFieldAllowsIntegers() throws EventDeliveryException {
+	public void doubleFieldAllowsIntegers() {
 		testFieldType(DOUBLE_FIELD, "123", Status.READY);
 	}
 
 	@Test
-	public void doubleFieldDoesNotAllowText() throws EventDeliveryException {
+	public void doubleFieldDoesNotAllowText() {
 		testFieldType(DOUBLE_FIELD, "text", Status.BACKOFF);
 	}
 
 	@Test
-	public void floatFieldAllowsFloats() throws EventDeliveryException {
+	public void floatFieldAllowsFloats() {
 		testFieldType(FLOAT_FIELD, "123.45", Status.READY);
 	}
 
 	@Test
-	public void floatFieldAllowsIntegers() throws EventDeliveryException {
+	public void floatFieldAllowsIntegers() {
 		testFieldType(FLOAT_FIELD, "123", Status.READY);
 	}
 
 	@Test
-	public void floatFieldDoesNotAllowText() throws EventDeliveryException {
+	public void floatFieldDoesNotAllowText() {
 		testFieldType(FLOAT_FIELD, "text", Status.BACKOFF);
 	}
 
 	@Test
-	public void inetFieldAllowsInet() throws EventDeliveryException {
+	public void inetFieldAllowsInet() {
 		testFieldType(INET_FIELD, "123.10.123.10", Status.READY);
 	}
 
 	@Test
-	public void inetFieldDoesNotAllowText() throws EventDeliveryException {
+	public void inetFieldDoesNotAllowText() {
 		testFieldType(INET_FIELD, "text", Status.BACKOFF);
 	}
 
 	@Test
-	public void listFieldAllowsList() throws EventDeliveryException {
+	public void listFieldAllowsList() {
 		testFieldType(LIST_FIELD, "a,b,c,d,e", Status.READY);
 	}
 
 	@Test
-	public void mapFieldAllowsMap() throws EventDeliveryException {
-		testFieldType(MAP_FIELD, "a,0;c,1", Status.READY);
+	public void mapFieldAllowsMap() {
+		testFieldType(MAP_FIELD, "a:0,c:1", Status.READY);
 	}
 
 	@Test
-	public void setFieldAllowsList() throws EventDeliveryException {
+	public void setFieldAllowsList() {
 		testFieldType(SET_FIELD, "a,b,c,d,e", Status.READY);
 	}
 
 	@Test
-	public void timestampFieldAllowsDatesWithTheFormatDefined()
-			throws EventDeliveryException {
-		testFieldType(TIMESTAMP_FIELD, "10/10/2010", Status.READY);
+	public void timestampFieldAllowsDatesWithTheFormatDefined() {
+		testFieldType(TIMESTAMP_FIELD, "1231234", Status.READY);
+		testFieldType(TIMESTAMP_FIELD, "2010-12-20T10:20:20", Status.READY);
+		testFieldType(TIMESTAMP_FIELD, "2010-12-20T10:20:20.000", Status.READY);
+		testFieldType(TIMESTAMP_FIELD, "2010-12-20T10:20:20.000Z", Status.READY);
 	}
 
 	@Test
-	public void timestampFieldDoesNotAllowDatesWithOtherFormatThatTheDefined()
-			throws EventDeliveryException {
-		testFieldType(TIMESTAMP_FIELD, "2010", Status.BACKOFF);
+	public void timestampFieldDoesNotAllowDatesWithOtherFormatThatTheDefined() {
+		testFieldType(TIMESTAMP_FIELD, "1/2/3/4/5", Status.BACKOFF);
 	}
 
 	@Test
-	public void UUIDFieldAllowsUUID() throws EventDeliveryException {
+	public void UUIDFieldAllowsUUID() {
 		testFieldType(UUID_FIELD, "550e8400-e29b-41d4-a716-446655440000", Status.READY);
 	}
 
 	@Test
-	public void UUIDFieldDoesNotAllowInvalidUUID() throws EventDeliveryException {
+	public void UUIDFieldDoesNotAllowInvalidUUID() {
 		testFieldType(UUID_FIELD, "550e8400", Status.BACKOFF);
 	}
 
 	@Test
-	public void bigintFieldAllowsIntegers() throws EventDeliveryException {
+	public void bigintFieldAllowsIntegers() {
 		testFieldType(BIGINT_FIELD, "12345", Status.READY);
 	}
 
 	@Test
-	public void bigintFieldDoesNotAllowText() throws EventDeliveryException {
+	public void bigintFieldDoesNotAllowText() {
 		testFieldType(BIGINT_FIELD, "text", Status.BACKOFF);
 	}
 
-	private void testFieldType(final String field, final String value, final Status result) throws EventDeliveryException {
+	private void testFieldType(final String field, final String value, final Status result) {
 		headers.put(field, value);
 		addEventToChannel(headers);
-		Status status = sink.process();
-		Assert.assertEquals(result, status);
+		boolean thrown = false;
+		try {
+			Status status = sink.process();
+			Assert.assertEquals(result, status);
+		} catch (EventDeliveryException ex) {
+			thrown = true;
+		}
+		if (result == Status.READY) {
+			Assert.assertFalse(thrown);
+		} else {
+			Assert.assertTrue(thrown);
+		}
 	}
 
 	private void addEventToChannel(Map<String, String> headers) {

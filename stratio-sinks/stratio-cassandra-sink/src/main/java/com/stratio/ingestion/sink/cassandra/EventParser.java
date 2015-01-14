@@ -19,8 +19,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -31,61 +29,40 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.google.common.base.Charsets;
-import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Event;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.format.ISODateTimeFormat;
 
 import com.datastax.driver.core.DataType;
+import com.google.common.base.Charsets;
 
 class EventParser {
 
-	private static final String BODY_COLUMN = "data";
 	private final ColumnDefinition definition;
-
-	public EventParser(String jsonDefinition) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			this.definition = mapper.readValue(jsonDefinition,
-					ColumnDefinition.class);
-			validateDefinition();
-		} catch (Exception e) {
-			throw new CassandraSinkException(e);
-		}
-	}
+	private final String bodyColumn;
 	
-	public EventParser(ColumnDefinition definition) {
+	public EventParser(final ColumnDefinition definition, final String bodyColumn) {
 		this.definition = definition;
-	}
-	
-	private void validateDefinition() {
-		for (FieldDefinition field : definition.getFields()) {
-			boolean validEnum = EnumUtils.isValidEnum(DataType.Name.class, field.getType());
-			if (!validEnum)
-				throw new CassandraSinkException("Field type \"" + field.getType() + "\" is not a valid one.");
-		}
+		this.bodyColumn = bodyColumn;
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public CassandraRow parse(Event event) {
-		List<CassandraField<?>> fields = new ArrayList<CassandraField<?>>();
-		
-		for (FieldDefinition def : this.definition.getFields()) {
+	public CassandraRow parse(final Event event) {
+		final List<CassandraField<?>> fields = new ArrayList<CassandraField<?>>();
+		for (final FieldDefinition def : this.definition.getFields()) {
 			if (event.getHeaders().containsKey(def.getColumnName())) {
 				fields.add(parseField(event.getHeaders().get(def.getColumnName()), def));
-			} else if (def.getColumnName().equals(BODY_COLUMN)) {
+			} else if (def.getColumnName().equals(bodyColumn)) {
+				//TODO: Ideally body should be written directly as byte[] to BLOB
 				fields.add(parseField(new String(event.getBody(), Charsets.UTF_8), def));
 			}
 		}
-
 		return new CassandraRow(fields);
 	}
 
-	public List<CassandraRow> parse(List<Event> events) {
-		List<CassandraRow> rows = new ArrayList<CassandraRow>(events.size());
-		for (Event event : events) {
+	public List<CassandraRow> parse(final List<Event> events) {
+		final List<CassandraRow> rows = new ArrayList<CassandraRow>(events.size());
+		for (final Event event : events) {
 			rows.add(this.parse(event));
 		}
 		return rows;
@@ -96,99 +73,73 @@ class EventParser {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	static final CassandraField parseField(String field,
-			FieldDefinition definition) {
-		String columnName = definition.getColumnName();
-		if (DataType.Name.valueOf(definition.getType()).equals(
-				DataType.Name.SET)) {
-			return parseSet(field, definition);
-		} else if (DataType.Name.valueOf(definition.getType()).equals(
-				DataType.Name.MAP)) {
-			return parseMap(field, definition);
-		} else if (DataType.Name.valueOf(definition.getType()).equals(
-				DataType.Name.LIST)) {
-			return parseList(field, definition);
+	static CassandraField parseField(final String fieldValue, final FieldDefinition definition) {
+		final String columnName = definition.getColumnName();
+		final DataType.Name dataTypeName = DataType.Name.valueOf(definition.getType());
+		if (DataType.Name.SET.equals(dataTypeName)) {
+			return parseSet(fieldValue, definition);
+		} else if (DataType.Name.MAP.equals(dataTypeName)) {
+			return parseMap(fieldValue, definition);
+		} else if (DataType.Name.LIST.equals(dataTypeName)) {
+			return parseList(fieldValue, definition);
 		} else {
-			return new CassandraField(columnName, parseValue(field,
-					DataType.Name.valueOf(definition.getType()),
-					definition.getDateFormat()));
+			final Object value = parseValue(fieldValue, dataTypeName);
+			return new CassandraField(columnName, value);
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	final static CassandraField<Map> parseMap(String field,
-			FieldDefinition definition) {
-		List<String> rawItems = Arrays.asList(field.split(definition
-				.getItemSeparator()));
-		Map map = new HashMap();
-		for (String rawItem : rawItems) {
-			String rawKey = rawItem.split(definition.getMapValueSeparator())[0];
-			String rawValue = rawItem.split(definition.getMapValueSeparator())[1];
-			Object key = parseValue(rawKey,
-					DataType.Name.valueOf(definition.getMapKeyType()),
-					definition.getDateFormat());
-			Object value = parseValue(rawValue,
-					DataType.Name.valueOf(definition.getMapValueType()),
-					definition.getDateFormat());
+	static CassandraField<Map<Object,Object>> parseMap(final String fieldValue, final FieldDefinition definition) {
+		final List<String> rawItems = Arrays.asList(fieldValue.split(definition.getItemSeparator()));
+
+		final Map<Object,Object> map = new HashMap<Object,Object>();
+		for (final String rawItem : rawItems) {
+			final String[] fields = rawItem.split(definition.getMapValueSeparator());
+			final String rawKey = fields[0];
+			final String rawValue = fields[1];
+			final Object key = parseValue(rawKey, DataType.Name.valueOf(definition.getMapKeyType()));
+			final Object value = parseValue(rawValue, DataType.Name.valueOf(definition.getMapValueType()));
 			map.put(key, value);
 		}
-		return new CassandraField<Map>(definition.getColumnName(), map);
+		return new CassandraField<Map<Object,Object>>(definition.getColumnName(), map);
 	}
 
-	private static Date parseDate(String rawValue, String dateFormat) {
-        if (dateFormat == null) {
-            if (StringUtils.isNumeric(rawValue)) {
-                return new Date(Long.parseLong(rawValue));
-            } else {
-                return ISODateTimeFormat.dateOptionalTimeParser().parseDateTime(rawValue).toDate();
-            }
-        }
-		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-		try {
-			return sdf.parse(rawValue);
-		} catch (ParseException e) {
-			throw new CassandraSinkException(e);
+	private static Date parseDate(final String rawValue) {
+		if (StringUtils.isNumeric(rawValue)) {
+			return new Date(Long.parseLong(rawValue));
+		} else {
+			return ISODateTimeFormat.dateOptionalTimeParser().parseDateTime(rawValue).toDate();
 		}
 	}
 
-	private static InetAddress parseInetSocketAddress(String field) {
+	private static InetAddress parseInetSocketAddress(final String fieldValue) {
 		try {
-			return InetAddress.getByName(field);
+			return InetAddress.getByName(fieldValue);
 		} catch (UnknownHostException e) {
-			throw new CassandraSinkException(e);
+			throw new IllegalArgumentException(e);
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	final static CassandraField<Set> parseSet(String field,
-			FieldDefinition definition) {
-		Set items = new HashSet();
-		List<String> rawItems = Arrays.asList(field.split(definition
-				.getItemSeparator()));
+	static CassandraField<Set<Object>> parseSet(final String fieldValue, final FieldDefinition definition) {
+		Set<Object> items = new HashSet<Object>();
+		List<String> rawItems = Arrays.asList(fieldValue.split(definition.getItemSeparator()));
 		for (String rawItem : rawItems) {
-			items.add(parseValue(rawItem,
-					DataType.Name.valueOf(definition.getListValueType()),
-					definition.getDateFormat()));
+			items.add(parseValue(rawItem, DataType.Name.valueOf(definition.getListValueType())));
 		}
-		return new CassandraField<Set>(definition.getColumnName(), items);
+		return new CassandraField<Set<Object>>(definition.getColumnName(), items);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	final static CassandraField<List> parseList(String field,
-			FieldDefinition definition) {
-		List items = new ArrayList();
-		List<String> rawItems = Arrays.asList(field.split(definition
+	static CassandraField<List<Object>> parseList(final String field, final FieldDefinition definition) {
+		final List<Object> items = new ArrayList<Object>();
+		final List<String> rawItems = Arrays.asList(field.split(definition
 				.getItemSeparator()));
-		for (String rawItem : rawItems) {
-			items.add(parseValue(rawItem,
-					DataType.Name.valueOf(definition.getListValueType()),
-					definition.getDateFormat()));
+		for (final String rawItem : rawItems) {
+			items.add(parseValue(rawItem, DataType.Name.valueOf(definition.getListValueType())));
 		}
-		return new CassandraField<List>(definition.getColumnName(), items);
+		return new CassandraField<List<Object>>(definition.getColumnName(), items);
 	}
 
-	final static Object parseValue(String rawValue, DataType.Name type,
-			String dateFormat) {
+	static Object parseValue(String rawValue, final DataType.Name type) {
+				// Type-dependent input sanitization
         switch (type) {
             case COUNTER:
             case VARINT:
@@ -207,7 +158,7 @@ class EventParser {
             case VARCHAR: //FIXME: This is expected to be UTF-8
                 return rawValue;
             case TIMESTAMP:
-                return parseDate(rawValue, dateFormat);
+                return parseDate(rawValue);
             case UUID:
             case TIMEUUID:
                 return UUID.fromString(rawValue);
@@ -230,9 +181,7 @@ class EventParser {
             case INET:
                 return parseInetSocketAddress(rawValue);
             default:
-                throw new CassandraSinkException(
-                        "Cassandra type not supported: " + type.toString()
-                );
+                throw new IllegalArgumentException("Cassandra type not supported: " + type);
         }
 	}
 }
