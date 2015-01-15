@@ -32,7 +32,8 @@
 		<module>stratio-nlp-morphline</module>
 		<module>stratio-wikipediacleaner-morphline</module>
         <module>stratio-commons-morphline</module>
-    </modules>
+		<module>stratio-checkpointfilter-morphline</module>
+	</modules>
 
 	<dependencyManagement>
 		<dependencies>
