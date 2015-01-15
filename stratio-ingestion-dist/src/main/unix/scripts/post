@@ -1,0 +1,8 @@
+#!/bin/sh
+# Copyright (c) 2014 Stratio (http://stratio.com)
+#
+
+set -e
+
+chmod 0755 /opt/sds/ingestion/bin/*
+chmod 0755 /opt/sds/ingestion/examples/*/bin/*

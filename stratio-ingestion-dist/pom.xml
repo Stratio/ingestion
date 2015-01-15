@@ -20,7 +20,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
   <groupId>com.stratio.ingestion</groupId>
-	<artifactId>stratio-ingestion-dist</artifactId>
+	<artifactId>stratio-ingestion</artifactId>
   <version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -28,6 +28,15 @@
     <module>../flume</module>
     <module>..</module>
   </modules>
+
+    <!-- Required here for unix-maven-plugin -->
+    <name>Stratio Ingestion</name>
+    <description>An improved Apache Flume distribution with extra components</description>
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+        </license>
+    </licenses>
 
     <dependencies>
         <dependency>
@@ -47,7 +56,7 @@
 		<plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4.1</version>
+                <version>2.5.3</version>
                 <executions>
                     <execution>
                         <id>distro-assembly</id>
@@ -65,6 +74,39 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.stratio.mojo.unix</groupId>
+                <artifactId>unix-maven-plugin</artifactId>
+                <version>1.0-alpha-8</version>
+                <inherited>false</inherited>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>package-unix</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package-deb</goal>
+                            <goal>package-rpm</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <contact>Stratio</contact>
+                    <contactEmail>ingestion@stratio.com</contactEmail>
+                    <deb>
+                        <section>devel</section>
+                    </deb>
+                    <rpm>
+                        <group>Development/System</group>
+                    </rpm>
+                    <assembly>
+                        <copyDirectory>
+                            <from>target/stratio-ingestion-${project.version}-bin/stratio-ingestion-${project.version}-bin</from>
+                            <to>/opt/sds/ingestion</to>
+                        </copyDirectory>
+                    </assembly>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 
@@ -75,13 +117,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <assembly.baseDirectory>stratio-ingestion-${project.version}</assembly.baseDirectory>
-            </properties>
-        </profile>
-        <profile>
-            <id>stratio-distro</id>
-            <properties>
-                <assembly.baseDirectory>opt/sds/ingestion</assembly.baseDirectory>
+                <assembly.baseDirectory>stratio-ingestion-${project.version}-bin/</assembly.baseDirectory>
             </properties>
         </profile>
     </profiles>
