@@ -16,4 +16,6 @@ Stratio Morphlines consists of several modules:
 * GeoIP: 
 * NLP: 
 * WikipediaCleaner: 
+* CheckpointFiler: Get the last checkpoint value by parametrized handler and filter records by paramentrized field 
+too. Periodically update checkpoints values.
 
