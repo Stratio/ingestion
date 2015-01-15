@@ -48,6 +48,10 @@ The following extra types are defined to match MongoDB's BSON types:
 
 - `objectid`: See MongoDB documentation for [ObjectId](http://docs.mongodb.org/manual/reference/object-id/#core-object-id-class).
 
+- `document`: Lets you to define json object structure, including each field type.
+
+
+
 Type mapping examples
 ---------------------
 
@@ -76,106 +80,124 @@ Let's see how an event is mapped to a MongoDB document by default, with no JSON 
 
 **Document:**
 
-```json
-{
-  "myString": "string",
-  "myString2": "string",
-  "myString3": "1234",
-  "myString4": "string4",  // <--- Note that this field came from a JSON body.
-  "myIntSmall": 123,       // <--- INT32
-  "myIntBig": 2147483649,  // <--- INT64
-  "myDouble": 1.0,
-  "myBoolean": true,
-  "myArray": [1, 2.0, "3"],
-  "myObj": {
-    "foo": "bar"
-  },
-  "myDate": Date(2014-06-11T15:56:36),
-  "myDate2": "2014/12/30"
-  "myBinary": "U3RyYXRpbw==",
-  "myObjectId": "507c7f79bcf86cd7994f6c0e",
-  "data": BinData([0x7b, 0x22, 0x6d, 0x79, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x34, 0x22, 0x3a, 0x20, 0x22, 0x73, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x34, 0x22, 0x7d]) 
-}
-```
+
+    {
+      "myString": "string",
+      "myString2": "string",
+      "myString3": "1234",
+      "myString4": "string4",  // <--- Note that this field came from a JSON body.
+      "myIntSmall": 123,       // <--- INT32
+      "myIntBig": 2147483649,  // <--- INT64
+      "myDouble": 1.0,
+      "myBoolean": true,
+      "myArray": [1, 2.0, "3"],
+      "myObj": {
+        "foo": "bar"
+      },
+      "myDate": Date(2014-06-11T15:56:36),
+      "myDate2": "2014/12/30"
+      "myBinary": "U3RyYXRpbw==",
+      "myObjectId": "507c7f79bcf86cd7994f6c0e",
+      "data": BinData([0x7b, 0x22, 0x6d, 0x79, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x34, 0x22, 0x3a, 0x20, 0x22, 
+      0x73, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x34, 0x22, 0x7d]),
+      "geolocation": "Point#[111.11,222.22]"
+    }
+
 
 ### With JSON schema
 
 Now let's specify a JSON schema using a fair amount of custom options:
 
-```json
-{
-  "title": "Example Schema",
-  "type": "object",
-  "bodyType": "object",
-  "bodyField": "data",
-  "additionalProperties": false,
-  "properties": {
-    "myString": {
-      "type": "string"
-    },
-    "myStringMapped": {
-      "type": "string",
-      "mappedFrom": "myString2"
-    },
-    "myIntSmall": {
-      "type": "int32"
-    },
-    "myIntBig": {
-      "type": "int64"
-    },
-    "myDouble": {
-      "type": "double"
+
+    {
+      "title": "Example Schema",
+      "type": "object",
+      "bodyType": "object",
+      "bodyField": "data",
+      "additionalProperties": false,
+      "properties": {
+        "myString": {
+          "type": "string"
+        },
+        "myStringMapped": {
+          "type": "string",
+          "mappedFrom": "myString2"
+        },
+        "myIntSmall": {
+          "type": "int32"
+        },
+        "myIntBig": {
+          "type": "int64"
+        },
+        "myDouble": {
+          "type": "double"
+        }
+        "myBoolean": {
+          "type": "boolean"
+        },
+        "myArray": {
+          "type": "array"
+        },
+        "myObj": {
+          "type": "object"
+        },
+        "myDate": {
+          "type": "date"
+        },
+        "myDate2": {
+          "type": "date",
+          "dateFormat": "yyyy/MM/dd"
+        }
+        "myBinary": {
+          "type": "binary",
+          "encoding": "base64"
+        },
+        "myObjectId": {
+          "type": "objectid"
+        },
+        geoLocation": {
+              "type": "document",
+              "delimiter": "#",
+              "documentMapping":{
+                "type": {
+                  "type" : "string"
+                  },
+                "loc": {
+                  "type":"array"
+                }
+              }
+            }
+      }
     }
-    "myBoolean": {
-      "type": "boolean"
-    },
-    "myArray": {
-      "type": "array"
-    },
-    "myObj": {
-      "type": "object"
-    },
-    "myDate": {
-      "type": "date"
-    },
-    "myDate2": {
-      "type": "date",
-      "dateFormat": "yyyy/MM/dd"
-    }
-    "myBinary": {
-      "type": "binary",
-      "encoding": "base64"
-    },
-    "myObjectId": {
-      "type": "objectid"
-    }
-  }
-}
-```
+
 
 If we take the same event as in the previous example, it will be converted to a document conforming to the following JSON:
 
-```json
-{
-  "myString": "string",
-  "myStringMapped": "string",
-  "myIntSmall": 123,       // <--- INT32 (forced)
-  "myIntBig": 2147483649,  // <--- INT64 (forced)
-  "myDouble": 1.0,
-  "myBoolean": true,
-  "myArray": [1, 2.0, "3"],
-  "myObj": {
-    "foo": "bar"
-  },
-  "myDate": Date(2014-06-11T15:56:36Z),
-  "myDate2": Date(2014-12-31T00:00:00Z),
-  "myBinary": BinData([0x53, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f]),
-  "myObjectId": ObjectId(507c7f79bcf86cd7994f6c0e),
-  "data": {
-     "myString4": "string4"
-  }
-}
-```
+
+    {
+      "myString": "string",
+      "myStringMapped": "string",
+      "myIntSmall": 123,       // <--- INT32 (forced)
+      "myIntBig": 2147483649,  // <--- INT64 (forced)
+      "myDouble": 1.0,
+      "myBoolean": true,
+      "myArray": [1, 2.0, "3"],
+      "myObj": {
+        "foo": "bar"
+      },
+      "myDate": Date(2014-06-11T15:56:36Z),
+      "myDate2": Date(2014-12-31T00:00:00Z),
+      "myBinary": BinData([0x53, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f]),
+      "myObjectId": ObjectId(507c7f79bcf86cd7994f6c0e),
+      "data": {
+         "myString4": "string4"
+      },
+      "geoLocation": {
+        "type": "Point",
+        "loc": [ 111.11, 222.22]
+      }
+    }
+
 
 Note that any field not specified in the JSON schema was ignored. This is because `additionalProperties` was set to `false`.
 

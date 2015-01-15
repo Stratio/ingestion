@@ -15,27 +15,34 @@
  */
 package com.stratio.ingestion.sink.mongodb;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Closeables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 class MappingDefinition implements Serializable {
 
     private static final Logger log = LoggerFactory.getLogger(MappingDefinition.class);
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private static final String ADDITIONAL_PROPERTIES = "additionalProperties";
     private static final String PROPERTIES = "properties";
@@ -51,9 +58,11 @@ class MappingDefinition implements Serializable {
     private static final MongoDataType DEFAULT_BODY_TYPE = MongoDataType.BINARY;
     private static final String DEFAULT_BODY_ENCODING = "UTF-8"; // For BINARY it defaults to "raw".
     private static final String DEFAULT_BODY_FIELD = "data";
+    private static final String DOCUMENT_MAPPING = "documentMapping";
+    private static final String DELIMITER_CHAR = "delimiter";
 
     private final boolean additionalProperties;
-	private final List<FieldDefinition> fields;
+    private final List<FieldDefinition> fields;
     private final MongoDataType bodyType;
     private final String bodyEncoding;
     private final String bodyField;
@@ -95,39 +104,79 @@ class MappingDefinition implements Serializable {
         List<FieldDefinition> fields = new ArrayList<FieldDefinition>();
         if (jsonSchema.has(PROPERTIES)) {
             for (Map.Entry<String, JsonNode> entry : ImmutableList.copyOf(jsonSchema.get(PROPERTIES).fields())) {
-                FieldDefinition fieldDefinition = new FieldDefinition();
-                fieldDefinition.setFieldName(entry.getKey());
-
-                String type = entry.getValue().get(TYPE).asText().toUpperCase(Locale.ENGLISH);
-                fieldDefinition.setType(MongoDataType.valueOf(type));
-
-                if (entry.getValue().has(MAPPED_FROM)) {
-                    fieldDefinition.setFieldName(entry.getValue().get(MAPPED_FROM).asText());
-                    fieldDefinition.setMappedName(entry.getKey());
-                }
-
-                if (fieldDefinition.getType().equals(MongoDataType.BINARY) && entry.getValue().has(ENCODING)) {
-                    fieldDefinition.setEncoding(entry.getValue().get(ENCODING).asText());
-                }
-
-                if (fieldDefinition.getType().equals(MongoDataType.DATE) && entry.getValue().has(DATE_FORMAT)) {
-                    fieldDefinition.setDateFormat(entry.getValue().get(DATE_FORMAT).asText());
-                }
-
+                FieldDefinition fieldDefinition = populateFieldDefinition(entry);
                 fields.add(fieldDefinition);
             }
         }
         this.fields = ImmutableList.copyOf(fields);
     }
 
-	public List<FieldDefinition> getFields() {
+    private FieldDefinition populateFieldDefinition(Map.Entry<String, JsonNode> entry) {
+        String type = entry.getValue().get(TYPE).asText().toUpperCase(Locale.ENGLISH);
+
+        FieldDefinition fieldDefinition = null;
+        switch (MongoDataType.valueOf(type)) {
+        case DATE:
+            fieldDefinition = new DateFieldDefinition(entry.getKey());
+            populateDateFormatField(entry, (DateFieldDefinition) fieldDefinition);
+            break;
+        case DOCUMENT:
+            fieldDefinition = new DocumentFieldDefinition(entry.getKey());
+            populateDocumentType(entry, (DocumentFieldDefinition) fieldDefinition);
+            break;
+        default:
+            fieldDefinition = new SimpleFieldDefinition(MongoDataType.valueOf(type));
+            populateMappedFromField(entry, (SimpleFieldDefinition) fieldDefinition);
+        }
+
+        return fieldDefinition;
+    }
+
+    private void populateDocumentType(Map.Entry<String, JsonNode> entry, DocumentFieldDefinition fieldDefinition) {
+        if (fieldDefinition.getType().equals(MongoDataType.DOCUMENT) && entry.getValue().has(DOCUMENT_MAPPING)) {
+            if (entry.getValue().has(DELIMITER_CHAR)) {
+                fieldDefinition.setDelimiter(entry.getValue().get(DELIMITER_CHAR).asText());
+                JsonNode documentMapping = entry.getValue().get(DOCUMENT_MAPPING);
+                Map<String, FieldDefinition> documentFieldDefinitionMap = new LinkedHashMap<String, FieldDefinition>();
+                Iterator<Map.Entry<String, JsonNode>> entryIterator = documentMapping.fields();
+                Map.Entry<String, JsonNode> field = null;
+                while (entryIterator.hasNext()) {
+                    field = entryIterator.next();
+                    documentFieldDefinitionMap.put(field.getKey(), populateFieldDefinition(field));
+                }
+                fieldDefinition.setDocumentMapping(documentFieldDefinitionMap);
+            } else {
+                throw new MongoSinkException("Delimiter char must be set into schema");
+            }
+        }
+    }
+
+    private void populateDateFormatField(Map.Entry<String, JsonNode> entry, DateFieldDefinition fieldDefinition) {
+        if (entry.getValue().has(DATE_FORMAT)) {
+            fieldDefinition.setDateFormat(entry.getValue().get(DATE_FORMAT).asText());
+        }
+    }
+
+    private void populateMappedFromField(Map.Entry<String, JsonNode> entry, SimpleFieldDefinition fieldDefinition) {
+        if (fieldDefinition.getType().equals(MongoDataType.BINARY) && entry.getValue().has(ENCODING)) {
+            fieldDefinition.setEncoding(entry.getValue().get(ENCODING).asText());
+        }
+        if (entry.getValue().has(MAPPED_FROM)) {
+            fieldDefinition.setFieldName(entry.getValue().get(MAPPED_FROM).asText());
+            fieldDefinition.setMappedName(entry.getKey());
+        }
+    }
+
+    public List<FieldDefinition> getFields() {
         return this.fields;
-	}
+    }
 
     public FieldDefinition getFieldDefinitionByName(String name) {
-        for (FieldDefinition fd : this.fields)
-            if (fd.getFieldName().equals(name))
+        for (FieldDefinition fd : this.fields) {
+            if (fd.getFieldName().equals(name)) {
                 return fd;
+            }
+        }
         return null;
     }
 
