@@ -217,6 +217,9 @@
 					<includes>
 						<include>**/*Test.java</include>
 					</includes>
+					<excludes>
+						<exclude>**/*IT.java</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -225,6 +228,12 @@
 				<version>2.17</version>
 				<configuration>				
 					<argLine>${jacocoIT}</argLine>
+					<includes>
+						<include>**/*IT.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/*Test.java</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 			<plugin>

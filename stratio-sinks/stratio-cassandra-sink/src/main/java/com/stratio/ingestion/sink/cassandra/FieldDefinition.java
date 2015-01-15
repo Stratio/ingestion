@@ -26,7 +26,6 @@ class FieldDefinition implements Serializable {
 
     private String type;
     private String columnName;
-    private String dateFormat;
     private String itemSeparator;
     private String mapValueSeparator;
     private String mapKeyType;
@@ -40,10 +39,6 @@ class FieldDefinition implements Serializable {
 
     public String getColumnName() {
         return this.columnName;
-    }
-
-    public String getDateFormat() {
-        return this.dateFormat;
     }
 
     public String getItemSeparator() {
@@ -72,10 +67,6 @@ class FieldDefinition implements Serializable {
 
     public void setColumnName(String columnName) {
         this.columnName = columnName;
-    }
-
-    public void setDateFormat(String dateFormat) {
-        this.dateFormat = dateFormat;
     }
 
     public void setItemSeparator(String itemSeparator) {
@@ -122,7 +113,6 @@ class FieldDefinition implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + (this.columnName == null ? 0 : this.columnName.hashCode());
-        result = prime * result + (this.dateFormat == null ? 0 : this.dateFormat.hashCode());
         result = prime * result + (this.itemSeparator == null ? 0 : this.itemSeparator.hashCode());
         result = prime * result + (this.listValueType == null ? 0 : this.listValueType.hashCode());
         result = prime * result + (this.mapKeyType == null ? 0 : this.mapKeyType.hashCode());
@@ -150,13 +140,6 @@ class FieldDefinition implements Serializable {
                 return false;
             }
         } else if (!this.columnName.equals(other.columnName)) {
-            return false;
-        }
-        if (this.dateFormat == null) {
-            if (other.dateFormat != null) {
-                return false;
-            }
-        } else if (!this.dateFormat.equals(other.dateFormat)) {
             return false;
         }
         if (this.itemSeparator == null) {
