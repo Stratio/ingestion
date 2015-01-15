@@ -11,6 +11,9 @@ Available config parameters:
 - frequency: Frequency to send request to the url in seconds. Default: 10.
 - headers: Headers json. e.g.: { Accept-Charset: utf-8, Date: Tue,15 Nov 1994 08:12:31 GMT} Default: "".
 - body: Body for post request. Default: "".
+- handler: Handlder implementation classname. This handler will transform the rest service response into one, or many,
+events. Default: "com.stratio.ingestion.source.rest.handler.DefaultRestSourceHandler".
+- jsonPath: field path from which we want recovery the response data. Default: "".
 
 This source will send a request to url target every 'frequency' seconds, retrieve the response and put it into its flume channel.
 
