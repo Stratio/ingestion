@@ -99,7 +99,7 @@ public class CassandraSinkIT {
 				.build();
 		Session session = cluster.connect();
 
-		session.execute("DROP KEYSPACE keyspaceTestCassandraSinkIT");
+		session.execute("DROP KEYSPACE IF EXISTS keyspaceTestCassandraSinkIT");
 		Assert.assertNull(session.getCluster().getMetadata().getKeyspace("keyspaceTestCassandraSinkIT"));
 		_do();
 		Assert.assertNotNull(session.getCluster().getMetadata().getKeyspace("keyspaceTestCassandraSinkIT"));
@@ -109,6 +109,7 @@ public class CassandraSinkIT {
 		Assert.assertNotNull(session.getCluster().getMetadata().getKeyspace("keyspaceTestCassandraSinkIT"));
 		Assert.assertNotNull(session.getCluster().getMetadata().getKeyspace("keyspaceTestCassandraSinkIT")
 				.getTable("tableTestCassandraSinkIT"));
+		session.execute("DROP KEYSPACE IF EXISTS keyspaceTestCassandraSinkIT");
 
 		session.close();
 		cluster.close();
