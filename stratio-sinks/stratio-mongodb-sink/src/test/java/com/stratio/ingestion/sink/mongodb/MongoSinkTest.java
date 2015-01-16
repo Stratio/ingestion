@@ -15,12 +15,13 @@
  */
 package com.stratio.ingestion.sink.mongodb;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.github.fakemongo.Fongo;
-import com.google.common.base.Charsets;
-import com.mongodb.*;
-import org.apache.commons.io.IOUtils;
+import static org.fest.assertions.Assertions.assertThat;
+
+import java.lang.reflect.Field;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.flume.Channel;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -34,14 +35,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
-import sun.security.krb5.Config;
 
-import static org.fest.assertions.Assertions.*;
-
-import java.lang.reflect.Field;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.fakemongo.Fongo;
+import com.google.common.base.Charsets;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
 
 @RunWith(JUnit4.class)
 public class MongoSinkTest {
@@ -118,7 +120,7 @@ public class MongoSinkTest {
         headers.put("myInt64", "64");
         headers.put("myBoolean", "true");
         headers.put("myDouble", "1.0");
-        headers.put("myNull", "foobar");
+        headers.put("myNull", null);
 
         Date myDate = new Date();
         headers.put("myDate", Long.toString(myDate.getTime()));
@@ -141,8 +143,8 @@ public class MongoSinkTest {
         assertThat(result.get("myString")).isEqualTo("bar");
         assertThat(result.get("myInt32")).isEqualTo(32);
         assertThat(result.get("myInt32")).isInstanceOf(Integer.class);
-        assertThat(result.get("myInt64")).isEqualTo(64L);
-        assertThat(result.get("myInt64")).isInstanceOf(Long.class);
+        assertThat(result.get("myInt64")).isEqualTo(64);
+        assertThat(result.get("myInt64")).isInstanceOf(Integer.class);
         assertThat(result.get("myBoolean")).isEqualTo(true);
         assertThat(result.get("myDouble")).isEqualTo(1.0);
         assertThat(result.get("myNull")).isNull();

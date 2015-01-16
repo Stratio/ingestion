@@ -173,7 +173,7 @@ class MappingDefinition implements Serializable {
 
     public FieldDefinition getFieldDefinitionByName(String name) {
         for (FieldDefinition fd : this.fields) {
-            if (fd.getFieldName().equals(name)) {
+            if (name.equals(fd.getFieldName())) {
                 return fd;
             }
         }
