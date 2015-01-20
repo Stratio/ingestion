@@ -21,8 +21,6 @@ import static org.fest.assertions.Assertions.assertThat;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -59,8 +57,7 @@ public class CheckpointFilterBuilderTest {
 
     @Test
     public void recordMustPassTheFilterButNotCheckedAsCheckpoint() throws Exception {
-        Record validRecord = new Record();
-        validRecord.put("date", new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssXXX").format(new Date(0)));
+        Record validRecord = buildMockRecord();
         int actualSize = validRecord.getFields().size();
         command.process(validRecord);
         assertThat(validRecord.getFields().size()).isEqualTo(actualSize);
@@ -68,14 +65,20 @@ public class CheckpointFilterBuilderTest {
 
     @Test
     public void recordMustPassTheFilterAndIsCheckedAsCheckpoint() throws Exception {
-        Record validRecord = new Record();
-        validRecord.put("date", new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssXXX").format(new Date(0)));
+        Record validRecord = buildMockRecord();
         int actualSize = validRecord.getFields().size();
         config = parse("checkpointfilter-2.conf").getConfigList(COMMANDS).get(0).getConfig(CHECKPOINT_FILTER);
         command = new CheckpointFilterBuilder().build(config, collectorParent,
                 collectorChild, context);
         command.process(validRecord);
         assertThat(validRecord.getFields().size()).isEqualTo(actualSize+1);
+    }
+
+    private Record buildMockRecord() throws IOException {
+        Record newRecord=new Record();
+        newRecord.put("date", "2014-12-16T17:32:33+01:00");
+        
+        return newRecord;
     }
 
     protected Config parse(String file, Config... overrides) throws URISyntaxException, IOException {
