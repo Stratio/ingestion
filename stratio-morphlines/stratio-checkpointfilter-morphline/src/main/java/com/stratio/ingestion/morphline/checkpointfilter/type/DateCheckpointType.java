@@ -22,8 +22,6 @@ import java.util.Map;
 
 import org.kitesdk.morphline.api.Record;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 /**
  * Created by eambrosio on 14/01/15.
  */
@@ -67,8 +65,7 @@ public class DateCheckpointType implements CheckpointType {
 
     @Override
     public Object getCheckpoint(Record record, Map<String, String> context) {
-        final ObjectNode attachment_body = (ObjectNode) record.get("_attachment_body").get(0);
-        return attachment_body.get(context.get("field")).asText();
+        return record.get(context.get("field")).get(0);
     }
 
     private String getDatePattern(Map<String, String> context) {

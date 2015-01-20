@@ -28,8 +28,6 @@ import org.kitesdk.morphline.api.Command;
 import org.kitesdk.morphline.api.MorphlineContext;
 import org.kitesdk.morphline.api.Record;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.io.Resources;
 import com.typesafe.config.Config;
 
@@ -77,11 +75,8 @@ public class CheckpointFilterBuilderTest {
     }
 
     private Record buildMockRecord() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode objectNode = mapper.createObjectNode();
-        objectNode.put("date", "2014-12-16T17:32:33+01:00");
         Record newRecord=new Record();
-        newRecord.put("_attachment_body",objectNode);
+        newRecord.put("date", "2014-12-16T17:32:33+01:00");
         
         return newRecord;
     }
