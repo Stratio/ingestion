@@ -80,7 +80,8 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     protected static final String CONF_HEADERS = "headers";
     protected static final String CONF_BODY = "body";
     protected static final String CONF_HANDLER = "handler";
-    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.handler.JsonRestSourceHandler";
+    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.handler" 
+            + ".DefaultRestSourceHandler";
     protected static final String DEFAULT_JSON_PATH = "";
     protected static final String CONF_PATH = "jsonPath";
 
@@ -115,6 +116,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
                 context.getString(CONF_APPLICATION_TYPE, DEFAULT_APPLICATION_TYPE).toUpperCase());
         properties.put(CONF_HEADERS, context.getString(CONF_HEADERS, DEFAULT_HEADERS));
         properties.put(CONF_BODY, context.getString(CONF_BODY, DEFAULT_BODY));
+        properties.put(CONF_HANDLER, context.getString(CONF_HANDLER, DEFAULT_REST_HANDLER));
         handler = initHandler(context);
     }
 

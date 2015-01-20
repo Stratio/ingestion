@@ -26,6 +26,7 @@ import org.kitesdk.morphline.api.MorphlineContext;
 import org.kitesdk.morphline.api.Record;
 import org.kitesdk.morphline.base.AbstractCommand;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableMap;
 import com.stratio.ingestion.morphline.checkpointfilter.handler.CheckpointFilterHandler;
 import com.stratio.ingestion.morphline.checkpointfilter.type.CheckpointType;
@@ -109,10 +110,15 @@ public class CheckpointFilterBuilder extends AbstractCheckpointFilter implements
 
         @Override
         protected boolean doProcess(Record record) {
-            if (type.isValidCurrentCheckpoint(record.get(field).get(0), filterContext)) {
+            if (type.isValidCurrentCheckpoint(getField(record), filterContext)) {
                 return processRecord(record);
             }
             return true;
+        }
+
+        private Object getField(Record record) {
+            final ObjectNode attachment_body = (ObjectNode) record.get("_attachment_body").get(0);
+            return attachment_body.get(field).asText();
         }
 
         private boolean processRecord(Record record) {
