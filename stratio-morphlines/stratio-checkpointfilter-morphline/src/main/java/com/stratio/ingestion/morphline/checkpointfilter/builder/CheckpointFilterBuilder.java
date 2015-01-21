@@ -109,10 +109,14 @@ public class CheckpointFilterBuilder extends AbstractCheckpointFilter implements
 
         @Override
         protected boolean doProcess(Record record) {
-            if (type.isValidCurrentCheckpoint(record.get(field).get(0), filterContext)) {
+            if (type.isValidCurrentCheckpoint(getCheckpointField(record), filterContext)) {
                 return processRecord(record);
             }
             return true;
+        }
+
+        private Object getCheckpointField(Record record) {
+          return record.get(field).get(0);
         }
 
         private boolean processRecord(Record record) {

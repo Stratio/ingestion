@@ -30,7 +30,7 @@
 	<name>Stratio GeoIP morphline</name>
 
 	<properties>
-		<maxmind.version>0.3.2</maxmind.version>
+
 	</properties>
 
 	<dependencies>
@@ -46,7 +46,6 @@
 		<dependency>
 			<groupId>com.maxmind.db</groupId>
 			<artifactId>maxmind-db</artifactId>
-			<version>${maxmind.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -7,7 +7,7 @@ cache:
   directories:
     - $HOME/.m2
 install:
-  - apt-get install -y -q rpm
+  - sudo apt-get install -y -q rpm
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -f stratio-ingestion-dist/pom.xml
 script:
   - mvn test -Ptravis-test
