@@ -56,7 +56,11 @@
 		<plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.3</version>
+                <!-- XXX:
+                    Tried version 2.5.3 but it was missing JARs.
+                    See https://github.com/Stratio/flume-ingestion/issues/45
+                -->
+                <version>2.4.1</version>
                 <executions>
                     <execution>
                         <id>distro-assembly</id>
