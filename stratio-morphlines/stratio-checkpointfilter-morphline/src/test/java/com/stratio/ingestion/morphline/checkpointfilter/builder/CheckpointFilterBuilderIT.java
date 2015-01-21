@@ -31,7 +31,7 @@ import org.kitesdk.morphline.api.Record;
 import com.google.common.io.Resources;
 import com.typesafe.config.Config;
 
-public class CheckpointFilterBuilderTest {
+public class CheckpointFilterBuilderIT {
 
     private static final String MORPH_CONF_FILE = "checkpointfilter.conf";
     private static final String CHECKPOINT_FILTER = "checkpointFilter";
