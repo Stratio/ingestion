@@ -27,9 +27,8 @@ import org.kitesdk.morphline.api.Record;
  */
 public class DateCheckpointType implements CheckpointType {
 
-    private static final String CONF_DATE_PATTERN = "datePattern";
+    private static final String CONF_DATE_PATTERN = "format";
     private static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
-    private static final String CONF_CHECKPOINT_VALUE = "checkpointValue";
 
     @Override
     public String buildCheckpoint(Object fieldValue, Map<String, String> context) {
