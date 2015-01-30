@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.EventDeliveryException;
@@ -39,6 +42,9 @@ import org.slf4j.LoggerFactory;
 
 import com.stratio.ingestion.source.rest.handler.RestSourceHandler;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.client.urlconnection.HTTPSProperties;
 
 /**
  * 
@@ -84,6 +90,10 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
             + ".DefaultRestSourceHandler";
     protected static final String DEFAULT_JSON_PATH = "";
     protected static final String CONF_PATH = "jsonPath";
+    protected static final String CHECKPOINT_CONF = "checkpointConfiguration";
+
+    protected static final String CONF_PARAM_MAPPER = "urlParamMapper";
+
 
     private LinkedBlockingQueue<Event> queue = new LinkedBlockingQueue<Event>(QUEUE_SIZE);
     private int frequency;
@@ -94,8 +104,50 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     private RestSourceHandler handler;
 
     public RestSource(){
-        client =new Client();
+        ClientConfig config = new DefaultClientConfig(); // SSL configuration
+        // SSL configuration
+        config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES, new com.sun.jersey.client.urlconnection.HTTPSProperties(getHostnameVerifier(), getSSLContext()));
+        client = Client.create(config);
+        //client =new Client();
     }
+
+    private HostnameVerifier getHostnameVerifier() {
+        return new HostnameVerifier() {
+
+            @Override
+            public boolean verify(String hostname, javax.net.ssl.SSLSession sslSession) {
+                return true;
+            }
+        };
+    }
+
+    private SSLContext getSSLContext() {
+        javax.net.ssl.TrustManager x509 = new javax.net.ssl.X509TrustManager() {
+
+            @Override
+            public void checkClientTrusted(java.security.cert.X509Certificate[] arg0, String arg1) throws java.security.cert.CertificateException {
+                return;
+            }
+
+            @Override
+            public void checkServerTrusted(java.security.cert.X509Certificate[] arg0, String arg1) throws java.security.cert.CertificateException {
+                return;
+            }
+
+            @Override
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+        };
+        SSLContext ctx = null;
+        try {
+            ctx = SSLContext.getInstance("SSL");
+            ctx.init(null, new javax.net.ssl.TrustManager[]{x509}, null);
+        } catch (java.security.GeneralSecurityException ex) {
+        }
+        return ctx;
+    }
+
 
     public RestSource(Client client){
         this.client = client;
@@ -117,6 +169,8 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         properties.put(CONF_HEADERS, context.getString(CONF_HEADERS, DEFAULT_HEADERS));
         properties.put(CONF_BODY, context.getString(CONF_BODY, DEFAULT_BODY));
         properties.put(CONF_HANDLER, context.getString(CONF_HANDLER, DEFAULT_REST_HANDLER));
+        properties.put(CONF_PARAM_MAPPER, context.getString(CONF_PARAM_MAPPER));
+        properties.put(CHECKPOINT_CONF,context.getString(CHECKPOINT_CONF));
         handler = initHandler(context);
     }
 
