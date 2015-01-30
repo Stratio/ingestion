@@ -69,10 +69,10 @@ public class CassandraSinkIT {
 				cqlFile.deleteOnExit();
 
 				IOUtils.write(
-						"CREATE KEYSPACE IF NOT EXISTS keyspaceTestCassandraSinkIT WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };\n"
+						"CREATE KEYSPACE IF NOT EXISTS keyspaceTestCassandraSinkIT WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };\n\n"
 						+ "CREATE TABLE IF NOT EXISTS keyspaceTestCassandraSinkIT.tableTestCassandraSinkIT ("
 						+ "id uuid, bool_field boolean, int_field int, PRIMARY KEY (int_field)"
-						+ ")",
+						+ ");\n\n",
 						new FileOutputStream(cqlFile));
 
 				context.put("cqlFile", cqlFile.getAbsolutePath());
