@@ -2,7 +2,7 @@ mongodb:
   image: mongo:2.6
   net: bridge
 cassandra:
-  image: spotify/cassandra
+  image: poklet/cassandra
   net: bridge
 elasticsearch:
   image: dockerfile/elasticsearch

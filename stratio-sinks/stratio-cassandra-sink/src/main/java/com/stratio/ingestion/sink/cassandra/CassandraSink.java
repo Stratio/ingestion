@@ -163,6 +163,9 @@ public class CassandraSink extends AbstractSink implements Configurable {
                 lines.add(line.trim());
             }
             for (final String cql : Joiner.on(" ").join(lines).split(";")) {
+                if (cql.trim().isEmpty()) {
+                  continue;
+                }
                 this.session.execute(cql);
             }
         }

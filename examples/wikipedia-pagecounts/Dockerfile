@@ -5,7 +5,7 @@ ADD . /demo
 
 RUN echo "[stratio]" > /etc/yum.repos.d/stratio.repo &&\
 	echo "name=Stratio Package Repository" >> /etc/yum.repos.d/stratio.repo &&\
-	echo "baseurl=http://prerepository.stratio.com/TEST/1.0.0/RHEL/6.5" >> /etc/yum.repos.d/stratio.repo &&\
+	echo "baseurl=http://prerepository.stratio.com/TEST/1.1/RHEL/6.5" >> /etc/yum.repos.d/stratio.repo &&\
 	echo "gpgcheck=0" >> /etc/yum.repos.d/stratio.repo &&\
 	echo "enabled=1" >> /etc/yum.repos.d/stratio.repo
 
