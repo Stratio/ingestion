@@ -26,18 +26,20 @@ import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Charsets;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.stratio.ingestion.source.rest.exception.RestSourceException;
 
 /**
  * Created by eambrosio on 13/01/15.
  */
 public class JsonRestSourceHandler implements RestSourceHandler {
 
+    private static final Logger LOG = LoggerFactory.getLogger(JsonRestSourceHandler.class);
     protected static final String DEFAULT_JSON_PATH = "";
     protected static final String CONF_PATH = "jsonPath";
     private String path;
@@ -56,19 +58,19 @@ public class JsonRestSourceHandler implements RestSourceHandler {
         try {
             JsonNode jsonNode = mapper.readTree(body);
             if (jsonNode.isObject()) {
-                    events.add(buildSingleEvent(headers, findValue(jsonNode,path)));
+                events.add(buildSingleEvent(headers, findValue(jsonNode, path)));
             }
             if (jsonNode.isArray()) {
                 final Iterator<JsonNode> elements = jsonNode.getElements();
                 JsonNode element;
                 while (elements.hasNext()) {
                     element = elements.next();
-                    events.add(buildSingleEvent(headers, findValue(element,path)));
+                    events.add(buildSingleEvent(headers, findValue(element, path)));
                 }
             }
 
         } catch (Exception e) {
-            throw new RestSourceException("An error ocurred while response parsing", e);
+            LOG.warn("An error ocurred while response parsing. Then content is not valid: " + body);
         }
 
         return events;
@@ -77,7 +79,7 @@ public class JsonRestSourceHandler implements RestSourceHandler {
 
     private JsonNode findValue(JsonNode jsonNode, String path) {
         JsonNode node = jsonNode;
-        if (!DEFAULT_JSON_PATH.equals(path)){
+        if (!DEFAULT_JSON_PATH.equals(path)) {
             node = jsonNode.findValue(path);
         }
         return node;
