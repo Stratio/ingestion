@@ -29,8 +29,6 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.flume.Event;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -39,6 +37,7 @@ import org.quartz.SchedulerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.stratio.ingestion.source.rest.exception.RestSourceException;
 import com.stratio.ingestion.source.rest.handler.RestSourceHandler;
 import com.stratio.ingestion.source.rest.requestHandler.handler.CheckpointFilterHandler;
 import com.stratio.ingestion.source.rest.requestHandler.type.CheckpointType;
@@ -68,7 +67,9 @@ public class RequestJob implements Job {
     private Client client;
     private MediaType mediaType;
     private JobExecutionContext context;
-    private RestSourceHandler handler;
+    private RestSourceHandler restSourceHandler;
+    private CheckpointFilterHandler filterHandler;
+    private Map<String, String> checkpointFilterContext;
 
     /**
      * {@inheritDoc}
@@ -89,7 +90,7 @@ public class RequestJob implements Job {
 
             if (response != null) {
                 String responseString = response.getEntity(String.class);
-                queue.addAll(handler.getEvents(responseString, responseToHeaders(response.getHeaders())));
+                queue.addAll(restSourceHandler.getEvents(responseString, responseToHeaders(response.getHeaders())));
             }
 
         } catch (Exception e) {
@@ -97,7 +98,7 @@ public class RequestJob implements Job {
         }
     }
 
-    private WebResource.Builder getBuilder() throws Exception{
+    private WebResource.Builder getBuilder() throws Exception {
         //WebResource resource = client.resource(properties.get(URL));
         WebResource resource = client.resource(buildRestURL());
         WebResource.Builder resourceBuilder = setApplicationType(resource, properties.get(APPLICATION_TYPE));
@@ -160,22 +161,10 @@ public class RequestJob implements Job {
         queue = (LinkedBlockingQueue<Event>) context.get("queue");
         properties = (Map<String, String>) context.get("properties");
         client = (Client) context.get("client");
-        handler = (RestSourceHandler)context.get("handler");
+        restSourceHandler = (RestSourceHandler) context.get(HANDLER);
+        checkpointFilterContext = loadCheckpointContext();
+        filterHandler = getCheckPointHandler(checkpointFilterContext);
 
-    }
-
-    private RestSourceHandler getHandler(SchedulerContext context) {
-        RestSourceHandler handler = null;
-        try {
-            handler = (RestSourceHandler) Class.forName((String) context.get(HANDLER)).newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return handler;
     }
 
     /**
@@ -210,12 +199,8 @@ public class RequestJob implements Job {
             for (Map.Entry<String, Object> entry : headers.entrySet()) {
                 builder.header(entry.getKey(), entry.getValue());
             }
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RestSourceException("An error occurred during headers parsing", e);
         }
 
         return builder;
@@ -226,11 +211,11 @@ public class RequestJob implements Job {
      *
      * @return
      */
-    private String buildRestURL() throws Exception{
+    private String buildRestURL() throws Exception {
         String url = properties.get(URL);
 
-        if(properties.get(PARAM_MAPPER)!=null && !properties.get(PARAM_MAPPER).trim().equals("")) {
-            Map<String, String> checkpoint = getCheckPoint();
+        if (properties.get(PARAM_MAPPER) != null && !properties.get(PARAM_MAPPER).trim().equals("")) {
+            Map<String, String> checkpoint = getCheckPoint(checkpointFilterContext);
 
             ObjectMapper mapper = new ObjectMapper();
             try {
@@ -247,7 +232,7 @@ public class RequestJob implements Job {
             }
         }
 
-        if(url.indexOf("${'") > -1){
+        if (url.indexOf("${'") > -1) {
             //There is any not replaced param
             throw new Exception("Some params in the REST were not satisfied");
         }
@@ -258,26 +243,27 @@ public class RequestJob implements Job {
     /**
      * Sets a param value into its  placeholder
      *
-     * @param url Current REST URL
+     * @param url          Current REST URL
      * @param currentParam paramMapper specification
-     * @param checkpoint current checkpoint
+     * @param checkpoint   current checkpoint
      * @return
      */
-    private String replaceParameter(String url, JsonNode currentParam, Map<String,String> checkpoint) throws Exception{
+    private String replaceParameter(String url, JsonNode currentParam, Map<String, String> checkpoint)
+            throws Exception {
         String placeHolder = "${" + currentParam.get("name").asText() + "}";
-        if(!url.contains(placeHolder)){
+        if (!url.contains(placeHolder)) {
             return url;
         }
 
-        if(checkpoint != null && checkpoint.containsKey(currentParam.get("name").asText())){
+        if (checkpoint != null && checkpoint.containsKey(currentParam.get("name").asText())) {
             url = url.replace(placeHolder, checkpoint.get(currentParam.get("name").asText()));
             return url;
         }
 
-        if(currentParam.get("default")!=null && !currentParam.get("default").asText().trim().equals("")){
+        if (currentParam.get("default") != null && !currentParam.get("default").asText().trim().equals("")) {
             url = url.replace(placeHolder, currentParam.get("default").asText());
-        }else{
-            throw new Exception ("Can't replace the " + currentParam.get("name") + " parameter");
+        } else {
+            throw new Exception("Can't replace the " + currentParam.get("name") + " parameter");
         }
 
         return url;
@@ -285,47 +271,69 @@ public class RequestJob implements Job {
 
     /**
      * Returns the checkpoint parameter as a Map. the key is the param name
+     *
      * @return
      * @throws Exception
      */
-    private Map<String,String> getCheckPoint() throws Exception{
-        Map<String,String> context = loadContext();
-        Map<String, String> checkPoint = null;
+    private CheckpointFilterHandler getCheckPointHandler(Map<String, String> filterContext) {
+        CheckpointFilterHandler filterHandler = null;
 
-        if(context!=null) {
-            Constructor constructor = Class.forName(context.get("handler")).getConstructor(CheckpointType.class,
-                    Map.class);
-            CheckpointFilterHandler handler = (CheckpointFilterHandler) constructor
-                    .newInstance(Class.forName(context.get
-                            ("checkpointType")).newInstance(), context);
-            checkPoint = new HashMap<String, String>();
-            checkPoint.put(context.get("field"), handler.getLastCheckpoint(context));
+        if (filterContext != null) {
+            Constructor constructor = null;
+            try {
+                constructor = Class.forName(filterContext.get("handler")).getConstructor(CheckpointType.class,
+                        Map.class);
+                filterHandler = (CheckpointFilterHandler) constructor
+                        .newInstance(Class.forName(filterContext.get
+                                ("checkpointType")).newInstance(), filterContext);
+            } catch (Exception e) {
+                throw new RestSourceException("An error occurred during CheckpointFilterHandler instantiation", e);
+            }
+
         }
+        return filterHandler;
+    }
+
+    /**
+     * Returns the checkpoint parameter as a Map. the key is the param name
+     *
+     * @return
+     * @throws Exception
+     */
+    private Map<String, String> getCheckPoint(Map<String, String> filterContext) {
+        final String lastCheckpoint = filterHandler.getLastCheckpoint(filterContext);
+        Map<String, String> checkPoint = new HashMap<String, String>();
+        checkPoint.put(filterContext.get("field"), lastCheckpoint);
         return checkPoint;
     }
 
     /**
      * Loads the context configured in the parameter 'checkpointConfiguration'
+     *
      * @return
      * @throws Exception
      */
-    private Map<String,String> loadContext() throws Exception{
-        Map<String,String> context = null;
+    private Map<String, String> loadCheckpointContext() {
+        Map<String, String> context = null;
+        JsonNode jsonNode;
 
-        if(properties.get(CHECKPOINT_CONF)!=null && !properties.get(CHECKPOINT_CONF).trim().equals("")) {
-            File checkpointFile = new File(properties.get(CHECKPOINT_CONF));
-            if(checkpointFile.exists()) {
-                context = new HashMap<String, String>();
-                ObjectMapper mapper = new ObjectMapper();
-
-                JsonNode nodo = mapper.readTree(checkpointFile);
-                context.put("handler", nodo.findValue("handler").asText());
-                context.put("field", nodo.findValue("field").asText());
-                context.put("mongoUri", nodo.findValue("mongoUri").asText());
-                context.put("checkpointType", nodo.findValue("type").asText());
-                context.put("format", nodo.findValue("format").asText());
-            }else{
-                throw new Exception("The checkpoint configuration file doesn't exist");
+        if (properties.get(CHECKPOINT_CONF) != null && !properties.get(CHECKPOINT_CONF).trim().equals("")) {
+            try {
+                File checkpointFile = new File(properties.get(CHECKPOINT_CONF));
+                if (checkpointFile.exists()) {
+                    context = new HashMap<String, String>();
+                    ObjectMapper mapper = new ObjectMapper();
+                    jsonNode = mapper.readTree(checkpointFile);
+                    context.put("handler", jsonNode.findValue("handler").asText());
+                    context.put("field", jsonNode.findValue("field").asText());
+                    context.put("mongoUri", jsonNode.findValue("mongoUri").asText());
+                    context.put("checkpointType", jsonNode.findValue("type").asText());
+                    context.put("format", jsonNode.findValue("format").asText());
+                } else {
+                    throw new RestSourceException("The checkpoint configuration file doesn't exist");
+                }
+            } catch (Exception e) {
+                throw new RestSourceException("An error ocurred while json parsing. Verify checkpointConfiguration", e);
             }
         }
         return context;

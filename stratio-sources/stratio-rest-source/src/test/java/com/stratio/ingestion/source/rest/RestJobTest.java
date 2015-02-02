@@ -22,6 +22,7 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -54,7 +55,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 @RunWith(JUnit4.class)
 public class RestJobTest {
-
+    RequestJob job = spy(new RequestJob());
     Client client = mock(Client.class);
     WebResource webResource = mock(WebResource.class);
     ClientResponse response = mock(ClientResponse.class);
@@ -123,7 +124,6 @@ public class RestJobTest {
         handler = initJsonHandler("");
         when(schedulerContext.get("handler")).thenReturn(handler);
 
-        RequestJob job = new RequestJob();
         job.execute(context);
 
         assertThat(queue.size()).isEqualTo(1);
@@ -155,7 +155,6 @@ public class RestJobTest {
         handler = initJsonHandler("");
         when(schedulerContext.get("handler")).thenReturn(handler);
 
-        RequestJob job = new RequestJob();
         job.execute(context);
 
         assertThat(queue.size()).isEqualTo(2);
@@ -181,7 +180,6 @@ public class RestJobTest {
         handler = initJsonHandler("");
         when(schedulerContext.get("handler")).thenReturn(handler);
 
-        RequestJob job = new RequestJob();
         job.execute(context);
 
         assertThat(queue.size()).isEqualTo(2);
@@ -211,8 +209,7 @@ public class RestJobTest {
         when(schedulerContext.get("properties")).thenReturn(properties);
         handler = initJsonHandler("data");
         when(schedulerContext.get("handler")).thenReturn(handler);
-
-        RequestJob job = new RequestJob();
+        
         job.execute(context);
 
         assertThat(queue.size()).isEqualTo(2);
@@ -244,7 +241,6 @@ public class RestJobTest {
         handler = initDefaultHandler();
         when(schedulerContext.get("handler")).thenReturn(handler);
 
-        RequestJob job = new RequestJob();
         job.execute(context);
 
         assertEquals(queue.size(), 1);

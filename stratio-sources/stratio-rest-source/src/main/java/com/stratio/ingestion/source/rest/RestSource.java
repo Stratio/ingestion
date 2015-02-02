@@ -47,11 +47,10 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.client.urlconnection.HTTPSProperties;
 
 /**
- * 
  * Make a request to a RESTful Service.
- * 
+ * <p/>
  * Configuration parameters are:
- * 
+ * <p/>
  * <p>
  * <ul>
  * <li><tt>url</tt> <em>(string, required)</em>: target URI.</li>
@@ -65,7 +64,6 @@ import com.sun.jersey.client.urlconnection.HTTPSProperties;
  * <li><tt>body</tt> <em>(string)</em>: Body for post request. Default: "".</li>
  * </ul>
  * </p>
- * 
  */
 public class RestSource extends AbstractSource implements Configurable, PollableSource {
 
@@ -86,82 +84,37 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     protected static final String CONF_HEADERS = "headers";
     protected static final String CONF_BODY = "body";
     protected static final String CONF_HANDLER = "handler";
-    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.handler" 
+    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.handler"
             + ".DefaultRestSourceHandler";
     protected static final String DEFAULT_JSON_PATH = "";
     protected static final String CONF_PATH = "jsonPath";
     protected static final String CHECKPOINT_CONF = "checkpointConfiguration";
 
     protected static final String CONF_PARAM_MAPPER = "urlParamMapper";
-
+    protected static final String CONF_SSL = "ssl";
 
     private LinkedBlockingQueue<Event> queue = new LinkedBlockingQueue<Event>(QUEUE_SIZE);
     private int frequency;
-    private final Client client;
+    private Client client;
     private JobDetail jobDetail;
     private Scheduler scheduler;
     private Map<String, String> properties = new HashMap<String, String>();
     private RestSourceHandler handler;
 
-    public RestSource(){
-        ClientConfig config = new DefaultClientConfig(); // SSL configuration
-        // SSL configuration
-        config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES, new com.sun.jersey.client.urlconnection.HTTPSProperties(getHostnameVerifier(), getSSLContext()));
-        client = Client.create(config);
-        //client =new Client();
-    }
+    
 
-    private HostnameVerifier getHostnameVerifier() {
-        return new HostnameVerifier() {
-
-            @Override
-            public boolean verify(String hostname, javax.net.ssl.SSLSession sslSession) {
-                return true;
-            }
-        };
-    }
-
-    private SSLContext getSSLContext() {
-        javax.net.ssl.TrustManager x509 = new javax.net.ssl.X509TrustManager() {
-
-            @Override
-            public void checkClientTrusted(java.security.cert.X509Certificate[] arg0, String arg1) throws java.security.cert.CertificateException {
-                return;
-            }
-
-            @Override
-            public void checkServerTrusted(java.security.cert.X509Certificate[] arg0, String arg1) throws java.security.cert.CertificateException {
-                return;
-            }
-
-            @Override
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-        };
-        SSLContext ctx = null;
-        try {
-            ctx = SSLContext.getInstance("SSL");
-            ctx.init(null, new javax.net.ssl.TrustManager[]{x509}, null);
-        } catch (java.security.GeneralSecurityException ex) {
-        }
-        return ctx;
-    }
-
-
-    public RestSource(Client client){
+    public RestSource(Client client) {
         this.client = client;
     }
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param context
      */
     @Override
     public void configure(Context context) {
         frequency = context.getInteger(CONF_FREQUENCY, DEFAULT_FREQUENCY);
-
         properties.put(CONF_URL, context.getString(CONF_URL));
         properties.put(CONF_METHOD, context.getString(CONF_METHOD, DEFAULT_METHOD).toUpperCase());
         properties.put(CONF_APPLICATION_TYPE,
@@ -170,8 +123,23 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         properties.put(CONF_BODY, context.getString(CONF_BODY, DEFAULT_BODY));
         properties.put(CONF_HANDLER, context.getString(CONF_HANDLER, DEFAULT_REST_HANDLER));
         properties.put(CONF_PARAM_MAPPER, context.getString(CONF_PARAM_MAPPER));
-        properties.put(CHECKPOINT_CONF,context.getString(CHECKPOINT_CONF));
+        properties.put(CHECKPOINT_CONF, context.getString(CHECKPOINT_CONF));
         handler = initHandler(context);
+        client = initClient(context);
+    }
+
+    private Client initClient(Context context) {
+        Client client= new Client();
+        Boolean isSsl = context.getBoolean(CONF_SSL, Boolean.FALSE);
+        if (isSsl) {
+            ClientConfig config = new DefaultClientConfig(); // SSL configuration
+            // SSL configuration
+            config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
+                    new com.sun.jersey.client.urlconnection.HTTPSProperties(getHostnameVerifier(), getSSLContext()));
+            client = Client.create(config);
+        }
+
+        return client;
     }
 
     /**
@@ -255,7 +223,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
 
     /**
      * Look at the queue and poll and {@code Event}
-     * 
+     *
      * @return an {@code Event} or null if is empty.
      */
     private Event poll() {
@@ -272,4 +240,42 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         return null;
     }
 
+    private HostnameVerifier getHostnameVerifier() {
+        return new HostnameVerifier() {
+
+            @Override
+            public boolean verify(String hostname, javax.net.ssl.SSLSession sslSession) {
+                return true;
+            }
+        };
+    }
+
+    private SSLContext getSSLContext() {
+        javax.net.ssl.TrustManager x509 = new javax.net.ssl.X509TrustManager() {
+
+            @Override
+            public void checkClientTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
+                    throws java.security.cert.CertificateException {
+                return;
+            }
+
+            @Override
+            public void checkServerTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
+                    throws java.security.cert.CertificateException {
+                return;
+            }
+
+            @Override
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+        };
+        SSLContext ctx = null;
+        try {
+            ctx = SSLContext.getInstance("SSL");
+            ctx.init(null, new javax.net.ssl.TrustManager[] { x509 }, null);
+        } catch (java.security.GeneralSecurityException ex) {
+        }
+        return ctx;
+    }
 }
