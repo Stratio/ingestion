@@ -9,19 +9,15 @@ Configuration
 
 The available config parameters are:
 
-- table: One or more table names separated with commas. Table names must be fully qualified with keyspace (e.g. keyspace1.table1,keyspace2.table2) (Mandatory)
+- tables: One or more table names separated with commas. Table names must be fully qualified with keyspace (e.g. keyspace1.table1,keyspace2.table2) (Mandatory)
 
 - clusterName: The Cassandra's cluster name. (Default: Test Cluster)
 
-- host: The ip address or the host name of one Cassandra node. (Default: localhost)
-
-- port: The CQL native transport port. Please make sure that this port is open. (Default: 9042)
+- hosts: A comma-separated list of Cassandra hosts. It is recommended to specify at least two host of the cluster. The result of the cluster will be auto-discovered. (Default: localhost:9042)
 
 - username: Database user. (Optional)
 
 - password: Database password. (Optional)
-
-- primaryKey: The primary key of the table. (Optional)
 
 - batchSize: The size to batch insert statement. We recommend 100 as an optimum value to this property. Please do not forget increase the channel.capacity property on your channel component over the sink.batchSize property. (Default: 100)
 
@@ -56,8 +52,9 @@ The following file describes an example configuration of an flume agent that use
 
     # Describe the sink
     agent.sinks.cassandraSink.clusterName=testCluster
+    agent.sinks.cassandraSink.hosts=host1:9000,host2,192.168.1.2:9042
     agent.sinks.cassandraSink.type=com.stratio.ingestion.sink.cassandra.CassandraSink
-    agent.sinks.cassandraSink.table=keyspaceTest.tableTest
+    agent.sinks.cassandraSink.tables=keyspaceTest.tableTest
     agent.sinks.cassandraSink.itemSeparator=|
 
     # Use a channel which buffers events in file

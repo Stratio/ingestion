@@ -17,6 +17,7 @@ package com.stratio.ingestion.sink.cassandra;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,6 +48,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
+import com.google.common.net.HostAndPort;
 
 public class CassandraSink extends AbstractSink implements Configurable {
 
@@ -54,7 +56,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
 
     private static final int DEFAULT_PORT = 9042;
     private static final String DEFAULT_CLUSTER = "Test Cluster";
-    private static final String DEFAULT_HOST = "localhost";
+    private static final String DEFAULT_HOST = "localhost:9042";
     private static final int DEFAULT_BATCH_SIZE = 100;
     private static final String DEFAULT_CONSISTENCY_LEVEL = "QUORUM";
     private static final String DEFAULT_BODY_COLUMN = null;
@@ -65,10 +67,9 @@ public class CassandraSink extends AbstractSink implements Configurable {
 	private static final String DEFAULT_MAP_VALUE_TYPE = "INT";
 	private static final String DEFAULT_LIST_VALUE_TYPE = "TEXT";
 	
-    private static final String CONF_TABLE = "table";
-    private static final String CONF_PORT = "port";
+    private static final String CONF_TABLES = "tables";
+    private static final String CONF_HOSTS = "hosts";
     private static final String CONF_CLUSTER = "cluster";
-    private static final String CONF_HOST = "host";
     private static final String CONF_USERNAME = "username";
     private static final String CONF_PASSWORD = "password";
     private static final String CONF_BATCH_SIZE = "batchSize";
@@ -90,8 +91,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
     private String initCql;
     private List<String> tableStrings;
     private List<CassandraTable> tables;
-    private String host;
-    private int port;
+    private List<InetSocketAddress> contactPoints;
     private String username;
     private String password;
     private String clusterName;
@@ -110,17 +110,31 @@ public class CassandraSink extends AbstractSink implements Configurable {
 
     @Override
     public void configure(Context context) {
-        this.host = context.getString(CONF_HOST, DEFAULT_HOST);
-        this.port = context.getInteger(CONF_PORT, DEFAULT_PORT);
+
+      contactPoints = new ArrayList<InetSocketAddress>();
+      final String hosts = context.getString(CONF_HOSTS, DEFAULT_HOST);
+      for (final String host : Splitter.on(',').split(hosts)) {
+        try {
+          final HostAndPort hostAndPort = HostAndPort.fromString(host)
+              .withDefaultPort(DEFAULT_PORT);
+          contactPoints.add(
+              InetSocketAddress.createUnresolved(hostAndPort.getHostText(), hostAndPort.getPort())
+          );
+        } catch (IllegalArgumentException ex) {
+          throw new ConfigurationException("Could not parse host: " + host, ex);
+        }
+      }
+
+
         this.username = context.getString(CONF_USERNAME);
         this.password = context.getString(CONF_PASSWORD);
         this.clusterName = context.getString(CONF_CLUSTER, DEFAULT_CLUSTER);
         this.consistency = context.getString(CONF_CONSISTENCY_LEVEL, DEFAULT_CONSISTENCY_LEVEL);
         this.bodyColumn = context.getString(CONF_BODY_COLUMN, DEFAULT_BODY_COLUMN);
 
-        final String tablesString = StringUtils.trimToNull(context.getString(CONF_TABLE));
+        final String tablesString = StringUtils.trimToNull(context.getString(CONF_TABLES));
         if (tablesString == null) {
-            throw new ConfigurationException(String.format("%s is mandatory", CONF_TABLE));
+            throw new ConfigurationException(String.format("%s is mandatory", CONF_TABLES));
         }
         this.tableStrings = Arrays.asList(tablesString.split(","));
 
@@ -148,8 +162,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
 
         // Connect to Cassandra cluster
         Cluster.Builder clusterBuilder = Cluster.builder()
-            .addContactPoint(host)
-            .withPort(port);
+            .addContactPointsWithPorts(contactPoints);
         if (!Strings.isNullOrEmpty(username) && !Strings.isNullOrEmpty(password)) {
             clusterBuilder = clusterBuilder.withCredentials(username, password);
         }
