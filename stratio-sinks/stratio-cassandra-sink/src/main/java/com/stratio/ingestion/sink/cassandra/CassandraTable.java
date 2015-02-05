@@ -15,51 +15,110 @@
  */
 package com.stratio.ingestion.sink.cassandra;
 
+import static com.stratio.ingestion.sink.cassandra.CassandraUtils.parseValue;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.flume.Event;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.BatchStatement;
+import com.datastax.driver.core.ColumnMetadata;
 import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.google.common.base.Charsets;
 
 class CassandraTable {
 
-  private final Session session;
-  private final String keyspace;
-  private final String table;
-  private final EventParser parser;
-  private final ConsistencyLevel consistencyLevel;
+  private static final Logger log = LoggerFactory.getLogger(CassandraTable.class);
 
-  public CassandraTable(final Session session, final String keyspace, final String table,
-      final EventParser parser, final ConsistencyLevel consistencyLevel) {
+  private final Session session;
+  private final TableMetadata table;
+  private final ConsistencyLevel consistencyLevel;
+  private final String bodyColumn;
+
+  private final List<ColumnMetadata> columns;
+  private final int totalColumns;
+  private final List<String> primaryKeys;
+
+  public CassandraTable(
+      final Session session,
+      final TableMetadata table,
+      final ConsistencyLevel consistencyLevel,
+      final String bodyColumn) {
     this.session = session;
-    this.keyspace = keyspace;
     this.table = table;
-    this.parser = parser;
     this.consistencyLevel = consistencyLevel;
+    this.bodyColumn = bodyColumn;
+
+    this.columns = table.getColumns();
+    this.totalColumns = this.columns.size();
+    this.primaryKeys = new ArrayList<String>();
+    for (final ColumnMetadata column : table.getPrimaryKey()) {
+      primaryKeys.add(column.getName());
+    }
   }
 
   public void save(final List<Event> events) {
-    final List<CassandraRow> rows = this.parser.parse(events);
     final BatchStatement batch = new BatchStatement();
-    for (final CassandraRow row : rows) {
-      final Insert buildInsert = buildInsert(row, this.keyspace, this.table);
-      batch.add(buildInsert);
+    for (final Event event : events) {
+      final Map<String, Object> parsedEvent = parse(event);
+      if (parsedEvent.isEmpty()) {
+        log.warn("Event {} could not be mapped", event);
+        continue;
+      }
+      if (!hasPrimaryKey(parsedEvent)) {
+        break;
+      }
+      final Insert insert = QueryBuilder.insertInto(table);
+      for (final Map.Entry<String, Object> entry : parsedEvent.entrySet()) {
+        insert.value(entry.getKey(), entry.getValue());
+      }
+      if (log.isTraceEnabled()) {
+        log.trace("Preparing insert for table {}: {}", table.getName(), insert.getQueryString());
+      }
+      batch.add(insert);
+    }
+    if (batch.getStatements().isEmpty()) {
+      log.warn("No event produced insert query for table {}", table.getName());
+      return;
     }
     batch.setConsistencyLevel(consistencyLevel);
-    this.session.execute(batch);
+    session.execute(batch);
   }
 
-  @SuppressWarnings("rawtypes")
-  private static Insert buildInsert(final CassandraRow row, final String keyspace, final String table) {
-    final Insert insert = QueryBuilder.insertInto(keyspace, table);
-    for (final CassandraField field : row.getFields()) {
-      insert.value(field.getColumnName(), field.getValue());
+  private boolean hasPrimaryKey(final Map<String,Object> parsedEvent) {
+    for (final String primaryKey : primaryKeys) {
+      if (!parsedEvent.containsKey(primaryKey)) {
+        log.info("Event {} misses primary key ({}), skipping", parsedEvent, primaryKey);
+        return false;
+      }
     }
-    return insert;
+    return true;
+  }
+
+  public Map<String, Object> parse(final Event event) {
+    final Map<String, String> headers = event.getHeaders();
+    final int maxValues = Math.min(headers.size(), totalColumns);
+    final Map<String, Object> result = new HashMap<String, Object>(maxValues);
+
+    for (final ColumnMetadata column : columns) {
+      final String columnName = column.getName();
+      if (headers.containsKey(columnName) && !columnName.equals(bodyColumn)) {
+        result.put(columnName, parseValue(column.getType(), headers.get(columnName)));
+      } else if (columnName.equals(bodyColumn)) {
+        result.put(columnName, parseValue(column.getType(), new String(event.getBody(), Charsets.UTF_8)));
+      }
+    }
+
+    return result;
   }
 
 }

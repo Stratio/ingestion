@@ -11,8 +11,6 @@ The available config parameters are:
 
 - tables: One or more table names separated with commas. Table names must be fully qualified with keyspace (e.g. keyspace1.table1,keyspace2.table2) (Mandatory)
 
-- clusterName: The Cassandra's cluster name. (Default: Test Cluster)
-
 - hosts: A comma-separated list of Cassandra hosts. It is recommended to specify at least two host of the cluster. The result of the cluster will be auto-discovered. (Default: localhost:9042)
 
 - username: Database user. (Optional)
@@ -24,16 +22,6 @@ The available config parameters are:
 - consistency: The consistency level for this insert. Default value are QUORUM, available options are described here: [Cassandra data consistency](http://www.datastax.com/documentation/cassandra/2.0/cassandra/dml/dml_config_consistency_c.html) (Default: QUORUM)
 
 - cqlFile: Path to a CQL file with initialization statements such as keyspace and table creation. (Optional)
-
-- itemSeparator: (Default: ,)
-
-- mapValueSeparator: (Default: :)
-
-- mapKeyType: (Default: TEXT)
-
-- mapValueType: (Default: INT)
-
-- listValueType: (Default: TEXT)
 
 Sample Complete-flow Flume config
 =================================
@@ -51,11 +39,9 @@ The following file describes an example configuration of an flume agent that use
     agent.sources.spoolSource.spoolDir = /home/flume/data/files/
 
     # Describe the sink
-    agent.sinks.cassandraSink.clusterName=testCluster
     agent.sinks.cassandraSink.hosts=host1:9000,host2,192.168.1.2:9042
     agent.sinks.cassandraSink.type=com.stratio.ingestion.sink.cassandra.CassandraSink
     agent.sinks.cassandraSink.tables=keyspaceTest.tableTest
-    agent.sinks.cassandraSink.itemSeparator=|
 
     # Use a channel which buffers events in file
     agent.channels=fileChannel
