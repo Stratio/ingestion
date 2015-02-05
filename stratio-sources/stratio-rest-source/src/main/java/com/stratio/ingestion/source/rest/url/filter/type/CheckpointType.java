@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.source.rest.requestHandler.type;
+package com.stratio.ingestion.source.rest.url.filter.type;
 
+import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -24,5 +25,7 @@ public interface CheckpointType {
     Object buildCheckpoint(Object value, Map<String, String> context);
     Object buildDefaultCheckpoint(Map<String, String> context);
     Boolean isValidCurrentCheckpoint(Object currentCheckpoint, Map<String, String> properties);
-//    Object getCheckpoint(Record checkpointRecord, Map<String, String> filterContext);
+
+    Object parseCheckpoint(Object o, Map<String, String> context) throws ParseException;
+    //    Object getCheckpoint(Record checkpointRecord, Map<String, String> filterContext);
 }

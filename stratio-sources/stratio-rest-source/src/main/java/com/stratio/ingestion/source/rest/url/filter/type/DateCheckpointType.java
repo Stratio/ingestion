@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.source.rest.requestHandler.type;
+package com.stratio.ingestion.source.rest.url.filter.type;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+
+import com.stratio.ingestion.source.rest.url.filter.type.CheckpointType;
 
 /**
  * Created by eambrosio on 14/01/15.
@@ -61,7 +63,11 @@ public class DateCheckpointType implements CheckpointType {
         return isValid >= 0;
     }
 
-//    @Override
+    @Override public Object parseCheckpoint(Object o, Map<String, String> context) throws ParseException {
+        return new SimpleDateFormat(getDatePattern(context)).parse((String) o);
+    }
+
+    //    @Override
 //    public Object getCheckpoint(Record record, Map<String, String> context) {
 //        return record.get(context.get("field")).get(0);
 //    }

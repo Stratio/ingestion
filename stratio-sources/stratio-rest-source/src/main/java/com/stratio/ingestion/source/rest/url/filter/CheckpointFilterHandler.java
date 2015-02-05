@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.source.rest.requestHandler.handler;
+package com.stratio.ingestion.source.rest.url.filter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -22,24 +22,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.stratio.ingestion.source.rest.requestHandler.type.CheckpointType;
+import com.stratio.ingestion.source.rest.url.filter.type.CheckpointType;
 
 /**
  * Created by eambrosio on 14/01/15.
  */
-public abstract class  CheckpointFilterHandler {
+public abstract class CheckpointFilterHandler {
 
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
     final String checkpointField;
     CheckpointType checkpointType;
     Map<String, String> context;
 
-    public abstract String getLastCheckpoint(Map<String,String> context);
+    /**
+     * Obtain the last checkpoint element
+     *
+     * @param context Context properties map
+     * @return Checkpoint value
+     */
+    public abstract String getLastCheckpoint(Map<String, String> context);
+
+    /**
+     * Update the checkpoint value
+     *
+     * @param checkpoint checkpoint value
+     */
+    public abstract void updateCheckpoint(String checkpoint);
 
     public CheckpointFilterHandler(CheckpointType checkpointType, Map<String, String> context) {
         this.checkpointField = checkNotNull(context.get("field"), "Expected non-null checkpoint field");
         this.checkpointType = checkNotNull(checkpointType, "Expected non-null "
                 + "checkpoint type");
+        this.context = checkNotNull(context, "Expected non-null context");
     }
 
     public static <T> T getInstance(String fieldName, Class<T> type, Object... parameters) {

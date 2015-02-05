@@ -13,13 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.source.rest.requestHandler.handler;
+package com.stratio.ingestion.source.rest.url.filter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -29,8 +38,8 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoException;
 import com.mongodb.WriteConcern;
-import com.stratio.ingestion.source.rest.requestHandler.exception.MongoCheckpointFilterException;
-import com.stratio.ingestion.source.rest.requestHandler.type.CheckpointType;
+import com.stratio.ingestion.source.rest.url.filter.exception.MongoCheckpointFilterException;
+import com.stratio.ingestion.source.rest.url.filter.type.CheckpointType;
 
 /**
  * Created by eambrosio on 14/01/15.
@@ -86,6 +95,37 @@ public class MongoCheckpointFilterHandler extends CheckpointFilterHandler {
             checkpoint = (String) checkpointType.buildDefaultCheckpoint(context);
         }
         return checkpoint;
+    }
+
+    @Override public void updateCheckpoint(String checkpoint) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            final HashMap checkpointMap = mapper.readValue(checkpoint, HashMap.class);
+            DBObject object = new BasicDBObject();
+            object.put(checkpointField, checkpointType.parseCheckpoint(checkpointMap.get(checkpointField), context));
+            saveDocument(object);
+        } catch (JsonMappingException e) {
+            throw new MongoCheckpointFilterException("An error occurred while mapping checkpoint value to Mongo", e);
+        } catch (JsonParseException e) {
+            throw new MongoCheckpointFilterException("An error occurred while parsing checkpoint value to json", e);
+        } catch (IOException e) {
+            throw new MongoCheckpointFilterException("An error occurred while updating checkpoint value to Mongo", e);
+        } catch (ParseException e) {
+            throw new MongoCheckpointFilterException("An error occurred while parsibg checkpoint value to Mongo", e);
+        }
+
+    }
+
+    private Object formatCheckpointField(HashMap checkpointMap) {
+        try {
+            return new SimpleDateFormat(context.get("format")).parse((String) checkpointMap.get(checkpointField));
+        } catch (ParseException e) {
+            throw new MongoCheckpointFilterException("An error occurred while parsing checkpoint field.", e);
+        }
+    }
+
+    protected void saveDocument(DBObject object) {
+        mongoCollection.save(object);
     }
 
     private long countCheckpoints() {

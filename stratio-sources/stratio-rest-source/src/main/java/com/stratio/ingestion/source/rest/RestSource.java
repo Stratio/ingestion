@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.stratio.ingestion.source.rest.handler.RestSourceHandler;
+import com.stratio.ingestion.source.rest.url.UrlHandler;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -84,7 +85,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     protected static final String CONF_HEADERS = "headers";
     protected static final String CONF_BODY = "body";
     protected static final String CONF_HANDLER = "handler";
-    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.handler"
+    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.restSourceHandler"
             + ".DefaultRestSourceHandler";
     protected static final String DEFAULT_JSON_PATH = "";
     protected static final String CONF_PATH = "jsonPath";
@@ -92,6 +93,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
 
     protected static final String CONF_PARAM_MAPPER = "urlParamMapper";
     protected static final String CONF_SSL = "ssl";
+    public static final String URL_HANDLER = "urlHandler";
 
     private LinkedBlockingQueue<Event> queue = new LinkedBlockingQueue<Event>(QUEUE_SIZE);
     private int frequency;
@@ -99,7 +101,8 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     private JobDetail jobDetail;
     private Scheduler scheduler;
     private Map<String, String> properties = new HashMap<String, String>();
-    private RestSourceHandler handler;
+    private RestSourceHandler restSourceHandler;
+    private UrlHandler urlHandler;
 
     
 
@@ -124,9 +127,13 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         properties.put(CONF_HANDLER, context.getString(CONF_HANDLER, DEFAULT_REST_HANDLER));
         properties.put(CONF_PARAM_MAPPER, context.getString(CONF_PARAM_MAPPER));
         properties.put(CHECKPOINT_CONF, context.getString(CHECKPOINT_CONF));
-        handler = initHandler(context);
+        properties.put(URL_HANDLER, context.getString(URL_HANDLER));
+        restSourceHandler = initRestSourceHandler(context);
+        urlHandler = initUrlHandler(context);
         client = initClient(context);
     }
+
+   
 
     private Client initClient(Context context) {
         Client client= new Client();
@@ -163,7 +170,8 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
             scheduler.getContext().put("client", client);
             scheduler.getContext().put("queue", queue);
             scheduler.getContext().put("properties", properties);
-            scheduler.getContext().put("handler", handler);
+            scheduler.getContext().put("handler", restSourceHandler);
+            scheduler.getContext().put("urlHandler", urlHandler);
             scheduler.start();
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
@@ -172,7 +180,24 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
 
     }
 
-    private RestSourceHandler initHandler(Context context) {
+    private UrlHandler initUrlHandler(Context context) {
+        UrlHandler handler = null;
+        try {
+            handler = (UrlHandler) Class.forName((String) properties.get("urlHandler")).newInstance();
+            handler.configure(context);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        
+        return handler;
+
+    }
+
+    private RestSourceHandler initRestSourceHandler(Context context) {
         RestSourceHandler handler = null;
         try {
             handler = (RestSourceHandler) Class.forName((String) properties.get("handler")).newInstance();

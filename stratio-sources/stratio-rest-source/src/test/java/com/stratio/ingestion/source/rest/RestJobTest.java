@@ -25,8 +25,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -35,6 +37,7 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
+import org.apache.flume.event.EventBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,9 +48,12 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerContext;
 import org.quartz.SchedulerException;
 
+import com.google.common.base.Charsets;
 import com.stratio.ingestion.source.rest.handler.DefaultRestSourceHandler;
 import com.stratio.ingestion.source.rest.handler.JsonRestSourceHandler;
 import com.stratio.ingestion.source.rest.handler.RestSourceHandler;
+import com.stratio.ingestion.source.rest.url.DefaultUrlHandler;
+import com.stratio.ingestion.source.rest.url.UrlHandler;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -64,7 +70,8 @@ public class RestJobTest {
     SchedulerContext schedulerContext = mock(SchedulerContext.class);
     LinkedBlockingQueue<Event> queue;
     WebResource.Builder builder = mock(WebResource.Builder.class);
-    RestSourceHandler handler;
+    RestSourceHandler restSourceHandler;
+    UrlHandler urlHandler;
 
     @Before
     public void setUp() throws SchedulerException {
@@ -92,8 +99,10 @@ public class RestJobTest {
         when(response.getEntity(String.class)).thenReturn("XXXXX");
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        handler = initDefaultHandler();
-        when(schedulerContext.get("handler")).thenReturn(handler);
+        restSourceHandler = initDefaultHandler();
+        urlHandler = new DefaultUrlHandler();
+        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
+        when(schedulerContext.get("urlHandler")).thenReturn(urlHandler);
 
         RequestJob job = new RequestJob();
         job.execute(context);
@@ -103,8 +112,7 @@ public class RestJobTest {
     }
 
     private RestSourceHandler initDefaultHandler() {
-        RestSourceHandler defaultHandler = new DefaultRestSourceHandler();
-        return defaultHandler;
+        return new DefaultRestSourceHandler();
     }
 
     @Test
@@ -117,12 +125,15 @@ public class RestJobTest {
         properties.put(RestSource.CONF_METHOD, "GET");
         String jsonResponse = "{\"field1\": \"value1\"}";
 
+        restSourceHandler = initJsonHandler("");
+        urlHandler = new DefaultUrlHandler();
         when(client.resource(goodUrl)).thenReturn(webResource);
         when(response.getEntity(String.class)).thenReturn(jsonResponse);
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        handler = initJsonHandler("");
-        when(schedulerContext.get("handler")).thenReturn(handler);
+        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
+        when(schedulerContext.get("urlHandler")).thenReturn(urlHandler);
+
 
         job.execute(context);
 
@@ -148,12 +159,14 @@ public class RestJobTest {
         properties.put(RestSource.CONF_METHOD, "GET");
         String jsonResponse = "[{\"field1\":\"value1\"},{\"field2\":\"value2\"}]";
 
+        restSourceHandler = initJsonHandler("");
+        urlHandler = new DefaultUrlHandler();
+        when(schedulerContext.get("urlHandler")).thenReturn(urlHandler);
         when(client.resource(goodUrl)).thenReturn(webResource);
         when(response.getEntity(String.class)).thenReturn(jsonResponse);
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        handler = initJsonHandler("");
-        when(schedulerContext.get("handler")).thenReturn(handler);
+        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
 
         job.execute(context);
 
@@ -173,12 +186,14 @@ public class RestJobTest {
         properties.put(RestSource.CONF_METHOD, "GET");
         String jsonResponse = "[{\"field1\":\"value1\"},{\"field2\":\"value2\"}]";
 
+        restSourceHandler = initJsonHandler("");
+        urlHandler = new DefaultUrlHandler();
+        when(schedulerContext.get("urlHandler")).thenReturn(urlHandler);
         when(client.resource(goodUrl)).thenReturn(webResource);
         when(response.getEntity(String.class)).thenReturn(jsonResponse);
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        handler = initJsonHandler("");
-        when(schedulerContext.get("handler")).thenReturn(handler);
+        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
 
         job.execute(context);
 
@@ -203,12 +218,14 @@ public class RestJobTest {
         String jsonResponse = "[{\"field1\":\"value1\",\"field2\":\"value2\",\"data\":{\"dataField1\":1,"
                 + "\"dataField2\":\"value1\"}},{\"field1\":\"value1\",\"field2\":\"value2\",\"data\":{\"dataField1\":1,\"dataField2\":\"value2\"}}]";
 
+        urlHandler = new DefaultUrlHandler();
+        restSourceHandler = initJsonHandler("data");
+        when(schedulerContext.get("urlHandler")).thenReturn(urlHandler);
         when(client.resource(goodUrl)).thenReturn(webResource);
         when(response.getEntity(String.class)).thenReturn(jsonResponse);
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        handler = initJsonHandler("data");
-        when(schedulerContext.get("handler")).thenReturn(handler);
+        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
         
         job.execute(context);
 
@@ -236,10 +253,12 @@ public class RestJobTest {
         //Return headers
         MultivaluedMap<String, String> responseHeaders = new MultivaluedMapImpl();
         responseHeaders.put("GOODHEADER", Arrays.asList("aa", "bb"));
+        restSourceHandler = initDefaultHandler();
+        urlHandler = new DefaultUrlHandler();
+        when(schedulerContext.get("urlHandler")).thenReturn(urlHandler);
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        handler = initDefaultHandler();
-        when(schedulerContext.get("handler")).thenReturn(handler);
+        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
 
         job.execute(context);
 
@@ -247,4 +266,21 @@ public class RestJobTest {
         assertEquals(queue.poll().getHeaders().get("GOODHEADER"), "aa, bb");
     }
 
+    @Test
+    public void getLastEvent() throws Exception {
+        List<Event> events = new ArrayList<Event>();
+        events.add(buildEvent("{\"dataField1\":1,\"dataField1\":\"value1\"}"));
+        events.add(buildEvent("{\"dataField2\":2,\"dataField2\":\"value2\"}"));
+        events.add(buildEvent("{\"dataField3\":3,\"dataField3\":\"value3\"}"));
+      
+        final String lastEvent = job.getLastEvent(events);
+       
+        assertThat(lastEvent).isNotEmpty().isEqualToIgnoringCase("{\"dataField3\":3,\"dataField3\":\"value3\"}");
+
+    }
+
+    private Event buildEvent(String json) {
+        Event event = EventBuilder.withBody(json, Charsets.UTF_8, new HashMap<String, String>());
+        return event;
+    }
 }

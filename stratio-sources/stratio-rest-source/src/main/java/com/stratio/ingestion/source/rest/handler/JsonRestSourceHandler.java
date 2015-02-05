@@ -67,6 +67,7 @@ public class JsonRestSourceHandler implements RestSourceHandler {
                     element = elements.next();
                     events.add(buildSingleEvent(headers, findValue(element, path)));
                 }
+                
             }
 
         } catch (Exception e) {
