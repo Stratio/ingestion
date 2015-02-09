@@ -101,7 +101,7 @@ public class RestJobTest {
         when(schedulerContext.get("properties")).thenReturn(properties);
         restSourceHandler = initDefaultHandler();
         urlHandler = new DefaultUrlHandler();
-        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
+        when(schedulerContext.get("restSourceHandler")).thenReturn(restSourceHandler);
         when(schedulerContext.get("urlHandler")).thenReturn(urlHandler);
 
         RequestJob job = new RequestJob();
@@ -131,7 +131,7 @@ public class RestJobTest {
         when(response.getEntity(String.class)).thenReturn(jsonResponse);
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
+        when(schedulerContext.get("restSourceHandler")).thenReturn(restSourceHandler);
         when(schedulerContext.get("urlHandler")).thenReturn(urlHandler);
 
 
@@ -166,7 +166,7 @@ public class RestJobTest {
         when(response.getEntity(String.class)).thenReturn(jsonResponse);
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
+        when(schedulerContext.get("restSourceHandler")).thenReturn(restSourceHandler);
 
         job.execute(context);
 
@@ -193,7 +193,7 @@ public class RestJobTest {
         when(response.getEntity(String.class)).thenReturn(jsonResponse);
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
+        when(schedulerContext.get("restSourceHandler")).thenReturn(restSourceHandler);
 
         job.execute(context);
 
@@ -225,7 +225,7 @@ public class RestJobTest {
         when(response.getEntity(String.class)).thenReturn(jsonResponse);
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
+        when(schedulerContext.get("restSourceHandler")).thenReturn(restSourceHandler);
         
         job.execute(context);
 
@@ -258,7 +258,7 @@ public class RestJobTest {
         when(schedulerContext.get("urlHandler")).thenReturn(urlHandler);
         when(response.getHeaders()).thenReturn(responseHeaders);
         when(schedulerContext.get("properties")).thenReturn(properties);
-        when(schedulerContext.get("handler")).thenReturn(restSourceHandler);
+        when(schedulerContext.get("restSourceHandler")).thenReturn(restSourceHandler);
 
         job.execute(context);
 

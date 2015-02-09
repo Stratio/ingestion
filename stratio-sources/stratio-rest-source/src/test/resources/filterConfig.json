@@ -1,0 +1,6 @@
+{
+  "field": "date",
+  "type": "com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType",
+  "dateFormat": "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+  "mongoUri": "mongodb://127.0.0.1:27017/socialLogin.checkpoints"
+}

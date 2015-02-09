@@ -147,14 +147,14 @@ public class MongoFilterHandler extends FilterHandler {
      * @return
      * @throws Exception
      */
-    private Map<String, String> loadCheckpointContext(Map<String, String> context) {
+    protected Map<String, String> loadCheckpointContext(Map<String, String> context) {
         Map<String, String> checkpointContext = null;
         JsonNode jsonNode;
         final String string = context.get(FILTER_CONF);
 
         if (StringUtils.isNotBlank(string)) {
             try {
-                File checkpointFile = new File(context.get(FILTER_CONF));
+                File checkpointFile = new File(string);
                 if (checkpointFile.exists()) {
                     checkpointContext = new HashMap<String, String>();
                     ObjectMapper mapper = new ObjectMapper();
