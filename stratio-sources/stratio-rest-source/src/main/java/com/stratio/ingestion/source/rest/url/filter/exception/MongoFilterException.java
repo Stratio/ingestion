@@ -18,17 +18,17 @@ package com.stratio.ingestion.source.rest.url.filter.exception;
 /**
  * Created by eambrosio on 14/01/15.
  */
-public class MongoCheckpointFilterException extends RuntimeException{
+public class MongoFilterException extends RuntimeException{
 
-    public MongoCheckpointFilterException(String message) {
+    public MongoFilterException(String message) {
         super(message);
     }
 
-    public MongoCheckpointFilterException(String message, Throwable cause) {
+    public MongoFilterException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public MongoCheckpointFilterException(Throwable cause) {
+    public MongoFilterException(Throwable cause) {
         super(cause);
     }
 }

@@ -20,31 +20,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import com.stratio.ingestion.source.rest.url.filter.type.CheckpointType;
-
 /**
  * Created by eambrosio on 14/01/15.
  */
 public class DateCheckpointType implements CheckpointType {
 
-    private static final String CONF_DATE_PATTERN = "format";
-    private static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
-    private static final String CONF_CHECKPOINT_VALUE = "checkpointValue";
+    private static final String CONF_DATE_PATTERN = "dateFormat";
+    private static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
     @Override
     public String buildCheckpoint(Object fieldValue, Map<String, String> context) {
-        //        Record newRecord = new Record();
-        //        newRecord.put(context.get("field"), new SimpleDateFormat(getDatePattern(context)).format(fieldValue));
-        //        newRecord.put("checkpoint", "true");
-        //        return newRecord;
         return new SimpleDateFormat(getDatePattern(context)).format(fieldValue);
     }
 
     @Override
     public String buildDefaultCheckpoint(Map<String, String> context) {
-        //        Record record = new Record();
-        //        record.put(context.get("field"), new SimpleDateFormat(getDatePattern(context)).format(new Date(0)));
-        //        return record;
         return new SimpleDateFormat(getDatePattern(context)).format(new Date(0));
     }
 
@@ -60,7 +50,7 @@ public class DateCheckpointType implements CheckpointType {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return isValid >= 0;
+        return isValid > 0;
     }
 
     @Override public Object parseCheckpoint(Object o, Map<String, String> context) throws ParseException {

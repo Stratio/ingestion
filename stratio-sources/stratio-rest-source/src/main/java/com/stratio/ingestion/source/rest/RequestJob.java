@@ -23,6 +23,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.flume.Event;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.quartz.Job;
@@ -51,7 +52,7 @@ public class RequestJob implements Job {
     public static final String HEADERS = "headers";
     public static final String DEFAULT_REST_SOURCE_HANDLER = "com.stratio.ingestion.source"
             + ".rest.DefaultRestSourceHandler";
-    public static final String HANDLER = "handler";
+    public static final String HANDLER = "restSourceHandler";
     public static final String URL_HANDLER = "urlHandler";
 
     private Map<String, String> properties;
@@ -93,8 +94,12 @@ public class RequestJob implements Job {
     }
 
     protected String getLastEvent(List<Event> events) {
-        final Event lastEvent = events.get(events.size() - 1);
-        return new String(lastEvent.getBody());
+        String lastEventAsString = "";
+        if (CollectionUtils.isNotEmpty(events)) {
+            final Event lastEvent = events.get(events.size() - 1);
+            lastEventAsString = new String(lastEvent.getBody());
+        }
+        return lastEventAsString;
     }
 
     private WebResource.Builder getBuilder() {

@@ -15,8 +15,6 @@
  */
 package com.stratio.ingestion.source.rest.url.filter;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +25,10 @@ import com.stratio.ingestion.source.rest.url.filter.type.CheckpointType;
 /**
  * Created by eambrosio on 14/01/15.
  */
-public abstract class CheckpointFilterHandler {
+public abstract class FilterHandler {
 
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
-    final String checkpointField;
+    String checkpointField;
     CheckpointType checkpointType;
     Map<String, String> context;
 
@@ -40,7 +38,7 @@ public abstract class CheckpointFilterHandler {
      * @param context Context properties map
      * @return Checkpoint value
      */
-    public abstract String getLastCheckpoint(Map<String, String> context);
+    public abstract Map<String,String> getLastCheckpoint(Map<String, String> context);
 
     /**
      * Update the checkpoint value
@@ -49,12 +47,7 @@ public abstract class CheckpointFilterHandler {
      */
     public abstract void updateCheckpoint(String checkpoint);
 
-    public CheckpointFilterHandler(CheckpointType checkpointType, Map<String, String> context) {
-        this.checkpointField = checkNotNull(context.get("field"), "Expected non-null checkpoint field");
-        this.checkpointType = checkNotNull(checkpointType, "Expected non-null "
-                + "checkpoint type");
-        this.context = checkNotNull(context, "Expected non-null context");
-    }
+    public abstract void configure(Map<String, String> context);
 
     public static <T> T getInstance(String fieldName, Class<T> type, Object... parameters) {
         T instance = null;

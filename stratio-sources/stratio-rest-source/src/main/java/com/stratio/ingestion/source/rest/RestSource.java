@@ -84,16 +84,12 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     protected static final String CONF_APPLICATION_TYPE = "applicationType";
     protected static final String CONF_HEADERS = "headers";
     protected static final String CONF_BODY = "body";
-    protected static final String CONF_HANDLER = "handler";
+    protected static final String CONF_HANDLER = "restSourceHandler";
     protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.restSourceHandler"
             + ".DefaultRestSourceHandler";
-    protected static final String DEFAULT_JSON_PATH = "";
-    protected static final String CONF_PATH = "jsonPath";
-    protected static final String CHECKPOINT_CONF = "checkpointConfiguration";
-
-    protected static final String CONF_PARAM_MAPPER = "urlParamMapper";
     protected static final String CONF_SSL = "ssl";
-    public static final String URL_HANDLER = "urlHandler";
+    protected static final String URL_HANDLER = "urlHandler";
+    protected static final String URL_CONF = "urlHandlerConfig";
 
     private LinkedBlockingQueue<Event> queue = new LinkedBlockingQueue<Event>(QUEUE_SIZE);
     private int frequency;
@@ -104,7 +100,9 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     private RestSourceHandler restSourceHandler;
     private UrlHandler urlHandler;
 
-    
+    public RestSource() {
+        client = new Client();
+    }
 
     public RestSource(Client client) {
         this.client = client;
@@ -125,18 +123,15 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         properties.put(CONF_HEADERS, context.getString(CONF_HEADERS, DEFAULT_HEADERS));
         properties.put(CONF_BODY, context.getString(CONF_BODY, DEFAULT_BODY));
         properties.put(CONF_HANDLER, context.getString(CONF_HANDLER, DEFAULT_REST_HANDLER));
-        properties.put(CONF_PARAM_MAPPER, context.getString(CONF_PARAM_MAPPER));
-        properties.put(CHECKPOINT_CONF, context.getString(CHECKPOINT_CONF));
+        properties.put(URL_CONF, context.getString(URL_CONF));
         properties.put(URL_HANDLER, context.getString(URL_HANDLER));
         restSourceHandler = initRestSourceHandler(context);
         urlHandler = initUrlHandler(context);
         client = initClient(context);
     }
 
-   
-
     private Client initClient(Context context) {
-        Client client= new Client();
+        Client client = new Client();
         Boolean isSsl = context.getBoolean(CONF_SSL, Boolean.FALSE);
         if (isSsl) {
             ClientConfig config = new DefaultClientConfig(); // SSL configuration
@@ -170,7 +165,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
             scheduler.getContext().put("client", client);
             scheduler.getContext().put("queue", queue);
             scheduler.getContext().put("properties", properties);
-            scheduler.getContext().put("handler", restSourceHandler);
+            scheduler.getContext().put("restSourceHandler", restSourceHandler);
             scheduler.getContext().put("urlHandler", urlHandler);
             scheduler.start();
             scheduler.scheduleJob(jobDetail, trigger);
@@ -192,7 +187,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        
+
         return handler;
 
     }
@@ -200,7 +195,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     private RestSourceHandler initRestSourceHandler(Context context) {
         RestSourceHandler handler = null;
         try {
-            handler = (RestSourceHandler) Class.forName((String) properties.get("handler")).newInstance();
+            handler = (RestSourceHandler) Class.forName((String) properties.get(CONF_HANDLER)).newInstance();
             handler.configure(context);
         } catch (InstantiationException e) {
             e.printStackTrace();

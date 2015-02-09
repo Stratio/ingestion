@@ -1,11 +1,11 @@
-/*
+/**
  * Copyright (C) 2014 Stratio (http://stratio.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,45 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.stratio.ingestion.source.rest.url;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Context;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.stratio.ingestion.source.rest.exception.RestSourceException;
-import com.stratio.ingestion.source.rest.url.filter.CheckpointFilterHandler;
-import com.stratio.ingestion.source.rest.url.filter.type.CheckpointType;
+import com.stratio.ingestion.source.rest.url.filter.FilterHandler;
 
 /**
  * Created by eambrosio on 5/02/15.
  */
 public class DynamicUrlHandler implements UrlHandler {
-    private static final String CHECKPOINT_CONF = "checkpointConfiguration";
     private static final String PARAM_MAPPER = "urlParamMapper";
-    public static final String URL = "url";
+    private static final String URL = "url";
+    public static final String URL_CONF = "urlHandlerConfig";
 
-    private CheckpointFilterHandler checkpointFilterHandler;
-    private Map<String, String> checkpointFilterContext;
+    private FilterHandler filterHandler;
+    private Map<String, String> urlContext;
 
     @Override public String buildUrl(Map<String, String> properties) {
         String url = properties.get(URL);
 
-        if (properties.get(PARAM_MAPPER) != null && !properties.get(PARAM_MAPPER).trim().equals("")) {
-            Map<String, String> checkpoint = getCheckPoint(checkpointFilterContext);
-
+        if (StringUtils.isNotBlank(urlContext.get(PARAM_MAPPER))) {
+            Map<String, String> checkpoint = filterHandler.getLastCheckpoint(properties);
             ObjectMapper mapper = new ObjectMapper();
             try {
-                JsonNode jsonNode = mapper.readTree(properties.get(PARAM_MAPPER)).get("params");
+                JsonNode jsonNode = mapper.readTree(urlContext.get(PARAM_MAPPER)).get("params");
                 Iterator<JsonNode> iterator = jsonNode.getElements();
                 while (iterator.hasNext()) {
                     JsonNode currentNode = iterator.next();
@@ -63,7 +60,7 @@ public class DynamicUrlHandler implements UrlHandler {
                 throw new RestSourceException("Error during mapping url params", e);
             } catch (IOException e) {
                 throw new RestSourceException("Error during mapping url params", e);
-            }  catch (Exception e) {
+            } catch (Exception e) {
                 throw new RestSourceException("Error on param replacement", e);
             }
         }
@@ -82,18 +79,8 @@ public class DynamicUrlHandler implements UrlHandler {
      * @param filterParameters
      */
     @Override public void updateFilterParameters(String filterParameters) {
-        checkpointFilterHandler.updateCheckpoint(filterParameters);
+        filterHandler.updateCheckpoint(filterParameters);
 
-    }
-
-    /**
-     * Set up url handler dependencies
-     *
-     * @param context
-     */
-    @Override public void configure(Context context) {
-        checkpointFilterContext = loadCheckpointContext(context);
-        checkpointFilterHandler = getCheckPointHandler(checkpointFilterContext);
     }
 
     /**
@@ -113,6 +100,7 @@ public class DynamicUrlHandler implements UrlHandler {
 
         if (checkpoint != null && checkpoint.containsKey(currentParam.get("name").asText())) {
             url = url.replace(placeHolder, checkpoint.get(currentParam.get("name").asText()));
+            url = url.replace("+", "%2B");
             return url;
         }
 
@@ -126,72 +114,60 @@ public class DynamicUrlHandler implements UrlHandler {
     }
 
     /**
-     * Returns the checkpoint parameter as a Map. the key is the param name
+     * Set up url handler dependencies
      *
-     * @return
-     * @throws Exception
+     * @param context
      */
-    private CheckpointFilterHandler getCheckPointHandler(Map<String, String> filterContext) {
-        CheckpointFilterHandler filterHandler = null;
+    @Override public void configure(Context context) {
+        urlContext = loadUrlContext(context);
+        filterHandler = getFilterHandler(urlContext);
+    }
 
-        if (filterContext != null) {
-            Constructor constructor;
+    private Map<String, String> loadUrlContext(Context context) {
+        Map<String, String> urlContext = new HashMap<String, String>();
+        JsonNode jsonNode = loadConfiguration(context.getString(URL_CONF));
+        urlContext.put("filterHandler", jsonNode.findValue("filterHandler").asText());
+        urlContext.put("filterConfiguration", jsonNode.findValue("filterConfiguration").asText());
+        urlContext.put("urlParamMapper", jsonNode.findValue("urlParamMapper").asText());
+        return urlContext;
+    }
+
+    private JsonNode loadConfiguration(String jsonFile) {
+        JsonNode jsonNode = null;
+        if (StringUtils.isNotBlank(jsonFile)) {
             try {
-                constructor = Class.forName(filterContext.get("handler")).getConstructor(CheckpointType.class,
-                        Map.class);
-                filterHandler = (CheckpointFilterHandler) constructor.newInstance(Class.forName(filterContext.get
-                        ("checkpointType")).newInstance(), filterContext);
+                File checkpointFile = new File(jsonFile);
+                if (checkpointFile.exists()) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    jsonNode = mapper.readTree(checkpointFile);
+                } else {
+                    throw new RestSourceException("The configuration file doesn't exist");
+                }
             } catch (Exception e) {
-                throw new RestSourceException("An error occurred during CheckpointFilterHandler instantiation", e);
+                throw new RestSourceException("An error ocurred while json parsing. Verify configuration  file", e);
             }
-
         }
-        return filterHandler;
+        return jsonNode;
     }
 
     /**
      * Returns the checkpoint parameter as a Map. the key is the param name
-     *
-     * @return
-     * @throws Exception
-     */
-    private Map<String, String> getCheckPoint(Map<String, String> filterContext) {
-        final String lastCheckpoint = checkpointFilterHandler.getLastCheckpoint(filterContext);
-        Map<String, String> checkPoint = new HashMap<String, String>();
-        checkPoint.put(filterContext.get("field"), lastCheckpoint);
-        return checkPoint;
-    }
-
-    /**
-     * Loads the context configured in the parameter 'checkpointConfiguration'
      *
      * @param context
      * @return
      * @throws Exception
      */
-    private Map<String, String> loadCheckpointContext(Context context) {
-        Map<String, String> checkpointContext = null;
-        JsonNode jsonNode;
-
-        if (context.getString(CHECKPOINT_CONF) != null && !context.getString(CHECKPOINT_CONF).trim().equals("")) {
+    private FilterHandler getFilterHandler(Map<String, String> context) {
+        FilterHandler filterHandler = null;
+        if (context != null) {
             try {
-                File checkpointFile = new File(context.getString(CHECKPOINT_CONF));
-                if (checkpointFile.exists()) {
-                    checkpointContext = new HashMap<String, String>();
-                    ObjectMapper mapper = new ObjectMapper();
-                    jsonNode = mapper.readTree(checkpointFile);
-                    checkpointContext.put("handler", jsonNode.findValue("handler").asText());
-                    checkpointContext.put("field", jsonNode.findValue("field").asText());
-                    checkpointContext.put("mongoUri", jsonNode.findValue("mongoUri").asText());
-                    checkpointContext.put("checkpointType", jsonNode.findValue("type").asText());
-                    checkpointContext.put("format", jsonNode.findValue("format").asText());
-                } else {
-                    throw new RestSourceException("The checkpoint configuration file doesn't exist");
-                }
+                filterHandler = (FilterHandler) Class.forName(context.get("filterHandler")).newInstance();
+                filterHandler.configure(context);
             } catch (Exception e) {
-                throw new RestSourceException("An error ocurred while json parsing. Verify checkpointConfiguration", e);
+                throw new RestSourceException("An error occurred during FilterHandler instantiation", e);
             }
         }
-        return checkpointContext;
+        return filterHandler;
     }
+
 }
