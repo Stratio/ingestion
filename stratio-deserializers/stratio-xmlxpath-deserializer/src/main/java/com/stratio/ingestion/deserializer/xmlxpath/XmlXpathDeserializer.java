@@ -48,6 +48,7 @@ import org.apache.flume.Event;
 import org.apache.flume.conf.ConfigurationException;
 import org.apache.flume.event.EventBuilder;
 import org.apache.flume.serialization.EventDeserializer;
+import org.apache.flume.serialization.ResettableInputStream;
 import org.apache.flume.serialization.Seekable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +95,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
     private List<String> list = null;
     private ListIterator<String> markIt, currentIt;
 
-    XmlXpathDeserializer(Context context, InputStream in) throws IOException {
+    XmlXpathDeserializer(Context context, ResettableInputStream in) throws IOException {
         try {
           final String expression = context.getString(CONF_XPATH_EXPRESSION);
 
@@ -117,7 +118,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
           }
 
           try {
-            doc = docBuilder.parse(in);
+            doc = docBuilder.parse(new ResettableInputStreamInputStream(in));
           } catch (SAXException e) {
             throw new IOException("Cannot parse body", e);
           }
@@ -274,7 +275,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
     public static class Builder implements EventDeserializer.Builder {
 
         @Override
-        public EventDeserializer build(Context context, InputStream in) {
+        public EventDeserializer build(Context context, ResettableInputStream in) {
             if (!(in instanceof Seekable)) {
                 throw new IllegalArgumentException(
                         "Cannot use this deserializer without a Seekable input stream");

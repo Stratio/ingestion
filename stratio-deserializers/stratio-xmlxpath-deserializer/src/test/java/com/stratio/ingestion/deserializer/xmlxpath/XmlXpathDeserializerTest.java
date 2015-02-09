@@ -18,13 +18,13 @@ package com.stratio.ingestion.deserializer.xmlxpath;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.serialization.EventDeserializer;
-import org.apache.flume.serialization.SeekableFileInputStream;
+import org.apache.flume.serialization.ResettableFileInputStream;
+import org.apache.flume.serialization.ResettableInputStream;
+import org.apache.flume.serialization.TransientPositionTracker;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -37,14 +37,12 @@ import static org.junit.Assert.*;
 @RunWith(JUnit4.class)
 public class XmlXpathDeserializerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(XmlXpathDeserializerTest.class);
-
-    private InputStream getTestInputStream() throws IOException {
+    private ResettableInputStream getTestInputStream() throws IOException {
       return getTestInputStream("test.xml");
     }
 
-    private InputStream getTestInputStream(final String path) throws IOException {
-      return new SeekableFileInputStream("src/test/resources/" + path);
+    private ResettableInputStream getTestInputStream(final String path) throws IOException {
+      return new ResettableFileInputStream(new File("src/test/resources/" + path), new TransientPositionTracker("dummy"));
     }
 
     @Test
@@ -77,7 +75,7 @@ public class XmlXpathDeserializerTest {
     public void testDocument2String() throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(getTestInputStream());
+        InputSource is = new InputSource(new ResettableInputStreamInputStream(getTestInputStream()));
         Document doc = docBuilder.parse(is);
 
         Context context = new Context();
