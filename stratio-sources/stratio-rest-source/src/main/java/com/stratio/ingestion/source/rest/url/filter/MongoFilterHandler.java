@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,7 +58,7 @@ public class MongoFilterHandler extends FilterHandler {
     private DBCollection mongoCollection;
 
     @Override
-    public Map<String,String> getLastCheckpoint(Map<String, String> context) {
+    public Map<String, String> getLastCheckpoint(Map<String, String> context) {
         String checkpoint;
         DBCursor cursor;
         Object fieldValue = null;
@@ -79,7 +78,7 @@ public class MongoFilterHandler extends FilterHandler {
         } else {
             checkpoint = (String) checkpointType.buildDefaultCheckpoint(context);
         }
-        return ImmutableMap.<String,String>builder().put(checkpointField,checkpoint).build();
+        return ImmutableMap.<String, String>builder().put(checkpointField, checkpoint).build();
     }
 
     @Override public void updateCheckpoint(String checkpoint) {
@@ -105,14 +104,6 @@ public class MongoFilterHandler extends FilterHandler {
             }
         }
 
-    }
-
-    private Object formatCheckpointField(HashMap checkpointMap) {
-        try {
-            return new SimpleDateFormat(context.get("format")).parse((String) checkpointMap.get(checkpointField));
-        } catch (ParseException e) {
-            throw new MongoFilterException("An error occurred while parsing checkpoint field.", e);
-        }
     }
 
     protected void saveDocument(DBObject object) {
@@ -148,44 +139,51 @@ public class MongoFilterHandler extends FilterHandler {
      * @throws Exception
      */
     protected Map<String, String> loadCheckpointContext(Map<String, String> context) {
-        Map<String, String> checkpointContext = null;
-        JsonNode jsonNode;
-        final String string = context.get(FILTER_CONF);
-
-        if (StringUtils.isNotBlank(string)) {
-            try {
-                File checkpointFile = new File(string);
-                if (checkpointFile.exists()) {
-                    checkpointContext = new HashMap<String, String>();
-                    ObjectMapper mapper = new ObjectMapper();
-                    jsonNode = mapper.readTree(checkpointFile);
-                    checkpointContext.put("field", jsonNode.findValue("field").asText());
-                    checkpointContext.put("mongoUri", jsonNode.findValue("mongoUri").asText());
-                    checkpointContext.put("checkpointType", jsonNode.findValue("type").asText());
-                    checkpointContext.put("dateFormat", jsonNode.findValue("dateFormat").asText());
-                } else {
-                    throw new RestSourceException("The checkpoint configuration file doesn't exist");
-                }
-            } catch (Exception e) {
-                throw new RestSourceException("An error ocurred while json parsing. Verify checkpointConfiguration", e);
-            }
-        }
+        Map<String, String> checkpointContext = new HashMap<String, String>();
+        final JsonNode jsonNode = loadConfigurationFile(context.get(FILTER_CONF));
+        checkpointContext.put("field", checkNotNull(jsonNode.findValue("field").asText(), "Non-null field value "
+                + "expected"));
+        checkpointContext.put("mongoUri", checkNotNull(jsonNode.findValue("mongoUri").asText(), "Non-null mongoUri "
+                + "value expected"));
+        checkpointContext.put("checkpointType", checkNotNull(jsonNode.findValue("type").asText(), "Non-null type "
+                + "value expected"));
+        checkpointContext.put("dateFormat", checkNotNull(jsonNode.findValue("dateFormat").asText(), "Non-null "
+                + "dateFormat value expected"));
         return checkpointContext;
     }
 
-    private void initMongo(String mongoUri) {
-        this.mongoClientURI = new MongoClientURI(
-                mongoUri, MongoClientOptions.builder().writeConcern(WriteConcern.SAFE));
+    protected JsonNode loadConfigurationFile(String jsonFile) {
+        JsonNode jsonNode = null;
+        if (StringUtils.isNotBlank(jsonFile)) {
+            try {
+                File checkpointFile = new File(jsonFile);
+                if (checkpointFile.exists()) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    jsonNode = mapper.readTree(checkpointFile);
+                } else {
+                    throw new RestSourceException("The configuration file doesn't exist");
+                }
+            } catch (Exception e) {
+                throw new RestSourceException("An error ocurred while json parsing. Verify configuration  file", e);
+            }
+        }
+        return jsonNode;
+    }
+
+    protected void initMongo(String mongoUri) {
         try {
+            this.mongoClientURI = new MongoClientURI(mongoUri,
+                    MongoClientOptions.builder().writeConcern(WriteConcern.SAFE));
             this.mongoClient = new MongoClient(mongoClientURI);
+            this.mongoDb = mongoClient.getDB(checkNotNull(mongoClientURI.getDatabase(), "Non-null database expected"));
+            this.mongoCollection = mongoDb.getCollection(checkNotNull(mongoClientURI.getCollection(), "Non-null "
+                    + "collection expected"));
         } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        if (mongoClientURI.getDatabase() != null) {
-            this.mongoDb = mongoClient.getDB(mongoClientURI.getDatabase());
-        }
-        if (mongoClientURI.getCollection() != null) {
-            this.mongoCollection = mongoDb.getCollection(mongoClientURI.getCollection());
+            throw new MongoFilterException("mongo host could not be reached", e);
+        } catch (IllegalArgumentException e) {
+            throw new MongoFilterException("Valid mongo uri expected.", e);
+        } catch (NullPointerException e) {
+            throw new MongoFilterException("Non-null db/collection expected", e);
         }
     }
 }

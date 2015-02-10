@@ -17,6 +17,7 @@ package com.stratio.ingestion.source.rest.url.filter;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -29,6 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -40,7 +43,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.stratio.ingestion.source.rest.url.filter.exception.MongoFilterException;
 
-public class MongoCheckpointFilterHandlerTestIT {
+public class MongoFilterHandlerTestIT {
 
     public static final String DB_TEST = "test_MongoCheckpointFilterHandlerIT";
     public static final String DATE_FORMAT_YYYY_MM_DD_T_HH_MM_SS_XXX = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
@@ -173,12 +176,12 @@ public class MongoCheckpointFilterHandlerTestIT {
                 .thenReturn("com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType");
         doReturn(context).when(handler).loadCheckpointContext(context);
         handler.configure(context);
-        
+
         handler.updateCheckpoint(
                 "{\"date\":\"2015-02-04T16:10:00.000+0100\",\"santanderId\":\"1234567890\"}");
 
         verify(handler).saveDocument(any(DBObject.class));
-        assertThat(handler.getLastCheckpoint(context).get("date")).isEqualToIgnoringCase("2015-02-04T16:10:00" 
+        assertThat(handler.getLastCheckpoint(context).get("date")).isEqualToIgnoringCase("2015-02-04T16:10:00"
                 + ".000+0100");
     }
 
@@ -220,6 +223,67 @@ public class MongoCheckpointFilterHandlerTestIT {
 
         handler.updateCheckpoint(
                 "{\"date\":,\"santanderId\":\"1234567890\"}");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void loadCheckpointFilterWithNoValidProperties() throws IOException {
+        handler = spy(new MongoFilterHandler());
+        JsonNode jsonObject = new ObjectMapper().readTree(
+                "{\"field\":\"date\"}");
+        doReturn(jsonObject).when(handler).loadConfigurationFile(anyString());
+
+        handler.loadCheckpointContext(context);
+    }
+
+    @Test
+    public void loadCheckpointFilterWithTooMuchProperties() throws IOException {
+        handler = spy(new MongoFilterHandler());
+        JsonNode jsonObject = new ObjectMapper().readTree(
+                "{\"field\":\"date\","
+                        + "\"type\":\"com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType\","
+                        + "\"dateFormat\":\"yyyy-MM-dd'T'HH:mm:ss.SSSZ\","
+                        + "\"dateFormat2\":\"yyyy-MM-dd'T'HH:mm:ss.SSSZ\","
+                        + "\"dateFormat3\":\"yyyy-MM-dd'T'HH:mm:ss.SSSZ\","
+                        + "\"mongoUri\":\"mongodb://127.0.0.1:27017/socialLogin.checkpoints\"}");
+        doReturn(jsonObject).when(handler).loadConfigurationFile(anyString());
+
+        final Map<String, String> filterContext = handler.loadCheckpointContext(context);
+        assertThat(filterContext).isNotEmpty().hasSize(4);
+    }
+
+    @Test
+    public void loadCheckpointFilterWithValidProperties() throws IOException {
+        handler = spy(new MongoFilterHandler());
+        JsonNode jsonObject = new ObjectMapper().readTree(
+                "{\"field\":\"date\","
+                        + "\"type\":\"com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType\","
+                        + "\"dateFormat\":\"yyyy-MM-dd'T'HH:mm:ss.SSSZ\","
+                        + "\"mongoUri\":\"mongodb://127.0.0.1:27017/socialLogin.checkpoints\"}");
+        doReturn(jsonObject).when(handler).loadConfigurationFile(anyString());
+
+        final Map<String, String> filterContext = handler.loadCheckpointContext(context);
+        assertThat(filterContext).isNotEmpty().hasSize(4);
+    }
+
+    @Test(expected = MongoFilterException.class)
+    public void initMongoWithEmptyDB(){
+        handler = new MongoFilterHandler();
+        handler.initMongo("mongodb://127.0.0.1:27017/");
+
+    }
+    
+    @Test(expected = MongoFilterException.class)
+     public void initMongoWithEmptyCollection() {
+        handler = new MongoFilterHandler();
+        handler.initMongo("mongodb://127.0.0.1:27017/db");
+
+    }
+
+    @Test(expected = MongoFilterException.class)
+    public void initMongoWithEmptyMongoUri()  {
+        handler = new MongoFilterHandler();
+        handler.initMongo("");
+
     }
 
     private DBObject populateDocument() throws ParseException {
