@@ -87,7 +87,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     protected static final String CONF_HANDLER = "restSourceHandler";
     protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.restSourceHandler"
             + ".DefaultRestSourceHandler";
-    protected static final String CONF_SSL = "ssl";
+    protected static final String CONF_SKIP_SSL = "skipSsl";
     protected static final String URL_HANDLER = "urlHandler";
     protected static final String URL_CONF = "urlHandlerConfig";
 
@@ -131,17 +131,16 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     }
 
     private Client initClient(Context context) {
-        Client client = new Client();
-        Boolean isSsl = context.getBoolean(CONF_SSL, Boolean.FALSE);
-        if (isSsl) {
+        final Boolean skipSsl = context.getBoolean(CONF_SKIP_SSL, Boolean.FALSE);
+        if (skipSsl) {
             ClientConfig config = new DefaultClientConfig(); // SSL configuration
             // SSL configuration
             config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
                     new com.sun.jersey.client.urlconnection.HTTPSProperties(getHostnameVerifier(), getSSLContext()));
-            client = Client.create(config);
+            return Client.create(config);
+        } else {
+            return new Client();
         }
-
-        return client;
     }
 
     /**
