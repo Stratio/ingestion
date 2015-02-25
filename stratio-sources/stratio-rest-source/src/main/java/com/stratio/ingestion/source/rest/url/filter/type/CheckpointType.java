@@ -22,10 +22,10 @@ import java.util.Map;
  * Created by eambrosio on 14/01/15.
  */
 public interface CheckpointType {
-    Object buildCheckpoint(Object value, Map<String, String> context);
-    Object buildDefaultCheckpoint(Map<String, String> context);
+    Object buildFilter(Object value, Map<String, String> context);
+    Object buildDefaultFilter(Map<String, String> context);
     Boolean isValidCurrentCheckpoint(Object currentCheckpoint, Map<String, String> properties);
 
-    Object parseCheckpoint(Object o, Map<String, String> context) throws ParseException;
+    Object parseFilter(Object o, Map<String, String> context) throws ParseException;
     //    Object getCheckpoint(Record checkpointRecord, Map<String, String> filterContext);
 }

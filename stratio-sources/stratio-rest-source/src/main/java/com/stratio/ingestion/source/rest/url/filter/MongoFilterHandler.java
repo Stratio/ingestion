@@ -58,49 +58,45 @@ public class MongoFilterHandler extends FilterHandler {
     private DBCollection mongoCollection;
 
     @Override
-    public Map<String, String> getLastCheckpoint(Map<String, String> context) {
-        String checkpoint;
+    public Map<String, String> getLastFilter(Map<String, String> context) {
+        String filter;
         DBCursor cursor;
         Object fieldValue = null;
-        final long count = countCheckpoints();
+        final long count = countFilters();
         if (count > 0) {
             try {
                 cursor = mongoCollection.find().skip((int) (count - 1));
                 while (cursor.hasNext()) {
                     DBObject object = cursor.next();
-                    fieldValue = object.get(checkpointField);
+                    fieldValue = object.get(filterField);
                 }
-                checkpoint = (String) checkpointType.buildCheckpoint(fieldValue, context);
+                filter = (String) filterType.buildFilter(fieldValue, context);
 
             } catch (Exception e) {
                 throw new MongoFilterException("Error accesing DB. Verify db/collection name.");
             }
         } else {
-            checkpoint = (String) checkpointType.buildDefaultCheckpoint(context);
+            filter = (String) filterType.buildDefaultFilter(context);
         }
-        return ImmutableMap.<String, String>builder().put(checkpointField, checkpoint).build();
+        return ImmutableMap.<String, String>builder().put(filterField, filter).build();
     }
 
-    @Override public void updateCheckpoint(String checkpoint) {
+    @Override public void updateFilter(String filter) {
         ObjectMapper mapper = new ObjectMapper();
-        if (StringUtils.isNotEmpty(checkpoint)) {
+        if (StringUtils.isNotEmpty(filter)) {
             try {
-                final HashMap checkpointMap = mapper.readValue(checkpoint, HashMap.class);
+                final HashMap filterMap = mapper.readValue(filter, HashMap.class);
                 DBObject object = new BasicDBObject();
-                object.put(checkpointField,
-                        checkpointType.parseCheckpoint(checkpointMap.get(checkpointField), context));
+                object.put(filterField, filterType.parseFilter(filterMap.get(filterField), context));
                 saveDocument(object);
             } catch (JsonMappingException e) {
-                throw new MongoFilterException("An error occurred while mapping checkpoint value to Mongo",
-                        e);
+                throw new MongoFilterException("An error occurred while mapping filter value to Mongo", e);
             } catch (JsonParseException e) {
-                throw new MongoFilterException("An error occurred while parsing checkpoint value to json", e);
+                throw new MongoFilterException("An error occurred while parsing filter value to json", e);
             } catch (IOException e) {
-                throw new MongoFilterException("An error occurred while updating checkpoint value to Mongo",
-                        e);
+                throw new MongoFilterException("An error occurred while updating filter value to Mongo", e);
             } catch (ParseException e) {
-                throw new MongoFilterException("An error occurred while parsing checkpoint value to Mongo",
-                        e);
+                throw new MongoFilterException("An error occurred while parsing filter value to Mongo", e);
             }
         }
 
@@ -110,7 +106,7 @@ public class MongoFilterHandler extends FilterHandler {
         mongoCollection.save(object);
     }
 
-    private long countCheckpoints() {
+    private long countFilters() {
         long count = 0;
         try {
             count = mongoCollection.count();
@@ -124,10 +120,10 @@ public class MongoFilterHandler extends FilterHandler {
         context = loadCheckpointContext(contextx);
         try {
             initMongo(checkNotNull(context.get(MONGO_URI), "Expected non-null mongoUri field"));
-            checkpointType = (CheckpointType) Class.forName(context.get("checkpointType")).newInstance();
-            checkpointField = checkNotNull(context.get("field"), "Expected non-null checkpoint field");
+            filterType = (CheckpointType) Class.forName(context.get("filterType")).newInstance();
+            filterField = checkNotNull(context.get("field"), "Expected non-null filterField");
         } catch (Exception e) {
-            throw new MongoFilterException("An error occurred during checkpoint type instantiation", e);
+            throw new MongoFilterException("An error occurred during filterType instantiation", e);
         }
     }
 
@@ -145,7 +141,7 @@ public class MongoFilterHandler extends FilterHandler {
                 + "expected"));
         checkpointContext.put("mongoUri", checkNotNull(jsonNode.findValue("mongoUri").asText(), "Non-null mongoUri "
                 + "value expected"));
-        checkpointContext.put("checkpointType", checkNotNull(jsonNode.findValue("type").asText(), "Non-null type "
+        checkpointContext.put("filterType", checkNotNull(jsonNode.findValue("type").asText(), "Non-null type "
                 + "value expected"));
         checkpointContext.put("dateFormat", checkNotNull(jsonNode.findValue("dateFormat").asText(), "Non-null "
                 + "dateFormat value expected"));

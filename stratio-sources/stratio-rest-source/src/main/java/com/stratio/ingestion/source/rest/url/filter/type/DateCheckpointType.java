@@ -29,12 +29,12 @@ public class DateCheckpointType implements CheckpointType {
     private static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
     @Override
-    public String buildCheckpoint(Object fieldValue, Map<String, String> context) {
+    public String buildFilter(Object fieldValue, Map<String, String> context) {
         return new SimpleDateFormat(getDatePattern(context)).format(fieldValue);
     }
 
     @Override
-    public String buildDefaultCheckpoint(Map<String, String> context) {
+    public String buildDefaultFilter(Map<String, String> context) {
         return new SimpleDateFormat(getDatePattern(context)).format(new Date(0));
     }
 
@@ -53,7 +53,7 @@ public class DateCheckpointType implements CheckpointType {
         return isValid > 0;
     }
 
-    @Override public Object parseCheckpoint(Object o, Map<String, String> context) throws ParseException {
+    @Override public Object parseFilter(Object o, Map<String, String> context) throws ParseException {
         return new SimpleDateFormat(getDatePattern(context)).parse((String) o);
     }
 

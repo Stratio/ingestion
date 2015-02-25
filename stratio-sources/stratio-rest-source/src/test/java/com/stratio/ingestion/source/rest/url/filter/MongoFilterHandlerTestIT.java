@@ -78,7 +78,7 @@ public class MongoFilterHandlerTestIT {
         when(context.get(MONGO_URI)).thenReturn("mongodb://" + getMongoHost() + "/noExistingDB.profiles");
 
         handler = new MongoFilterHandler();
-        handler.updateCheckpoint(checkpoint);
+        handler.updateFilter(checkpoint);
     }
 
     @Test(expected = NullPointerException.class)
@@ -88,7 +88,7 @@ public class MongoFilterHandlerTestIT {
         when(context.get("field")).thenReturn("date");
 
         handler = new MongoFilterHandler();
-        handler.updateCheckpoint(checkpoint);
+        handler.updateFilter(checkpoint);
     }
 
     @Test
@@ -101,13 +101,13 @@ public class MongoFilterHandlerTestIT {
                 .thenReturn(DATE_FORMAT_YYYY_MM_DD_T_HH_MM_SS_XXX);
         when(context.get("mongoUri"))
                 .thenReturn("mongodb://" + getMongoHost() + "/noExistingDB.emptyCollection");
-        when(context.get("checkpointType"))
+        when(context.get("filterType"))
                 .thenReturn("com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType");
         handler = spy(new MongoFilterHandler());
         doReturn(context).when(handler).loadCheckpointContext(context);
         handler.configure(context);
 
-        final Map<String, String> lastCheckpoint = handler.getLastCheckpoint(context);
+        final Map<String, String> lastCheckpoint = handler.getLastFilter(context);
         assertThat(lastCheckpoint).isNotNull();
         assertThat(lastCheckpoint.get("validName"))
                 .isEqualTo(new SimpleDateFormat(DATE_FORMAT_YYYY_MM_DD_T_HH_MM_SS_XXX).format(new Date(0)));
@@ -124,13 +124,13 @@ public class MongoFilterHandlerTestIT {
         when(context.get("mongoUri"))
                 .thenReturn("mongodb://" + getMongoHost() + "/" + DB_TEST + ".emptyCollection");
         handler = new MongoFilterHandler();
-        when(context.get("checkpointType"))
+        when(context.get("filterType"))
                 .thenReturn("com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType");
         handler = spy(new MongoFilterHandler());
         doReturn(context).when(handler).loadCheckpointContext(context);
         handler.configure(context);
 
-        final Map<String, String> lastCheckpoint = handler.getLastCheckpoint(context);
+        final Map<String, String> lastCheckpoint = handler.getLastFilter(context);
         assertThat(lastCheckpoint).isNotNull();
         assertThat(lastCheckpoint.get("validName"))
                 .isEqualTo(new SimpleDateFormat(DATE_FORMAT_YYYY_MM_DD_T_HH_MM_SS_XXX).format(new Date(0)));
@@ -150,13 +150,13 @@ public class MongoFilterHandlerTestIT {
         mongoClient = new MongoClient(new MongoClientURI("mongodb://" + getMongoHost()));
         mongoClient.getDB(DB_TEST).createCollection("validCollection", null);
         mongoClient.getDB(DB_TEST).getCollection("validCollection").save(populateDocument());
-        when(context.get("checkpointType"))
+        when(context.get("filterType"))
                 .thenReturn("com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType");
         handler = spy(new MongoFilterHandler());
         doReturn(context).when(handler).loadCheckpointContext(context);
         handler.configure(context);
 
-        final Map<String, String> lastCheckpoint = handler.getLastCheckpoint(context);
+        final Map<String, String> lastCheckpoint = handler.getLastFilter(context);
         assertThat(lastCheckpoint).isNotNull();
         assertThat(lastCheckpoint.get("date")).isEqualTo("2014-12-16T16:32:33.000+0100");
     }
@@ -172,16 +172,16 @@ public class MongoFilterHandlerTestIT {
         when(context.get("mongoUri"))
                 .thenReturn("mongodb://" + getMongoHost() + "/" + DB_TEST + ".validCollection");
         handler = spy(new MongoFilterHandler());
-        when(context.get("checkpointType"))
+        when(context.get("filterType"))
                 .thenReturn("com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType");
         doReturn(context).when(handler).loadCheckpointContext(context);
         handler.configure(context);
 
-        handler.updateCheckpoint(
+        handler.updateFilter(
                 "{\"date\":\"2015-02-04T16:10:00.000+0100\",\"santanderId\":\"1234567890\"}");
 
         verify(handler).saveDocument(any(DBObject.class));
-        assertThat(handler.getLastCheckpoint(context).get("date")).isEqualToIgnoringCase("2015-02-04T16:10:00"
+        assertThat(handler.getLastFilter(context).get("date")).isEqualToIgnoringCase("2015-02-04T16:10:00"
                 + ".000+0100");
     }
 
@@ -196,12 +196,12 @@ public class MongoFilterHandlerTestIT {
         when(context.get("mongoUri"))
                 .thenReturn("mongodb://" + getMongoHost() + "/" + DB_TEST + ".validCollection");
         handler = spy(new MongoFilterHandler());
-        when(context.get("checkpointType"))
+        when(context.get("filterType"))
                 .thenReturn("com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType");
         doReturn(context).when(handler).loadCheckpointContext(context);
         handler.configure(context);
 
-        handler.updateCheckpoint(
+        handler.updateFilter(
                 "{\"date\":\"2015-02-04T16:10:00+0100\",\"santanderId\":\"1234567890\"}");
     }
 
@@ -216,12 +216,12 @@ public class MongoFilterHandlerTestIT {
         when(context.get("mongoUri"))
                 .thenReturn("mongodb://" + getMongoHost() + "/" + DB_TEST + ".validCollection");
         handler = spy(new MongoFilterHandler());
-        when(context.get("checkpointType"))
+        when(context.get("filterType"))
                 .thenReturn("com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType");
         doReturn(context).when(handler).loadCheckpointContext(context);
         handler.configure(context);
 
-        handler.updateCheckpoint(
+        handler.updateFilter(
                 "{\"date\":,\"santanderId\":\"1234567890\"}");
     }
 

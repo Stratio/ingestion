@@ -45,7 +45,7 @@ public class DynamicUrlHandler implements UrlHandler {
         String url = properties.get(URL);
 
         if (StringUtils.isNotBlank(urlContext.get(PARAM_MAPPER))) {
-            Map<String, String> checkpoint = filterHandler.getLastCheckpoint(properties);
+            Map<String, String> filter = filterHandler.getLastFilter(properties);
             ObjectMapper mapper = new ObjectMapper();
             try {
                 JsonNode jsonNode = mapper.readTree(urlContext.get(PARAM_MAPPER)).get("params");
@@ -53,7 +53,7 @@ public class DynamicUrlHandler implements UrlHandler {
                 while (iterator.hasNext()) {
                     JsonNode currentNode = iterator.next();
                     if (currentNode.get("name") != null && (!(currentNode.get("name").asText().trim().equals("")))) {
-                        url = replaceParameter(url, currentNode, checkpoint);
+                        url = replaceParameter(url, currentNode, filter);
                     }
                 }
             } catch (JsonProcessingException e) {
@@ -79,7 +79,7 @@ public class DynamicUrlHandler implements UrlHandler {
      * @param filterParameters
      */
     @Override public void updateFilterParameters(String filterParameters) {
-        filterHandler.updateCheckpoint(filterParameters);
+        filterHandler.updateFilter(filterParameters);
 
     }
 
@@ -136,10 +136,10 @@ public class DynamicUrlHandler implements UrlHandler {
         JsonNode jsonNode = null;
         if (StringUtils.isNotBlank(jsonFile)) {
             try {
-                File checkpointFile = new File(jsonFile);
-                if (checkpointFile.exists()) {
+                File filterFile = new File(jsonFile);
+                if (filterFile.exists()) {
                     ObjectMapper mapper = new ObjectMapper();
-                    jsonNode = mapper.readTree(checkpointFile);
+                    jsonNode = mapper.readTree(filterFile);
                 } else {
                     throw new RestSourceException("The configuration file doesn't exist");
                 }

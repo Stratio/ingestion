@@ -28,8 +28,8 @@ import com.stratio.ingestion.source.rest.url.filter.type.CheckpointType;
 public abstract class FilterHandler {
 
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
-    String checkpointField;
-    CheckpointType checkpointType;
+    String filterField;
+    CheckpointType filterType;
     Map<String, String> context;
 
     /**
@@ -38,14 +38,14 @@ public abstract class FilterHandler {
      * @param context Context properties map
      * @return Checkpoint value
      */
-    public abstract Map<String,String> getLastCheckpoint(Map<String, String> context);
+    public abstract Map<String,String> getLastFilter(Map<String, String> context);
 
     /**
      * Update the checkpoint value
      *
      * @param checkpoint checkpoint value
      */
-    public abstract void updateCheckpoint(String checkpoint);
+    public abstract void updateFilter(String checkpoint);
 
     public abstract void configure(Map<String, String> context);
 
