@@ -125,7 +125,7 @@ class MappingDefinition implements Serializable {
             populateDocumentType(entry, (DocumentFieldDefinition) fieldDefinition);
             break;
         default:
-            fieldDefinition = new SimpleFieldDefinition(MongoDataType.valueOf(type));
+            fieldDefinition = new SimpleFieldDefinition(entry.getKey(), MongoDataType.valueOf(type));
             populateMappedFromField(entry, (SimpleFieldDefinition) fieldDefinition);
         }
 

@@ -143,8 +143,8 @@ public class MongoSinkTest {
         assertThat(result.get("myString")).isEqualTo("bar");
         assertThat(result.get("myInt32")).isEqualTo(32);
         assertThat(result.get("myInt32")).isInstanceOf(Integer.class);
-        assertThat(result.get("myInt64")).isEqualTo(64);
-        assertThat(result.get("myInt64")).isInstanceOf(Integer.class);
+        assertThat(result.get("myInt64")).isEqualTo(64L);
+        assertThat(result.get("myInt64")).isInstanceOf(Long.class);
         assertThat(result.get("myBoolean")).isEqualTo(true);
         assertThat(result.get("myDouble")).isEqualTo(1.0);
         assertThat(result.get("myNull")).isNull();
