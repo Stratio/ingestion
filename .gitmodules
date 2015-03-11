@@ -1,3 +1,4 @@
 [submodule "flume"]
 	path = flume
 	url = https://github.com/Stratio/flume.git
+	branch = stratio-develop
