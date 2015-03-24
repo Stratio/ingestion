@@ -2,3 +2,7 @@
 	path = flume
 	url = https://github.com/Stratio/flume.git
 	branch = stratio-develop
+[submodule "doc/src/site/sphinx/_themes/stratio"]
+	path = doc/src/site/sphinx/_themes/stratio
+	url = https://github.com/Stratio/sphinx-theme-stratio.git
+	branch = master
