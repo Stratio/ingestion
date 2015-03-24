@@ -87,6 +87,7 @@ public class EventParserTest {
 
         assertThat(eventParser.parseValue(definition(MongoDataType.BINARY), "U3RyYXRpbw==")).isEqualTo(
                 "Stratio".getBytes(Charsets.UTF_8));
+
     }
 
     @Test
@@ -195,6 +196,23 @@ public class EventParserTest {
         assertThat(eventParser.parseValue(fieldDefinition, "Point1#[111.11,222.22]#Point2#[111.11,222.22]#Point3"))
                 .isEqualTo(
                         dbObject);
+    }
+
+    @Test
+    public void parseFieldMappedFromEmbeddedObject() {
+
+        EventParser eventParser = new EventParser(MappingDefinition.load("/mapping_definition_with_embedded_object"
+                + ".json"));
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("field1", "\"value1\"");
+        headers.put("object", "{\"field1\": \"embeddedValue1\", \"field2\": 2, \"embeddedObject\": { "
+                + "\"field3\": \"embeddedValue2\"}}");
+
+
+        final DBObject objectParsed = eventParser.parse(EventBuilder.withBody(new byte[0], headers));
+        assertThat(objectParsed.get("mappedField1")).isEqualTo("embeddedValue2");
+
     }
 
     private DBObject buildExpectedObject() {

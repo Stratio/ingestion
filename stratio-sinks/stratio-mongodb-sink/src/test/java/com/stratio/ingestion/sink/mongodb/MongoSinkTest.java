@@ -127,6 +127,9 @@ public class MongoSinkTest {
 
         headers.put("myString2", "baz");
 
+        headers.put("embeddedObject", "{\"fiedl1\": \"value1\",\"fiedl2\": \"value2\"}");
+        headers.put("mappedField1", "value1");
+
         Event event = EventBuilder.withBody(jsonBody.toString().getBytes(Charsets.UTF_8), headers);
         channel.put(event);
 
@@ -151,6 +154,7 @@ public class MongoSinkTest {
         assertThat(result.get("myDate")).isEqualTo(myDate);
         assertThat(result.get("myString2")).isNull();
         assertThat(result.get("myStringMapped")).isEqualTo("baz");
+        assertThat(result.get("mappedField1")).isEqualTo("value1");
     }
 
     @Test

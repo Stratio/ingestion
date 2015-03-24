@@ -164,8 +164,8 @@ class EventParser {
                     dbObject.put(fieldName, parseValue(null, fieldValue));
                 } else {
                     final String mappedName = (def.getMappedName() == null) ? def.getFieldName() : def.getMappedName();
-                    if (eventHeaders.containsKey(fieldName)) {
-                        dbObject.put(mappedName, parseValue(def, fieldValue));
+                    if (containsKey(eventHeaders, fieldName)) {
+                        dbObject.put(mappedName, parseValue(def, getFieldName(eventHeaders, fieldName)));
                     }
                 }
             }
