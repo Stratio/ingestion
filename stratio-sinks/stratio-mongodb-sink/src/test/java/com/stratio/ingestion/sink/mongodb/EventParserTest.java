@@ -209,9 +209,43 @@ public class EventParserTest {
         headers.put("object", "{\"field1\": \"embeddedValue1\", \"field2\": 2, \"embeddedObject\": { "
                 + "\"field3\": \"embeddedValue2\"}}");
 
-
         final DBObject objectParsed = eventParser.parse(EventBuilder.withBody(new byte[0], headers));
         assertThat(objectParsed.get("mappedField1")).isEqualTo("embeddedValue2");
+
+    }
+
+    @Test
+    public void parseFieldMappedFromNoValidEmbeddedObject() {
+
+        EventParser eventParser = new EventParser(MappingDefinition.load
+                ("/mapping_definition_with_no_valid_embedded_object"
+                        + ".json"));
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("field1", "\"value1\"");
+        headers.put("object", "{\"field1\": \"embeddedValue1\", \"field2\": 2, \"embeddedObject\": { "
+                + "\"field3\": \"embeddedValue2\"}}");
+
+        final DBObject objectParsed = eventParser.parse(EventBuilder.withBody(new byte[0], headers));
+        assertThat(objectParsed.get("mappedField1")).isNull();
+
+    }
+
+    @Test
+    public void parseSubFieldMappedFromInteger() {
+
+        EventParser eventParser = new EventParser(MappingDefinition.load
+                ("/mapping_definition_with_no_valid_embedded_object_2"
+                        + ".json"));
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("field1", "\"value1\"");
+        headers.put("field2", "100");
+        headers.put("object", "{\"subfield1\": \"embeddedValue1\", \"subfield2\": 2, \"embeddedObject\": { "
+                + "\"subfield3\": \"embeddedValue2\"}}");
+
+        final DBObject objectParsed = eventParser.parse(EventBuilder.withBody(new byte[0], headers));
+        assertThat(objectParsed.get("mappedField1")).isNull();
 
     }
 

@@ -1,0 +1,21 @@
+{
+  "additionalProperties": false,
+  "title": "Example Schema",
+  "bodyType": "null",
+  "bodyField": "",
+  "properties": {
+    "field1": {
+      "type": "string"
+    },
+    "field2": {
+      "type": "int32"
+    },
+    "embeddedObject": {
+      "type": "object"
+    },
+    "mappedField1":{
+      "type": "string",
+      "mappedFrom": "field2.field3"
+    }
+  }
+}

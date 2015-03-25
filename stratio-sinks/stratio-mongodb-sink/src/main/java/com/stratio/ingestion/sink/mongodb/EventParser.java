@@ -165,7 +165,10 @@ class EventParser {
                 } else {
                     final String mappedName = (def.getMappedName() == null) ? def.getFieldName() : def.getMappedName();
                     if (containsKey(eventHeaders, fieldName)) {
-                        dbObject.put(mappedName, parseValue(def, getFieldName(eventHeaders, fieldName)));
+                        final Object parsedValue = parseValue(def, getFieldName(eventHeaders, fieldName));
+                        if (parsedValue != null) {
+                            dbObject.put(mappedName, parsedValue);
+                        }
                     }
                 }
             }
@@ -174,7 +177,11 @@ class EventParser {
                 final String fieldName = def.getFieldName();
                 final String mappedName = (def.getMappedName() == null) ? def.getFieldName() : def.getMappedName();
                 if (containsKey(eventHeaders, fieldName)) {
-                    dbObject.put(mappedName, parseValue(def, getFieldName(eventHeaders, fieldName)));
+                    final Object parsedValue = parseValue(def, getFieldName(eventHeaders, fieldName));
+                    if (parsedValue != null) {
+                        dbObject.put(mappedName, parsedValue);
+                    }
+
                 }
             }
         }
@@ -184,15 +191,18 @@ class EventParser {
 
     private String getFieldName(Map<String, String> eventHeaders, String fieldName) {
         String value = null;
+        String extractedField = null;
         if (fieldName.contains(".")) {
             ObjectMapper mapper = new ObjectMapper();
             final String[] fieldNameSplitted = fieldName.split("\\.");
             try {
                 final String objectName = fieldNameSplitted[0];
                 JsonNode jsonNode = mapper.readTree(eventHeaders.get(objectName));
-                value = jsonNode.findValue(fieldNameSplitted[fieldNameSplitted.length - 1]).getTextValue();
+                extractedField = fieldNameSplitted[fieldNameSplitted.length - 1];
+                value = jsonNode.findValue(extractedField).getTextValue();
             } catch (Exception e) {
                 e.printStackTrace();
+                log.warn("An error occurred during extracting value for " + extractedField, e);
             }
         } else {
             value = eventHeaders.get(fieldName);
