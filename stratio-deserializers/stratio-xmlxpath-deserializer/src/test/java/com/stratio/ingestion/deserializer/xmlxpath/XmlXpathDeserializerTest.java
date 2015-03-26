@@ -15,12 +15,23 @@
  */
 package com.stratio.ingestion.deserializer.xmlxpath;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.serialization.EventDeserializer;
 import org.apache.flume.serialization.ResettableFileInputStream;
 import org.apache.flume.serialization.ResettableInputStream;
-import org.apache.flume.serialization.TransientPositionTracker;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,11 +39,7 @@ import org.junit.runners.JUnit4;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
-import java.util.List;
-import static org.junit.Assert.*;
+import com.stratio.ingestion.serialization.tracker.TransientPositionTracker;
 
 @RunWith(JUnit4.class)
 public class XmlXpathDeserializerTest {
