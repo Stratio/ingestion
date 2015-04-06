@@ -345,6 +345,13 @@
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
             </modules>
+            <repositories>
+			    <repository>
+			      <id>maven-twttr</id>
+			      <name>Twitter Public Maven Repo</name>
+			      <url>http://maven.twttr.com</url>
+			    </repository>
+			</repositories>
         </profile>
         <profile>
             <id>travis-test</id>
@@ -358,11 +365,4 @@
         </profile>
     </profiles>
 
-<repositories>
-    <repository>
-      <id>maven-twttr</id>
-      <name>Twitter Public Maven Repo</name>
-      <url>http://maven.twttr.com</url>
-    </repository>
-</repositories>
 </project>
