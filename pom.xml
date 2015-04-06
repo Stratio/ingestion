@@ -358,4 +358,11 @@
         </profile>
     </profiles>
 
+<repositories>
+    <repository>
+      <id>maven-twttr</id>
+      <name>Twitter Public Maven Repo</name>
+      <url>http://maven.twttr.com</url>
+    </repository>
+</repositories>
 </project>
