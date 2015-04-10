@@ -1,11 +1,11 @@
-/*
+/**
  * Copyright (C) 2014 Stratio (http://stratio.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@ package com.stratio.ingestion.sink.druid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,8 +70,8 @@ public class DruidSink extends AbstractSink implements Configurable {
     private static final String AGGREGATORS = "aggregators";
     private static final String ZOOKEEPER_LOCATION = "zookeeperLocation";
     private static final String TIMESTAMP_FIELD = "timestampField";
-    private static final String GRANULARITY = "granularity";
-    private static final String BATCH_SIZE = "5";
+    private static final String SEGMENT_GRANULARITY = "segmentGranularity";
+    private static final String BATCH_SIZE = "batchSize";
     private static final Integer DEFAULT_BATCH_SIZE = 10000;
     public static final String QUERY_GRANULARITY = "queryGranularity";
     private static final String WINDOW_PERIOD = "period";
@@ -94,7 +95,7 @@ public class DruidSink extends AbstractSink implements Configurable {
     private SinkCounter sinkCounter;
     private Integer batchSize;
     private QueryGranularity queryGranularity;
-    private Granularity granularity;
+    private Granularity segmentGranularity;
     private String period;
     private int partitions;
     private int replicants;
@@ -102,6 +103,7 @@ public class DruidSink extends AbstractSink implements Configurable {
     private int baseSleppTime;
     private int maxRetries;
     private int maxSleep;
+    private String timestampField;
 
     @Override
     public void configure(Context context) {
@@ -112,47 +114,80 @@ public class DruidSink extends AbstractSink implements Configurable {
         dimensions = Arrays.asList(context.getString(DIMENSIONS).split(","));
         //        aggregators = AggregatorsHelper.build(Arrays.asList(context.getString(AGGREGATORS).split(",")));
         aggregators = new ArrayList<AggregatorFactory>();
-        aggregators.add(new CountAggregatorFactory("fieldXX"));
+        aggregators.add(new CountAggregatorFactory("count"));
         queryGranularity = QueryGranularityHelper.getGranularity(context.getString(QUERY_GRANULARITY));
-        granularity = Granularity.valueOf(context.getString(GRANULARITY));
+        segmentGranularity = Granularity.valueOf(context.getString(SEGMENT_GRANULARITY));
         period = context.getString(WINDOW_PERIOD);
         partitions = context.getInteger(PARTITIONS);
         replicants = context.getInteger(REPLICANTS);
         // Tranquility needs to be able to extract timestamps from your object type (in this case, Map<String, Object>).
         timestamper = getTimestamper();
         discoveryPath = context.getString(DISCOVERY_PATH);
-        timestampSpec = new TimestampSpec(context.getString(TIMESTAMP_FIELD), "auto");
+        timestampField = context.getString(TIMESTAMP_FIELD);
         zookeeperLocation = context.getString(ZOOKEEPER_LOCATION);
         baseSleppTime = context.getInteger(ZOOKEEPPER_BASE_SLEEP_TIME);
         maxRetries = context.getInteger(ZOOKEEPER_MAX_RETRIES);
         maxSleep = context.getInteger(ZOOKEEPER_MAX_SLEEP);
-        curator = buildCurator();
 
         druidService = buildDruidService();
         sinkCounter = new SinkCounter(this.getName());
-        batchSize = 5;
-        //        batchSize = context.getInteger(BATCH_SIZE, DEFAULT_BATCH_SIZE);
+        batchSize = context.getInteger(BATCH_SIZE,DEFAULT_BATCH_SIZE);
     }
 
     private Service buildDruidService() {
+//        timestampSpec = new TimestampSpec(timestampField, "auto");
+//        curator = buildCurator();
+//                final DruidLocation druidLocation = DruidLocation.create(indexService, firehosePattern, dataSource);
+//                final DruidRollup druidRollup = DruidRollup
+//                        .create(DruidDimensions.specific(dimensions), aggregators, queryGranularity);
+//
+//                final ClusteredBeamTuning clusteredBeamTuning = ClusteredBeamTuning.builder()
+//                        .segmentGranularity(segmentGranularity)
+//                        .windowPeriod(new Period(period)).partitions(partitions).replicants(replicants).build();//TODO revise
+//
+//        return DruidBeams.builder(timestamper).curator(curator).discoveryPath(discoveryPath).location(
+//                druidLocation).timestampSpec(timestampSpec).rollup(druidRollup).tuning(clusteredBeamTuning).buildJavaService();
+        final Timestamper<Map<String, Object>> timestamper = new Timestamper<Map<String, Object>>() {
+            @Override
+            public DateTime timestamp(Map<String, Object> theMap) {
+                return new DateTime(theMap.get("timestamp"));
+            }
+        };
+        curator = CuratorFrameworkFactory
+                .builder()
+                .connectString("druid-server:2181")
+                .retryPolicy(new ExponentialBackoffRetry(1000, 20, 30000))
+                .build();
+        curator.start();
+        return DruidBeams.builder(timestamper)
+                .curator(curator)
+                .discoveryPath(discoveryPath)
+                .location(
+                        DruidLocation.create(
+                                indexService,
+                                firehosePattern,
+                                dataSource
+                        )
+                )
+                .timestampSpec(new TimestampSpec("timestamp", "auto"))
+                .rollup(DruidRollup.create(DruidDimensions.specific(dimensions), aggregators, queryGranularity))
+                .tuning(
+                        ClusteredBeamTuning
+                                .builder()
+                                .segmentGranularity(segmentGranularity)
+                                .windowPeriod(new Period("PT10M"))
+                                .partitions(1)
+                                .replicants(1)
+                                .build()
+                )
+                .buildJavaService();
 
-        final DruidLocation druidLocation = DruidLocation.create(indexService, firehosePattern, dataSource);
-        final DruidRollup druidRollup = DruidRollup
-                .create(DruidDimensions.specific(dimensions), aggregators, queryGranularity);
-
-        final ClusteredBeamTuning clusteredBeamTuning = ClusteredBeamTuning.builder()
-                .segmentGranularity(granularity)
-                .windowPeriod(new Period(period)).partitions(partitions).replicants(replicants).build();//TODO revise
-
-        return DruidBeams.builder(timestamper).curator(curator).discoveryPath(discoveryPath).location(
-                druidLocation).timestampSpec(timestampSpec).rollup(druidRollup).tuning(
-                clusteredBeamTuning).buildJavaService();
     }
 
     @Override
     public Status process() throws EventDeliveryException {
         List<Event> events;
-        List<Map> parsedEvents;
+        List<Map<String, Object>> parsedEvents;
         Status status = Status.BACKOFF;
         Transaction transaction = this.getChannel().getTransaction();
         try {
@@ -206,19 +241,26 @@ public class DruidSink extends AbstractSink implements Configurable {
         super.start();
     }
 
-    protected List<Map> parseEvents(List<Event> events) {
-        List<Map> parsedEvents = new ArrayList<Map>();
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String json = "";
-//        try {
-            for (Event event : events) {
-                parsedEvents.add(event.getHeaders());
+    protected List<Map<String, Object>> parseEvents(List<Event> events) {
+        List<Map<String, Object>> parsedEvents = new ArrayList<Map<String, Object>>();
+        for (Event event : events) {
+            parsedEvents.add(paseEvent(event));
+        }
+        return parsedEvents;
+    }
+
+    private Map<String, Object> paseEvent(Event event) {
+        Map<String, Object> parsedEvent = new HashMap<String, Object>();
+        final Map<String, String> headers = event.getHeaders();
+        for (String header : headers.keySet()) {
+            if (timestampField.equalsIgnoreCase(header) ) {
+                parsedEvent.put(header, Long.valueOf(headers.get(header)));
+            } else {
+                parsedEvent.put(header, headers.get(header));
             }
-//            json = objectMapper.writeValueAsString(parsedEvents);
-//        } catch (Exception e) {
-//            throw new DruidSinkException("An error occurred during parsing events", e);
-//        }
-        return parsedEvents ;
+
+        }
+        return parsedEvent;
     }
 
     private void updateSinkCounters(List<Event> events) {
@@ -239,17 +281,19 @@ public class DruidSink extends AbstractSink implements Configurable {
         return events;
     }
 
-    private void sendEvents(List<Map> events) {
+    private int sendEvents(List<Map<String, Object>> events) {
+        int sentEvents = 0;
         // Send events to Druid:
-        Integer result=0;
         final Future<Integer> numSentFuture = druidService.apply(events);
 
         // Wait for confirmation:
         try {
-            result = Await.result(numSentFuture);
+            sentEvents = Await.result(numSentFuture);
         } catch (Exception e) {
-            new DruidSinkException("An error occurred during sending events to druid", e);
+            throw new DruidSinkException("An error occurred during sending events to druid", e);
         }
+
+        return sentEvents;
     }
 
     private CuratorFramework buildCurator() {
@@ -260,6 +304,7 @@ public class DruidSink extends AbstractSink implements Configurable {
                 .retryPolicy(new ExponentialBackoffRetry(baseSleppTime, maxRetries, maxSleep))
                 .build();
         curator.start();
+
         return curator;
     }
 
