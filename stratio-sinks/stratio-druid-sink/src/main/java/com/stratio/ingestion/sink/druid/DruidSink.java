@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
@@ -243,8 +244,10 @@ public class DruidSink extends AbstractSink implements Configurable {
 
     protected List<Map<String, Object>> parseEvents(List<Event> events) {
         List<Map<String, Object>> parsedEvents = new ArrayList<Map<String, Object>>();
-        for (Event event : events) {
-            parsedEvents.add(paseEvent(event));
+        if (!CollectionUtils.isEmpty(events)) {
+            for (Event event : events) {
+                parsedEvents.add(paseEvent(event));
+            }
         }
         return parsedEvents;
     }

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 Stratio (http://stratio.com)
- * <p/>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,6 +36,8 @@ import org.apache.flume.channel.MemoryChannel;
 import org.apache.flume.conf.Configurables;
 import org.apache.flume.event.EventBuilder;
 import org.fest.assertions.Assertions;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -53,6 +55,7 @@ public class DruidSinkTest {
     private Channel channel;
     private DruidSink druidSink;
 
+    @Before
     public void setup() {
         Context channelContext = new Context();
         channelContext.put("capacity", "10000");
@@ -72,7 +75,6 @@ public class DruidSinkTest {
 
     @Test
     public void parseValidEvents() throws Exception {
-        druidSink = new DruidSink();
         List<Event> events = buildEvents();
         final List<Map<String, Object>> parsedEvents = druidSink.parseEvents(events);
         assertThat(parsedEvents).isNotNull();
@@ -82,7 +84,6 @@ public class DruidSinkTest {
 
     @Test
     public void parseEmptyEvents() throws Exception {
-        druidSink = new DruidSink();
         List<Event> events = new ArrayList<Event>();
         final List<Map<String, Object>> parsedEvents = druidSink.parseEvents(events);
         assertThat(parsedEvents).isNotNull();
@@ -90,14 +91,14 @@ public class DruidSinkTest {
 
     }
 
-    @Test(expected = DruidSinkException.class)
+    @Test
     public void parseInvalidEvents() {
-        druidSink = new DruidSink();
-        druidSink.parseEvents(null);
+        Assertions.assertThat(druidSink.parseEvents(null)).isEmpty();
 
     }
 
     @Test
+    @Ignore
     public void processValidEvents() throws EventDeliveryException {
         setup();
         Transaction tx;
@@ -117,6 +118,7 @@ public class DruidSinkTest {
     }
 
     @Test
+    @Ignore
     public void process500KValidEvents() throws EventDeliveryException {
         for (int i = 0; i < 10; i++) {
             processValidEvents();
