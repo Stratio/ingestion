@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 Stratio (http://stratio.com)
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,6 @@
 package com.stratio.ingestion.sink.druid;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,13 +54,12 @@ public class EventParser {
             parsedEvent = new HashMap<String, Object>();
             for (String header : headers.keySet()) {
                 if (timestampField.equalsIgnoreCase(header)) {
-                    //                    parsedEvent.put(header, Long.valueOf(headers.get(header)));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    parsedEvent.put(header, Long.valueOf(new Date().getTime()));
+                    parsedEvent.put(header, Long.valueOf(headers.get(header)));
+                    //                    try {
+                    //                        Thread.sleep(1000);
+                    //                    } catch (InterruptedException e) {
+                    //                        e.printStackTrace();
+                    //                    }
                 } else {
                     parsedEvent.put(header, headers.get(header));
                 }
