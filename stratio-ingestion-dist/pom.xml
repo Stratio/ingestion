@@ -84,16 +84,16 @@
                 <version>1.0-alpha-9</version>
                 <inherited>false</inherited>
                 <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <id>package-unix</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>package-deb</goal>
-                            <goal>package-rpm</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>package-unix</id>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>package-deb</goal>-->
+                            <!--<goal>package-rpm</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
                 <configuration>
                     <contact>Stratio</contact>
                     <contactEmail>ingestion@stratio.com</contactEmail>
