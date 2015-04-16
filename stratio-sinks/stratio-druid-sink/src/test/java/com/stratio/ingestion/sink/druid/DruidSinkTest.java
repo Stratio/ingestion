@@ -15,13 +15,9 @@
  */
 package com.stratio.ingestion.sink.druid;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -57,58 +53,36 @@ public class DruidSinkTest {
 
     @Before
     public void setup() {
+        //        Context channelContext = new Context();
+        //        channelContext.put("checkpointDir","data/check");
+        //        channelContext.put("dataDirs","data/data");
+        //        channelContext.put("capacity","1000");
+        //        channelContext.put("transactionCapacity","100");
+        //        channelContext.put("checkpointInterval","300");
+        //        channel = new FileChannel();
         Context channelContext = new Context();
         channelContext.put("capacity", "10000");
         channelContext.put("transactionCapacity", "5000");
-
         channel = new MemoryChannel();
         channel.setName("junitChannel");
         Configurables.configure(channel, channelContext);
+        channel.start();
 
         druidSink = new DruidSink();
         druidSink.setChannel(channel);
-
         druidSink.configure(getMockContext());
-        channel.start();
         druidSink.start();
-    }
-
-    @Test
-    public void parseValidEvents() throws Exception {
-        List<Event> events = buildEvents();
-        final List<Map<String, Object>> parsedEvents = druidSink.parseEvents(events);
-        assertThat(parsedEvents).isNotNull();
-        assertThat(parsedEvents.size()).isEqualTo(2);
-
-    }
-
-    @Test
-    public void parseEmptyEvents() throws Exception {
-        List<Event> events = new ArrayList<Event>();
-        final List<Map<String, Object>> parsedEvents = druidSink.parseEvents(events);
-        assertThat(parsedEvents).isNotNull();
-        assertThat(parsedEvents.size()).isEqualTo(0);
-
-    }
-
-    @Test
-    public void parseInvalidEvents() {
-        Assertions.assertThat(druidSink.parseEvents(null)).isEmpty();
-
     }
 
     @Test
     @Ignore
     public void processValidEvents() throws EventDeliveryException {
-        setup();
-        Transaction tx;
-
-        tx = channel.getTransaction();
+        Transaction tx = channel.getTransaction();
         tx.begin();
-        getNTrackerEvents(5000);
+        getNTrackerEvents(1000);
         tx.commit();
         tx.close();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             druidSink.process();
         }
 
@@ -223,26 +197,4 @@ public class DruidSinkTest {
         return Maps.fromProperties(properties);
     }
 
-    private List<Event> buildEvents() {
-        List<Event> events = new ArrayList<Event>();
-        events.add(createEvent("0"));
-        events.add(createEvent("1"));
-
-        return events;
-    }
-
-    private Event createEvent(String index) {
-        ObjectNode jsonBody = new ObjectNode(JsonNodeFactory.instance);
-        jsonBody.put("field1" + index, "foo");
-        jsonBody.put("field2" + index, 32);
-
-        Map<String, String> headers = new HashMap<String, String>();
-        headers.put("header1" + index, "bar");
-        headers.put("header2" + index, "64");
-        headers.put("header3" + index, "true");
-        headers.put("header4" + index, "1.0");
-        headers.put("header5" + index, null);
-
-        return EventBuilder.withBody(jsonBody.toString().getBytes(Charsets.UTF_8), headers);
-    }
 }

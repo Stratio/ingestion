@@ -18,11 +18,9 @@ package com.stratio.ingestion.sink.druid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
@@ -33,6 +31,7 @@ import org.apache.flume.Event;
 import org.apache.flume.EventDeliveryException;
 import org.apache.flume.Transaction;
 import org.apache.flume.conf.Configurable;
+import org.apache.flume.event.EventBuilder;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
 import org.joda.time.DateTime;
@@ -40,6 +39,9 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.base.Charsets;
 import com.metamx.common.Granularity;
 import com.metamx.tranquility.beam.ClusteredBeamTuning;
 import com.metamx.tranquility.druid.DruidBeams;
@@ -83,7 +85,6 @@ public class DruidSink extends AbstractSink implements Configurable {
     private static final String ZOOKEEPER_MAX_SLEEP = "maxSleep";
 
     private Service druidService;
-    private Timestamper<? extends Object> timestamper;
     private CuratorFramework curator;
     private String discoveryPath;
     private String indexService;
@@ -105,6 +106,7 @@ public class DruidSink extends AbstractSink implements Configurable {
     private int maxRetries;
     private int maxSleep;
     private String timestampField;
+    private EventParser eventParser;
 
     @Override
     public void configure(Context context) {
@@ -122,7 +124,6 @@ public class DruidSink extends AbstractSink implements Configurable {
         partitions = context.getInteger(PARTITIONS);
         replicants = context.getInteger(REPLICANTS);
         // Tranquility needs to be able to extract timestamps from your object type (in this case, Map<String, Object>).
-        timestamper = getTimestamper();
         discoveryPath = context.getString(DISCOVERY_PATH);
         timestampField = context.getString(TIMESTAMP_FIELD);
         zookeeperLocation = context.getString(ZOOKEEPER_LOCATION);
@@ -132,22 +133,25 @@ public class DruidSink extends AbstractSink implements Configurable {
 
         druidService = buildDruidService();
         sinkCounter = new SinkCounter(this.getName());
-        batchSize = context.getInteger(BATCH_SIZE,DEFAULT_BATCH_SIZE);
+        batchSize = context.getInteger(BATCH_SIZE, DEFAULT_BATCH_SIZE);
+        eventParser = new EventParser(timestampField);
     }
 
     private Service buildDruidService() {
-//        timestampSpec = new TimestampSpec(timestampField, "auto");
-//        curator = buildCurator();
-//                final DruidLocation druidLocation = DruidLocation.create(indexService, firehosePattern, dataSource);
-//                final DruidRollup druidRollup = DruidRollup
-//                        .create(DruidDimensions.specific(dimensions), aggregators, queryGranularity);
-//
-//                final ClusteredBeamTuning clusteredBeamTuning = ClusteredBeamTuning.builder()
-//                        .segmentGranularity(segmentGranularity)
-//                        .windowPeriod(new Period(period)).partitions(partitions).replicants(replicants).build();//TODO revise
-//
-//        return DruidBeams.builder(timestamper).curator(curator).discoveryPath(discoveryPath).location(
-//                druidLocation).timestampSpec(timestampSpec).rollup(druidRollup).tuning(clusteredBeamTuning).buildJavaService();
+        //        curator = buildCurator();
+        //        final TimestampSpec timestampSpec = new TimestampSpec(timestampField, "auto");
+        //        final Timestamper<Map<String, Object>> timestamper = getTimestamper();
+        //        final DruidLocation druidLocation = DruidLocation.create(indexService, firehosePattern, dataSource);
+        //        final DruidRollup druidRollup = DruidRollup
+        //                .create(DruidDimensions.specific(dimensions), aggregators, queryGranularity);
+        //        final ClusteredBeamTuning clusteredBeamTuning = ClusteredBeamTuning.builder()
+        //                .segmentGranularity(segmentGranularity)
+        //                .windowPeriod(new Period(period)).partitions(partitions).replicants(replicants).build();//TODO revise
+        //
+        //        return DruidBeams.builder(timestamper).curator(curator).discoveryPath(discoveryPath).location(
+        //                druidLocation).timestampSpec(timestampSpec).rollup(druidRollup).tuning(clusteredBeamTuning)
+        //                .buildJavaService();
+
         final Timestamper<Map<String, Object>> timestamper = new Timestamper<Map<String, Object>>() {
             @Override
             public DateTime timestamp(Map<String, Object> theMap) {
@@ -176,7 +180,7 @@ public class DruidSink extends AbstractSink implements Configurable {
                         ClusteredBeamTuning
                                 .builder()
                                 .segmentGranularity(segmentGranularity)
-                                .windowPeriod(new Period("PT10M"))
+                                .windowPeriod(new Period("PT1M"))
                                 .partitions(1)
                                 .replicants(1)
                                 .build()
@@ -197,7 +201,7 @@ public class DruidSink extends AbstractSink implements Configurable {
             status = Status.READY;
             if (!events.isEmpty()) {
                 updateSinkCounters(events);
-                parsedEvents = parseEvents(events);
+                parsedEvents = eventParser.parse(events);
                 sendEvents(parsedEvents);
                 sinkCounter.addToEventDrainSuccessCount(events.size());
             } else {
@@ -242,30 +246,6 @@ public class DruidSink extends AbstractSink implements Configurable {
         super.start();
     }
 
-    protected List<Map<String, Object>> parseEvents(List<Event> events) {
-        List<Map<String, Object>> parsedEvents = new ArrayList<Map<String, Object>>();
-        if (!CollectionUtils.isEmpty(events)) {
-            for (Event event : events) {
-                parsedEvents.add(paseEvent(event));
-            }
-        }
-        return parsedEvents;
-    }
-
-    private Map<String, Object> paseEvent(Event event) {
-        Map<String, Object> parsedEvent = new HashMap<String, Object>();
-        final Map<String, String> headers = event.getHeaders();
-        for (String header : headers.keySet()) {
-            if (timestampField.equalsIgnoreCase(header) ) {
-                parsedEvent.put(header, Long.valueOf(headers.get(header)));
-            } else {
-                parsedEvent.put(header, headers.get(header));
-            }
-
-        }
-        return parsedEvent;
-    }
-
     private void updateSinkCounters(List<Event> events) {
         if (events.size() == batchSize) {
             sinkCounter.incrementBatchCompleteCount();
@@ -276,12 +256,27 @@ public class DruidSink extends AbstractSink implements Configurable {
 
     private List<Event> takeEventsFromChannel(Channel channel, long eventsToTake) throws ChannelException {
         List<Event> events = new ArrayList<Event>();
+        Event event;
         for (int i = 0; i < eventsToTake; i++) {
-            events.add(channel.take());
-            sinkCounter.incrementEventDrainAttemptCount();
+            event = buildEvent(channel);
+            events.add(event);
+            if (event != null) {
+                sinkCounter.incrementEventDrainAttemptCount();
+            }
         }
         events.removeAll(Collections.singleton(null));
         return events;
+    }
+
+    private Event buildEvent(Channel channel) {
+        final Event takenEvent = channel.take();
+        final ObjectNode objectNode = new ObjectNode(JsonNodeFactory.instance);
+        Event event = null;
+        if (takenEvent != null) {
+            event = EventBuilder.withBody(objectNode.toString().getBytes(Charsets.UTF_8),
+                    takenEvent.getHeaders());
+        }
+        return event;
     }
 
     private int sendEvents(List<Map<String, Object>> events) {
