@@ -1,0 +1,12 @@
+{
+  "properties" : {
+    "@timestamp": { "type": "date", "store": true },
+    "proj_lang": { "type": "string", "index": "not_analyzed" },
+    "title": { "type": "string", "index": "not_analyzed", "store": true },
+    "reqs": { "type": "integer", "store": true },
+    "size": { "type": "integer", "store": false, "index": "no" },
+    "timestamp": { "type": "date" }
+  },
+  "_source": { "enabled": true },
+  "_all": { "enabled": false }
+}
