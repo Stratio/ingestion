@@ -60,6 +60,7 @@ fi
 ################
 ## NODE & NPM ##
 ################
+echo -e 'Installing Node.js'
 yum_install nodejs npm --enablerepo=epel
 
 ##############
@@ -81,6 +82,7 @@ tar xf "${DOWNLOADS_DIR}/${KIBANA_4_TARBALL}"
 #################
 ## ELASTICDUMP ##
 #################
+echo -e 'Installing elasticdump'
 sudo npm install elasticdump -g
 
 #######################
@@ -95,5 +97,6 @@ chmod -R 777 "${KIBANA_INSTALL}/kibana/app/dashboards"
 ## KIBANA 4 DASHBOARDS ##
 #########################
 
-elasticdump --input /opt/sds/ingestion/examples/airlines-map/dashboards/us-flights.json --output=http://localhost:9200/.kibana --type=data
+echo -e 'Installing Kibana 4 dashboards...'
+#elasticdump --input /opt/sds/ingestion/examples/airlines-map/dashboards/us-flights.json --output=http://localhost:9200/.kibana --type=data
 
