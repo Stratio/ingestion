@@ -78,6 +78,8 @@ download "${KIBANA_4_DOWNLOAD_URL}" "${DOWNLOADS_DIR}/${KIBANA_4_TARBALL}"
 echo -e 'Extracting Kibana 4...'
 cd "${KIBANA_4_INSTALL}"
 tar xf "${DOWNLOADS_DIR}/${KIBANA_4_TARBALL}"
+echo -e 'Starting Kibana 4...'
+./${KIBANA_4_INSTALL}/kibana-${KIBANA_4_VERSION}-linux-x64/kibana &
 
 #################
 ## ELASTICDUMP ##
