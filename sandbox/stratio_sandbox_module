@@ -57,6 +57,32 @@ if [ ! -e "/var/www/html/kibana" ]; then
 	ln -s kibana-${KIBANA_VERSION} kibana
 fi
 
+################
+## NODE & NPM ##
+################
+yum_install nodejs npm --enablerepo=epel
+
+##############
+## KIBANA 4 ##
+##############
+
+KIBANA_4_VERSION=4.0.2
+KIBANA_4_INSTALL=/opt/sds
+KIBANA_4_TARBALL="kibana-${KIBANA_4_VERSION}-linux-x64.tar.gz"
+KIBANA_4_DOWNLOAD_URL="https://download.elastic.co/kibana/kibana/${KIBANA_4_TARBALL}"
+
+echo -e 'Downloading Kibana 4...'
+mkdir -p "${DOWNLOADS_DIR}"
+download "${KIBANA_4_DOWNLOAD_URL}" "${DOWNLOADS_DIR}/${KIBANA_4_TARBALL}"
+echo -e 'Extracting Kibana 4...'
+cd "${KIBANA_4_INSTALL}"
+tar xf "${DOWNLOADS_DIR}/${KIBANA_4_TARBALL}"
+
+#################
+## ELASTICDUMP ##
+#################
+sudo npm install elasticdump -g
+
 #######################
 ## KIBANA DASHBOARDS ##
 #######################
@@ -64,4 +90,10 @@ fi
 echo -e 'Installing Kibana dashboards...'
 cp -f /opt/sds/ingestion/examples/*/dashboards/*.json "${KIBANA_INSTALL}/kibana/app/dashboards"
 chmod -R 777 "${KIBANA_INSTALL}/kibana/app/dashboards"
+
+#########################
+## KIBANA 4 DASHBOARDS ##
+#########################
+
+elasticdump --input /opt/sds/ingestion/examples/airlines-map/dashboards/us-flights.json --output=http://localhost:9200/.kibana --type=data
 

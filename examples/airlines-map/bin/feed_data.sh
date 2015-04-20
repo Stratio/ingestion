@@ -9,8 +9,8 @@ DATA_DIR="data"
 SPOOL_DIR="${DATA_DIR}/spooldir"
 TMP_DIR="${DATA_DIR}/tmp"
 
-YEAR_START=1988
-YEAR_END=1988
+YEAR_START=1987
+YEAR_END=2008
 
 log() {
     logger -s -t "${APP_NAME}" -i $@
