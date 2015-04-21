@@ -1,0 +1,45 @@
+{
+    "fieldDefinitions": [
+        {
+            "type": "TEXT",
+            "columnName": "data"
+        }, 
+        {
+            "type": "UUID",
+            "columnName": "log_id"
+        },
+	    {
+            "type": "TIMESTAMP",
+            "columnName": "log_date",
+            "dateFormat": "dd/MMM/yyyy:HH:mm:ss z"
+        },
+	    {
+            "type": "TEXT",
+            "columnName": "log_user"
+        },
+        {
+            "type": "TEXT",
+            "columnName": "log_http_version"
+        },
+	    {
+            "type": "TEXT",
+            "columnName": "log_http_method"
+        },
+        {
+            "type": "INT",
+            "columnName": "log_http_code"
+        },
+        {
+            "type": "TEXT",
+            "columnName": "log_host"
+        },
+        {
+            "type": "TEXT",
+            "columnName": "log_bytes_returned"
+        },
+        {
+            "type": "TEXT",
+            "columnName": "log_url_path"
+        }
+    ]
+}
