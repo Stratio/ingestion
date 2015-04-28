@@ -1,5 +1,5 @@
 .vagrant
 .*.swp
 *~
-logs
-data
+.logs
+.data
