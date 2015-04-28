@@ -20,13 +20,14 @@ import com.stratio.streaming.api.StratioStreamingAPIFactory;
 import com.stratio.streaming.api.messaging.ColumnNameType;
 import com.stratio.streaming.api.messaging.ColumnNameValue;
 import com.stratio.streaming.commons.constants.ColumnType;
+import com.stratio.streaming.commons.exceptions.StratioEngineConnectionException;
 import com.stratio.streaming.commons.exceptions.StratioStreamingException;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.flume.*;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
-
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,20 +38,18 @@ public class StratioStreamingSink
         implements Configurable {
 
     private static final int DEFAULT_BATCH_SIZE = 20;
+    private static final String DEFAULT_ZOOKEEPER = "localhost:2181";
+    private static final String DEFAULT_KAFKA = "localhost:9092";
     private static final String CONF_BATCH_SIZE = "batchSize";
-    private static final String ZOOKEEPER_HOST = "zookeeperHost";
-    private static final String ZOOKEEPER_PORT = "zookeeperPort";
-    private static final String KAFKA_HOST = "kafkaHost";
-    private static final String KAFKA_PORT = "kafkaPort";
+    private static final String ZOOKEEPER = "zookeeper";
+    private static final String KAFKA = "kafka";
     private static final String STREAM_DEFINITION_FILE = "streamDefinitionFile";
 
     private SinkCounter sinkCounter;
     private int batchsize;
     private IStratioStreamingAPI stratioStreamingAPI;
-    private String zookeeperHost;
-    private Integer zookeeperPort;
-    private String kafkaHost;
-    private Integer kafkaPort;
+    private String zookeeper;
+    private String kafka;
     private String streamName;
     private List<StreamField> streamFields;
 
@@ -59,37 +58,40 @@ public class StratioStreamingSink
     }
 
     public void configure(Context context) {
-        try {
-            this.batchsize = context.getInteger(CONF_BATCH_SIZE, DEFAULT_BATCH_SIZE);
-            this.sinkCounter = new SinkCounter(this.getName());
-            this.zookeeperHost = context.getString(ZOOKEEPER_HOST);
-            this.zookeeperPort = context.getInteger(ZOOKEEPER_PORT);
-            this.kafkaHost = context.getString(KAFKA_HOST);
-            this.kafkaPort = context.getInteger(KAFKA_PORT);
-            String columnDefinitionFile = context.getString(STREAM_DEFINITION_FILE);
-            StreamDefinitionParser parser = new StreamDefinitionParser(readJsonFromFile(new File(columnDefinitionFile)));
-            StreamDefinition theStreamDefinition = parser.parse();
-            this.streamName = theStreamDefinition.getStreamName();
-            this.streamFields = theStreamDefinition.getFields();
-            this.stratioStreamingAPI = StratioStreamingAPIFactory.
-                    create().
-                    initializeWithServerConfig(kafkaHost,
-                            kafkaPort,
-                            zookeeperHost,
-                            zookeeperPort);
-            createStream();
-        } catch (Exception e) {
-            throw new StratioStreamingSinkException(e);
-        }
+        this.batchsize = context.getInteger(CONF_BATCH_SIZE, DEFAULT_BATCH_SIZE);
+        this.sinkCounter = new SinkCounter(this.getName());
+        this.zookeeper = context.getString(ZOOKEEPER, DEFAULT_ZOOKEEPER);
+        this.kafka = context.getString(KAFKA, DEFAULT_KAFKA);
+        String columnDefinitionFile = context.getString(STREAM_DEFINITION_FILE);
+        StreamDefinitionParser parser = new StreamDefinitionParser(readJsonFromFile(new File(columnDefinitionFile)));
+        StreamDefinition theStreamDefinition = parser.parse();
+        this.streamName = theStreamDefinition.getStreamName();
+        this.streamFields = theStreamDefinition.getFields();
     }
 
+    @Override public synchronized void start() {
+        super.start();
+
+        try {
+            this.stratioStreamingAPI = StratioStreamingAPIFactory.create()
+                    .withServerConfig(kafka, zookeeper)
+                    .init();
+        } catch (StratioEngineConnectionException e) {
+            throw new StratioStreamingSinkException(e);
+        }
+        createStream();
+
+        this.sinkCounter.start();
+
+    }
 
     private void createStream() {
         try {
             String streamName = this.streamName;
             List<ColumnNameType> columnList = new ArrayList<ColumnNameType>();
-            for (StreamField streamField: this.streamFields) {
-                ColumnNameType streamColumn = new ColumnNameType(streamField.getName(), parseStreamField(streamField.getType()));
+            for (StreamField streamField : this.streamFields) {
+                ColumnNameType streamColumn = new ColumnNameType(streamField.getName(),
+                        parseStreamField(streamField.getType()));
                 columnList.add(streamColumn);
             }
             stratioStreamingAPI.createStream(streamName, columnList);
@@ -142,7 +144,7 @@ public class StratioStreamingSink
     private List<ColumnNameValue> getColumnNameValueListFromEvent(Event event) {
         List<ColumnNameValue> columnNameValues = new ArrayList<ColumnNameValue>();
         Map<String, String> headers = event.getHeaders();
-        for (StreamField field: streamFields) {
+        for (StreamField field : streamFields) {
             String fieldContent = headers.get(field.getName());
             columnNameValues.add(new ColumnNameValue(field.getName(), fieldContent));
         }
@@ -171,9 +173,9 @@ public class StratioStreamingSink
 
     private ColumnType parseStreamField(String field) {
         try {
-          return ColumnType.valueOf(field.toUpperCase(Locale.ENGLISH));
+            return ColumnType.valueOf(field.toUpperCase(Locale.ENGLISH));
         } catch (IllegalArgumentException ex) {
-          //TODO: log something
+            //TODO: log something
         }
         return ColumnType.STRING;
     }
