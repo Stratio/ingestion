@@ -16,18 +16,18 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.stratio.ingestion</groupId>
-	<artifactId>stratio-ingestion</artifactId>
-  <version>0.4.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    <groupId>com.stratio.ingestion</groupId>
+    <artifactId>stratio-ingestion</artifactId>
+    <version>0.4.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-  <modules>
-    <module>../flume</module>
-    <module>..</module>
-  </modules>
+    <modules>
+        <module>../flume</module>
+        <module>..</module>
+    </modules>
 
     <!-- Required here for unix-maven-plugin -->
     <name>Stratio Ingestion</name>
@@ -44,16 +44,27 @@
             <artifactId>kite-morphlines-all</artifactId>
             <version>0.17.0</version>
             <type>pom</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-flume-sink_2.10</artifactId>
             <version>1.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.5</version>
+        </dependency>
     </dependencies>
 
-	<build>
-		<plugins>
+    <build>
+        <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <!-- XXX:
@@ -84,16 +95,16 @@
                 <version>1.0-alpha-9</version>
                 <inherited>false</inherited>
                 <extensions>true</extensions>
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>package-unix</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>package-deb</goal>-->
-                            <!--<goal>package-rpm</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
+                <executions>
+                    <execution>
+                        <id>package-unix</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package-deb</goal>
+                            <goal>package-rpm</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <contact>Stratio</contact>
                     <contactEmail>ingestion@stratio.com</contactEmail>
@@ -105,14 +116,16 @@
                     </rpm>
                     <assembly>
                         <copyDirectory>
-                            <from>target/stratio-ingestion-${project.version}-bin/stratio-ingestion-${project.version}-bin</from>
+                            <from>
+                                target/stratio-ingestion-${project.version}-bin/stratio-ingestion-${project.version}-bin
+                            </from>
                             <to>/opt/sds/ingestion</to>
                         </copyDirectory>
                     </assembly>
                 </configuration>
             </plugin>
-		</plugins>
-	</build>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>

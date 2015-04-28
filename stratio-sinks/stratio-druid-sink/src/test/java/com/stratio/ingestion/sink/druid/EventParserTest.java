@@ -88,5 +88,4 @@ public class EventParserTest {
         return EventBuilder.withBody(jsonBody.toString().getBytes(Charsets.UTF_8), headers);
     }
 
-
 }

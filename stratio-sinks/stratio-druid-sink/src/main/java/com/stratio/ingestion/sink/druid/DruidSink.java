@@ -138,55 +138,19 @@ public class DruidSink extends AbstractSink implements Configurable {
     }
 
     private Service buildDruidService() {
-        //        curator = buildCurator();
-        //        final TimestampSpec timestampSpec = new TimestampSpec(timestampField, "auto");
-        //        final Timestamper<Map<String, Object>> timestamper = getTimestamper();
-        //        final DruidLocation druidLocation = DruidLocation.create(indexService, firehosePattern, dataSource);
-        //        final DruidRollup druidRollup = DruidRollup
-        //                .create(DruidDimensions.specific(dimensions), aggregators, queryGranularity);
-        //        final ClusteredBeamTuning clusteredBeamTuning = ClusteredBeamTuning.builder()
-        //                .segmentGranularity(segmentGranularity)
-        //                .windowPeriod(new Period(period)).partitions(partitions).replicants(replicants).build();//TODO revise
-        //
-        //        return DruidBeams.builder(timestamper).curator(curator).discoveryPath(discoveryPath).location(
-        //                druidLocation).timestampSpec(timestampSpec).rollup(druidRollup).tuning(clusteredBeamTuning)
-        //                .buildJavaService();
+        curator = buildCurator();
+        final TimestampSpec timestampSpec = new TimestampSpec(timestampField, "auto");
+        final Timestamper<Map<String, Object>> timestamper = getTimestamper();
+        final DruidLocation druidLocation = DruidLocation.create(indexService, firehosePattern, dataSource);
+        final DruidRollup druidRollup = DruidRollup
+                .create(DruidDimensions.specific(dimensions), aggregators, queryGranularity);
+        final ClusteredBeamTuning clusteredBeamTuning = ClusteredBeamTuning.builder()
+                .segmentGranularity(segmentGranularity)
+                .windowPeriod(new Period(period)).partitions(partitions).replicants(replicants).build();//TODO revise
 
-        final Timestamper<Map<String, Object>> timestamper = new Timestamper<Map<String, Object>>() {
-            @Override
-            public DateTime timestamp(Map<String, Object> theMap) {
-                return new DateTime(theMap.get("timestamp"));
-            }
-        };
-        curator = CuratorFrameworkFactory
-                .builder()
-                .connectString("druid-server:2181")
-                .retryPolicy(new ExponentialBackoffRetry(1000, 20, 30000))
-                .build();
-        curator.start();
-        return DruidBeams.builder(timestamper)
-                .curator(curator)
-                .discoveryPath(discoveryPath)
-                .location(
-                        DruidLocation.create(
-                                indexService,
-                                firehosePattern,
-                                dataSource
-                        )
-                )
-                .timestampSpec(new TimestampSpec("timestamp", "auto"))
-                .rollup(DruidRollup.create(DruidDimensions.specific(dimensions), aggregators, queryGranularity))
-                .tuning(
-                        ClusteredBeamTuning
-                                .builder()
-                                .segmentGranularity(segmentGranularity)
-                                .windowPeriod(new Period("PT1M"))
-                                .partitions(1)
-                                .replicants(1)
-                                .build()
-                )
+        return DruidBeams.builder(timestamper).curator(curator).discoveryPath(discoveryPath).location(
+                druidLocation).timestampSpec(timestampSpec).rollup(druidRollup).tuning(clusteredBeamTuning)
                 .buildJavaService();
-
     }
 
     @Override
@@ -227,17 +191,6 @@ public class DruidSink extends AbstractSink implements Configurable {
             transaction.close();
         }
         return status;
-    }
-
-    @Override public synchronized void stop() {
-        // Close lifecycled objects:
-        try {
-            Await.result(druidService.close());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        curator.close();
-        super.stop();
     }
 
     @Override public synchronized void start() {
@@ -310,7 +263,7 @@ public class DruidSink extends AbstractSink implements Configurable {
         return new Timestamper<Map<String, Object>>() {
             @Override
             public DateTime timestamp(Map<String, Object> theMap) {
-                return new DateTime(theMap.get("timestamp"));
+                return new DateTime(theMap.get(timestampField));
             }
         };
     }

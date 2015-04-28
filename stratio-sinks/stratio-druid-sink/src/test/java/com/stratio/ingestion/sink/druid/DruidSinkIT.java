@@ -33,7 +33,6 @@ import org.apache.flume.conf.Configurables;
 import org.apache.flume.event.EventBuilder;
 import org.fest.assertions.Assertions;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -46,7 +45,7 @@ import com.google.common.collect.Maps;
 /**
  * Created by eambrosio on 30/03/15.
  */
-public class DruidSinkTest {
+public class DruidSinkIT {
 
     private Channel channel;
     private DruidSink druidSink;
@@ -75,7 +74,6 @@ public class DruidSinkTest {
     }
 
     @Test
-    @Ignore
     public void processValidEvents() throws EventDeliveryException {
         Transaction tx = channel.getTransaction();
         tx.begin();
@@ -92,7 +90,6 @@ public class DruidSinkTest {
     }
 
     @Test
-    @Ignore
     public void process500KValidEvents() throws EventDeliveryException {
         for (int i = 0; i < 10; i++) {
             processValidEvents();
