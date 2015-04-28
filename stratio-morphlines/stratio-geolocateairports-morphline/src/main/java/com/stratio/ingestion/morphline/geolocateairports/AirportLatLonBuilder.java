@@ -70,7 +70,7 @@ public class AirportLatLonBuilder implements CommandBuilder {
                 }
             }
         }
-        LOG.info("Loaded [" + AIRPORT_COORDS.size() + "] airports coordinates.");
+        LOG.debug("Loaded [" + AIRPORT_COORDS.size() + "] airports coordinates.");
     }
 
     @Override
@@ -115,11 +115,11 @@ public class AirportLatLonBuilder implements CommandBuilder {
         protected boolean doProcess(Record record) {
             Object origin = record.get(originFieldName).get(0);
             Object destination = record.get(destinationFieldName).get(0);
-            LOG.info("Processing record with origin airport [" + origin + "] and destination airport [" + destination + "].");
+            LOG.debug("Processing record with origin airport [" + origin + "] and destination airport [" + destination + "].");
             record.put(originLatLonFieldName, AIRPORT_COORDS.get(origin));
             record.put(destinationLatLonFieldName, AIRPORT_COORDS.get(destination));
-            LOG.info("Origin airport coordinates: [" + record.get(originLatLonFieldName) + "]");
-            LOG.info("Destination airport coordinates: [" + record.get(destinationLatLonFieldName) + "]");
+            LOG.debug("Origin airport coordinates: [" + record.get(originLatLonFieldName) + "]");
+            LOG.debug("Destination airport coordinates: [" + record.get(destinationLatLonFieldName) + "]");
             return super.doProcess(record);
         }
 
