@@ -1,0 +1,17 @@
+{
+  "properties" : {
+    "data": { "type": "string", "store": true },
+    "log_id": { "type": "string", "store": true},
+    "log_date": { "type": "string", "store": true},
+    "log_user": { "type": "string"},
+    "log_http_version": { "type": "string"},
+    "log_http_method": { "type": "string"},
+    "log_http_code": { "type": "string"},
+    "log_host": { "type": "string"},
+    "log_bytes_returned": { "type": "string"},
+    "log_url_path": { "type": "string"},
+    "log_longitud_latitude" : {"type": "geo_point"}
+  },
+  "_source": { "enabled": true },
+  "_all": { "enabled": false }
+}
