@@ -2,14 +2,19 @@
   "properties" : {
     "@timestamp": { "type": "date", "store": true },
     "@message": { "type": "string", "store": false, "index": "no"},
-    "DepDelay": { "type": "integer", "store": true},
+    "flight_date": { "type": "date", "store": true},
+    "DepDelay": { "type": "integer"},
     "destLatLon": { "type": "geo_point"},
     "originLatLon": { "type": "geo_point"},
-    "Origin": {"type": "string", "store": true},
-    "Dest": {"type": "string", "store": true},
-    "ArrDelay": {"type": "integer", "store": true},
-    "UniqueCarrier": {"type": "string", "store": true}
+    "Origin": {"type": "string"},
+    "Dest": {"type": "string"},
+    "ArrDelay": {"type": "integer"},
+    "UniqueCarrier": {"type": "string"}
   },
   "_source": { "enabled": true },
   "_all": { "enabled": false }
 }
+
+
+
+
