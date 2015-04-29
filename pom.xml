@@ -232,6 +232,7 @@
 					<excludes>
 						<exclude>**/*IT.java</exclude>
 					</excludes>
+					<skipTests>${skipUTs}</skipTests>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -246,6 +247,7 @@
 					<excludes>
 						<exclude>**/*Test.java</exclude>
 					</excludes>
+					<skipTests>${skipITs}</skipTests>
 				</configuration>
 			</plugin>
 			<plugin>
