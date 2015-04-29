@@ -19,20 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.druid.query.aggregation.AggregatorFactory;
+import io.druid.query.aggregation.CountAggregatorFactory;
 
 /**
  * Created by eambrosio on 30/03/15.
  */
 public class AggregatorsHelper {
 
-    public static List<AggregatorFactory> build(List<String> aggregators) {
-        List<AggregatorFactory> list = new ArrayList<AggregatorFactory>();
-        for (String aggregator : aggregators) {
-            list.add(null);
-        }
-
-
-        return null;
+    public static List<AggregatorFactory> build(String rawAggregators) {
+//        final List<String> splittedAggregators = Arrays.asList(rawAggregators.split(","));
+        //        List<AggregatorFactory> list = new ArrayList<AggregatorFactory>();
+        //        for (String aggregator : aggregators) {
+        //            list.add(null);
+        //        }
+        //TODO pending implementation
+        List<AggregatorFactory> aggregators = new ArrayList<AggregatorFactory>();
+        aggregators.add(new CountAggregatorFactory("count"));
+        return aggregators;
 
     }
 

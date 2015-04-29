@@ -56,7 +56,6 @@ import com.twitter.util.Future;
 import io.druid.data.input.impl.TimestampSpec;
 import io.druid.granularity.QueryGranularity;
 import io.druid.query.aggregation.AggregatorFactory;
-import io.druid.query.aggregation.CountAggregatorFactory;
 
 /**
  * Created by eambrosio on 27/03/15.
@@ -75,7 +74,6 @@ public class DruidSink extends AbstractSink implements Configurable {
     private static final String TIMESTAMP_FIELD = "timestampField";
     private static final String SEGMENT_GRANULARITY = "segmentGranularity";
     private static final String BATCH_SIZE = "batchSize";
-    private static final Integer DEFAULT_BATCH_SIZE = 10000;
     public static final String QUERY_GRANULARITY = "queryGranularity";
     private static final String WINDOW_PERIOD = "period";
     private static final String PARTITIONS = "partitions";
@@ -83,6 +81,19 @@ public class DruidSink extends AbstractSink implements Configurable {
     private static final String ZOOKEEPPER_BASE_SLEEP_TIME = "baseSleepTime";
     private static final String ZOOKEEPER_MAX_RETRIES = "maxRetries";
     private static final String ZOOKEEPER_MAX_SLEEP = "maxSleep";
+    private static final String DEFAULT_FIREHOSE = "druid:firehose:%s";
+    private static final String DEFAUL_DATASOURCE = "sampleSource";
+    private static final String DEFAULT_QUERY_GRANULARITY = "NONE";
+    private static final String DEFAULT_SEGMENT_GRANULARITY = "HOUR";
+    private static final String DEFAULT_PERIOD = "PT10M";
+    private static final Integer DEFAULT_PARTITIONS = 1;
+    private static final Integer DEFAULT_REPLICANTS = 1;
+    private static final String DEFAULT_TIMESTAMP_FIELD = "timestamp";
+    private static final String DEFAULT_ZOOKEEPER_LOCATION = "localhost:2181";
+    private static final Integer DEFAULT_ZOOKEEPER_BASE_SLEEP = 1000;
+    private static final Integer DEFAULT_ZOOKEEPER_MAX_RETRIES = 3;
+    private static final Integer DEFAULT_ZOOKEEPER_MAX_SLEEP = 30000;
+    private static final Integer DEFAULT_BATCH_SIZE = 10000;
 
     private Service druidService;
     private CuratorFramework curator;
@@ -112,28 +123,27 @@ public class DruidSink extends AbstractSink implements Configurable {
     public void configure(Context context) {
 
         indexService = context.getString(INDEX_SERVICE);
-        firehosePattern = context.getString(FIREHOSE_PATTERN);
-        dataSource = context.getString(DATA_SOURCE);
-        dimensions = Arrays.asList(context.getString(DIMENSIONS).split(","));
-        //        aggregators = AggregatorsHelper.build(Arrays.asList(context.getString(AGGREGATORS).split(",")));
-        aggregators = new ArrayList<AggregatorFactory>();
-        aggregators.add(new CountAggregatorFactory("count"));
-        queryGranularity = QueryGranularityHelper.getGranularity(context.getString(QUERY_GRANULARITY));
-        segmentGranularity = Granularity.valueOf(context.getString(SEGMENT_GRANULARITY));
-        period = context.getString(WINDOW_PERIOD);
-        partitions = context.getInteger(PARTITIONS);
-        replicants = context.getInteger(REPLICANTS);
-        // Tranquility needs to be able to extract timestamps from your object type (in this case, Map<String, Object>).
         discoveryPath = context.getString(DISCOVERY_PATH);
-        timestampField = context.getString(TIMESTAMP_FIELD);
-        zookeeperLocation = context.getString(ZOOKEEPER_LOCATION);
-        baseSleppTime = context.getInteger(ZOOKEEPPER_BASE_SLEEP_TIME);
-        maxRetries = context.getInteger(ZOOKEEPER_MAX_RETRIES);
-        maxSleep = context.getInteger(ZOOKEEPER_MAX_SLEEP);
+        dimensions = Arrays.asList(context.getString(DIMENSIONS).split(","));
+        firehosePattern = context.getString(FIREHOSE_PATTERN, DEFAULT_FIREHOSE);
+        dataSource = context.getString(DATA_SOURCE, DEFAUL_DATASOURCE);
+        aggregators = AggregatorsHelper.build(context.getString(AGGREGATORS));
+        queryGranularity = QueryGranularityHelper.getGranularity(context.getString(QUERY_GRANULARITY,
+                DEFAULT_QUERY_GRANULARITY));
+        segmentGranularity = Granularity.valueOf(context.getString(SEGMENT_GRANULARITY, DEFAULT_SEGMENT_GRANULARITY));
+        period = context.getString(WINDOW_PERIOD, DEFAULT_PERIOD);
+        partitions = context.getInteger(PARTITIONS, DEFAULT_PARTITIONS);
+        replicants = context.getInteger(REPLICANTS, DEFAULT_REPLICANTS);
+        // Tranquility needs to be able to extract timestamps from your object type (in this case, Map<String, Object>).
+        timestampField = context.getString(TIMESTAMP_FIELD, DEFAULT_TIMESTAMP_FIELD);
+        zookeeperLocation = context.getString(ZOOKEEPER_LOCATION, DEFAULT_ZOOKEEPER_LOCATION);
+        baseSleppTime = context.getInteger(ZOOKEEPPER_BASE_SLEEP_TIME, DEFAULT_ZOOKEEPER_BASE_SLEEP);
+        maxRetries = context.getInteger(ZOOKEEPER_MAX_RETRIES, DEFAULT_ZOOKEEPER_MAX_RETRIES);
+        maxSleep = context.getInteger(ZOOKEEPER_MAX_SLEEP, DEFAULT_ZOOKEEPER_MAX_SLEEP);
+        batchSize = context.getInteger(BATCH_SIZE, DEFAULT_BATCH_SIZE);
 
         druidService = buildDruidService();
         sinkCounter = new SinkCounter(this.getName());
-        batchSize = context.getInteger(BATCH_SIZE, DEFAULT_BATCH_SIZE);
         eventParser = new EventParser(timestampField);
     }
 

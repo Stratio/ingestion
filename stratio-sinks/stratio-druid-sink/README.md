@@ -11,17 +11,17 @@ The available config parameters are:
 
 - `indexService` *(String, required)*: Overlord's service name
 
+- `discoveryPath` *(String, required)*: Your overlord's druid.discovery.curator.path
+
+- `dimensions` *(String, required)*: Comma separated list with event headers you want to stored. Similar to columns in 
+relational databases. 
+
 - `firehosePattern` *(String)*:  Firehoses describe the data stream source. Make up a service pattern, include %s 
 somewhere in it. This will be used for internal service-discovery purposes, to help druid sink find Druid indexing 
 tasks. By default, *druid:firehose:%s*.
 
-- `discoveryPath` *(String, required)*: Your overlord's druid.discovery.curator.path
-
 - `dataSource` *(String)*: Source name where events will be stored. Very similar to a table in relational databases. 
  By default, *sampleSource*.
-
-- `dimensions` *(String, required)*: Comma separated list with event headers you want to stored. Similar to columns in 
-relational databases. 
 
 - `aggregators` *(String)*: Different specifications of processing over available metrics. By default, *count* 
 aggregator.
