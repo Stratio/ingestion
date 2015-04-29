@@ -7,10 +7,8 @@ The StratioStreaming Sink will insert flume events to an specific stream. The co
 
 Available config parameters:
 
-- kafkaHost: the ip address or the host name where the Stratio Streaming/Kafka instance is running
-- kafkaPort: the port number where the Stratio Streaming kafka instance is running
-- zookeeperHost: the ip address or the host name where the Stratio Streaming/Zookeeper instance is running
-- zookeeperPort: the port number where the Stratio Streaming/Zookeeper instance is running
+- kafka: Kafka brokers (comma separated list) where the Stratio Streaming/Kafka instance is running
+- zookeeper: Zookeeper quorum where the Stratio Streaming/Zookeeper instance is running
 - streamDefinitionFile: stream definition file path (see example below)
 
 This sink will extract the data from the flume event headers and for each field within the headers map it will create a new stream "field" with the content of the specific header. You must provide a mechanism to parse the content of the flume flow to the event headers (we strongly recommend using morphlines).
@@ -33,10 +31,8 @@ agent.sources.r1.spoolDir = /home/flume/data/files
 
 # Describe the sink
 agent.sinks.streamingSink.type=com.stratio.ingestion.sink.stratiostreaming.StratioStreamingSink
-agent.sinks.streamingSink.kafkaHost=localhost
-agent.sinks.streamingSink.kafkaPort=9092
-agent.sinks.streamingSink.zookeeperHost=localhost
-agent.sinks.streamingSink.zookeeperPort=2181
+agent.sinks.streamingSink.kafka=localhost:9092
+agent.sinks.streamingSink.zookeeper=localhost:2181
 agent.sinks.streamingSink.streamDefinitionFile=/path/to/stream/definition/file/stream.conf
 
 # Define the interceptors

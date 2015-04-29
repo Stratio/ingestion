@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.sink.cassandra;
+package com.stratio.ingestion.deserializer.xmlxpath;
 
-import java.io.Serializable;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
 
-class ColumnDefinition implements Serializable {
+import org.apache.flume.serialization.ResettableInputStream;
 
-	private static final long serialVersionUID = 1L;
+class ResettableInputStreamInputStream extends InputStream {
 
-	private List<FieldDefinition> fields;
+  private final ResettableInputStream in;
 
-	public List<FieldDefinition> getFields() {
-		return this.fields;
-	}
+  public ResettableInputStreamInputStream(final ResettableInputStream in) {
+    this.in = in;
+  }
 
-	public void setFields(List<FieldDefinition> fields) {
-		this.fields = fields;
-	}
+  @Override public int read() throws IOException {
+    return in.read();
+  }
 
 }

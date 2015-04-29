@@ -24,7 +24,8 @@ import java.net.UnknownHostException;
  */
 public abstract class CassandraTestHelper {
 
-  private CassandraTestHelper() { }
+  private CassandraTestHelper() {
+  }
 
   /**
    * Gets an @{link java.net.InetSocketAddress} representing
