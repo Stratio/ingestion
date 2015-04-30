@@ -2,7 +2,7 @@
   "properties" : {
     "data": { "type": "string", "store": true },
     "log_id": { "type": "string", "store": true},
-    "log_date": { "type": "string", "store": true},
+    "log_date": { "type": "date", "store": true},
     "log_user": { "type": "string"},
     "log_http_version": { "type": "string"},
     "log_http_method": { "type": "string"},
