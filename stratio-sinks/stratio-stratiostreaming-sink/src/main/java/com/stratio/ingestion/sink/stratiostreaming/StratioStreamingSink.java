@@ -67,10 +67,6 @@ public class StratioStreamingSink
         StreamDefinition theStreamDefinition = parser.parse();
         this.streamName = theStreamDefinition.getStreamName();
         this.streamFields = theStreamDefinition.getFields();
-    }
-
-    @Override public synchronized void start() {
-        super.start();
 
         try {
             this.stratioStreamingAPI = StratioStreamingAPIFactory.create()
@@ -79,10 +75,12 @@ public class StratioStreamingSink
         } catch (StratioEngineConnectionException e) {
             throw new StratioStreamingSinkException(e);
         }
+    }
+
+    @Override public synchronized void start() {
+        super.start();
         createStream();
-
         this.sinkCounter.start();
-
     }
 
     private void createStream() {
