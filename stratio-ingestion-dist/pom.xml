@@ -16,18 +16,18 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.stratio.ingestion</groupId>
-	<artifactId>stratio-ingestion</artifactId>
+    <groupId>com.stratio.ingestion</groupId>
+    <artifactId>stratio-ingestion</artifactId>
     <version>0.4.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-  <modules>
-    <module>../flume</module>
-    <module>..</module>
-  </modules>
+    <modules>
+        <module>../flume</module>
+        <module>..</module>
+    </modules>
 
     <!-- Required here for unix-maven-plugin -->
     <name>Stratio Ingestion</name>
@@ -44,6 +44,12 @@
             <artifactId>kite-morphlines-all</artifactId>
             <version>0.17.0</version>
             <type>pom</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>

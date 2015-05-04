@@ -29,6 +29,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Event;
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,8 +173,8 @@ class EventParser {
             for (FieldDefinition def : definition.getFields()) {
                 final String fieldName = def.getFieldName();
                 final String mappedName = (def.getMappedName() == null) ? def.getFieldName() : def.getMappedName();
-                if (eventHeaders.containsKey(fieldName)) {
-                    dbObject.put(mappedName, parseValue(def, eventHeaders.get(fieldName)));
+                if (containsKey(eventHeaders, fieldName)) {
+                    dbObject.put(mappedName, parseValue(def, getFieldName(eventHeaders, fieldName)));
                 }
             }
         }
@@ -180,6 +182,33 @@ class EventParser {
         return dbObject;
     }
 
+    private String getFieldName(Map<String, String> eventHeaders, String fieldName) {
+        String value = null;
+        if (fieldName.contains(".")) {
+            ObjectMapper mapper = new ObjectMapper();
+            final String[] fieldNameSplitted = fieldName.split("\\.");
+            try {
+                final String objectName = fieldNameSplitted[0];
+                JsonNode jsonNode = mapper.readTree(eventHeaders.get(objectName));
+                value = jsonNode.findValue(fieldNameSplitted[fieldNameSplitted.length - 1]).getTextValue();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            value = eventHeaders.get(fieldName);
+        }
+        return value;
+    }
+
+    private boolean containsKey(Map<String, String> eventHeaders, String fieldName) {
+        if (StringUtils.isNotBlank(fieldName) && fieldName.contains(".")) {
+            final String[] fieldNameSplitted = fieldName.split("\\.");
+            return eventHeaders.containsKey(fieldNameSplitted[0]);
+        } else {
+            return eventHeaders.containsKey(fieldName);
+        }
+    }
+    
     public List<DBObject> parse(List<Event> events) {
         List<DBObject> rows = new ArrayList<DBObject>(events.size());
         for (Event event : events) {

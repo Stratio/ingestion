@@ -46,6 +46,25 @@ public class JsonRestSourceHandlerTest {
     }
 
     @Test
+    public void getEventsFromEmptyJson() throws Exception {
+        final List<Event> events = jsonHandler
+                .getEvents("{}", ImmutableMap.<String,
+                        String>builder().build());
+
+        assertThat(events).isNotEmpty().hasSize(1);
+        assertThat(new String(events.get(0).getBody())).isEqualTo("{}");
+    }
+
+    @Test
+    public void getEventsFromNotValidJson() throws Exception {
+        final List<Event> events = jsonHandler
+                .getEvents("[{\"field1\":\"value1\"},{\"field2\":}]", ImmutableMap.<String,
+                        String>builder().build());
+
+        assertThat(events).isEmpty();
+    }
+
+    @Test
     public void getEventsWithDefaultPath() throws Exception {
         final List<Event> events = jsonHandler
                 .getEvents("[{\"field1\":\"value1\"},{\"field2\":\"value2\"}]", ImmutableMap.<String,

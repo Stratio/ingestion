@@ -1,0 +1,38 @@
+{
+  "_id": "alfredoPerez@test.com",
+  "ip": "127.0.0.1",
+  "timestamp": "",
+  "request": "http://www.mysite3.stratio.org:8080/sites/test1.html?param1=value1&param2=value2",
+  "encoding": "UTF-8",
+  "Cookie": "sp=b2e5fff1-dac9-4854-8835-4308c8c0dc5a",
+  "accept-language": "de",
+  "Accept-Encoding": "gzip, deflate, sdch",
+  "Accept": "image/webp, */*;q=0.8",
+  "Connection": "keep-alive",
+  "Host": "localhost:8085",
+  "data": {
+    "santanderID": "",
+    "name": "campoControlado",
+    "value": "asdfgh",
+    "action": "text"
+  },
+  "santanderID": "",
+  "request_component_authority": "www.mysite3.stratio.org:8080",
+  "request_full_domain": "mysite3.stratio.org",
+  "request_main_domain": "mysite3",
+  "request_component_path": "/sites/test1.html",
+  "request_component_port": "8080",
+  "request_component_scheme": "http",
+  "request_query_params": {
+    "param1": "value1",
+    "param2": "value2"
+  },
+  "request_tld": ".org",
+  "action": "text",
+  "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36",
+  "os": "MacOS",
+  "browser": "Firefox",
+  "isoCode": "DE",
+  "size": 321,
+  "response": 200
+}
