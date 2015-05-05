@@ -49,6 +49,7 @@
 		<mongodb.version>2.12.4</mongodb.version>
 		<tika.version>1.5</tika.version>
 		<commons.lang3.version>3.3.2</commons.lang3.version> <!-- Watch Flume -->
+		<hadoop.version>2.4.0</hadoop.version>
 	        <commons.io.version>2.1</commons.io.version>
 	        <slf4j.version>1.7.7</slf4j.version>
 	        <kite.version>0.17.0</kite.version>
@@ -65,26 +66,6 @@
 	<dependencyManagement>
 		<dependencies>
 			<!-- If ingestion version for a flume module is resolved you must add here the module -->
-			<dependency>
-				<groupId>org.apache.flume</groupId>
-				<artifactId>flume-ng-core</artifactId>
-				<version>${flume.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.flume</groupId>
-				<artifactId>flume-ng-configuration</artifactId>
-				<version>${flume.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.flume</groupId>
-				<artifactId>flume-ng-sdk</artifactId>
-				<version>${flume.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.flume.flume-ng-sinks</groupId>
-				<artifactId>flume-ng-elasticsearch-sink</artifactId>
-				<version>${flume.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>com.stratio.streaming</groupId>
 				<artifactId>streaming-api</artifactId>
@@ -197,6 +178,9 @@
 				<artifactId>maxmind-db</artifactId>
 				<version>${maxmind.version}</version>
 			</dependency>
+
+			<!-- Flume -->
+
 		</dependencies>
 	</dependencyManagement>
 

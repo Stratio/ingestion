@@ -24,8 +24,13 @@
     <version>0.4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <parent>
+        <artifactId>stratio-ingestion-parent</artifactId>
+        <groupId>com.stratio.ingestion</groupId>
+        <version>0.4.0-SNAPSHOT</version>
+    </parent>
+
     <modules>
-        <module>../flume</module>
         <module>..</module>
     </modules>
 
@@ -61,6 +66,14 @@
             <artifactId>zookeeper</artifactId>
             <version>3.4.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.flume</groupId>
+            <artifactId>flume-ng-dist</artifactId>
+            <version>${flume.version}</version>
+            <type>pom</type>
+        </dependency>
+
     </dependencies>
 
     <profiles>
