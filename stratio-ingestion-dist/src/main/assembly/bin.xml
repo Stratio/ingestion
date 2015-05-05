@@ -22,7 +22,7 @@
         <format>dir</format>
         <format>tar.gz</format>
     </formats>
-    <baseDirectory>${assembly.baseDirectory}</baseDirectory>
+    <!--<baseDirectory>${assembly.baseDirectory}</baseDirectory>-->
     <moduleSets>
       <moduleSet>
         <includes>

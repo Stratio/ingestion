@@ -132,7 +132,7 @@
                             </rpm>
                             <assembly>
                                 <copyDirectory>
-                                    <from>target/stratio-ingestion-${project.version}-bin/stratio-ingestion-${project.version}-bin</from>
+                                    <from>target/stratio-ingestion-${project.version}-bin/stratio-ingestion-${project.version}</from>
                                     <to>/opt/sds/ingestion</to>
                                 </copyDirectory>
                             </assembly>
