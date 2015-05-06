@@ -1,0 +1,922 @@
+Release Notes - Flume - Version v1.5.2
+
+** Bug
+    * [FLUME-2547] - Removing SSLv2Hello causes Java 6 clients to break
+
+** Sub-task
+    * [FLUME-2548] - Enable SSLv2Hello for Avro Source and NettyAvroRpcClient
+    * [FLUME-2549] - Enable SSLv2Hello for HttpSource
+
+** Improvement
+    * [FLUME-2551] - Add dev-support to src tarball
+
+Release Notes - Flume - Version v1.5.1
+
+** Bug
+    * [FLUME-2441] - Unit test TestHTTPSource.java failed with IBM JDK 1.7
+    * [FLUME-2520] - HTTP Source should be able to block a prefixed set of protocols.
+    * [FLUME-2533] - HTTPS tests fail on Java 6
+
+** Improvement
+    * [FLUME-2511] - Allow configuration of enabled protocols in Avro source and Rpc client
+
+Release Notes - Flume - Version v1.5.0.1
+
+** Bug
+    * [FLUME-2389] - Spillable Memory Channel Example is incorrect
+    * [FLUME-2397] - HBase-98 compatibility
+    * [FLUME-2400] - Dataset Sink is not built in hbase-98 profile
+
+Release Notes - Flume - Version v1.5.0
+
+** New Feature
+    * [FLUME-1227] - Introduce some sort of SpillableChannel
+    * [FLUME-2056] - Allow SpoolDir to pass just the filename that is the source of an event
+    * [FLUME-2071] - Flume Context doesn't support float or double configuration values.
+    * [FLUME-2185] - Upgrade morphlines to 0.7.0
+    * [FLUME-2188] - flume-ng-log4jappender Support user supplied headers
+    * [FLUME-2225] - Elasticsearch Sink for ES HTTP API
+    * [FLUME-2294] - Add a sink for Kite Datasets
+    * [FLUME-2309] - Spooling directory should not always consume the oldest file first.
+
+** Improvement
+    * [FLUME-1542] - Flume User Guide sample configurations need fixing
+    * [FLUME-2052] - Spooling directory source should be able to replace or ignore malformed characters
+    * [FLUME-2130] - Handle larger payloads via SyslogUDPSource
+    * [FLUME-2139] - upgrade morphline library dependency to a 0.5.0 release
+    * [FLUME-2154] - Reducing duplicate events caused by reset-connection-interval
+    * [FLUME-2155] - Improve replay time
+    * [FLUME-2181] - Optionally disable File Channel fsyncs 
+    * [FLUME-2202] - AsyncHBaseSink should coalesce increments to reduce RPC roundtrips
+    * [FLUME-2206] - ElasticSearchSink ttl field modification to mimic Elasticsearch way of specifying TTL
+    * [FLUME-2207] - HDFS file suffix style index suffix in ElasticSearchSink
+    * [FLUME-2212] - upgrade to Morphlines-0.8.0
+    * [FLUME-2213] - MorphlineInterceptor should share metric registry across threads for better (aggregate) reporting
+    * [FLUME-2217] - Preserve priority, timestamp and hostname fields in MultiportSyslogTcp and Udp sources
+    * [FLUME-2231] - Add details in Flume Ganglia config in User Guide
+    * [FLUME-2243] - AvroSource to use TransceiverThreadFactory for Thread naming while initializing NioServerSocketChannelFactory
+    * [FLUME-2267] - Increase default transactionCapacity for FileChannel to 10000 from 1000
+    * [FLUME-2275] - Improve scalability of MorphlineInterceptor under contention
+    * [FLUME-2292] - Upgrade mapdb to 0.9.8
+    * [FLUME-2316] - Upgrade MorphlineSolrSink to kite-0.12.0
+    * [FLUME-2340] - Refactor to make room for Morphlines Elasticsearch Sink
+    * [FLUME-2343] - Add user impersonation to DatasetSink
+    * [FLUME-2351] - Ability to override any parameter from the configuration file
+    * [FLUME-2352] - HDFSCompressedDataStream should support appendBatch
+
+** Bug
+    * [FLUME-1666] - Syslog source strips timestamp and hostname from log message body
+    * [FLUME-1679] - Add dependency on Guava to flume-ng-elasticsearch-sink POM
+    * [FLUME-1892] - IRC Sink NPE
+    * [FLUME-1951] - Remove unused future from FlumeEventQueue
+    * [FLUME-2007] - HDFS Sink should check if file is closed and retry if it is not.
+    * [FLUME-2088] - Minor typo in Flume User Guide JSON Reporting section
+    * [FLUME-2109] - HTTPS support in HTTP Source
+    * [FLUME-2110] - Scribe Source must check if category is null before inserting the headers
+    * [FLUME-2119] - duplicate files cause flume to enter irrecoverable state
+    * [FLUME-2121] - Upgrade Flume to log4j 1.2.17 to be in sync with HDFS/HBase
+    * [FLUME-2122] - Minor cleanups of User guide
+    * [FLUME-2123] - Morphline Solr sink missing short type name
+    * [FLUME-2124] - Upgrade Morphline Solr Sink to CDK 0.4.1
+    * [FLUME-2127] - JMX shutdown command for Flume
+    * [FLUME-2134] - AsyncHbase Sink bugfix plus tests errors on Windows
+    * [FLUME-2135] - Add zip to the build distribution for Windows support
+    * [FLUME-2136] - Windows - Fix intermitent test failure in TestMonitoredCounterGroup.java
+    * [FLUME-2137] - Fix StagedInstall.java to invoke the correct startup script on Windows
+    * [FLUME-2142] - HTTPS tests for http source
+    * [FLUME-2145] - TestCheckpointRebuilder.testFastReplay  fails on Windows due to checkpoint file being memory mapped
+    * [FLUME-2151] - Windows:  Update TestExecSource to use native commands on Windows
+    * [FLUME-2152] - Flume user guide says "Ganglia support" where it should say "JSON support"
+    * [FLUME-2156] - Unregister then re-register MonitoredCounterGroup JMX MBeans on reconfigure
+    * [FLUME-2157] - Spool directory source does not shut down correctly when Flume is reconfigured
+    * [FLUME-2159] - Sporadic failures in  TestNettyAvroRpcClient.spinThreadsCrazily()
+    * [FLUME-2161] - Flume does not support spaces in -X java-opt command line args
+    * [FLUME-2172] - Update protocol buffer from 2.4.1 to 2.5.0
+    * [FLUME-2176] - SpoolDir Source, get 'File has changed' exception but actually there is no change on the file
+    * [FLUME-2182] - Spooling Directory Source will not ingest data completely when a wide character appears at the edge of a buffer
+    * [FLUME-2184] - flume-ng-morphline-solr-sink Build failing due to incorrect hadoop-common dependency declaration
+    * [FLUME-2191] - HDFS Minicluster tests failing after protobuf upgrade.
+    * [FLUME-2192] - AbstractSinkProcessor stop incorrectly calls start
+    * [FLUME-2198] - Avro Source should disable itself if ipFilterRules contains invalid rules
+    * [FLUME-2199] - Flume builds with new version require mvn install before site can be generated
+    * [FLUME-2200] - HTTP Source should be able to use "port" parameter if SSL is enabled
+    * [FLUME-2208] - Jetty's default SocketSelector leaks File descriptors
+    * [FLUME-2209] - AsyncHBaseSink will never recover if the column family does not exists for the first start 
+    * [FLUME-2210] - UnresolvedAddressException when using multiple hostNames in Elasticsearch sink configuration
+    * [FLUME-2220] - ElasticSearch sink - duplicate fields in indexed document
+    * [FLUME-2229] - Backoff period gets reset too often in OrderSelector
+    * [FLUME-2233] - MemoryChannel lock contention on every put due to bytesRemaining Semaphore
+    * [FLUME-2235] - idleFuture should be cancelled at the start of append
+    * [FLUME-2238] - Provide option to configure worker threads in NettyAvroRpcClient
+    * [FLUME-2239] - Clarify File Channel's  dataDirs setting in User Guide
+    * [FLUME-2252] - Add null check before closing table in HbaseSink
+    * [FLUME-2253] - Please delete old releases from mirroring system
+    * [FLUME-2255] - Spooling Directory Source cannot handle channel exceptions
+    * [FLUME-2259] - transaction  closure not happening for all the scenario in hbasesink
+    * [FLUME-2262] - Log4j Appender should use timeStamp field not getTimestamp
+    * [FLUME-2263] - Bump Hadoop 2 version to 2.3.0
+    * [FLUME-2264] - Log4j Appender + Avro Reflection on string results in an invalid avro schema
+    * [FLUME-2265] - Closed bucket writers should be removed from sfwriters map
+    * [FLUME-2266] - Update Morphline Sink to kite-0.10.0
+    * [FLUME-2270] - Twitter Source Documentation Does not load properly
+    * [FLUME-2272] - Getting start page returning 503 error
+    * [FLUME-2283] - Spool Dir source must check interrupt flag before writing to channel
+    * [FLUME-2289] - Disable maxUnderReplication test which is extremely flakey
+    * [FLUME-2301] - Update HBaseSink tests to reflect sink returning backoff only on empty batches
+    * [FLUME-2302] - TestHDFS Sink fails with Can't get Kerberos realm
+    * [FLUME-2303] - HBaseSink tests can fail based on order of execution
+    * [FLUME-2304] - DatasetSink test fails unexpectedly
+    * [FLUME-2305] - BucketWriter#close must cancel idleFuture
+    * [FLUME-2307] - Remove Log writetimeout
+    * [FLUME-2311] - Use standard way of finding queue/topic
+    * [FLUME-2312] - Add utility for adorning HTTP contexts in Jetty
+    * [FLUME-2314] - Upgrade to Mapdb 0.9.9
+    * [FLUME-2320] - Deadlock in DatasetSink
+    * [FLUME-2323] - Morphline sink must increment eventDrainAttemptCount when it takes event from channel
+    * [FLUME-2324] - Support writing to multiple HBase clusters using HBaseSink
+    * [FLUME-2325] - BucketWriter might throw BucketClosedException incorrectly
+    * [FLUME-2328] - FileChannel Dual Checkpoint Backup Thread not released on Application stop
+    * [FLUME-2329] - Add an alias for the Morphline Solr Sink
+    * [FLUME-2330] - Remove the MorphlineHandlerImpl configuration option from MorphlineSink
+    * [FLUME-2334] - Upgrade Asynchbase to 1.5.0 as this include hbase 0.96.x support
+    * [FLUME-2335] - TestHBaseSink#testWithoutConfigurationObject() must delete the table at the end of the test
+    * [FLUME-2336] - HBase tests that pass in ZK configs must use a new context object
+    * [FLUME-2338] - Support coalescing increments in HBaseSink
+    * [FLUME-2345] - Update to Kite 0.12.0 dependency
+    * [FLUME-2347] - Add FLUME_JAVA_OPTS which allows users to inject java properties from cmd line
+    * [FLUME-2350] - Consume Order tests need to space out file creation
+    * [FLUME-2357] - HDFS sink should retry closing files that previously had close errors
+    * [FLUME-2381] - Upgrade Hadoop version in Hadoop 2 profile to 2.4.0
+    * [FLUME-2379] - Flume's pom files are invalid and not parseable by non-maven build tools
+
+** Documentation
+    * [FLUME-1223] - Userguide improvement rolling file sink
+    * [FLUME-1678] - Incorrect documentation for HBase sink
+    * [FLUME-1851] - User Guide grammar mistake
+    * [FLUME-2064] - Typo/Grammar in flume main user doc under Scribe
+    * [FLUME-2065] - Regex Extractor Interceptor config agent name inconsistent with rest of docs
+    * [FLUME-2183] - Add "Other Resources" page to wiki
+    * [FLUME-2278] - Incorrect documentation for write-timeout of File Channel
+    * [FLUME-2319] - Incorrect property name of Ganglia Reporting documentation
+
+
+Release Notes - Flume - Version v1.4.0
+
+** New Feature
+    * [FLUME-924] - Implement a JMS source for Flume NG
+    * [FLUME-997] - Support secure transport mechanism
+    * [FLUME-1170] - Create a framework for transaction listeners
+    * [FLUME-1502] - Support for running simple configurations embedded in host process
+    * [FLUME-1516] - FileChannel Write Dual Checkpoints to avoid replays
+    * [FLUME-1632] - Persist progress on each file in file spooling client/source
+    * [FLUME-1735] - Add support for a plugins.d directory
+    * [FLUME-1894] - Implement Thrift RPC
+    * [FLUME-1917] - FileChannel group commit (coalesce fsync)
+    * [FLUME-2004] - Need to capture metrics on the Flume exec source such as events received, rejected, etc.
+    * [FLUME-2010] - Support Avro records in Log4jAppender and the HDFS Sink
+    * [FLUME-2048] - Avro container file deserializer
+    * [FLUME-2070] - Add a Flume Morphline Solr Sink
+
+** Improvement
+    * [FLUME-1076] - Sink batch sizes vary wildy
+    * [FLUME-1100] - HDFSWriterFactory and HDFSFormatterFactory should allow extension
+    * [FLUME-1571] - Channels should check for positive capacity and transaction capacity values
+    * [FLUME-1586] - File Channel should support verifying integrity of individual events.
+    * [FLUME-1652] - Logutils.getLogs could NPE
+    * [FLUME-1661] - ExecSource cannot execute complex *nix commands
+    * [FLUME-1677] - Add File-channel dependency to flume-ng-node's pom.xml
+    * [FLUME-1699] - Make the rename of the meta file platform neutral
+    * [FLUME-1702] - HDFSEventSink should write to a hidden file as opposed to a .tmp file
+    * [FLUME-1740] - Remove contrib/ directory from Flume NG
+    * [FLUME-1745] - FlumeConfiguration Eats Exceptions
+    * [FLUME-1756] - Avro client should be able to use load balancing RPC
+    * [FLUME-1757] - Improve configuration of hbase serializers
+    * [FLUME-1762] - File Channel should recover automatically if the checkpoint is incomplete or bad by deleting the contents of the checkpoint directory
+    * [FLUME-1768] - Multiplexing channel selector should allow optional-only channels
+    * [FLUME-1769] - Replicating channel selector should support optional channels
+    * [FLUME-1770] - Flume should have serializer which supports serializer the headers to a simple string
+    * [FLUME-1777] - AbstractSource does not provide enough implementation for sub-classes
+    * [FLUME-1790] - Commands in EncryptionTestUtils comments require high encryption pack to be installed
+    * [FLUME-1794] - FileChannel check for full disks in the background
+    * [FLUME-1800] - Docs for spooling source durability changes
+    * [FLUME-1808] - ElasticSearchSink is missing log4.properties
+    * [FLUME-1821] - Support configuration of hbase instances to be used in AsyncHBaseSink from flume config
+    * [FLUME-1847] - NPE in SourceConfiguration
+    * [FLUME-1848] - HDFSDataStream logger is actually for a sequence file
+    * [FLUME-1855] - Sequence gen source should be able to stop after a fixed number of events
+    * [FLUME-1864] - Allow hdfs idle callback to clean up closed bucket writers
+    * [FLUME-1874] - Ship with log4j.properties file that has a reliable time based rolling policy
+    * [FLUME-1876] - Document hadoop dependency of FileChannel when used with EmbeddedAgent
+    * [FLUME-1878] - FileChannel replay should print status every 10000 events
+    * [FLUME-1886] - Add a JMS enum type to SourceType so that users don't need to enter FQCN for JMSSource
+    * [FLUME-1889] - Add HBASE and ASYNC_HBASE enum types to SinkType so that users don't need to enter FQCNs
+    * [FLUME-1906] - Ability to disable WAL for put operation in HBaseSink
+    * [FLUME-1915] - Enhance NettyAvroRpcClient and the use of NettyServer to optionally use compression
+    * [FLUME-1926] - Optionally timeout Avro Sink Rpc Clients to avoid stickiness
+    * [FLUME-1940] - Log a snapshot of Flume metrics on shutdown
+    * [FLUME-1945] - HBase Serializer allow key from regular expression group
+    * [FLUME-1976] - JMS Source document should provide instruction on JMS implementation jars
+    * [FLUME-1977] - JMS Source connectionFactory property is not documented
+    * [FLUME-1992] - ElasticSearch dependency is marked optional
+    * [FLUME-1994] - Add ELASTICSEARCH enum type to SinkType to eliminate need for FQCN in agent configuration files
+    * [FLUME-2005] - Minor improvements to Flume assembly config
+    * [FLUME-2008] - it would be very convenient to have a fat jar of flume-ng-log4jappender
+    * [FLUME-2009] - Flume project throws error when imported into Eclipse IDE (Juno)
+    * [FLUME-2013] - Parametrize java source and target version in the main pom file
+    * [FLUME-2015] - ElasticSearchSink: need access to IndexRequestBuilder instance during flume event processing
+    * [FLUME-2046] - Typo in HBaseSink java doc
+    * [FLUME-2049] - Compile ElasticSearchSink with elasticsearch 0.90
+    * [FLUME-2062] - make it possible for HBase sink to deposit event headers into corresponding column qualifiers
+    * [FLUME-2063] - Add Configurable charset to RegexHbaseEventSerializer
+    * [FLUME-2076] - JMX metrics support for HTTP Source
+    * [FLUME-2093] - binary tarball that is created by flume's assembly shouldn't contain sources
+    * [FLUME-2100] - Increase default batchSize of Morphline Solr Sink
+    * [FLUME-2105] - Add docs for MorphlineSolrSink
+
+** Bug
+    * [FLUME-1110] - HDFS Sink throws IllegalStateException when flume-daemon shuts down
+    * [FLUME-1153] - flume-ng script is missing some agent options in help output
+    * [FLUME-1175] - RollingFileSink complains of Bad File Descriptor upon a reconfig event
+    * [FLUME-1262] - Move doc generation to a different profile
+    * [FLUME-1285] - FileChannel has a dependency on Hadoop IO classes
+    * [FLUME-1296] - Lifecycle supervisor should check if the monitor service is still running before supervising
+    * [FLUME-1511] - Scribe-source doesn't handle zero message request correctly.
+    * [FLUME-1676] - ExecSource should provide a configurable charset
+    * [FLUME-1688] - Bump AsyncHBase version to 1.4.1
+    * [FLUME-1709] - HDFS CompressedDataStream doesn't support serializer parameter
+    * [FLUME-1720] - LICENSE file contain entry for protobuf-<version>.jar, however proper artifact name is protobuf-java-<version>.jar
+    * [FLUME-1731] - SpoolableDirectorySource should have configurable support for deleting files it has already completed instead of renaming
+    * [FLUME-1741] - ElasticSearch tests leave directory data/elasticsearch/nodes/ lying around
+    * [FLUME-1748] - HDFS Sink should check if the thread is interrupted before performing any HDFS operations
+    * [FLUME-1755] - Load balancing RPC client has issues with downed hosts
+    * [FLUME-1766] - AvroSource throws confusing exception when configured without a port
+    * [FLUME-1772] - AbstractConfigurationProvider should remove component which throws exception from configure method.
+    * [FLUME-1773] - File Channel worker thread should not be daemon
+    * [FLUME-1774] - EventBackingStoreFactory error message asks user to delete checkpoint which is now done automatically
+    * [FLUME-1775] - FileChannel Log Background worker should catch Throwable
+    * [FLUME-1776] - Several modules require commons-lang but do not declare this in the pom
+    * [FLUME-1778] - Upgrade Flume to use Avro 1.7.3
+    * [FLUME-1784] - JMSource fix minor documentation problem and parameter name
+    * [FLUME-1788] - Flume Thrift source can fail intermittently because of a race condition in Thrift server implementation on some Linux systems
+    * [FLUME-1789] - Unit tests TestJCEFileKeyProvider and TestFileChannelEncryption fail with IBM JDK and flume-1.3.0
+    * [FLUME-1795] - Flume thrift legacy source does not have proper logging configured
+    * [FLUME-1797] - TestFlumeConfiguration is in com.apache.flume.conf namespace. 
+    * [FLUME-1799] - Generated source tarball is missing flume-ng-embedded-agent
+    * [FLUME-1802] - Missing parameter --conf in example of the Flume User Guide
+    * [FLUME-1803] - Generated dist tarball is missing flume-ng-embedded-agent
+    * [FLUME-1804] - JMS source not included in binary dist
+    * [FLUME-1805] - Embedded agent deps should be specified in dependencyManagement section of pom
+    * [FLUME-1818] - Support various layouts in log4jappender
+    * [FLUME-1819] - ExecSource don't flush the cache if there is no input entries
+    * [FLUME-1820] - Should not be possible for RPC client to block indefinitely on close()
+    * [FLUME-1822] - Update javadoc for FlumeConfiguration
+    * [FLUME-1823] - LoadBalancingRpcClient method must throw exception if it is called after close is called.
+    * [FLUME-1824] - Inflights can complete successfully even if checkpoint fails
+    * [FLUME-1828] - ResettableInputStream should support seek()
+    * [FLUME-1834] - Userguide on trunk is missing some memory channel props
+    * [FLUME-1835] - Flume User Guide has wrong prop in Load Balancing Sink Selector
+    * [FLUME-1844] - HDFSEventSink should have option to use RawLocalFileSystem
+    * [FLUME-1845] - Document plugin.d directory structure
+    * [FLUME-1849] - Embedded Agent doesn't shutdown supervisor
+    * [FLUME-1852] - Issues with EmbeddedAgentConfiguration
+    * [FLUME-1854] - Application class can deadlock if stopped immediately after start
+    * [FLUME-1863] - EmbeddedAgent pom must pull in file channel
+    * [FLUME-1865] - Rename the Sequence File formatters to Serializer to be consistent with the rest of Flume
+    * [FLUME-1866] - ChannelProcessor is not logging ChannelExceptions.
+    * [FLUME-1867] - There's no option to set hostname for HTTPSource
+    * [FLUME-1868] - FlumeUserGuide mentions wrong FQCN for JSONHandler
+    * [FLUME-1869] - Request to add "HTTP" source type to SourceType.java
+    * [FLUME-1870] - Flume sends non-numeric values with type as float to Ganglia causing ganglia to crash
+    * [FLUME-1872] - SpoolingDirectorySource doesn't delete tracker file when deletePolicy is "immediate"
+    * [FLUME-1879] - Secure HBase documentation
+    * [FLUME-1880] - Double-logging of created HDFS files
+    * [FLUME-1882] - Allow case-insensitive deserializer value for SpoolDirectorySource
+    * [FLUME-1890] - Flume should set the hbase keytab and principal in HBase conf object.
+    * [FLUME-1891] - Fast replay runs even when checkpoint exists.
+    * [FLUME-1893] - File Channel could miss possible checkpoint corruption
+    * [FLUME-1911] - Add deprecation back to the legacy thrift code
+    * [FLUME-1916] - HDFS sink should poll for # of active replicas. If less than required, roll the file.
+    * [FLUME-1918] - File Channel cannot handle capacity of more than 500 Million events
+    * [FLUME-1922] - HDFS Sink should optionally insert the timestamp at the sink
+    * [FLUME-1924] - Bug in serializer context parsing in RollingFileSink
+    * [FLUME-1925] - HDFS timeouts should not starve other threads
+    * [FLUME-1929] - CheckpointRebuilder main method does not work
+    * [FLUME-1930] - Inflights should clean up executors on close.
+    * [FLUME-1931] - HDFS Sink has a commons-lang dependency which is missing in pom
+    * [FLUME-1932] - no-reload-conf command line param does not work
+    * [FLUME-1937] - Issue with maxUnderReplication in HDFS sink
+    * [FLUME-1939] - FlumeEventQueue must check if file is open before setting the length of the file
+    * [FLUME-1943] - ExecSource tests failing on Jenkins
+    * [FLUME-1948] - plugins.d directory(ies) should be separately overridable, independent of FLUME_HOME
+    * [FLUME-1949] - Documentation for sink processor lists incorrect default
+    * [FLUME-1955] - fileSuffix does not work with compressed streams
+    * [FLUME-1958] - Remove attlasian-ide-plugin.xml from the repo
+    * [FLUME-1964] - hdfs sink depends on commons-io but does not specify it in the pom
+    * [FLUME-1965] - Thrift sink alias doesn't exist
+    * [FLUME-1969] - Update user Guide to explain the purpose of minimumRequiredSpace setting for FileChannel
+    * [FLUME-1974] - Thrift compatibility issue with hbase-0.92
+    * [FLUME-1975] - Use TThreadedSelectServer in ThriftSource if it is available
+    * [FLUME-1980] - Log4jAppender should optionally drop events if append fails
+    * [FLUME-1981] - Rpc client expiration can be done in a more thread-safe way
+    * [FLUME-1986] - doTestInflightCorrupts should not commit transactions  
+    * [FLUME-1993] - On Windows, when using the spooling directory source, there is a file sharing violation when trying to delete tracker file
+    * [FLUME-2002] - Flume RPC Client creates 2 threads per each log attempt if the remote flume agent goes down
+    * [FLUME-2011] - "mvn test" fails
+    * [FLUME-2012] - Two tests fail on Mac OS (saying they fail to load native library) with Java 7
+    * [FLUME-2014] - Race condition when using local timestamp with BucketPath
+    * [FLUME-2023] - Flume must login to secure HBase before creating the HTable instance
+    * [FLUME-2025] - ThriftSource throws NPE in stop() if start() failed because socket open failed or if thrift server instance creation threw.
+    * [FLUME-2026] - TestHTTPSource should use any available port rather than a hardcoded port number
+    * [FLUME-2027] - Check for default replication fails on federated cluster in hdfs sink
+    * [FLUME-2032] - HDFSEventSink doesn't work in Windows
+    * [FLUME-2036] - Make hostname optional for HTTPSource
+    * [FLUME-2042] - log4jappender timeout should be configurable
+    * [FLUME-2043] - JMS Source removed on failure to create configuration
+    * [FLUME-2044] - HDFS Sink impersonation fails after the first file
+    * [FLUME-2051] - Surefire 2.12 cannot run a single test on Windows. Upgrade to 2.12.3
+    * [FLUME-2054] - Support Version Info  on Windows  and fix failure of TestVersionInfo 
+    * [FLUME-2057] - Failures in  FileChannel's TestEventQueueBackingStoreFactory  on Windows
+    * [FLUME-2060] - Failure in TestLog.testReplaySucceedsWithUnusedEmptyLogMetaDataFastReplay test on Windows
+    * [FLUME-2072] - JMX metrics support for HBase Sink
+    * [FLUME-2081] - JMX metrics support for SpoolDir
+    * [FLUME-2082] - JMX support for Seq Generator Source
+    * [FLUME-2083] - Avro Source should not start if SSL is enabled and keystore cannot be opened
+    * [FLUME-2098] - Make Solr sink depend on the CDK version of morphlines
+
+** Documentation
+    * [FLUME-1621] - Document new MemoryChannel parameters in Flume User Guide
+    * [FLUME-1910] - Add thrift RPC documentation
+    * [FLUME-1953] - Fix dev guide error that says sink can read from multiple channels
+    * [FLUME-1962] - Document proper specification of lzo codec as lzop in Flume User Guide
+    * [FLUME-1979] - Wrong propname for connection reset interval in avro sink
+    * [FLUME-2030] - Documentation of Configuration Changes JMSSource, HBaseSink, AsyncHBaseSink and ElasticSearchSink
+
+** Task
+    * [FLUME-1686] - Exclude target directories & Eclipse files from rat checks
+    * [FLUME-2094] - Remove the deprecated - Recoverable Memory Channel
+
+** Sub-task
+    * [FLUME-1626] - Support Hbase security in Hbase sink
+    * [FLUME-1630] - Flume configuration code could be improved
+    * [FLUME-1674] - Documentation / Wiki
+    * [FLUME-1896] - Implement Thrift RpcClient
+    * [FLUME-1897] - Implement Thrift Sink
+    * [FLUME-1898] - Implement Thrift Source
+    * [FLUME-2102] - Update LICENSE file for Flume 1.4.0
+
+----
+
+Release Notes - Flume - Version v1.3.0
+
+** New Feature
+    * [FLUME-1199] - Add HTTP Post Source
+    * [FLUME-1371] - ElasticSearch Sink
+    * [FLUME-1382] - Flume adopt message from existing local Scribe
+    * [FLUME-1385] - Add a multiport syslog source
+    * [FLUME-1424] - File Channel should support encryption
+    * [FLUME-1425] - Create a SpoolDirectory Source and Client
+    * [FLUME-1488] - Load Balancing RPC client should support exponential backoff of failed nodes
+    * [FLUME-1537] - Dump RollingFileSink's counter status when agent stops
+    * [FLUME-1657] - Regex Extractor Interceptor
+
+** Improvement
+    * [FLUME-946] - Allow multiplexing channel selector to specify optional channels.
+    * [FLUME-1337] - Add IDEA files to .gitignore
+    * [FLUME-1358] - Add a regex-based filtering interceptor
+    * [FLUME-1383] - Improve various log messages in FileChannel and HDFSSink
+    * [FLUME-1408] - ScheduledExecutorService does not log uncaught Throwables, we should log them
+    * [FLUME-1418] - Improvement for Log4j configuration
+    * [FLUME-1419] - Using system time if 'timestamp' property is absent in event header
+    * [FLUME-1434] - Distinguish background worker with channel name 
+    * [FLUME-1480] - Replace object descriptor with detailed component type plus name
+    * [FLUME-1487] - FileChannel format needs to be extensible
+    * [FLUME-1490] - Option to limit number of events sent in Stress source
+    * [FLUME-1496] - TestFileChannel is bloated
+    * [FLUME-1507] - Have "Topology Design Considerations" in User Guide
+    * [FLUME-1509] - Flume HDFS sink should allow for the use of different timezones when resolving sink paths
+    * [FLUME-1519] - LifecycleController prints tons of DEBUG messages
+    * [FLUME-1523] - Allow -X java opts to be passed to the agent on the command line
+    * [FLUME-1526] - LogFile log message is scary when no harm has been done
+    * [FLUME-1531] - Flume User Guide should provide more details on configuring the timestamp interceptor
+    * [FLUME-1535] - Ability to specify the capacity of MemoryChannel in bytes
+    * [FLUME-1536] - Support for batch size in StressSource
+    * [FLUME-1538] - Channels should expose channel fill ratio through JMX
+    * [FLUME-1543] - TestFileChannel should be factored into many tests
+    * [FLUME-1546] - File channel encryption: trim() passwords and warn user if he doesn't have JCE policy file
+    * [FLUME-1548] - Build dies due to older protocol buffers compiler
+    * [FLUME-1550] - Use maven-antrun-plugin to save version
+    * [FLUME-1554] - FileChannel fails to build on machines with old protocol buffer compiler
+    * [FLUME-1556] - It would be nice if NullSink logged the number of event processed every 10K or so
+    * [FLUME-1560] - TestFileChannel* tests which fill up the channel should use larger batch size than 1
+    * [FLUME-1563] - FileChannel Encryption KeyProvider configuration properties should be more consistent
+    * [FLUME-1564] - FileChannel log file creation could be clarified and tested
+    * [FLUME-1569] - MemoryChannel uses an Integer as a lock
+    * [FLUME-1575] - FIleChannel Encryption should disallow a null key
+    * [FLUME-1603] - FileChannel capacity reached message is unclear
+    * [FLUME-1607] - FileChannel We should use a regex as opposed to simple filename filter when finding logs
+    * [FLUME-1609] - FileChannel detecting when the underlying file systems are full could provide cleaner error recovery
+    * [FLUME-1631] - Retire hdfs.txnEventMax in HDFS sink
+    * [FLUME-1645] - add hdfs.fileSuffix property to HDFSEventSink
+    * [FLUME-1660] - Close "idle" hdfs handles
+    * [FLUME-1675] - Ignore netbeans config files in rat & git
+    * [FLUME-1681] - Disable empty-file unit test for Spooling File Reader
+    * [FLUME-1684] - Re-enable empty file unit test
+    * [FLUME-1689] - BodyTextSerializer should allow an option not to add a newline to each serialized event
+    * [FLUME-1692] - MultiportSyslogTCPSource user documentation and nickname
+    * [FLUME-1707] - Update FlumeDevGuide
+    * [FLUME-1706] - Website for 1.3 fails to build
+    * [FLUME-1698] - Update RELEASE-NOTES
+    * [FLUME-1711] - Update Flume User Guide
+    * [FLUME-1713] - Netcat source should allow for *not* returning "OK" upon receipt of each message.
+    * [FLUME-1740] - Remove contrib/ directory from Flume NG
+    * [FLUME-1750] - File spooling client uses -D as command line option
+    * [FLUME-1751] - User Guide Examples for File Channel encryption are broken in 1.3 rc5
+    * [FLUME-1749] - .gitignore and elipse related files should not be included in source tarball
+    * [FLUME-1752] - Update CHANGELOG for flume 1.3.0 rc6 to include latest changes
+
+
+** Bug
+    * [FLUME-1208] - Hbase sink should be built only in Hadoop-1.0  profile
+    * [FLUME-1256] - OutofMemory erros in Flume build
+    * [FLUME-1259] - Flume throws OutOfMemory error when sending data from netcat to avro source (negative test case)
+    * [FLUME-1276] - Create a static header interceptor
+    * [FLUME-1277] - Error parsing Syslog rfc 3164 messages with null values
+    * [FLUME-1310] - Make Asynch hbase sink test work with other versions of Hbase
+    * [FLUME-1354] - Update docs to show that recoverable memory channel is deprecated
+    * [FLUME-1362] - Port retrying in TestThriftLegacySource not working
+    * [FLUME-1363] - flume-ng-node - TestNetcatSource doesn't try multiple ports
+    * [FLUME-1364] - Document the necessity of the timestamp header when using time-related escapes for hdfs sink paths
+    * [FLUME-1373] - Remove hardcoded file separator in HDFSEventSink
+    * [FLUME-1374] - Support ganglia reporting
+    * [FLUME-1376] - StaticInterceptor doc update
+    * [FLUME-1377] - ChannelProcessor clobbers exception with NPE if Channel.getTransaction() throws
+    * [FLUME-1389] - Flume gives opaque error if interceptor type not specified
+    * [FLUME-1391] - Use sync() instead of syncFs() in HDFS Sink to be compatible with hadoop 0.20.2
+    * [FLUME-1392] - Inactive channels get added to source channels list causing NPE
+    * [FLUME-1398] - Improve concurrency for async hbase sink
+    * [FLUME-1412] - Commons collections is used in file channel - even though it is not in pom.xml
+    * [FLUME-1414] - VersionInfo should not create a log instance
+    * [FLUME-1416] - Version Info should have hardcoded git repo address
+    * [FLUME-1417] - File Channel checkpoint can be bad leading to the channel being unable to start.
+    * [FLUME-1420] - Exception should be thrown if we cannot instaniate an EventSerializer
+    * [FLUME-1421] - PollableSourceRunner does not name it's thread
+    * [FLUME-1422] - Fix "BarSource" Class Signature in Flume Developer Guide
+    * [FLUME-1426] - FileChannel Replay could be faster
+    * [FLUME-1428] - File Channel should not consider a file as inactive until all takes are committed.
+    * [FLUME-1432] - FileChannel should replay logs in the order they were written
+    * [FLUME-1437] - Checkpoint can miss pending takes.
+    * [FLUME-1470] - Syslog source does not parse facility correctly
+    * [FLUME-1479] - Multiple Sinks can connect to single Channel
+    * [FLUME-1482] - Flume should support exposing metrics via HTTP in JSON/some other web service format.
+    * [FLUME-1498] - File channel - Log updates and queue updates should be atomic
+    * [FLUME-1500] - Upgrade flume to use latest version of Avro - v1.7
+    * [FLUME-1504] - Test file channel times out randomly
+    * [FLUME-1506] - Child poms pull in specific versions of packages not in top level pom
+    * [FLUME-1512] - File Channel should not stop during a checkpoint.
+    * [FLUME-1513] - File Channel log close() method should not be synchronized
+    * [FLUME-1514] - Log4jAppender should also have flume-ng-configuration in the pom
+    * [FLUME-1515] - Fix flume-1.3.0 branch test failures on ASF Jenkins.
+    * [FLUME-1524] - TestMonitoredCounterGroup is flaky
+    * [FLUME-1525] - On some (slow) machines TestFileChannel can fail
+    * [FLUME-1534] - CheckpointRebuilder$ComparableFlumeEventPointer#equals does not work correctly.
+    * [FLUME-1540] - CheckpointBuilder needs to open logfiles in inactive mode
+    * [FLUME-1541] - Implement a SinkSelector for LoadBalancingSinkProcessor that includes failover mechanics
+    * [FLUME-1544] - Update dev guide to reflect the protoc requirement
+    * [FLUME-1545] - File channel missing implicit dependency on commons-lang
+    * [FLUME-1552] - TestFileChannelEncryption fails without a high encryption policy file
+    * [FLUME-1553] - TestFileChannelEncryption should be refactored to use TestFileChannelBase
+    * [FLUME-1555] - StressSource outputs bad log messages that reference (Sequence generator)
+    * [FLUME-1557] - It would be nice if SequenceGeneratorSource could do batching
+    * [FLUME-1562] - TestLoadBalancingSinkProcessor.testRoundRobinBackoffFailureRecovery is flaky, fails every once in a while...
+    * [FLUME-1565] - FileChannel Decryption in RandomReader is not thread safe
+    * [FLUME-1567] - Avro source should expose the number of active connections through JMX
+    * [FLUME-1570] - StressSource batching does not work unless maxTotalEvents is specified
+    * [FLUME-1572] - Add batching to FILE_ROLL sink
+    * [FLUME-1576] - CHECKPOINT_INCOMPLETE should be synced to disk before starting the checkpoint.
+    * [FLUME-1577] - CHECKPOINT_INCOMPLETE should be synced to disk before starting the checkpoint.
+    * [FLUME-1578] - Proposal to modify file channel encryption config
+    * [FLUME-1582] - flume-ng script should set LD_LIBRARY_PATH 
+    * [FLUME-1583] - FileChannel fast full replay will always be used if enabled
+    * [FLUME-1595] - HDFS SequenceFile implementation is not durable due to not using syncFs()
+    * [FLUME-1606] - Rollbacks of Put transactions does not clear the transaction from inflight puts.
+    * [FLUME-1610] - HDFSEventSink and bucket writer have a race condition
+    * [FLUME-1611] - LogUtils regex can be precompiled
+    * [FLUME-1613] - All of the sink examples in the user guide are broken
+    * [FLUME-1616] - FileChannel will lose data in when rollback fails with IOException
+    * [FLUME-1620] - Update flume user guide for LoadBalancingSinkProcessor with the backoff changes.
+    * [FLUME-1622] - MemoryChannel throws NPE if the event has no body
+    * [FLUME-1638] - LoadBalancingRpcClient depends on com.google.common.collect.Maps
+    * [FLUME-1639] - Client SDK should not have dependency on Guava
+    * [FLUME-1650] - Fix flume-ng-hbase-sink compilation against Hadoop 2.X
+    * [FLUME-1651] - in the hadoop-0.23 profile HBase version needs to be at least 0.94.2 
+    * [FLUME-1653] - Update Hadoop-23 profile to point to hadoop-2 alpha artifacts 
+    * [FLUME-1655] - Doc update needed for Regex Filtering Interceptor
+    * [FLUME-1656] - flume-ng script disregards stderr  from hadoop command when finding hadoop jars
+    * [FLUME-1659] - JSON Handler should return simple events, not JSONEvents.
+    * [FLUME-1662] - Convert null body in events into zero length arrays.
+    * [FLUME-1664] - Logutils.getLogs remove unneeded directory check
+    * [FLUME-1671] - Add support for custom components to MonitoredCounterGroup
+    * [FLUME-1673] - MonitoredCounterGroup publishes this reference to platform MBean server in constructor
+    * [FLUME-1683] - Fix Time Granularity Bug in SpoolingFileLineReader
+    * [FLUME-1690] - Elastic Search Sink doesn't run it's unit tests
+    * [FLUME-1712] - Regex Extractor Interceptor tests have timezone issues
+    * [FLUME-1705] - SpoolDirectory short name points at the wrong class
+    * [FLUME-1719] - Example export command in README do not properly close the string
+    * [FLUME-1723] - AsyncHBase and Avro bring in different versions of Netty
+    * [FLUME-1726] - SpoolingFileLineReader must close the reader before renaming
+    * [FLUME-1743] - Multiport syslog tcp source does not load (v1.3 rc5)
+
+
+** Test
+    * [FLUME-1492] - Create integration test for file channel
+
+** Task
+    * [FLUME-1359] - Update main pom.xml file with regards to Flume TLP promotion
+
+** Sub-task
+    * [FLUME-897] - Implement write ahead log library
+    * [FLUME-1629] - Add Audience/Stability annotations
+    * [FLUME-1694] - Fix LICENSE file for binary artifacts
+    * [FLUME-1695] - Fix tarball names and directories
+    * [FLUME-1696] - Update build instructions as Flume build requires more memory
+    * [FLUME-1697] - Update CHANGELOG after 1.3.0 RC0
+    * [FLUME-1727] - Update CHANGELOG for rc4
+
+----
+
+Release Notes - Flume - Version v1.2.0
+
+** New Feature
+    * [FLUME-896] - Implement a Durable Memory Channel
+    * [FLUME-971] - Create developer guide for Flume NG
+    * [FLUME-988] - Client SDK
+    * [FLUME-1085] - Implement a durable FileChannel
+    * [FLUME-1157] - Implement Interceptors (previously known as Decorators) for Flume 1.x
+    * [FLUME-1183] - Implement an HBase Sink which supports table level access
+    * [FLUME-1215] - Implement Timestamp Interceptor
+    * [FLUME-1252] - Asynchronous HBase Sink
+
+** Improvement
+    * [FLUME-828] - LoggerSink representation of the event's body isn't too useful
+    * [FLUME-881] - Would be nice if HDFS Sink would automatically choose best writableFormat based on fileType
+    * [FLUME-979] - ExecSource should optionally restart the command when it exits
+    * [FLUME-985] - All HDFS Operations in HDFSEventSink should have a timeout
+    * [FLUME-1001] - Support custom processors
+    * [FLUME-1011] - AvroSource should have a configurable max thread count
+    * [FLUME-1020] - Implement Kerberos security for HDFS Sink
+    * [FLUME-1030] - Retry logic for failover sink processor to handle downstream exceptions in a predictable manner.
+    * [FLUME-1032] - Fix / clean up Flume NG build
+    * [FLUME-1043] - SDK should mark slf4j deps as optional
+    * [FLUME-1048] - speed up mvn package: stop building .zip packages
+    * [FLUME-1049] - Use hadoop-1.0.0 as basis for default Flume build instead of 0.20.205
+    * [FLUME-1078] - flume-ng script has no way to add, not replace, classpath
+    * [FLUME-1090] - JDBC Channel: Minimize logging under nominal conditions
+    * [FLUME-1117] - Support output to files in Avro container format
+    * [FLUME-1122] - Flume documentation layout should be refactored
+    * [FLUME-1126] - Support RFC 3164 and 5424 syslog format timestamp parsing
+    * [FLUME-1127] - Add configuration support to AbstractAvroEventSerializer for Avro sync interval and compression support
+    * [FLUME-1132] - HDFSEventSink has spurious and verbose log message
+    * [FLUME-1140] - Adding Xms value in flume-env.sh
+    * [FLUME-1160] - ComponentConfigurationFactory catches NullPointerException
+    * [FLUME-1196] - Allow different HDFS Sinks within the same agent to write to HDFS as different users
+    * [FLUME-1198] - Implement a load-balancing sink processor
+    * [FLUME-1212] - Flume should pick HBase jars from HBASE_HOME
+    * [FLUME-1238] - Support active rolling of files created by HDFS Event Sink
+    * [FLUME-1242] - Make flume user & dev guides easily editable
+    * [FLUME-1275] - Add Regex Serializer for HBaseSink
+    * [FLUME-1287] - Add Standalone Example to Docs
+    * [FLUME-1330] - Avro Source should not use Fixed thread pool for boss threads when pool size is specified
+    * [FLUME-1338] - Produce helpful error message in case that timestamp header is missing when time based bucketing is in use
+    * [FLUME-1343] - Improve user guide
+    * [FLUME-1345] - Use apache-flume for the artifact instead of flume-ng-dist
+    * [FLUME-1351] - Add release version to Flume documentation
+
+** Bug
+    * [FLUME-862] - AvroSource breaks when config properties changes different service
+    * [FLUME-1002] - FailoverSinkProcessor replaces sinks with same priority
+    * [FLUME-1017] - syslog classes missing
+    * [FLUME-1026] - Document Thread Safety Guarantees
+    * [FLUME-1027] - Missing log4j library in Flume distribution
+    * [FLUME-1031] - Depricate code generated by Thrift and Avro OG sources that is under com.cloudera package
+    * [FLUME-1035] - slf4j error in flume sdk unit tests
+    * [FLUME-1036] - Reconfiguration of AVRO or NETCAT source causes port bind exception
+    * [FLUME-1037] - NETCAT handler theads terminate under stress test
+    * [FLUME-1040] - Release-Notes says Apache Ivy instead of Apache Flume
+    * [FLUME-1041] - maven warns of duplicate dependencies
+    * [FLUME-1046] - invoking flume-ng script from bin directory fails
+    * [FLUME-1047] - Client SDK has dependency on apache commons
+    * [FLUME-1070] - Fix javadoc for configuring hdfsSink 
+    * [FLUME-1074] - AvroSink if any non-caught exception is thrown, an exception is thrown in finally clause
+    * [FLUME-1075] - HDFSEventSink begin is called when transaction opened due to other error
+    * [FLUME-1079] - Flume agent reconfiguration enters permanent bad state
+    * [FLUME-1080] - Issue with HDFSEventSink for append support 
+    * [FLUME-1083] - Why does flume binary archive produces the following empty directories: bin/{ia64,amd64} ?
+    * [FLUME-1087] - Restore Client API compat with v1.1.0
+    * [FLUME-1088] - TestWAL.testThreadedAppend fails on jenkins build server
+    * [FLUME-1094] - hadoop.profile=23 build is broken by slf4j-jcl dependencies
+    * [FLUME-1096] - Add support to pass headers through AvroCLIClient
+    * [FLUME-1098] - Hadoop jars from compilation step included in assembly build
+    * [FLUME-1099] - copy-paste issue with RecoverableMemoryChannel
+    * [FLUME-1102] - HDFSEventSink rollInterval is broken
+    * [FLUME-1104] - HDFS rolls the first file incorrectly
+    * [FLUME-1108] - FILE_ROLL sink doesn't accept value 0 for unlimited wait time before rolling file
+    * [FLUME-1109] - Syslog sources need to be refactored
+    * [FLUME-1112] - HDFSCompressedDataStream append does not work
+    * [FLUME-1114] - Syslog Sources does not implement maxsize 
+    * [FLUME-1116] - Extra event created for max payload size of 2500 bytes in Flume syslogtcp source
+    * [FLUME-1119] - Remove default ports for syslog sources
+    * [FLUME-1121] - Recoverable Memory Channel cannot recover data 
+    * [FLUME-1124] - Lifecycle supervisor can cause thread contention, sometimes causing components to not startup.
+    * [FLUME-1125] - flume-ng script allows flume-env.sh to clobber some command-line arguments
+    * [FLUME-1128] - Conf poller should use schedule with fixed delay 
+    * [FLUME-1129] - change foo to agent in sample config
+    * [FLUME-1130] - flume-ng script bad ordering on FLUME_HOME var
+    * [FLUME-1135] - flume-docs exclude is not sufficient for rat
+    * [FLUME-1136] - Remove from executor service does not always remove the runnables from the queue
+    * [FLUME-1142] - Seq source fails with multiplexing channel selector
+    * [FLUME-1148] - Refactor logging
+    * [FLUME-1149] - All sources get same channel list even if configuration is different.
+    * [FLUME-1154] - flume-ng script should first try finding java from PATH and then try using bigtop, instead of vice-versa
+    * [FLUME-1156] - If config file has empty sources, then throws NPE
+    * [FLUME-1163] - HDFSEventSink leaves .tmp files in place when Flume is stopped
+    * [FLUME-1164] - Configure should be called after stopping all events.
+    * [FLUME-1177] - Maven deps on flume-ng-configuration module are brought in transitively instead of directly
+    * [FLUME-1180] - ChannelSelectorFactory creates incorrect selector for multiplexing selector type
+    * [FLUME-1181] - Context must enforce dot-separated prefix for sub-properties.
+    * [FLUME-1182] - Syslog source cannot read format correctly from configuration
+    * [FLUME-1184] - TestFileChannel.testThreaded fails sometimes
+    * [FLUME-1188] - TestRecoverableMemoryChannel.testThreaded can fail sometimes
+    * [FLUME-1190] - DurableFileChannel requires FILE enum definition in ChannelConfigurationType
+    * [FLUME-1194] - RecoverableMemoryChannel prop misspelled -- "rentention" should be "retention"
+    * [FLUME-1200] - HDFSEventSink causes *.snappy file to be created in HDFS even when snappy isn't used (due to missing lib)
+    * [FLUME-1202] - Too many approved licenses
+    * [FLUME-1204] - Add more unit tests for hbase sink
+    * [FLUME-1205] - NPE related to checkpointing when using FileChannel
+    * [FLUME-1213] - HDFS sink should allow bucketpath rounding down.
+    * [FLUME-1216] - Need useful error message when keytab does not exist
+    * [FLUME-1217] - HDFS Event Sink generates warnings due to recent change
+    * [FLUME-1219] - Race conditions in BucketWriter / HDFSEventSink
+    * [FLUME-1220] - Load balancing channel selector needs to be in the configuration type 
+    * [FLUME-1221] - ThriftLegacySource doesn't handle fields -> headers conversions for bytebuffers
+    * [FLUME-1226] - FailoverRpcClient should check for NULL batch-size property
+    * [FLUME-1229] - System.nanoTime incorrectly used in filename for HDFS file rolling
+    * [FLUME-1230] - Sink gets initialized even when not active
+    * [FLUME-1231] - Deadlock between BucketWriter and LeaseChecker on shutdown
+    * [FLUME-1232] - Cannot start agent a 3rd time when using FileChannel
+    * [FLUME-1234] - Can't use %P escape sequence for bucket path of HDFS sink
+    * [FLUME-1236] - File channel has a race condition between start and create transaction method
+    * [FLUME-1240] - Add version info to Flume NG
+    * [FLUME-1241] - Flume dist should include the flume-ng-doc directory
+    * [FLUME-1244] - Implement a load-balancing RpcClient with round/robin and random distribution capabilties.
+    * [FLUME-1245] - HDFSCompressedDataStream calls finish() on sync instead of flush()
+    * [FLUME-1246] - FileChannel hangs silently when Hadoop libs not found
+    * [FLUME-1248] - flume-ng script gets broken when it tried to load hbase classpath
+    * [FLUME-1253] - Support for running integration tests
+    * [FLUME-1254] - RpcClient can hang when communication is broken with the source.
+    * [FLUME-1270] - Incorrect default hdfs.callTimeout and hdfs.fileType of  HDFSEventSink in FlumeUserGuide.rst
+    * [FLUME-1271] - Incorrect configuration causes NPE
+    * [FLUME-1280] - Make all config properties of Hbase sinks public constants
+    * [FLUME-1284] - Need host interceptor for hdfs bucket path escape sequence
+    * [FLUME-1288] - Async hbase sink should throw exception when hbase reports failure and check hbase table correctness
+    * [FLUME-1290] - HDFS Sink should accept fileType parameters of arbitrary case
+    * [FLUME-1297] - Flume tests should wait for a few seconds for agent to start.
+    * [FLUME-1301] - HDFSCompressedDataStream can lose data
+    * [FLUME-1303] - java.library.path value is being truncated at first 'n' char
+    * [FLUME-1304] - Allow for faster allocation of checkpoint file.
+    * [FLUME-1306] - LoadBalancingRpcClient should catch exception for invalid RpcClient and failover to valid one
+    * [FLUME-1309] - Integration tests not included in assembly build artifacts
+    * [FLUME-1312] - Host interceptor should support custom headers
+    * [FLUME-1314] - File channel log file can grow beyond max size which causes startup failure
+    * [FLUME-1315] - Null sink should support batching
+    * [FLUME-1316] - AvroSink should be configurable for connect-timeout and request-timeout
+    * [FLUME-1317] - Assembly build pulls in target folder from flume-ng-tests
+    * [FLUME-1319] - File Channel optimize replay of logs when a checkpoint is present
+    * [FLUME-1320] - Add safeguard for checkpoint corruption detection
+    * [FLUME-1322] - ChannelProcessor should catch Throwable to work around close() clobbering uncaught Exceptions
+    * [FLUME-1323] - Remove shutdown hook from FileChannel
+    * [FLUME-1324] - File Channel Log can contain unassigned blocks
+    * [FLUME-1325] - Components should be stopped in the reverse order that they were started
+    * [FLUME-1327] - File Channel can deadlock in when checkpoint happens in between a put/take/commit
+    * [FLUME-1329] - AvroSink can hang during Avro RPC handshake
+    * [FLUME-1331] - Start method of components throwing NoClassDefFoundError are not caught
+    * [FLUME-1333] - Disable running of saveVersion.sh on Windows
+    * [FLUME-1341] - Build fails on jenkins because a file exists in the environment
+    * [FLUME-1344] - AvroSink JMX does not report connection created count accurately
+    * [FLUME-1346] - Build warning from missing maven-sphinx version in reporting section
+    * [FLUME-1347] - Deprecate RecoverableMemoryChannel
+    * [FLUME-1348] - Update the documentation, correcting links and removing incubation.
+    * [FLUME-1349] - Document Hbase sinks.
+    * [FLUME-1352] - Add documentation for HDFS path rounddown.
+    * [FLUME-1355] - Improve user guide section about sink processors
+    * [FLUME-1356] - Document interceptors
+
+** Task
+    * [FLUME-840] - Update project committers in pom file
+    * [FLUME-991] - Make flume configuration validation component specific at time rather than at runtime
+    * [FLUME-1028] - Fix jenkins build after addition of submodule
+    * [FLUME-1050] - Update version of surefire plugin
+    * [FLUME-1073] - Default Log4j configuration file should have a rolling policy
+    * [FLUME-1082] - Add User and dev guide to Flume site
+    * [FLUME-1151] - Exclude docs directory from rat
+    * [FLUME-1189] - Test ReoverableMemoryChannel throughput versus FileChannel
+    * [FLUME-1300] - Update user guide for File Channel
+    * [FLUME-1353] - Ensure license headers are consistent
+
+** Sub-task
+    * [FLUME-748] - Create metric collection infrastructure
+    * [FLUME-962] - Failover capability for Client SDK
+    * [FLUME-992] - Create configuration stubs for sources, channels, sinks etc
+    * [FLUME-999] - Updating init scripts and variables to fit the term agent
+    * [FLUME-1052] - Core configuration component
+    * [FLUME-1053] - Basic SourceConfiguration
+    * [FLUME-1054] - Basic ChannelConfiguration
+    * [FLUME-1055] - Basic SinkConfiguration
+    * [FLUME-1105] - Allow the optional disabling of foreign keys
+    * [FLUME-1107] - Configuration keys for JDBC channel contain redundant prefix.
+    * [FLUME-1113] - JDBC Channel invokes size query on every put
+
+----
+
+Release Notes - Flume - Version v1.1.0
+
+** Sub-task
+    * [FLUME-989] - Factor Flume Avro RPC interfaces out into separate Client SDK
+
+** Bug
+    * [FLUME-11] - Tests are setting logger level and should not be.
+    * [FLUME-889] - All events in memory channel are lost on reconfiguration
+    * [FLUME-920] - flume-ng script does not work on Ubuntu Maverick
+    * [FLUME-933] - Default[Source|Sink|Channel]Factory implementation should do reference counting for create/unregistering instances.
+    * [FLUME-936] - MemoryChannel is not thread safe
+    * [FLUME-955] - Rat failure: Legacy Avro Source missing Apache license header
+    * [FLUME-957] - Remove unused flume json config file
+    * [FLUME-960] - TestAvroSink.testFailedConnect is racy and fails often
+    * [FLUME-963] - Add additional tests to TestHDFSEventSink and demystify existing tests
+    * [FLUME-972] - Missing dep when attempting to prepare flume dir for import into Eclipse
+    * [FLUME-987] - LoggerSink prints garbage for body
+    * [FLUME-1003] - The memory channel does not seem to respect the capacity
+    * [FLUME-1005] - Several issues with flume-ng script
+    * [FLUME-1009] - HDFSEventSink should return BACKOFF when the channel returns null
+    * [FLUME-1018] - Context can cause NullPointerException
+
+** Improvement
+    * [FLUME-886] - Create Log4j Appender
+    * [FLUME-919] - flume-ng script should use exec when spawning the java process
+    * [FLUME-922] - Straighten up branches for development
+    * [FLUME-925] - Update build infrastructure to follow Apache Maven guidelines
+    * [FLUME-931] - Flume NG TailSource
+    * [FLUME-932] - Making flume-ng components pluggage and name aware
+    * [FLUME-935] - Create abstract implementations of basic channel/transaction semantics
+    * [FLUME-939] - Load flume-env.sh from flume_conf_dir environment variable / system property as opposed to bin directory 
+    * [FLUME-945] - Add the ability to specify a default channel for multiplexing channel selector.
+    * [FLUME-956] - Configuration File Template
+    * [FLUME-958] - Miscellaneous build improvements
+    * [FLUME-964] - Remove compiler warnings where possible
+    * [FLUME-978] - Context interface is too basic requiring boilerplate user code
+    * [FLUME-984] - SinkRunner should catch unhanded exceptions and log them like PollingSourceRunner
+    * [FLUME-990] - Hive sink
+    * [FLUME-1019] - Document Sink and related interfaces, defining expected behaviors
+    * [FLUME-1021] - Document API contracts and expected behavior in additional interfaces, including Source
+
+** New Feature
+    * [FLUME-865] - Implement failover sink 
+    * [FLUME-892] - Support for SysLog as source
+    * [FLUME-914] - Port the IRC sink to flume ng
+    * [FLUME-930] - Support for multiplexing into different channels from single source.
+    * [FLUME-942] - Support event compatibility with Flume 0.9x
+    * [FLUME-970] - Create user guide for Flume NG
+    * [FLUME-1015] - S3 sink on flumeNG
+
+** Task
+    * [FLUME-940] - Remove unused code from Flume
+    * [FLUME-949] - Collapse PollableSink into Sink interface.
+    * [FLUME-977] - Migrate trunk to 0.9.5 branch and move branch flume-728 over to trunk
+
+----
+
+Release Notes - Flume - Version v1.0.0 - 20111230
+
+** Bug
+    * [FLUME-830] - flume uber jar is missing files from flume-file-channel project
+    * [FLUME-831] - flume-jdbc-channel project has unnecessary direct dependency on log4j API
+    * [FLUME-833] - Audit Direct Library Deps for Flume NG
+    * [FLUME-835] - Issues during clean build of Flume NG
+    * [FLUME-850] - Upgrade the version of Hadoop we use for HDFS sink
+    * [FLUME-858] - HDFSWriterFactory is using operation == for string comparison
+    * [FLUME-863] - Use of unknown sink type leads to NullPointerException
+    * [FLUME-868] - RAT checks fail on builds.apache.org due to local maven repo
+    * [FLUME-869] - JDBC channel tests leave derby.log in module directory
+    * [FLUME-870] - LoggerSink contains two calls to Transaction#commit()
+    * [FLUME-880] - HDFSFormatterFactory is using == operator for String objects
+    * [FLUME-887] - Add maven assembly to build a source only artifact
+    * [FLUME-891] - flume-ng script doesn't build the classpath properly
+    * [FLUME-894] - Add log4j as part of the build
+    * [FLUME-898] - Create DISCLAIMER file for Flume project
+    * [FLUME-900] - RELEASENOTES file needs to be ignored by RAT
+    * [FLUME-902] - Remove thrift references in NG build
+    * [FLUME-903] - Update project metadata in main pom
+    * [FLUME-904] - Update plugin and dependency repos referenced in the main pom
+    * [FLUME-905] - ExecSource silently fails after first transaction with channel
+    * [FLUME-906] - Maven Avro plugin missing an entry in plugin dep management
+    * [FLUME-907] - Maven assembly missing CHANGELOG and other misc files
+    * [FLUME-908] - Clean out old bin and conf contents
+    * [FLUME-909] -  org.apache.flume.node.TestAbstractLogicalNodeManager is failing on some machines
+    * [FLUME-910] - Typo in maven avro plugin groupId in plugin dep management
+    * [FLUME-911] - README should reference Apache Flume rather than just Flume
+    * [FLUME-912] - DEVNOTES contains outdated info
+    * [FLUME-913] - slf4j-log4j binding is excluded from the dist assembly due to test scope
+    * [FLUME-915] - Incorrect license information in various files
+    * [FLUME-916] - DISCLAIMER file has an incorrect URL
+
+** Improvement
+    * [FLUME-846] - Bump Avro version to 1.6.x
+    * [FLUME-867] - Pollable source and sink runners should reduce poll interval after several BACKOFFs
+    * [FLUME-871] - HDFS sink needs to handle blocked/hung append operation
+
+** Question
+    * [FLUME-856] - Move data across hosts
+
+** Task
+    * [FLUME-876] - Update README, NOTICE, LICENSE, and DEVNOTES files
+    * [FLUME-878] - Write release-ready Maven assembly descriptor
+    * [FLUME-879] - Document Flume's ASF release process
+    * [FLUME-885] - Set version number of project to 1.0.0-SNAPSHOT for NG branch
+    * [FLUME-899] - Add Release notes
+    * [FLUME-901] - Make Flume NG build and pass tests against Hadoop 0.23 branch
+
+Release Notes - Flume - Version NG alpha 2 - 20111107
+
+** Bug
+    * [FLUME-773] - ExecSource doesn't rollback transactions on errors
+    * [FLUME-805] - HDFS sink should mangle the names of incomplete files till they are closed
+    * [FLUME-815] - Test json config file has missing bind property
+    * [FLUME-816] - TestJdbcChannelProvider throws OOME based on RNG values
+    * [FLUME-817] - JdbcChannel can not be created by DefaultChannelFactory
+    * [FLUME-818] - PropertiesFileConfigurationProvider doesn't properly log exceptions
+    * [FLUME-822] - JDBC channel lock acquisition failure during take()
+    * [FLUME-823] - The properties configuration provider should fail if the configuration file is not found
+    * [FLUME-825] - Need to remove dependency on hadoop core from flume-ng-core project
+    * [FLUME-827] - Avro client conn failure results in 60-second wait before terminating
+    * [FLUME-848] - Typo is TestHDFSEventSink path
+    * [FLUME-861] - AvroSource is failing on ClosedChannelException
+
+** Improvement
+    * [FLUME-819] - JDBC channel plugin is not registered with Flume node
+    * [FLUME-820] - JDBC channel should support capacity specification.
+    * [FLUME-821] - Derby schema handler should create the necessary indexes for fast lookups.
+    * [FLUME-826] - Update libs
+
+** New Feature
+    * [FLUME-775] - Support text output
+    * [FLUME-814] - Add support for multiple channels to sources
+
+** Task
+    * [FLUME-812] - Enable Apache RAT checks during Maven build
+    * [FLUME-866] - Remove old plugins and log4j appender
+
+Release Notes - Flume - Version NG alpha 1 - 20111021
+
+** Sub-task
+    * [FLUME-737] - Port Flume OG sources and sinks to NG interfaces
+    * [FLUME-739] - Create NG node configuration components
+    * [FLUME-747] - Create NG command line launchers and daemon infrastructure
+    * [FLUME-760] - Implement JDBC based channel implementation
+    * [FLUME-761] - Implement HDFS Flume NG sink
+    * [FLUME-777] - Support text output for HDFS sink
+    * [FLUME-795] - Replace the non-transactional memory channel with new transactional memory channel
+
+** Bug
+    * [FLUME-769] - FLUME-728 - TestJsonFileConfigurationProvider fails due to timing issue
+    * [FLUME-784] - MemoryChannel should poll with timeout on take() rather than block indefinitely
+    * [FLUME-788] - Add more test cases to Flume-NG HDFS test
+    * [FLUME-803] - support re-entrant transaction for memory channel
+    * [FLUME-806] - Fix cast exception in MemoryChannel due to config type changes
+    * [FLUME-807] - Fix tests broken by FLUME-802 changes
+    * [FLUME-809] - Fix channel syntax javadoc bug in PropertiesFileConfigurationProvider
+    * [FLUME-811] - Remove logging of avro client that causes errors with proxy object methods
+
+** Epic
+    * [FLUME-728] - Flume NG refactoring
+
+** Improvement
+    * [FLUME-772] - MemoryChannel should push events back into channel on rollback
+    * [FLUME-774] - Move HDFS sink into a separate module
+    * [FLUME-781] - Add error checking to AvroCLICilent
+    * [FLUME-782] - Instrument AvroSource with counters
+    * [FLUME-783] - Add a batch event RPC call to AvroSource
+    * [FLUME-804] - Support help and node name arguments from the command line
+    * [FLUME-810] - Add help command line options to AvroCLIClient
+
+** New Feature
+    * [FLUME-771] - Implement NG Avro source
+    * [FLUME-778] - Implement NG Avro sink
+    * [FLUME-779] - Create an Avro CLI for sending data to the Avro source
+
+** Task
+    * [FLUME-780] - Reduce default log levels for chatty libraries
+    * [FLUME-785] - Write javadoc for builtin channels
+    * [FLUME-786] - Write javadoc for builtin sources
+    * [FLUME-787] - Write javadoc for builtin sinks
+    * [FLUME-801] - Write NG getting started guide
+    * [FLUME-802] - Complete PropertyFileConfigurationProvider implementation
+
