@@ -16,104 +16,107 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.stratio.ingestion</groupId>
-	<artifactId>stratio-ingestion-parent</artifactId>
-	<version>0.4.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    <groupId>com.stratio.ingestion</groupId>
+    <artifactId>stratio-ingestion-parent</artifactId>
+    <version>0.4.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-	<name>Stratio Ingestion</name>
+    <name>Stratio Ingestion</name>
 
-	<organization>
-		<name>Stratio</name>
-		<url>http://stratio.com</url>
-	</organization>
-	<inceptionYear>2014</inceptionYear>
+    <organization>
+        <name>Stratio</name>
+        <url>http://stratio.com</url>
+    </organization>
+    <inceptionYear>2014</inceptionYear>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
-		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 
-		<flume.version>1.6.0-SNAPSHOT</flume.version>
-		<streaming.api.version>0.6.2</streaming.api.version>
-		<junit.version>4.11</junit.version>
-		<mockito.version>1.10.8</mockito.version>
-		<jackson.databind.version>2.4.4</jackson.databind.version>
-		<datastax.version>2.1.2</datastax.version>
-		<mongodb.version>2.12.4</mongodb.version>
-		<tika.version>1.5</tika.version>
-		<commons.lang3.version>3.3.2</commons.lang3.version> <!-- Watch Flume -->
-		<hadoop.version>2.4.0</hadoop.version>
-	        <commons.io.version>2.1</commons.io.version>
-	        <slf4j.version>1.7.7</slf4j.version>
-	        <kite.version>0.17.0</kite.version>
-	        <guava.version>17.0</guava.version>
-	        <codahale.metrics.version>3.0.2</codahale.metrics.version> <!-- Watch Datastax Driver & Kite -->
-	        <zookeeper.version>3.4.6</zookeeper.version> <!-- Watch Stratio Streaming -->
-	        <typesafe.config.version>1.2.1</typesafe.config.version>
-	        <spark.version>1.1.0</spark.version>
-			<quartz.version>2.2.1</quartz.version>
-		<maxmind.version>0.3.3</maxmind.version>
-		<jersey.core.version>1.18.3</jersey.core.version>
-	</properties>
+        <flume.version>1.6.0-SNAPSHOT</flume.version>
+        <streaming.api.version>0.6.2</streaming.api.version>
+        <junit.version>4.11</junit.version>
+        <mockito.version>1.10.8</mockito.version>
+        <jackson.databind.version>2.4.4</jackson.databind.version>
+        <datastax.version>2.1.2</datastax.version>
+        <mongodb.version>2.12.4</mongodb.version>
+        <tika.version>1.5</tika.version>
+        <commons.lang3.version>3.3.2</commons.lang3.version>
+        <!-- Watch Flume -->
+        <hadoop.version>2.4.0</hadoop.version>
+        <commons.io.version>2.1</commons.io.version>
+        <slf4j.version>1.7.7</slf4j.version>
+        <kite.version>0.17.0</kite.version>
+        <guava.version>17.0</guava.version>
+        <codahale.metrics.version>3.0.2</codahale.metrics.version>
+        <!-- Watch Datastax Driver & Kite -->
+        <zookeeper.version>3.4.6</zookeeper.version>
+        <!-- Watch Stratio Streaming -->
+        <typesafe.config.version>1.2.1</typesafe.config.version>
+        <spark.version>1.1.0</spark.version>
+        <quartz.version>2.2.1</quartz.version>
+        <maxmind.version>0.3.3</maxmind.version>
+        <jersey.core.version>1.18.3</jersey.core.version>
+    </properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<!-- If ingestion version for a flume module is resolved you must add here the module -->
-			<dependency>
-				<groupId>com.stratio.streaming</groupId>
-				<artifactId>streaming-api</artifactId>
-				<version>${streaming.api.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.datastax.cassandra</groupId>
-				<artifactId>cassandra-driver-core</artifactId>
-				<version>${datastax.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>io.netty</groupId>
-						<artifactId>netty</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.mongodb</groupId>
-				<artifactId>mongo-java-driver</artifactId>
-				<version>${mongodb.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>${jackson.databind.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-all</artifactId>
-				<scope>test</scope>
-				<version>${mockito.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.easytesting</groupId>
-				<artifactId>fest-assert</artifactId>
-				<version>1.4</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>${commons.lang3.version}</version>
-			</dependency>
+    <dependencyManagement>
+        <dependencies>
+            <!-- If ingestion version for a flume module is resolved you must add here the module -->
+            <dependency>
+                <groupId>com.stratio.streaming</groupId>
+                <artifactId>streaming-api</artifactId>
+                <version>${streaming.api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.datastax.cassandra</groupId>
+                <artifactId>cassandra-driver-core</artifactId>
+                <version>${datastax.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongo-java-driver</artifactId>
+                <version>${mongodb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.databind.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <scope>test</scope>
+                <version>${mockito.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.easytesting</groupId>
+                <artifactId>fest-assert</artifactId>
+                <version>1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons.lang3.version}</version>
+            </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
@@ -163,145 +166,153 @@
                 <version>${zookeeper.version}</version>
             </dependency>
 
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-client</artifactId>
-				<version>${jersey.core.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.quartz-scheduler</groupId>
-				<artifactId>quartz</artifactId>
-				<version>${quartz.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.maxmind.db</groupId>
-				<artifactId>maxmind-db</artifactId>
-				<version>${maxmind.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-client</artifactId>
+                <version>${jersey.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.maxmind.db</groupId>
+                <artifactId>maxmind-db</artifactId>
+                <version>${maxmind.version}</version>
+            </dependency>
 
-			<!-- Flume -->
+            <!-- Flume -->
 
-		</dependencies>
-	</dependencyManagement>
+        </dependencies>
+    </dependencyManagement>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>findbugs-maven-plugin</artifactId>
-					<version>2.5.4</version>
-					<configuration>
-						<effort>Max</effort>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.17</version>
-				<configuration>				
-					<argLine>${jacocoUT} -XX:MaxPermSize=512m</argLine>
-					<includes>
-						<include>**/*Test.java</include>
-					</includes>
-					<excludes>
-						<exclude>**/*IT.java</exclude>
-					</excludes>
-					<skipTests>${skipUTs}</skipTests>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.17</version>
-				<configuration>				
-					<argLine>${jacocoIT}</argLine>
-					<includes>
-						<include>**/*IT.java</include>
-					</includes>
-					<excludes>
-						<exclude>**/*Test.java</exclude>
-					</excludes>
-					<skipTests>${skipITs}</skipTests>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.1.201405082137</version>
-				<executions>
-					<execution>
-						<id>pre-unittest</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-						<configuration>
-							<destFile>${project.build.directory}/jacocoUT.exec</destFile>
-							<propertyName>jacocoUT</propertyName>
-						</configuration>
-					</execution>
-					<execution>
-						<id>pre-integrationtest</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-						<configuration>
-							<destFile>${project.build.directory}/jacocoIT.exec</destFile>
-							<propertyName>jacocoIT</propertyName>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
-					<properties>
-						<owner>${project.organization.name}</owner>
-						<email>${project.organization.url}</email>
-						<failOnMissingHeader>true</failOnMissingHeader>
-					</properties>
-					<includes>
-						<include>**/src/**</include>
-						<include>**/*.xml</include>
-					</includes>
-					<excludes>
-						<exclude>**/README</exclude>
-						<exclude>**/src/test/resources/**</exclude>
-						<exclude>**/src/main/resources/**</exclude>
-						<!-- The following files were written by other authors -->
-						<exclude>stratio-morphlines/stratio-commons-morphline/src/test/java/**/Collector.java</exclude>
-						<exclude>**/src/test/java/**/TransientPositionTracker.java</exclude>
-						<exclude>**/src/main/java/cue/lang/**</exclude>
-						<exclude>flume/**</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>format</goal>
-						</goals>
-						<phase>process-resources</phase>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.rat</groupId>
-				<artifactId>apache-rat-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>verify.rat</id>
-						<phase>none</phase>
-					</execution>
-				</executions>
-        		</plugin>
-		</plugins>
-	</build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>2.5.4</version>
+                    <configuration>
+                        <effort>Max</effort>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.4</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <argLine>${jacocoUT} -XX:MaxPermSize=512m</argLine>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*IT.java</exclude>
+                    </excludes>
+                    <skipTests>${skipUTs}</skipTests>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <argLine>${jacocoIT}</argLine>
+                    <includes>
+                        <include>**/*IT.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*Test.java</exclude>
+                    </excludes>
+                    <skipTests>${skipITs}</skipTests>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.1.201405082137</version>
+                <executions>
+                    <execution>
+                        <id>pre-unittest</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/jacocoUT.exec</destFile>
+                            <propertyName>jacocoUT</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pre-integrationtest</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/jacocoIT.exec</destFile>
+                            <propertyName>jacocoIT</propertyName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
+                    <properties>
+                        <owner>${project.organization.name}</owner>
+                        <email>${project.organization.url}</email>
+                        <failOnMissingHeader>true</failOnMissingHeader>
+                    </properties>
+                    <includes>
+                        <include>**/src/**</include>
+                        <include>**/*.xml</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/README</exclude>
+                        <exclude>**/src/test/resources/**</exclude>
+                        <exclude>**/src/main/resources/**</exclude>
+                        <!-- The following files were written by other authors -->
+                        <exclude>stratio-morphlines/stratio-commons-morphline/src/test/java/**/Collector.java</exclude>
+                        <exclude>**/src/test/java/**/TransientPositionTracker.java</exclude>
+                        <exclude>**/src/main/java/cue/lang/**</exclude>
+                        <exclude>flume/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>verify.rat</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>
@@ -315,14 +326,16 @@
                 <module>stratio-morphlines</module>
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
+                <module>stratio-ingestion-dist</module>
+                <module>doc</module>
             </modules>
             <!--<repositories>-->
-			    <!--<repository>-->
-			      <!--<id>maven-twttr</id>-->
-			      <!--<name>Twitter Public Maven Repo</name>-->
-			      <!--<url>http://maven.twttr.com</url>-->
-			    <!--</repository>-->
-			<!--</repositories>-->
+            <!--<repository>-->
+            <!--<id>maven-twttr</id>-->
+            <!--<name>Twitter Public Maven Repo</name>-->
+            <!--<url>http://maven.twttr.com</url>-->
+            <!--</repository>-->
+            <!--</repositories>-->
         </profile>
         <profile>
             <id>travis-test</id>

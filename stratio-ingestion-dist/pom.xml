@@ -19,9 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.stratio.ingestion</groupId>
-    <artifactId>stratio-ingestion</artifactId>
-    <version>0.4.0-SNAPSHOT</version>
+    <artifactId>stratio-ingestion-dist</artifactId>
     <packaging>pom</packaging>
 
     <parent>
@@ -30,9 +28,9 @@
         <version>0.4.0-SNAPSHOT</version>
     </parent>
 
-    <modules>
-        <module>..</module>
-    </modules>
+    <!--<modules>-->
+        <!--<module>..</module>-->
+    <!--</modules>-->
 
     <!-- Required here for unix-maven-plugin -->
     <name>Stratio Ingestion</name>
@@ -42,6 +40,10 @@
             <name>Apache 2.0</name>
         </license>
     </licenses>
+
+    <properties>
+        <outputFileName>stratio-ingestion</outputFileName>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -73,6 +75,93 @@
             <version>${flume.version}</version>
             <type>pom</type>
         </dependency>
+
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-rest-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-snmptraps-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-cassandra-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-checkpointfilter-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-commons-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-druid-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-elasticsearch-serializer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-geoip-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-irc-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-jdbc-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-kafka-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-mongodb-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-nlp-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-redis-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-stratiostreaming-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-wikipediacleaner-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-xmlxpath-deserializer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -108,7 +197,7 @@
                     <plugin>
                         <groupId>com.stratio.mojo.unix</groupId>
                         <artifactId>unix-maven-plugin</artifactId>
-                        <version>1.0-alpha-9</version>
+                        <version>1.1.2</version>
                         <inherited>false</inherited>
                         <extensions>true</extensions>
                         <executions>
