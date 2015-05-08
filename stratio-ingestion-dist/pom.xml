@@ -75,6 +75,16 @@
             <version>${flume.version}</version>
             <type>pom</type>
         </dependency>
+        <dependency>
+            <groupId>org.apache.flume</groupId>
+            <artifactId>flume-ng-core</artifactId>
+            <version>${flume.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flume</groupId>
+            <artifactId>flume-ng-sdk</artifactId>
+            <version>${flume.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.stratio.ingestion</groupId>
