@@ -11,6 +11,7 @@ RUN echo "[stratio]" > /etc/yum.repos.d/stratio.repo &&\
 
 RUN yum install -y java-1.7.0-openjdk-devel
 RUN yum install -y stratio-ingestion
+RUN yum install -y wget
 
 RUN sed -i -e "s~127.0.0.1~cassandra~g" /demo/conf/flume-conf-cassandra.properties
 RUN sed -i -e "s~127.0.0.1~mongodb~g" /demo/conf/flume-conf-mongodb.properties
