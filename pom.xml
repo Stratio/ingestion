@@ -182,8 +182,7 @@
                 <version>${maxmind.version}</version>
             </dependency>
 
-            <!-- Flume -->
-
+	
         </dependencies>
     </dependencyManagement>
 
@@ -329,13 +328,6 @@
                 <module>stratio-ingestion-dist</module>
                 <module>doc</module>
             </modules>
-            <!--<repositories>-->
-            <!--<repository>-->
-            <!--<id>maven-twttr</id>-->
-            <!--<name>Twitter Public Maven Repo</name>-->
-            <!--<url>http://maven.twttr.com</url>-->
-            <!--</repository>-->
-            <!--</repositories>-->
         </profile>
         <profile>
             <id>travis-test</id>

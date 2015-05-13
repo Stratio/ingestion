@@ -1,0 +1,20 @@
+{
+  "properties" : {
+    "@timestamp": { "type": "date", "store": true },
+    "@message": { "type": "string", "store": false, "index": "no"},
+    "flight_date": { "type": "date", "store": true},
+    "DepDelay": { "type": "integer"},
+    "destLatLon": { "type": "geo_point"},
+    "originLatLon": { "type": "geo_point"},
+    "Origin": {"type": "string"},
+    "Dest": {"type": "string"},
+    "ArrDelay": {"type": "integer"},
+    "UniqueCarrier": {"type": "string"}
+  },
+  "_source": { "enabled": true },
+  "_all": { "enabled": false }
+}
+
+
+
+
