@@ -22,6 +22,10 @@ echo -e 'Enabling ElasticSearch...'
 chkconfig elasticsearch on
 service elasticsearch restart
 
+echo -e 'Enabling Cassandra...'
+chkconfig cassandra on
+service cassandra restart
+
 ##############
 ## EXAMPLES ##
 ##############
@@ -36,13 +40,14 @@ cd "${TMPDIR}"
 download "https://github.com/Stratio/flume-ingestion/zipball/master" "flume-ingestion.zip"
 unzip -qq flume-ingestion.zip
 cp -rf Stratio-flume-ingestion*/examples /opt/sds/ingestion/
+cp -rf Stratio-flume-ingestion*/examples/apache-logs/dict/* /opt/sds/ingestion/dict
 
 ############
 ## KIBANA ##
 ############
 
 KIBANA_VERSION=3.1.2
-KIBANA_INSTALL=/var/www/html
+KIBANA_INSTALL="/var/www/html"
 KIBANA_TARBALL="kibana-${KIBANA_VERSION}.tar.gz"
 KIBANA_DOWNLOAD_URL="https://download.elasticsearch.org/kibana/kibana/${KIBANA_TARBALL}"
 
@@ -68,7 +73,7 @@ yum_install nodejs npm --enablerepo=epel
 ##############
 
 KIBANA_4_VERSION=4.0.2
-KIBANA_4_INSTALL=/opt/sds
+KIBANA_4_INSTALL="/opt/sds"
 KIBANA_4_TARBALL="kibana-${KIBANA_4_VERSION}-linux-x64.tar.gz"
 KIBANA_4_DOWNLOAD_URL="https://download.elastic.co/kibana/kibana/${KIBANA_4_TARBALL}"
 
