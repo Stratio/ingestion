@@ -68,6 +68,13 @@
             </includes>
         </fileSet>
         <fileSet>
+            <directory>../detector</directory>
+            <outputDirectory>/detector</outputDirectory>
+            <includes>
+                <include>**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
             <directory>src/main/resources/bin</directory>
             <includes>
                 <include>**</include>

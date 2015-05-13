@@ -33,6 +33,7 @@
 		<module>stratio-snmptraps-source</module>
 		<module>stratio-redis-source</module>
         <module>stratio-irc-source</module>
-    </modules>
+		<module>stratio-detector-http-source</module>
+	</modules>
 
 </project>

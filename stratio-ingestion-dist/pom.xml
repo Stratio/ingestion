@@ -171,6 +171,11 @@
             <artifactId>stratio-xmlxpath-deserializer</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-detector-http-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
 
     </dependencies>
