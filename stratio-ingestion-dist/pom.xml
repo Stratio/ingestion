@@ -124,6 +124,11 @@
         </dependency>
         <dependency>
             <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-geolocateairport-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
             <artifactId>stratio-irc-source</artifactId>
             <version>${project.version}</version>
         </dependency>
