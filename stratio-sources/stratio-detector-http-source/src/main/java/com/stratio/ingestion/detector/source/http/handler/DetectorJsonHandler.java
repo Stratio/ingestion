@@ -86,9 +86,19 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
             LOG.error("Unsupported character set in request {}. JSON handler supports UTF-8, UTF-16 and UTF-32 only.", charset);
             throw new UnsupportedCharsetException("JSON handler supports UTF-8, UTF-16 and UTF-32 only.");
         }
-        List<Event> events = new ArrayList<Event>(0);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(reader);
+        return parseJsonNode(jsonNode);
+    }
+
+    public List<Event> getEvents(final String jsonString) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(jsonString);
+        return parseJsonNode(jsonNode);
+    }
+
+    private List<Event> parseJsonNode(JsonNode jsonNode) throws Exception {
+        List<Event> events = new ArrayList<Event>(0);
         if(jsonNode.isObject()) {
             events.add(buildDetectorEvent(jsonNode));
         } if(jsonNode.isArray()) {
@@ -131,8 +141,10 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         headers.put(RECORDED_AT, Long.toString(DATE_FORMATTER.parse(payload.get(RECORDED_AT).asText()).getTime()));
         headers.put(RECORDED_AT_MS, Long.toString(DATE_FORMATTER_MS.parse(payload.get(RECORDED_AT_MS).asText()).getTime()));
         headers.put(RECEIVED_AT, Long.toString(DATE_FORMATTER.parse(payload.get(RECEIVED_AT).asText()).getTime()));
-        headers.put(LAT, payload.get(LOC).get(0).asText());
-        headers.put(LON, payload.get(LOC).get(1).asText());
+        if(payload.has(LOC)) {
+            headers.put(LAT, payload.get(LOC).get(0).asText());
+            headers.put(LON, payload.get(LOC).get(1).asText());
+        }
         return headers;
     }
 
