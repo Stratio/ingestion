@@ -37,10 +37,10 @@ cleanup() {
 }
 trap cleanup SIGINT
 
-if [[ ! -e ${DEFAULT_FLUME_CONF_PROPERTIES} ]] ; then
-	logger "${DEFAULT_FLUME_CONF_PROPERTIES} does not exist!"
-	exit 1
-fi
+#if [[ ! -e ${DEFAULT_FLUME_CONF_PROPERTIES} ]] ; then
+#	logger "${DEFAULT_FLUME_CONF_PROPERTIES} does not exist!"
+#	exit 1
+#fi
 
 mkdir -p "${LOG_DIR}"
 
@@ -48,8 +48,8 @@ log "Running feed_data.sh (logging to ${LOG_FEED_DATA})"
 "${BIN_FEED_DATA}" &> "${LOG_FEED_DATA}" &
 PID_FEED=$!
 
-log "Copying ${DEFAULT_FLUME_CONF_PROPERTIES} to ${FLUME_CONF_PROPERTIES}."
-cp "${DEFAULT_FLUME_CONF_PROPERTIES}" "${FLUME_CONF_PROPERTIES}"
+#log "Copying ${DEFAULT_FLUME_CONF_PROPERTIES} to ${FLUME_CONF_PROPERTIES}."
+#cp "${DEFAULT_FLUME_CONF_PROPERTIES}" "${FLUME_CONF_PROPERTIES}"
 
 log "Running run_flume.sh (logging to ${LOG_RUN_FLUME})"
 "${BIN_RUN_FLUME}" &> "${LOG_RUN_FLUME}" &

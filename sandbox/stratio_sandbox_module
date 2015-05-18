@@ -40,8 +40,7 @@ cd "${TMPDIR}"
 download "https://github.com/Stratio/flume-ingestion/zipball/master" "flume-ingestion.zip"
 unzip -qq flume-ingestion.zip
 cp -rf Stratio-flume-ingestion*/examples /opt/sds/ingestion/
-mkdir /opt/sds/ingestion/dict
-cp -rf /opt/sds/ingestion/examples/apache-logs/dict/* /opt/sds/ingestion/dict
+cp -rf Stratio-flume-ingestion*/examples/apache-logs/dict/* /opt/sds/ingestion/dict
 
 ############
 ## KIBANA ##
@@ -85,7 +84,8 @@ echo -e 'Extracting Kibana 4...'
 cd "${KIBANA_4_INSTALL}"
 tar xf "${DOWNLOADS_DIR}/${KIBANA_4_TARBALL}"
 echo -e 'Starting Kibana 4...'
-./${KIBANA_4_INSTALL}/kibana-${KIBANA_4_VERSION}-linux-x64/kibana &
+cd ${KIBANA_4_INSTALL}/kibana-${KIBANA_4_VERSION}-linux-x64/bin
+./kibana &
 
 #################
 ## ELASTICDUMP ##
@@ -106,5 +106,6 @@ chmod -R 777 "${KIBANA_INSTALL}/kibana/app/dashboards"
 #########################
 
 echo -e 'Installing Kibana 4 dashboards...'
-#elasticdump --input /opt/sds/ingestion/examples/airlines-map/dashboards/us-flights.json --output=http://localhost:9200/.kibana --type=data
+elasticdump --input /opt/sds/ingestion/examples/kibana4-dashboards/dashboards-data.json --output=http://localhost:9200/.kibana --type=data
+elasticdump --input /opt/sds/ingestion/examples/kibana4-dashboards/dashboards-mapping.json --output=http://localhost:9200/.kibana --type=data
 
