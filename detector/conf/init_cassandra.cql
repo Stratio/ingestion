@@ -1,0 +1,114 @@
+CREATE KEYSPACE IF NOT EXISTS detector WITH replication = {
+  'class': 'SimpleStrategy',
+  'replication_factor': '1'
+};
+
+USE detector;
+
+CREATE TABLE IF NOT EXISTS events (
+  id text,
+  connection_id text,
+  event_index text,
+  asset text,
+  recorded_at text,
+  recorded_at_ms text,
+  received_at text,
+  lat text,
+  lon text,
+  id_group text,
+  id_vehicle text,
+  serial_num text,
+  plate text,
+  company_vehicle text,
+  company_vehicle_name  text,
+  ou_vehicle text,
+  company_root text,
+  id_mcustomer text,
+  driver text,
+  rpm_event_timestamp text,
+  rpm_event_0 text,
+  rpm_event_1 text,
+  rpm_event_2 text,
+  rpm_event_3 text,
+  rpm_event_4 text,
+  rpm_event_5 text,
+  rpm_event_6 text,
+  rpm_event_7 text,
+  score_emissions_timestamp text,
+  score_emissions_lat_0 text,
+  score_emissions_lon_0 text,
+  score_emissions_consumption_0 text,
+  score_emissions_lat_1 text,
+  score_emissions_lon_1 text,
+  score_emissions_consumption_1 text,
+  alarm_timestamp text,
+  alarm_code text,
+  alarm_lat text,
+  alarm_lon text,
+  alarm_sat_number text,
+  alarm_speed text,
+  alarm_direction text,
+  alarm_modem_csq text,
+  alarm_cell_id text,
+  alarm_ignition text,
+  alarm_batt_tension text,
+  alarm_detl text,
+  odometer text,
+  ignition text,
+  vol_batt_tension text,
+  vel_timestamp text,
+  vel_0 text,
+  vel_1 text,
+  vel_2 text,
+  vel_3 text,
+  vel_4 text,
+  vel_5 text,
+  vel_6 text,
+  vel_7 text,
+  consumption_timestamp text,
+  consumption_lat_0 text,
+  consumption_lon_0 text,
+  consumption_0 text,
+  consumption_lat_1 text,
+  consumption_lon_1 text,
+  consumption_1 text,
+  consumption_lat_2 text,
+  consumption_lon_2 text,
+  consumption_2 text,
+  emissions_timestamp text,
+  emissions_lat_0 text,
+  emissions_lon_0 text,
+  emissions_co2_0 text,
+  emissions_lat_1 text,
+  emissions_lon_1 text,
+  emissions_co2_1 text,
+  emissions_lat_2 text,
+  emissions_lon_2 text,
+  emissions_co2_2 text,
+  score_consumption_timestamp text,
+  score_consumption_lat_0 text,
+  score_consumption_lon_0 text,
+  score_consumption_kpi_0 text,
+  score_consumption_lat_1 text,
+  score_consumption_lon_1 text,
+  score_consumption_kpi_1 text,
+  score_consumption_lat_2 text,
+  score_consumption_lon_2 text,
+  score_consumption_kpi_2 text,
+  PRIMARY KEY ((id))
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.000000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
+

@@ -46,6 +46,11 @@
             <artifactId>stratio-detector-http-source</artifactId>
             <version>0.4.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.1</version>
+        </dependency>
     </dependencies>
 
 

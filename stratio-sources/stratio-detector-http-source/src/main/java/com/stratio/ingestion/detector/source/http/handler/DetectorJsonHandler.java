@@ -45,6 +45,7 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
     private static final String ID = "id";
     private static final String CONNECTION_ID = "connection_id";
     private static final String INDEX = "index";
+    private static final String INDEX_ROWNAME = "event_index";
     private static final String ASSET = "asset";
     private static final String RECORDED_AT = "recorded_at";
     private static final String RECORDED_AT_MS = "recorded_at_ms";
@@ -116,16 +117,18 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         Event event = new SimpleEvent();
         Map<String, String> headers = new HashMap<String, String>();
         JsonNode payload = node.get(PAYLOAD);
-        JsonNode fieldsNode = payload.get(FIELDS);
-        final Iterator<Map.Entry<String, JsonNode>> fields = fieldsNode.getFields();
-        Map.Entry<String, JsonNode> field;
         headers.putAll(buildHeadersFromFrame(payload));
-        while(fields.hasNext()){
-            field = fields.next();
-            try {
-                headers.putAll(buildHeadersFromField(field.getKey(), field.getValue().get(B64_VALUE).asText()));
-            } catch(Exception e) {
-                LOG.warn("Error while building event from field [" + field.getKey() + ", " + field.getValue() + "]", e);
+        if (payload.has(FIELDS)) {
+            JsonNode fieldsNode = payload.get(FIELDS);
+            final Iterator<Map.Entry<String, JsonNode>> fields = fieldsNode.getFields();
+            Map.Entry<String, JsonNode> field;
+            while (fields.hasNext()) {
+                field = fields.next();
+                try {
+                    headers.putAll(buildHeadersFromField(field.getKey(), field.getValue().get(B64_VALUE).asText()));
+                } catch (Exception e) {
+                    LOG.warn("Error while building event from field [" + field.getKey() + ", " + field.getValue() + "]", e);
+                }
             }
         }
         event.setHeaders(headers);
@@ -135,12 +138,24 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
     private Map<String, String> buildHeadersFromFrame(JsonNode payload) throws ParseException {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put(ID, payload.get(ID).asText());
-        headers.put(CONNECTION_ID, payload.get(CONNECTION_ID).asText());
-        headers.put(INDEX, payload.get(INDEX).asText());
-        headers.put(ASSET, payload.get(ASSET).asText());
-        headers.put(RECORDED_AT, Long.toString(DATE_FORMATTER.parse(payload.get(RECORDED_AT).asText()).getTime()));
-        headers.put(RECORDED_AT_MS, Long.toString(DATE_FORMATTER_MS.parse(payload.get(RECORDED_AT_MS).asText()).getTime()));
-        headers.put(RECEIVED_AT, Long.toString(DATE_FORMATTER.parse(payload.get(RECEIVED_AT).asText()).getTime()));
+        if(payload.has(CONNECTION_ID)) {
+            headers.put(CONNECTION_ID, payload.get(CONNECTION_ID).asText());
+        }
+        if(payload.has(INDEX)) {
+            headers.put(INDEX_ROWNAME, payload.get(INDEX).asText());
+        }
+        if(payload.has(ASSET)) {
+            headers.put(ASSET, payload.get(ASSET).asText());
+        }
+        if(payload.has(RECORDED_AT)) {
+            headers.put(RECORDED_AT, Long.toString(DATE_FORMATTER.parse(payload.get(RECORDED_AT).asText()).getTime()));
+        }
+        if(payload.has(RECORDED_AT_MS)) {
+            headers.put(RECORDED_AT_MS, Long.toString(DATE_FORMATTER_MS.parse(payload.get(RECORDED_AT_MS).asText()).getTime()));
+        }
+        if(payload.has(RECEIVED_AT)) {
+            headers.put(RECEIVED_AT, Long.toString(DATE_FORMATTER.parse(payload.get(RECEIVED_AT).asText()).getTime()));
+        }
         if(payload.has(LOC)) {
             headers.put(LAT, payload.get(LOC).get(0).asText());
             headers.put(LON, payload.get(LOC).get(1).asText());
@@ -266,7 +281,7 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         // Timestamp EPOCH ms, Latitud, Longitud, Consumo (l/100km), Latitud, Longitud, Consumo (l/100km), Latitud, Longitud, Consumo (l/100km)
         headers.put("consumption_timestamp", values[0].trim());
         headers.put("consumption_lat_0", values[1].trim());
-        headers.put("consumption_lat_0", values[2].trim());
+        headers.put("consumption_lon_0", values[2].trim());
         headers.put("consumption_0", values[3].trim());
         headers.put("consumption_lat_1", values[4].trim());
         headers.put("consumption_lon_1", values[5].trim());

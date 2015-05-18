@@ -59,7 +59,6 @@ public class DetectorBuilder implements CommandBuilder {
             String line = (String)(record.get("message").get(0));
             String [] fields = line.split("\\|");
             String json = fields[fields.length -1];
-            LOG.warn(json);
             try {
                 List<Event> events = jsonHandler.getEvents(json);
                 record.removeAll("Value");
