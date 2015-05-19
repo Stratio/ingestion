@@ -123,7 +123,9 @@ public class DetectorMasterDataBuilder implements CommandBuilder {
             Map<String, String> masterData = MASTER_DATA.get(assetId);
             if(masterData != null) {
                 for(Map.Entry<String, String> data: masterData.entrySet()) {
-                    record.put(data.getKey(), data.getValue());
+                    if(!data.getValue().isEmpty()) {
+                        record.put(data.getKey(), data.getValue());
+                    }
                 }
             }
             if(record.getFields().containsKey("message")) {
