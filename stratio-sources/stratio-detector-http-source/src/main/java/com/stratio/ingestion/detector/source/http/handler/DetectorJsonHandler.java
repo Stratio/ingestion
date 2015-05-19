@@ -207,13 +207,14 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         Map<String, String> headers = new HashMap<String, String>();
         // Timestamp EPOCH ms, Latitud, Longitud, Nota de consumo, Latitud, Longitud, Nota de consumo, Latitud, Longitud, Nota de consumo
         String [] values = decodedString.split(",");
-        headers.put("score_emissions_timestamp", values[0].trim());
+        headers.put("score_emissions_timestamp_0", values[0].trim());
         headers.put("score_emissions_lat_0", values[1].trim());
         headers.put("score_emissions_lon_0", values[2].trim());
         headers.put("score_emissions_consumption_0", values[3].trim());
-        headers.put("score_emissions_lat_1", values[4].trim());
-        headers.put("score_emissions_lon_1", values[5].trim());
-        headers.put("score_emissions_consumption_1", values[6].trim());
+        headers.put("score_emissions_timestamp_1", values[4].trim());
+        headers.put("score_emissions_lat_1", values[5].trim());
+        headers.put("score_emissions_lon_1", values[6].trim());
+        headers.put("score_emissions_consumption_1", values[7].trim());
         return headers;
     }
 
@@ -222,18 +223,20 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         Map<String, String> headers = new HashMap<String, String>();
         // alarma,0,código de alarma, IMEI, Timestamp EPOCH ms, latitud, longiud, número de satélites vistos,velocidad,rumbo,modemCSQ,cellid,lac,Ignicion,Tension de batería, DETL
         String [] values = decodedString.split(",");
-        headers.put("alarm_timestamp", values[0].trim());
         headers.put("alarm_code", values[2].trim());
-        headers.put("alarm_lat", values[3].trim());
-        headers.put("alarm_lon", values[4].trim());
-        headers.put("alarm_sat_number", values[5].trim());
-        headers.put("alarm_speed", values[6].trim());
-        headers.put("alarm_direction", values[7].trim());
-        headers.put("alarm_modem_csq", values[8].trim());
-        headers.put("alarm_cell_id", values[9].trim());
-        headers.put("alarm_ignition", values[10].trim());
-        headers.put("alarm_batt_tension", values[11].trim());
-        headers.put("alarm_detl", values[12].trim());
+        headers.put("alarm_imei", values[3].trim());
+        headers.put("alarm_timestamp", values[4].trim());
+        headers.put("alarm_lat", values[5].trim());
+        headers.put("alarm_lon", values[6].trim());
+        headers.put("alarm_sat_number", values[7].trim());
+        headers.put("alarm_speed", values[8].trim());
+        headers.put("alarm_direction", values[9].trim());
+        headers.put("alarm_modem_csq", values[10].trim());
+        headers.put("alarm_cell_id", values[11].trim());
+        headers.put("alarm_iac", values[12].trim());
+        headers.put("alarm_ignition", values[13].trim());
+        headers.put("alarm_batt_tension", values[14].trim());
+        headers.put("alarm_detl", values[15].trim());
         return headers;
     }
 
@@ -279,16 +282,18 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         Map<String, String> headers = new HashMap<String, String>();
         String [] values = decodedString.split(",");
         // Timestamp EPOCH ms, Latitud, Longitud, Consumo (l/100km), Latitud, Longitud, Consumo (l/100km), Latitud, Longitud, Consumo (l/100km)
-        headers.put("consumption_timestamp", values[0].trim());
+        headers.put("consumption_timestamp_0", values[0].trim());
         headers.put("consumption_lat_0", values[1].trim());
         headers.put("consumption_lon_0", values[2].trim());
         headers.put("consumption_0", values[3].trim());
-        headers.put("consumption_lat_1", values[4].trim());
-        headers.put("consumption_lon_1", values[5].trim());
-        headers.put("consumption_1", values[6].trim());
-        headers.put("consumption_lat_2", values[7].trim());
-        headers.put("consumption_lon_2", values[8].trim());
-        headers.put("consumption_2", values[9].trim());
+        headers.put("consumption_timestamp_1", values[4].trim());
+        headers.put("consumption_lat_1", values[5].trim());
+        headers.put("consumption_lon_1", values[6].trim());
+        headers.put("consumption_1", values[7].trim());
+        headers.put("consumption_timestamp_2", values[8].trim());
+        headers.put("consumption_lat_2", values[9].trim());
+        headers.put("consumption_lon_2", values[10].trim());
+        headers.put("consumption_2", values[11].trim());
         return headers;
     }
 
@@ -297,16 +302,18 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         Map<String, String> headers = new HashMap<String, String>();
         String [] values = decodedString.split(",");
         // Timestamp EPOCH ms, Latitud, Longitud, Emisiones CO2 , Latitud, Longitud, Emisiones CO2, Latitud, Longitud, Emisiones CO2
-        headers.put("emissions_timestamp", values[0].trim());
+        headers.put("emissions_timestamp_0", values[0].trim());
         headers.put("emissions_lat_0", values[1].trim());
         headers.put("emissions_lon_0", values[2].trim());
         headers.put("emissions_co2_0", values[3].trim());
-        headers.put("emissions_lat_1", values[4].trim());
-        headers.put("emissions_lon_1", values[5].trim());
-        headers.put("emissions_co2_1", values[6].trim());
-        headers.put("emissions_lat_2", values[7].trim());
-        headers.put("emissions_lon_2", values[8].trim());
-        headers.put("emissions_co2_2", values[9].trim());
+        headers.put("emissions_timestamp_1", values[4].trim());
+        headers.put("emissions_lat_1", values[5].trim());
+        headers.put("emissions_lon_1", values[6].trim());
+        headers.put("emissions_co2_1", values[7].trim());
+        headers.put("emissions_timestamp_2", values[8].trim());
+        headers.put("emissions_lat_2", values[9].trim());
+        headers.put("emissions_lon_2", values[10].trim());
+        headers.put("emissions_co2_2", values[11].trim());
         return headers;
     }
 
@@ -315,16 +322,18 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         Map<String, String> headers = new HashMap<String, String>();
         String [] values = decodedString.split(",");
         // Timestamp EPOCH ms, Latitud, Longitud, Nota de consumo, Latitud, Longitud, Nota de consumo, Latitud, Longitud, Nota de consumo
-        headers.put("score_consumption_timestamp", values[0].trim());
+        headers.put("score_consumption_timestamp_0", values[0].trim());
         headers.put("score_consumption_lat_0", values[1].trim());
         headers.put("score_consumption_lon_0", values[2].trim());
         headers.put("score_consumption_kpi_0", values[3].trim());
-        headers.put("score_consumption_lat_1", values[4].trim());
-        headers.put("score_consumption_lon_1", values[5].trim());
-        headers.put("score_consumption_kpi_1", values[6].trim());
-        headers.put("score_consumption_lat_2", values[7].trim());
-        headers.put("score_consumption_lon_2", values[8].trim());
-        headers.put("score_consumption_kpi_2", values[9].trim());
+        headers.put("score_consumption_timestamp_1", values[4].trim());
+        headers.put("score_consumption_lat_1", values[5].trim());
+        headers.put("score_consumption_lon_1", values[6].trim());
+        headers.put("score_consumption_kpi_1", values[7].trim());
+        headers.put("score_consumption_timestamp_2", values[8].trim());
+        headers.put("score_consumption_lat_2", values[9].trim());
+        headers.put("score_consumption_lon_2", values[10].trim());
+        headers.put("score_consumption_kpi_2", values[11].trim());
         return headers;
     }
 
