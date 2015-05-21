@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS events (
   rpm_event_5 int,
   rpm_event_6 int,
   rpm_event_7 int,
+  rpm_event_avg float,
   score_emissions_timestamp_0 timestamp,
   score_emissions_lat_0 float,
   score_emissions_lon_0 float,
@@ -67,6 +68,7 @@ CREATE TABLE IF NOT EXISTS events (
   vel_5 int,
   vel_6 int,
   vel_7 int,
+  vel_avg float,
   consumption_timestamp_0 timestamp,
   consumption_lat_0 float,
   consumption_lon_0 float,
@@ -103,6 +105,9 @@ CREATE TABLE IF NOT EXISTS events (
   score_consumption_lat_2 float,
   score_consumption_lon_2 float,
   score_consumption_kpi_2 float,
+  stratio_timestamp_0 timestamp,
+  stratio_timestamp_1 timestamp,
+  stratio_timestamp_2 timestamp,
   PRIMARY KEY ((id))
 ) WITH
   bloom_filter_fp_chance=0.010000 AND

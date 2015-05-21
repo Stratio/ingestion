@@ -56,6 +56,8 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
     private static final String FIELDS = "fields";
     private static final String B64_VALUE = "b64_value";
 
+    private static final String STRATIO_TIMESTAMP_0 = "stratio_timestamp_0";
+
     // Fields with value
     private static final String DET_ST_RPM = "DET_ST_RPM";
     private static final String DET_ST_SCORE_EMISIONES = "DET_ST_SCORE_EMISIONES";
@@ -138,6 +140,7 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
     private Map<String, String> buildHeadersFromFrame(JsonNode payload) throws ParseException {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put(ID, payload.get(ID).asText());
+        headers.put(STRATIO_TIMESTAMP_0, "" + System.currentTimeMillis() / 1000L);
         if(payload.has(CONNECTION_ID)) {
             headers.put(CONNECTION_ID, payload.get(CONNECTION_ID).asText());
         }
@@ -196,8 +199,15 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         //Timestamp EPOCH ms, RPM,RPM,RPM,RPM,RPM,RPM,RPM,
         String [] values = decodedString.split(",");
         headers.put("rpm_event_timestamp", values[0].trim());
+        float rpmTot = 0f;
+        int rpmSize = 0;
         for (int i = 1; i < values.length; i++) {
             headers.put("rpm_event_" + (i-1), values[i].trim());
+            rpmTot += Float.parseFloat(values[i].trim());
+            rpmSize ++;
+        }
+        if(rpmSize > 0) {
+            headers.put("rpm_event_avg", "" + rpmTot / rpmSize);
         }
         return headers;
     }
@@ -271,8 +281,15 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         String [] values = decodedString.split(",");
         // Timestamp EPOCH ms, VEL, VEL, VEL, VEL, VEL, VEL, VEL, (7-8 valores de velocidad en Km/h)
         headers.put("vel_timestamp", values[0].trim());
+        float velTot = 0f;
+        int velSize = 0;
         for (int i = 1; i < values.length; i++) {
             headers.put("vel_"+(i-1), values[i].trim());
+            velTot += Float.parseFloat(values[i].trim());
+            velSize ++;
+        }
+        if (velSize > 0) {
+            headers.put("vel_avg", "" + velTot / velSize);
         }
         return headers;
     }
