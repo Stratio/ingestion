@@ -119,22 +119,27 @@ public class DetectorMasterDataBuilder implements CommandBuilder {
         }
 
         protected boolean doProcess(Record record) {
-            String assetId = (String)(record.get(ASSET).get(0));
-            Map<String, String> masterData = MASTER_DATA.get(assetId);
-            if(masterData != null) {
-                for(Map.Entry<String, String> data: masterData.entrySet()) {
-                    if(!data.getValue().isEmpty()) {
-                        record.put(data.getKey(), data.getValue());
+            try {
+                String assetId = (String) (record.get(ASSET).get(0));
+                Map<String, String> masterData = MASTER_DATA.get(assetId);
+                if (masterData != null) {
+                    for (Map.Entry<String, String> data : masterData.entrySet()) {
+                        if (!data.getValue().isEmpty()) {
+                            record.put(data.getKey(), data.getValue());
+                        }
                     }
                 }
+                if (record.getFields().containsKey("message")) {
+                    record.removeAll("message");
+                }
+                if (record.getFields().containsKey("file")) {
+                    record.removeAll("file");
+                }
+                return super.doProcess(record);
+            } catch (Exception e) {
+                LOG.warn("Error while processing record [" + record + "]", e);
+                return true; // Processing shall continue ignoring this error.
             }
-            if(record.getFields().containsKey("message")) {
-                record.removeAll("message");
-            }
-            if(record.getFields().containsKey("file")) {
-                record.removeAll("file");
-            }
-            return super.doProcess(record);
         }
 
     }
