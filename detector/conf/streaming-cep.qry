@@ -1,0 +1,15 @@
+
+#Seleccionar para cada imei a lo sumo un unico (el más reciente) evento donde se situa el ancla ON o OFF.
+add query --stream anchor_stream --definition "from anchor_stream#window.unique(imei) select imei, anchor insert into anchor_unique for all-events"
+
+#Alarma-ancla: genera un evento cuando el ancla es ON y aparece un evento rpm>1 (para probar)
+add query --stream tramas_stream --definition "from tramas_stream[rpm >= 1] as t unidirectional join anchor_unique[anchor == 'ON'] as a on t.imei == a.imei select t.imei, t.rpm, t.v, a.anchor insert into alert_anchor for all-events"
+
+#Persistencia en Cassandra
+save cassandra start --stream anchor_stream
+save cassandra start --stream tramas_stream
+save cassandra start --stream alert_anchor
+
+#Listen to queries
+listen start --stream anchor_stream
+listen start --stream tramas_stream
