@@ -326,6 +326,7 @@
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
                 <module>stratio-ingestion-dist</module>
+                <module>stratio-high-availability</module>
                 <module>doc</module>
             </modules>
         </profile>
@@ -337,6 +338,7 @@
                 <module>stratio-morphlines</module>
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
+                <module>stratio-high-availability</module>
             </modules>
         </profile>
     </profiles>

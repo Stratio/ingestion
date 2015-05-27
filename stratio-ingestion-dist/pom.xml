@@ -173,7 +173,11 @@
             <version>${project.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-high-availability</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <profiles>
