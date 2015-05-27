@@ -24,9 +24,6 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import java.io.EOFException;
 import java.io.IOException;
 
-/**
- * Created by epeinado on 26/05/15.
- */
 public class LeadershipManager {
 
     private CuratorFramework client;

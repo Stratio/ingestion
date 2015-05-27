@@ -21,9 +21,6 @@ import org.kohsuke.randname.RandomNameGenerator;
 
 import java.util.Random;
 
-/**
- * Created by epeinado on 25/05/15.
- */
 public class Launchflume {
 
     private static final String PATH = "/latch";
@@ -47,14 +44,14 @@ public class Launchflume {
 
     private static void waitForLeadership(LeadershipManager node, String[] args) throws Exception {
         while (!node.isLeader()) {
-            System.out.println("Waiting or leadership :(");
+            System.out.println("Waiting or leadership...");
             node.waitForLeadership();
         }
         runLeadership(node, args);
     }
 
     private static void runLeadership(LeadershipManager node, String[] args) throws Exception {
-        System.out.println("I'm the leader motherfuckers " + node.currentLeader());
+        System.out.println("I'm the leader " + node.currentLeader());
         Application.main(args);
 
 
