@@ -1,15 +1,34 @@
+//Seleccionar para cada asset (imei) a lo sumo un unico (el más reciente) evento donde se situa el ancla ON o OFF.
 
-#Seleccionar para cada imei a lo sumo un unico (el más reciente) evento donde se situa el ancla ON o OFF.
 add query --stream anchor_stream --definition "from anchor_stream#window.unique(asset) select asset, anchor insert into anchor_unique for all-events"
 
-#Alarma-ancla: genera un evento cuando el ancla es ON y aparece un evento rpm>1 (para probar)
-add query --stream detectorStream --definition "from detectorStream[rpm_event_avg >= 1] as t unidirectional join anchor_unique[anchor == 'ON'] as a on t.asset == a.asset select t.asset, t.rpm_event_avg, t.vel_avg, a.anchor insert into alert_anchor for all-events"
+add query --stream tramas_stream --definition "from tramas_stream[rpm >= 1] as t unidirectional join anchor_unique[anchor == 'ON'] as a on t.asset == a.asset select t.asset, 'ON' as active insert into alert_anchor"
 
-#Persistencia en Cassandra
+add query --stream alert_anchor --definition "from alert_anchor#window.unique(asset) select asset, active insert into alert_anchor_unique"
+
+add query --stream tramas_stream --definition "from tramas_stream[ignition == 'OFF'] as t unidirectional join alert_anchor_unique[active == 'ON'] as a on t.asset == a.asset select t.asset, 'OFF' as active insert into alert_anchor"
+
+//????
+add query --stream tramas_stream --definition "from tramas_stream#window.timeBatch( 2 min ) select asset, sum(rpm) as sum_rpm group by asset insert into rpm_last_2min"
+
+add query --stream tramas_stream --definition "from every a1 = alert_anchor_unique[active == 'ON'] -> b1 = rpm_last_2min[asset==a1[0].asset and sum_rpm>0]<0> select a1[0].asset as asset, 'OFF' as active insert into alert_anchor"
+
+
 save cassandra start --stream anchor_stream
-save cassandra start --stream detectorStream
+save cassandra start --stream tramas_stream
 save cassandra start --stream alert_anchor
-
-#Listen to queries
-listen start --stream anchor_stream
-listen start --stream detectorStream
+listen start --stream alert_anchor
+;previous
+;add query --stream tramas_stream --definition "from tramas_stream[rpm >= 1] as t unidirectional join anchor_unique[anchor == 'ON'] as a on t.asset == a.asset select t.asset, t.rpm, t.v, a.anchor insert into alert_anchor for all-events"
+;add query --stream tramas_stream --definition "from tramas_stream[rpm >= 1] as t unidirectional join anchor_unique as a on t.asset == a.asset and a.anchor == 'ON' select t.asset, t.rpm, t.v, a.anchor insert into alert_anchor for all-events"
+;Alarma-ancla: genera un evento cuando el ancla es ON y aparece un evento rpm>1 (para probar)
+;add query --stream detectorStream --definition "from detectorStream[rpm_event_avg >= 1] as t unidirectional join anchor_unique[anchor == 'ON'] as a on t.asset == a.asset select t.asset, t.rpm_event_avg, t.vel_avg, a.anchor insert into alert_anchor for all-events"
+;Persistencia en Cassandra
+;save cassandra start --stream anchor_stream
+;save cassandra start --stream tramas_stream
+;save cassandra start --stream alert_anchor
+;save cassandra start --stream detectorStream
+;Listen to queries
+;listen start --stream anchor_stream
+;listen start --stream tramas_stream
+;listen start --stream detectorStream
