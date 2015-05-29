@@ -15,7 +15,7 @@ Flume Ingestion is a fork of Apache Flume (1.6), where you can find:
 
 -  SNMP (v1, v2c and 3)
 -  redis, Kafka (0.8.1.1)
--  MongoDB, JDBC and Cassandra
+-  MongoDB, Druid, JDBC and Cassandra
 -  Stratio Streaming (Complex Event Processing engine)
 -  REST client, Flume agents stats
 
