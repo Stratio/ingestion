@@ -70,6 +70,11 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
     private static final String DET_ST_EMISIONES = "DET_ST_EMISIONES";
     private static final String DET_ST_SCORE_CONSUMO = "DET_ST_SCORE_CONSUMO";
 
+    private static final String PATH_ASSET_ID = "path_id";
+
+    private Map<String, Long> lastFrameIds = new HashMap<String, Long>();
+    private Map<String, PathId> lastPathIds = new HashMap<String, PathId>();
+
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(DATE_FORMAT);
     private static final String DATE_FORMAT_MS = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -91,7 +96,13 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         }
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(reader);
-        return parseJsonNode(jsonNode);
+        try {
+            return parseJsonNode(jsonNode);
+        } catch(Exception e) {
+            LOG.error("Exception: ", e);
+            LOG.error(jsonNode.toString());
+        }
+        return new ArrayList<Event>();
     }
 
     public List<Event> getEvents(final String jsonString) throws Exception {
@@ -120,6 +131,12 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         Map<String, String> headers = new HashMap<String, String>();
         JsonNode payload = node.get(PAYLOAD);
         headers.putAll(buildHeadersFromFrame(payload));
+        String asset = null;
+        Long frameId = Long.parseLong(headers.get(ID));
+        if(headers.containsKey(ASSET)) {
+            asset = headers.get(ASSET);
+        }
+        headers.put("alarm_code", "0");
         if (payload.has(FIELDS)) {
             JsonNode fieldsNode = payload.get(FIELDS);
             final Iterator<Map.Entry<String, JsonNode>> fields = fieldsNode.getFields();
@@ -127,7 +144,7 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
             while (fields.hasNext()) {
                 field = fields.next();
                 try {
-                    headers.putAll(buildHeadersFromField(field.getKey(), field.getValue().get(B64_VALUE).asText()));
+                    headers.putAll(buildHeadersFromField(asset, frameId, field.getKey(), field.getValue().get(B64_VALUE).asText()));
                 } catch (Exception e) {
                     LOG.warn("Error while building event from field [" + field.getKey() + ", " + field.getValue() + "]", e);
                 }
@@ -140,7 +157,7 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
     private Map<String, String> buildHeadersFromFrame(JsonNode payload) throws ParseException {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put(ID, payload.get(ID).asText());
-        headers.put(STRATIO_TIMESTAMP_0, "" + System.currentTimeMillis() / 1000L);
+        headers.put(STRATIO_TIMESTAMP_0, "" + System.currentTimeMillis());
         if(payload.has(CONNECTION_ID)) {
             headers.put(CONNECTION_ID, payload.get(CONNECTION_ID).asText());
         }
@@ -149,9 +166,11 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         }
         if(payload.has(ASSET)) {
             headers.put(ASSET, payload.get(ASSET).asText());
+            headers.put(PATH_ASSET_ID, buildFrameId(payload.get(ASSET).asText(), payload.get(ID).asLong()).toString());
         }
         if(payload.has(RECORDED_AT)) {
-            headers.put(RECORDED_AT, Long.toString(DATE_FORMATTER.parse(payload.get(RECORDED_AT).asText()).getTime()));
+            String recordedAt = payload.get(RECORDED_AT).asText();
+            headers.put(RECORDED_AT, Long.toString(DATE_FORMATTER.parse(recordedAt).getTime()));
         }
         if(payload.has(RECORDED_AT_MS)) {
             headers.put(RECORDED_AT_MS, Long.toString(DATE_FORMATTER_MS.parse(payload.get(RECORDED_AT_MS).asText()).getTime()));
@@ -166,7 +185,23 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         return headers;
     }
 
-    private Map<String, String> buildHeadersFromField(String fieldName, String base64FieldValue) throws Exception {
+    private String buildFrameId(String asset, long frameId) {
+        if(lastPathIds.containsKey(asset)) {
+            long oldFrameId = lastFrameIds.get(asset);
+            if(oldFrameId < frameId) {
+                lastFrameIds.put(asset, frameId);
+                return lastPathIds.get(asset).getPathId();
+            } else {
+                return lastPathIds.get(asset).getPreviousPathId();
+            }
+        } else {
+            lastPathIds.put(asset, new PathId(asset, 1L));
+            lastFrameIds.put(asset, frameId);
+            return lastPathIds.get(asset).getPathId();
+        }
+    }
+
+    private Map<String, String> buildHeadersFromField(String asset, Long frameId, String fieldName, String base64FieldValue) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         byte[] decodedValue = Base64.decodeBase64(base64FieldValue);
         if(DET_ST_RPM.equals(fieldName)) {
@@ -178,7 +213,7 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         } else if(DET_ODOMETER_FULL.equals(fieldName)) {
             headers = buildOdometerFull(decodedValue);
         } else if(DET_IGNITION.equals(fieldName)) {
-            headers = buildIgnition(decodedValue);
+            headers = buildIgnition(asset, frameId, decodedValue);
         } else if(DET_VOLT.equals(fieldName)) {
             headers = buildVolt(decodedValue);
         } else if(DET_ST_VEL.equals(fieldName)) {
@@ -258,13 +293,20 @@ public class DetectorJsonHandler implements HTTPSourceHandler, Configurable {
         return headers;
     }
 
-    private Map<String, String> buildIgnition(byte[] decodedBase64Value) throws Exception {
+    private Map<String, String> buildIgnition(String asset, Long frameId, byte[] decodedBase64Value) throws Exception {
         byte bool = decodedBase64Value[0];
         String result = bool == 1?"true":"false";
+        if ("true".equals(result)) {
+            updatePathId(asset, frameId);
+        }
         Map<String, String> headers = new HashMap<String, String>();
         // True/false
         headers.put("ignition", result);
         return headers;
+    }
+
+    private void updatePathId(String asset, Long frameId) {
+        lastPathIds.put(asset, lastPathIds.get(asset).next());
     }
 
     private Map<String, String> buildVolt(byte[] decodedBase64Value) throws Exception {

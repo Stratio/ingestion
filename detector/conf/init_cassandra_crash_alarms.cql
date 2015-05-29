@@ -5,7 +5,7 @@ CREATE KEYSPACE IF NOT EXISTS detector WITH replication = {
 
 USE detector;
 
-CREATE TABLE IF NOT EXISTS events_test_2 (
+CREATE TABLE IF NOT EXISTS events_crash_alarms (
   id bigint,
   connection_id bigint,
   event_index text,
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS events_test_2 (
   stratio_timestamp_1 timestamp,
   stratio_timestamp_2 timestamp,
   path_id text,
-  PRIMARY KEY ((id))
+  PRIMARY KEY ((alarm_code), recorded_at_ms)
 ) WITH
   bloom_filter_fp_chance=0.010000 AND
   caching='KEYS_ONLY' AND
@@ -126,9 +126,7 @@ CREATE TABLE IF NOT EXISTS events_test_2 (
   compaction={'class': 'SizeTieredCompactionStrategy'} AND
   compression={'sstable_compression': 'LZ4Compressor'};
 
-  create index if not exists on detector.events_test2 (company_vehicle);
-  create index if not exists on detector.events_test2 (ou_vehicle);
-  create index if not exists on detector.events_test2 (alarm_code);
-  create index if not exists on detector.events_test2 (asset);
-
+create index if not exists on detector.events_crash_alarms (company_vehicle);
+create index if not exists on detector.events_crash_alarms (ou_vehicle);
+create index if not exists on detector.events_crash_alarms (recorded_at_ms);
 

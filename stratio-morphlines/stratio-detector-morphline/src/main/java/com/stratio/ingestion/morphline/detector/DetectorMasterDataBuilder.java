@@ -66,7 +66,6 @@ public class DetectorMasterDataBuilder implements CommandBuilder {
             List<CSVRecord> records = parser.getRecords();
             for (int i = 0; i < records.size(); i++) {
                 CSVRecord record = records.get(i);
-                LOG.warn(record);
                 Map<String, String> row = new HashMap<String, String>();
                 row.put(ID_GROUP, record.get(1).trim());
                 row.put(ID_VEHICLE, record.get(2).trim());
@@ -99,7 +98,7 @@ public class DetectorMasterDataBuilder implements CommandBuilder {
                 }
             }
         }
-        LOG.debug("Loaded [" + MASTER_DATA.size() + "] master data rows.");
+        LOG.info("Loaded [" + MASTER_DATA.size() + "] master data rows.");
     }
 
     @Override
@@ -128,6 +127,9 @@ public class DetectorMasterDataBuilder implements CommandBuilder {
                             record.put(data.getKey(), data.getValue());
                         }
                     }
+                } else {
+                    record.put(COMPANY_VEHICLE, "UNKNOWN");
+                    record.put(OU_VEHICLE, "UNKNOWN");
                 }
                 if (record.getFields().containsKey("message")) {
                     record.removeAll("message");
