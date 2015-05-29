@@ -1,0 +1,132 @@
+CREATE KEYSPACE IF NOT EXISTS detector WITH replication = {
+  'class': 'SimpleStrategy',
+  'replication_factor': '1'
+};
+
+USE detector;
+
+CREATE TABLE IF NOT EXISTS events_positions (
+  id bigint,
+  connection_id bigint,
+  event_index text,
+  asset text,
+  recorded_at timestamp,
+  recorded_at_ms timestamp,
+  received_at timestamp,
+  lat float,
+  lon float,
+  id_group int,
+  id_vehicle int,
+  serial_num text,
+  plate text,
+  company_vehicle text,
+  company_vehicle_name  text,
+  ou_vehicle text,
+  company_root int,
+  id_mcustomer int,
+  driver text,
+  rpm_event_timestamp timestamp,
+  rpm_event_0 int,
+  rpm_event_1 int,
+  rpm_event_2 int,
+  rpm_event_3 int,
+  rpm_event_4 int,
+  rpm_event_5 int,
+  rpm_event_6 int,
+  rpm_event_7 int,
+  rpm_event_avg float,
+  score_emissions_timestamp_0 timestamp,
+  score_emissions_lat_0 float,
+  score_emissions_lon_0 float,
+  score_emissions_consumption_0 float,
+  score_emissions_timestamp_1 timestamp,
+  score_emissions_lat_1 float,
+  score_emissions_lon_1 float,
+  score_emissions_consumption_1 float,
+  alarm_code int,
+  alarm_imei bigint,
+  alarm_timestamp timestamp,
+  alarm_lat float,
+  alarm_lon float,
+  alarm_sat_number text,
+  alarm_speed text,
+  alarm_direction text,
+  alarm_modem_csq text,
+  alarm_cell_id text,
+  alarm_ignition text,
+  alarm_batt_tension text,
+  alarm_detl text,
+  odometer int,
+  ignition text,
+  vol_batt_tension int,
+  vel_timestamp timestamp,
+  vel_0 int,
+  vel_1 int,
+  vel_2 int,
+  vel_3 int,
+  vel_4 int,
+  vel_5 int,
+  vel_6 int,
+  vel_7 int,
+  vel_avg float,
+  consumption_timestamp_0 timestamp,
+  consumption_lat_0 float,
+  consumption_lon_0 float,
+  consumption_0 float,
+  consumption_timestamp_1 timestamp,
+  consumption_lat_1 float,
+  consumption_lon_1 float,
+  consumption_1 float,
+  consumption_timestamp_2 timestamp,
+  consumption_lat_2 float,
+  consumption_lon_2 float,
+  consumption_2 float,
+  emissions_timestamp_0 timestamp,
+  emissions_lat_0 float,
+  emissions_lon_0 float,
+  emissions_co2_0 float,
+  emissions_timestamp_1 timestamp,
+  emissions_lat_1 float,
+  emissions_lon_1 float,
+  emissions_co2_1 float,
+  emissions_timestamp_2 timestamp,
+  emissions_lat_2 float,
+  emissions_lon_2 float,
+  emissions_co2_2 float,
+  score_consumption_timestamp_0 timestamp,
+  score_consumption_lat_0 float,
+  score_consumption_lon_0 float,
+  score_consumption_kpi_0 float,
+  score_consumption_timestamp_1 timestamp,
+  score_consumption_lat_1 float,
+  score_consumption_lon_1 float,
+  score_consumption_kpi_1 float,
+  score_consumption_timestamp_2 timestamp,
+  score_consumption_lat_2 float,
+  score_consumption_lon_2 float,
+  score_consumption_kpi_2 float,
+  stratio_timestamp_0 timestamp,
+  stratio_timestamp_1 timestamp,
+  stratio_timestamp_2 timestamp,
+  path_id text,
+  PRIMARY KEY ((asset))
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.000000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
+
+create index if not exists on detector.events_positions (company_vehicle);
+create index if not exists on detector.events_positions (ou_vehicle);
+create index if not exists on detector.events_positions (alarm_code);
+
