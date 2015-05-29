@@ -21,11 +21,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Context;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
+
 
 import com.stratio.ingestion.source.rest.exception.RestSourceException;
 import com.stratio.ingestion.source.rest.url.filter.FilterHandler;
@@ -49,7 +50,7 @@ public class DynamicUrlHandler implements UrlHandler {
             ObjectMapper mapper = new ObjectMapper();
             try {
                 JsonNode jsonNode = mapper.readTree(urlContext.get(PARAM_MAPPER)).get("params");
-                Iterator<JsonNode> iterator = jsonNode.getElements();
+                Iterator<JsonNode> iterator = jsonNode.elements();
                 while (iterator.hasNext()) {
                     JsonNode currentNode = iterator.next();
                     if (currentNode.get("name") != null && (!(currentNode.get("name").asText().trim().equals("")))) {
