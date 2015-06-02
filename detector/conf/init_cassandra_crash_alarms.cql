@@ -7,7 +7,7 @@ USE detector;
 
 CREATE TABLE IF NOT EXISTS events_crash_alarms (
   id bigint,
-  connection_id bigint,
+  connection_id text,
   event_index text,
   asset text,
   recorded_at timestamp,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS events_crash_alarms (
   score_emissions_lon_1 float,
   score_emissions_consumption_1 float,
   alarm_code int,
-  alarm_imei bigint,
+  alarm_imei text,
   alarm_timestamp timestamp,
   alarm_lat float,
   alarm_lon float,
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS events_crash_alarms (
   stratio_timestamp_1 timestamp,
   stratio_timestamp_2 timestamp,
   path_id text,
-  PRIMARY KEY ((alarm_code), recorded_at_ms)
+  PRIMARY KEY ((alarm_code), recorded_at)
 ) WITH
   bloom_filter_fp_chance=0.010000 AND
   caching='KEYS_ONLY' AND

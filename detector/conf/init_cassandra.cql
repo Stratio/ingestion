@@ -5,9 +5,9 @@ CREATE KEYSPACE IF NOT EXISTS detector WITH replication = {
 
 USE detector;
 
-CREATE TABLE IF NOT EXISTS events_test_2 (
+CREATE TABLE IF NOT EXISTS events_test2 (
   id bigint,
-  connection_id bigint,
+  connection_id text,
   event_index text,
   asset text,
   recorded_at timestamp,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS events_test_2 (
   score_emissions_lon_1 float,
   score_emissions_consumption_1 float,
   alarm_code int,
-  alarm_imei bigint,
+  alarm_imei text,
   alarm_timestamp timestamp,
   alarm_lat float,
   alarm_lon float,
