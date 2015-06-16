@@ -42,7 +42,7 @@
     <dependencySets>
         <dependencySet>
             <excludes>
-                <exclude>org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:jar-with-dependencies:1.6.0-SNAPSHOT</exclude>
+                <exclude>org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:jar-with-dependencies:1.6.0</exclude>
             </excludes>
             <outputDirectory>/lib</outputDirectory>
             <useStrictFiltering>false</useStrictFiltering>
@@ -51,7 +51,7 @@
         </dependencySet>
         <dependencySet>
             <includes>
-                <include>org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:jar-with-dependencies:1.6.0-SNAPSHOT</include>
+                <include>org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:jar-with-dependencies:1.6.0</include>
             </includes>
             <outputDirectory>/tools</outputDirectory>
             <useStrictFiltering>false</useStrictFiltering>

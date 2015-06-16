@@ -20,23 +20,39 @@ By running the agent, flume will walk through the apache log file and for each l
 The full agent configuration is the following (see flume-conf.properties):
 
 * Source:
+
   - SpoolDir (we have used a 300 Mb apache log file)
 
 * Channels:
+
   - 3 file channels for cassandra, stratio streaming & elastic search
 
 * Sinks:
+
   - Cassandra sink (`developed by Stratio`_), see also the definition_access_log.json attached)
-  - Stratio sink (`developed by Stratio `_)
+  - Stratio Streaming sink (`also developed by Stratio`_)
   - Elastic search sink (included in flume core)
 
-.. _developed by Stratio: https://github.com/Stratio/flume-ng-cassandra-sink
-.. _developed by Stratio :  https://github.com/Stratio/flume-ng-stratiostreaming-sink
+.. _developed by Stratio: https://github.com/Stratio/flume-ingestion/tree/master/stratio-sinks/stratio-cassandra-sink
+.. _also developed by Stratio:  https://github.com/Stratio/flume-ingestion/tree/master/stratio-sinks/stratio-stratiostreaming-sink
 
 
 
 Preparing the environment
 =========================
+
+Manually
+--------
+
+You need an extracted full distribution of Stratio Ingestion at ``/opt/sds/ingestion``. You can use a different path via the
+``INGESTION_HOME`` environment variable. You will also need a running Stratio Streaming if you use the sink (you can use our sandbox for that), ElasticSearch and Cassandra. By default, it will use only
+Cassandra and ElasticSearch. See below for different set ups you can use.
+
+
+Vagrant Box
+-----------
+
+You can use our Vagrant Box to run the example, just type: ``vagrant up stratio/ingestion`` to get our sandbox.
 
 You can edit the conf/flume-conf.properties for customizing the example. By default, we have activated two sinks: ElasticSearch and Cassandra, but we provide the configuration for Stratio Streaming Sink commented in the same file.
 
@@ -49,7 +65,7 @@ To run the agent just type:
 
    sudo ./opt/sds/ingestion/examples/apache_logs/bin/run_example.sh
 
-This command downloads an apache log and sends it to Stratio Ingestion, you can check the sinks, channels and sources configurated in IP:353545/metrics (you can obtain the IP of your machine when you start the vagrant box). This metrics shows you the flow of the info throw the flume agent (source -> channel -> sink)
+This command downloads an apache log and sends it to Stratio Ingestion, you can check the sinks, channels and sources configurated in http://IP:353545/metrics (you can obtain the IP of your machine when you start the vagrant box). This metrics shows you the flow of the info throw the flume agent (source -> channel -> sink)
 
 Since we have activated two sink (ElasticSearch and Cassandra) you can check the info loaded in them:
 
@@ -69,7 +85,7 @@ Since we have activated two sink (ElasticSearch and Cassandra) you can check the
 Conection with Stratio Streaming
 ================================
 
-If you want to check the conection with Stratio Streaming uncomment the configuration in con/flume-conf.properties we recommend to use straming vagrant box (vagrant up stratio/streaming) and use this parameters to configure flume (IPs and port for kafka and zookeeper). If you have streaming vagrant box working, then you can run the flume example.
+If you want to check the conection with Stratio Streaming uncomment the configuration in con/flume-conf.properties we recommend to use straming vagrant box (``vagrant up stratio/streaming``) and use this parameters to configure flume (IPs and port for kafka and zookeeper). If you have streaming vagrant box working, then you can run the flume example.
 The example will create the stream necesary for working in streaming, you can enter in streaming shell and type create new querys:
 
 Create query **host_requests_per_second**:

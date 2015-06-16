@@ -13,6 +13,14 @@ Manually
 
 You need an extracted full distribution of Stratio Ingestion at ``/opt/sds/ingestion``. You can use a different path via the ``INGESTION_HOME`` environment variable. You will also need a running ElasticSearch.
 
+Vagrant Box
+-----------
+
+You can use our Vagrant Box to run the example, just type: ``vagrant up stratio/ingestion`` to get our sandbox.
+
+You can edit the conf/flume-conf.properties for customizing the example. By default, we have activated two sinks: ElasticSearch and Cassandra, but we provide the configuration for Stratio Streaming Sink commented in the same file.
+
+
 Running the example
 ===================
 
