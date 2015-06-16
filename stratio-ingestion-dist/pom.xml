@@ -37,10 +37,6 @@
         </license>
     </licenses>
 
-    <properties>
-        <outputFileName>stratio-ingestion</outputFileName>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.kitesdk</groupId>
@@ -222,6 +218,7 @@
                         <inherited>false</inherited>
                         <extensions>true</extensions>
                         <configuration>
+                            <outputFileName>stratio-ingestion</outputFileName>
                             <excludeDirectoryAttributes>
                                 <dir>/opt</dir>
                                 <dir>/var</dir>
