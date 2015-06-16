@@ -35,6 +35,7 @@ Flume Ingestion components
 
    -  Cassandra
    -  MongoDB
+   -  Druid
    -  `Stratio Streaming`_
    -  JDBC
    -  Kafka
@@ -62,8 +63,7 @@ Compile & Package
     $ cd stratio-ingestion-dist
     $ mvn clean compile package
 
-Distribution will be available at
-stratio-ingestion-dist/target/stratio-ingestion-0.3.0-SNAPSHOT-bin.tar.gz
+Distribution will be available at ``stratio-ingestion-dist/target/stratio-ingestion-0.4.0-SNAPSHOT-bin.tar.gz``
 
 Interesting facts about Flume-Ingestion
 =======================================
