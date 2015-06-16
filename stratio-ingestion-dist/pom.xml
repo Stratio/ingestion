@@ -172,10 +172,20 @@
             <artifactId>stratio-xmlxpath-deserializer</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <profiles>
         <profile>
             <id>package</id>
@@ -190,7 +200,7 @@
                         <version>2.4.1</version>
                         <executions>
                             <execution>
-                               <id>distro-assembly</id>
+                                <id>distro-assembly</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>single</goal>
@@ -208,35 +218,86 @@
                     <plugin>
                         <groupId>com.stratio.mojo.unix</groupId>
                         <artifactId>unix-maven-plugin</artifactId>
-                        <version>1.1.2</version>
+                        <version>1.1.6</version>
                         <inherited>false</inherited>
                         <extensions>true</extensions>
-                        <executions>
-                            <execution>
-                                <id>package-unix</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>package-deb</goal>
-                                    <goal>package-rpm</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                         <configuration>
+                            <excludeDirectoryAttributes>
+                                <dir>/opt</dir>
+                                <dir>/var</dir>
+                            </excludeDirectoryAttributes>
                             <contact>Stratio</contact>
                             <contactEmail>ingestion@stratio.com</contactEmail>
                             <deb>
                                 <section>devel</section>
                             </deb>
                             <rpm>
-                                <group>Development/System</group>
+                                <group>stratio</group>
+                                <requires>bash</requires>
                             </rpm>
                             <assembly>
+                                <mkdirs>
+                                    <path>/var/log/sds/ingestion</path>
+                                    <attributes>
+                                        <user>stratio</user>
+                                        <group>stratio</group>
+                                    </attributes>
+                                </mkdirs>
                                 <copyDirectory>
-                                    <from>target/stratio-ingestion-${project.version}-bin/stratio-ingestion-${project.version}</from>
+                                    <from>
+                                        target/stratio-ingestion-${project.version}-bin/stratio-ingestion-${project.version}
+                                    </from>
                                     <to>/opt/sds/ingestion</to>
+                                    <directoryAttributes>
+                                        <user>stratio</user>
+                                        <group>stratio</group>
+                                    </directoryAttributes>
+                                    <fileAttributes>
+                                        <user>stratio</user>
+                                        <group>stratio</group>
+                                    </fileAttributes>
                                 </copyDirectory>
                             </assembly>
+                            <defaults>
+                                <directoryAttributes>
+                                    <mode>0755</mode>
+                                </directoryAttributes>
+                                <fileAttributes>
+                                    <mode>0644</mode>
+                                </fileAttributes>
+                            </defaults>
                         </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>deb</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>package-deb</goal>
+                                </goals>
+                                <configuration>
+                                    <architecture>all</architecture>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>rpm</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>package-rpm</goal>
+                                </goals>
+                                <configuration>
+                                    <architecture>noarch</architecture>
+                                </configuration>
+                            </execution>
+                            <!--<execution>-->
+                                <!--<id>zip</id>-->
+                                <!--<phase>package</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>package-zip</goal>-->
+                                <!--</goals>-->
+                            <!--</execution>-->
+                        </executions>
+
                     </plugin>
                 </plugins>
             </build>
