@@ -79,7 +79,7 @@ Since we have activated two sink (ElasticSearch and Cassandra) you can check the
 
     select * from test.access_logs;
 
-- ElasticSearch: Enter in Kibana http://IP:5601 in Dashboard Tab You can Load saved dashboard and select "Apache Logs Demo Dashboard". Due to date of logs, you must select a new time filter between July-1995 and Agoust-1995.
+- ElasticSearch: Strart Kibana if it is stopped (``./opt/sds/kibana-4.0.2-linux-x64/kibana``) Enter in Kibana http://IP:5601 in Dashboard Tab You can Load saved dashboard and select "Apache Logs Demo Dashboard". Due to date of logs, you must select a new time filter between July-1995 and Agoust-1995.
 
 
 Conection with Stratio Streaming

@@ -75,9 +75,7 @@ download "${KIBANA_4_DOWNLOAD_URL}" "${DOWNLOADS_DIR}/${KIBANA_4_TARBALL}"
 echo -e 'Extracting Kibana 4...'
 cd "${KIBANA_4_INSTALL}"
 tar xf "${DOWNLOADS_DIR}/${KIBANA_4_TARBALL}"
-echo -e 'Starting Kibana 4...'
-cd ${KIBANA_4_INSTALL}/kibana-${KIBANA_4_VERSION}-linux-x64/bin
-nohup ./kibana &
+
 
 #################
 ## ELASTICDUMP ##
@@ -101,3 +99,6 @@ echo -e 'Installing Kibana 4 dashboards...'
 elasticdump --input /opt/sds/ingestion/examples/kibana4-dashboards/dashboards-data.json --output=http://localhost:9200/.kibana --type=data >/dev/null
 elasticdump --input /opt/sds/ingestion/examples/kibana4-dashboards/dashboards-mapping.json --output=http://localhost:9200/.kibana --type=data >/dev/null
 
+echo -e 'Starting Kibana 4...'
+cd ${KIBANA_4_INSTALL}/kibana-${KIBANA_4_VERSION}-linux-x64/bin
+sudo nohup ./kibana &
