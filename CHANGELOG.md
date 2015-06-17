@@ -2,7 +2,9 @@
 
 Only listing significant user-visible, not internal code cleanups and minor bug fixes.
 
-## 0.4.0
+## 0.5.0 (upcoming)
+
+## 0.4.0 (June 2015)
 
 * Added new example "Apache Logs"
 * Added new example "Airlines Map"
@@ -11,7 +13,7 @@ Only listing significant user-visible, not internal code cleanups and minor bug 
 * Fixed problem with Stratio Streaming connection (issue #58)
 * Fixed problems with Docker container (issue #61)
 
-## 0.3.1
+## 0.3.1 (January 2015)
 
 * Update Cassandra sink conf in Wikipedia Pagecounts examples. Issue #51.
 * Fix: Cassandra CQL initialization file produces exception if it ends with semicolon. Issue #52.
