@@ -27,7 +27,7 @@
 
     <groupId>com.stratio.ingestion</groupId>
     <artifactId>stratio-ingestion-parent</artifactId>
-    <version>0.4.0-RC1</version>
+    <version>0.4.0-RC2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Stratio Ingestion</name>
