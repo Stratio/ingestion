@@ -92,6 +92,9 @@ Flume Ingestion FAQ
 
 *Of course, we have developed a sink in order to send events from Flume to an existing stream in our CEP engine.  The sink will create the stream if it does not exist in the engine.*
 
+Changelog
+---------
 
+See the [changelog](CHANGELOG.md) for changes.
 
 
