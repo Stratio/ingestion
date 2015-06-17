@@ -57,6 +57,7 @@ fi
 ## NODE & NPM ##
 ################
 echo -e 'Installing Node.js'
+yum_install epel-release
 yum_install nodejs npm --enablerepo=epel
 
 ##############
