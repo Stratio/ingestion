@@ -65,7 +65,7 @@ To run the agent just type:
 
    sudo ./opt/sds/ingestion/examples/apache_logs/bin/run_example.sh
 
-This command downloads an apache log and sends it to Stratio Ingestion, you can check the sinks, channels and sources configurated in http://IP:353545/metrics (you can obtain the IP of your machine when you start the vagrant box). This metrics shows you the flow of the info throw the flume agent (source -> channel -> sink)
+This command downloads an apache log and sends it to Stratio Ingestion, you can check the sinks, channels and sources configurated in http://IP:3545/metrics (you can obtain the IP of your machine when you start the vagrant box). This metrics shows you the flow of the info throw the flume agent (source -> channel -> sink)
 
 Since we have activated two sink (ElasticSearch and Cassandra) you can check the info loaded in them:
 
