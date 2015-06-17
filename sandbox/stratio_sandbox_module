@@ -76,13 +76,13 @@ cd "${KIBANA_4_INSTALL}"
 tar xf "${DOWNLOADS_DIR}/${KIBANA_4_TARBALL}"
 echo -e 'Starting Kibana 4...'
 cd ${KIBANA_4_INSTALL}/kibana-${KIBANA_4_VERSION}-linux-x64/bin
-./kibana &
+nohup ./kibana &
 
 #################
 ## ELASTICDUMP ##
 #################
 echo -e 'Installing elasticdump'
-sudo npm install elasticdump -g
+sudo npm install elasticdump -g --quiet
 
 #######################
 ## KIBANA DASHBOARDS ##
