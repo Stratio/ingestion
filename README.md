@@ -2,7 +2,7 @@ FLUME-INGESTION
 ===================
 
 
-[![Build Status](https://travis-ci.org/Stratio/flume-ingestion.svg?branch=develop)](https://travis-ci.org/Stratio/flume-ingestion)
+[![Build Status](https://travis-ci.org/Stratio/flume-ingestion.svg?branch=master)](https://travis-ci.org/Stratio/flume-ingestion)
 
 
 Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
