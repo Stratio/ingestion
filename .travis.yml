@@ -8,7 +8,7 @@ cache:
 install:
   - sudo apt-get update
   - sudo apt-get install -y -q rpm
-  - mvn install -Ppackage -DskipUTs -DskipITs
+  - mvn install -B -q -DskipUTs -DskipITs
 script:
   - mvn test -Ptravis-test
-  - mvn package -Ppackage -DskipUTs -DskipITs
+  - mvn package -B -q -Ppackage -DskipUTs -DskipITs
