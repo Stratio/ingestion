@@ -19,7 +19,7 @@ Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
 
  - SNMP (v1, v2c and 3)
  - redis, Kafka (0.8.1.1)
- - MongoDB, JDBC and Cassandra
+ - MongoDB, JDBC, Cassandra and Druid
  - Stratio Streaming (Complex Event Processing engine)
  - REST client, Flume agents stats
  
@@ -42,6 +42,7 @@ Flume Ingestion components
     - [Stratio Streaming](https://github.com/Stratio/stratio-streaming)
     - JDBC
     - Kafka
+    - Druid
 
 
 What is Apache Flume?
@@ -60,10 +61,10 @@ Compile & Package
 $ git submodule init
 $ git submodule update
 $ cd stratio-ingestion-dist
-$ mvn clean compile package
+$ mvn clean compile package -Ppackage
 ```
 
-Distribution will be available at stratio-ingestion-dist/target/stratio-ingestion-0.3.0-SNAPSHOT-bin.tar.gz
+Distribution will be available at stratio-ingestion-dist/target/stratio-ingestion-0.4.0-SNAPSHOT-bin.tar.gz
 
 
 Interesting facts about Flume-Ingestion
