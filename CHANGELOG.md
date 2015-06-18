@@ -10,6 +10,7 @@ Only listing significant user-visible, not internal code cleanups and minor bug 
 * Added new example "Airlines Map"
 * New Druid Sink
 * Align dependencies with Stratio Streaming
+* Update MongoDB driver to assure compatibility with Mongo 3.X (issue #65)
 * Fixed problem with Stratio Streaming connection (issue #58)
 * Fixed problems with Docker container (issue #61)
 
