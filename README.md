@@ -23,6 +23,7 @@ Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
  - Stratio Streaming (Complex Event Processing engine)
  - REST client, Flume agents stats
  
+ You can find more documentation about us [here](http://docs.stratio.com/modules/flume-ingestion/development/)
 
 
 Flume Ingestion components
@@ -91,7 +92,7 @@ Flume Ingestion FAQ
 
 **Can I send data to streaming-cep-engine?**
 
-*Of course, we have developed a sink in order to send events from Flume to an existing stream in our CEP engine.  The sink will create the stream if it does not exist in the engine.*
+*Of course, we have developed a sink in order to send events from Flume to an existing stream in our CEP engine.  The sink will create the stream if it does not exist in the engine.* 
 
 Changelog
 ---------
