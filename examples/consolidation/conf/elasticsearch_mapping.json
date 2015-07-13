@@ -1,0 +1,4 @@
+{
+  "_source": { "enabled": true },
+  "_all": { "enabled": false }
+}
