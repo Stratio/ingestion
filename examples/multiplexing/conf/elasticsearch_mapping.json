@@ -1,0 +1,12 @@
+{
+  "properties" : {
+    "@timestamp": { "type": "date", "store": true },
+    "@message": { "type": "integer", "store": true}
+  },
+  "_source": { "enabled": true },
+  "_all": { "enabled": false }
+}
+
+
+
+
