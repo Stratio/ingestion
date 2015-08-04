@@ -75,7 +75,7 @@ public class HeadersToBodyTest {
                 "_attachment_body", "asfasdfasdf"
         );
         command.process(record);
-        assertThat(record.getFirstValue(Fields.ATTACHMENT_BODY)).isEqualTo("{\"field3\":\"value2\",\"field1\":\"value1\"}");
+        assertThat(record.getFirstValue(Fields.ATTACHMENT_BODY)).isEqualTo("{\"field1\":\"value1\",\"field3\":\"value2\"}");
         collectorChild.reset();
 
     }
