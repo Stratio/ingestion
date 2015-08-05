@@ -22,7 +22,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.base.Charsets;
 import org.apache.commons.io.IOUtils;
@@ -59,7 +61,8 @@ public class ElasticSearchSerializerWithMapping implements
 	private static final String CONF_MAPPING_FILE = "mappingFile";
 
 	private String jsonMapping = "";
-	private String oldIndexName = "";
+
+	private Set<String> indexCache = new HashSet<>();
 
 	@Override
 	public void configure(Context context) {
@@ -96,8 +99,7 @@ public class ElasticSearchSerializerWithMapping implements
 		long timestamp = timestampedEvent.getTimestamp();
 		String indexName = getIndexName(indexPrefix, timestamp);
 		
-		if (!jsonMapping.isEmpty() && !oldIndexName.equals(indexName)) {
-			oldIndexName = indexName;
+		if (!jsonMapping.isEmpty() && !indexCache.contains(indexName)) {
 			createIndexWithMapping(client, indexName, indexType);
 		}
 		
@@ -119,6 +121,7 @@ public class ElasticSearchSerializerWithMapping implements
 	private void createIndexWithMapping(Client client, String indexName, String indexType) {
 		try {
 			client.admin().indices().create(new CreateIndexRequest(indexName).mapping(indexType, jsonMapping)).actionGet();
+			indexCache.add(indexName);
 		} catch (IndexAlreadyExistsException e) {
 			logger.info("The index " + indexName + " already exists");
 		}
