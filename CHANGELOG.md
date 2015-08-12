@@ -4,6 +4,9 @@ Only listing significant user-visible, not internal code cleanups and minor bug 
 
 ## 0.5.0 (upcoming)
 
+* Updated examples documentation.
+* Fixed problem with ElasticSearch sink (issue #21)
+
 ## 0.4.0 (June 2015)
 
 * Added new example "Apache Logs"
