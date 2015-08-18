@@ -4,6 +4,7 @@ Only listing significant user-visible, not internal code cleanups and minor bug 
 
 ## 0.5.0 (upcoming)
 
+* Updated ElasticSearch version to 1.7.1.
 * Updated examples documentation.
 * Fixed problem with ElasticSearch sink (issue #21)
 
