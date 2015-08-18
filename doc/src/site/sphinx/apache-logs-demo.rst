@@ -2,7 +2,7 @@ NASA Apache Logs Demo
 *********************
 
 To play around with the different components that we have created within Stratio Ingestion we have designed an scenario where we launch one flume agent against an Ubuntu Virtual Machine with the following structure.
-We will have a data source (apache logs from NASA in 1995) which will be read and send to three sinks (Cassandra Database, ElasticSearch and Stratio Streaming) throw three channels. We sill need this components:
+We will have a data source (apache logs from NASA in 1995) which will be read and send to three sinks (Cassandra Database, ElasticSearch and Stratio Streaming) throw three channels. We will need this components:
 
 * Cassandra database
 * Stratio Streaming Engine
@@ -31,7 +31,7 @@ The full agent configuration is the following (see flume-conf.properties):
 
   - Cassandra sink (`developed by Stratio`_), see also the definition_access_log.json attached)
   - Stratio Streaming sink (`also developed by Stratio`_)
-  - Elastic search sink (included in flume core)
+  - ElasticSearch sink (included in flume core)
 
 .. _developed by Stratio: https://github.com/Stratio/flume-ingestion/tree/master/stratio-sinks/stratio-cassandra-sink
 .. _also developed by Stratio:  https://github.com/Stratio/flume-ingestion/tree/master/stratio-sinks/stratio-stratiostreaming-sink
@@ -52,7 +52,9 @@ Cassandra and ElasticSearch. See below for different set ups you can use.
 Vagrant Box
 -----------
 
-You can use our Vagrant Box to run the example, just type: ``vagrant up stratio/ingestion`` to get our sandbox.
+You can use our Vagrant Box to run the example, just type: ``vagrant init stratio/ingestion`` to get our sandbox.
+
+Then you must type ``vagrant up`` to start the machine.
 
 You can edit the conf/flume-conf.properties for customizing the example. By default, we have activated two sinks: ElasticSearch and Cassandra, but we provide the configuration for Stratio Streaming Sink commented in the same file.
 
@@ -63,7 +65,8 @@ Running the example
 To run the agent just type:
 ::
 
-   sudo ./opt/sds/ingestion/examples/apache_logs/bin/run_example.sh
+   cd /opt/sds/ingestion/examples/apache_logs/bin
+   sudo ./run_example.sh
 
 This command downloads an apache log and sends it to Stratio Ingestion, you can check the sinks, channels and sources configurated in http://IP:3545/metrics (you can obtain the IP of your machine when you start the vagrant box). This metrics shows you the flow of the info throw the flume agent (source -> channel -> sink)
 
@@ -75,17 +78,21 @@ Since we have activated two sink (ElasticSearch and Cassandra) you can check the
     sudo ./opt/sds/cassandra/bin/cqlsh
 
  then type
+
 ::
 
     select * from test.access_logs;
 
-- ElasticSearch: Strart Kibana if it is stopped (``./opt/sds/kibana-4.0.2-linux-x64/kibana``) Enter in Kibana http://IP:5601 in Dashboard Tab You can Load saved dashboard and select "Apache Logs Demo Dashboard". Due to date of logs, you must select a new time filter between July-1995 and Agoust-1995.
+- ElasticSearch: Start Kibana if it is stopped (``cd /opt/sds/kibana-4.0.2-linux-x64/bin`` and ``./kibana``) Enter in Kibana http://IP:5601 in Dashboard Tab You can Load saved dashboard and select "Apache Logs Demo Dashboard". Due to date of logs, you must select a new time filter between July-1995 and August-1995. You should see something like this:
+
+.. image:: /images/flume-logs.jpg
+ :align: center
 
 
 Conection with Stratio Streaming
 ================================
 
-If you want to check the conection with Stratio Streaming uncomment the configuration in con/flume-conf.properties we recommend to use straming vagrant box (``vagrant up stratio/streaming``) and use this parameters to configure flume (IPs and port for kafka and zookeeper). If you have streaming vagrant box working, then you can run the flume example.
+If you want to check the conection with Stratio Streaming uncomment the configuration in con/flume-conf.properties we recommend to use Streaming vagrant box (``vagrant init stratio/streaming`` and ``vagrant up``) and use this parameters to configure flume (IPs and ports for kafka and zookeeper). If you have streaming vagrant box working, then you can run the flume example.
 The example will create the stream necesary for working in streaming, you can enter in streaming shell and type create new querys:
 
 Create query **host_requests_per_second**:
