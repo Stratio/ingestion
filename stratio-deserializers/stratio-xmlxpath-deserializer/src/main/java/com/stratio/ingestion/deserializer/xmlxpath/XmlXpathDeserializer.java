@@ -139,7 +139,7 @@ public class XmlXpathDeserializer implements EventDeserializer {
             final XPathExpression expr = xpath.compile(expression);
             nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
             list = new ArrayList<String>(nodeList.getLength());
-            log.debug("XPath expression matched {} elements", list.size());
+            log.debug("XPath expression matched {} elements", nodeList.getLength());
           } catch (XPathExpressionException e) {
             throw new IOException("Applying XPath expression failed", e);
           }

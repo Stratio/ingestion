@@ -2,7 +2,7 @@ FLUME-INGESTION
 ===================
 
 
-[![Build Status](https://travis-ci.org/Stratio/flume-ingestion.svg?branch=develop)](https://travis-ci.org/Stratio/flume-ingestion)
+[![Build Status](https://travis-ci.org/Stratio/flume-ingestion.svg?branch=master)](https://travis-ci.org/Stratio/flume-ingestion)
 
 
 Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
@@ -19,10 +19,11 @@ Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
 
  - SNMP (v1, v2c and 3)
  - redis, Kafka (0.8.1.1)
- - MongoDB, JDBC and Cassandra
+ - MongoDB, JDBC, Cassandra and Druid
  - Stratio Streaming (Complex Event Processing engine)
  - REST client, Flume agents stats
  
+ You can find more documentation about us [here](http://docs.stratio.com/modules/flume-ingestion/development/)
 
 
 Flume Ingestion components
@@ -42,6 +43,7 @@ Flume Ingestion components
     - [Stratio Streaming](https://github.com/Stratio/stratio-streaming)
     - JDBC
     - Kafka
+    - Druid
 
 
 What is Apache Flume?
@@ -59,11 +61,12 @@ Compile & Package
 ```
 $ git submodule init
 $ git submodule update
+$ mvn install
 $ cd stratio-ingestion-dist
-$ mvn clean compile package
+$ mvn clean compile package -Ppackage
 ```
 
-Distribution will be available at stratio-ingestion-dist/target/stratio-ingestion-0.3.0-SNAPSHOT-bin.tar.gz
+Distribution will be available at stratio-ingestion-dist/target/stratio-ingestion-0.4.0-SNAPSHOT-bin.tar.gz
 
 
 Interesting facts about Flume-Ingestion
@@ -90,7 +93,7 @@ Flume Ingestion FAQ
 
 **Can I send data to streaming-cep-engine?**
 
-*Of course, we have developed a sink in order to send events from Flume to an existing stream in our CEP engine.  The sink will create the stream if it does not exist in the engine.*
+*Of course, we have developed a sink in order to send events from Flume to an existing stream in our CEP engine.  The sink will create the stream if it does not exist in the engine.* 
 
 Changelog
 ---------

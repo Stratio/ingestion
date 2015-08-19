@@ -64,7 +64,7 @@ public class TestElasticSearchSerializerWithMapping {
         FileUtils.deleteDirectory(new File("data/test"));
         String jsonMapping = IOUtils.toString(this.getClass()
                 .getResourceAsStream(MAPPING_PATH));
-		expectedESMapping = Strings.trimAllWhitespace("{\"" + INDEX_TYPE + "\":" + jsonMapping + "}");
+		expectedESMapping = trimAllWhitespace("{\"" + INDEX_TYPE + "\":" + jsonMapping + "}");
 		
 		URL resourceUrl = getClass().getResource(MAPPING_PATH);
 		Context context = new Context();
@@ -139,6 +139,26 @@ public class TestElasticSearchSerializerWithMapping {
 	private ImmutableOpenMap<String, IndexMetaData> getIndices() {
 		ClusterStateResponse clusterStateResponse = client.admin().cluster().prepareState().execute().actionGet();
 		return clusterStateResponse.getState().getMetaData().getIndices();
+	}
+
+	private String trimAllWhitespace(String str) {
+		if (!hasLength(str)) {
+			return str;
+		}
+		StringBuilder sb = new StringBuilder(str);
+		int index = 0;
+		while (sb.length() > index) {
+			if (Character.isWhitespace(sb.charAt(index))) {
+				sb.deleteCharAt(index);
+			} else {
+				index++;
+			}
+		}
+		return sb.toString();
+	}
+
+	private boolean hasLength(CharSequence str) {
+		return (str != null && str.length() > 0);
 	}
 	
 }

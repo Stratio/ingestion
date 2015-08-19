@@ -1,15 +1,13 @@
 language: java
 jdk:
-  - oraclejdk8
   - oraclejdk7
-  - openjdk7
 cache:
   directories:
     - $HOME/.m2
 install:
   - sudo apt-get update
   - sudo apt-get install -y -q rpm
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -f stratio-ingestion-dist/pom.xml
+  - mvn install -B -q -DskipUTs -DskipITs
 script:
   - mvn test -Ptravis-test
-  - mvn package -DskipTests -f stratio-ingestion-dist/pom.xml
+  - mvn package -B -q -Ppackage -DskipUTs -DskipITs
