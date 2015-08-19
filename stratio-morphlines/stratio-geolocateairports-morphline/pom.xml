@@ -22,7 +22,7 @@
     <parent>
         <artifactId>stratio-morphlines</artifactId>
         <groupId>com.stratio.ingestion</groupId>
-        <version>0.4.1-RC1-SNAPSHOT</version>
+        <version>0.4.1</version>
     </parent>
     <artifactId>stratio-geolocateairport-morphline</artifactId>
     <packaging>jar</packaging>
