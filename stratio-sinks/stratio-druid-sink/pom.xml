@@ -28,7 +28,6 @@
     </parent>
 
     <artifactId>stratio-druid-sink</artifactId>
-    <version>0.4.1-RC1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Stratio Druid sink</name>
