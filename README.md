@@ -98,6 +98,6 @@ Flume Ingestion FAQ
 Changelog
 ---------
 
-See the [changelog](CHANGELOG.md) for changes.
+See the [changelog](CHANGELOG.md) for changes. 
 
 
