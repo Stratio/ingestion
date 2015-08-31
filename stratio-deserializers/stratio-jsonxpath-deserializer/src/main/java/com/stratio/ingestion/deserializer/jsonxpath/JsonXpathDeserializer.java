@@ -72,6 +72,7 @@ import org.xml.sax.SAXException;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
@@ -118,6 +119,7 @@ public class JsonXpathDeserializer implements EventDeserializer {
     private ListIterator<String> markIt, currentIt;
 
     JSONObject object;
+    ArrayList<String> completeList = new ArrayList<>();
 
     JsonXpathDeserializer(Context context, ResettableInputStream in) throws IOException {
         try {
@@ -190,7 +192,7 @@ public class JsonXpathDeserializer implements EventDeserializer {
 
                 String[] productList = arrayHeaders2[0].split("}");
 
-                ArrayList<String> completeList = new ArrayList<>();
+
 
                 for (int i = 0; i < productList.length; i++) {
                     completeList.add(productList[i] + listaCabeceras);
@@ -228,8 +230,8 @@ public class JsonXpathDeserializer implements EventDeserializer {
             return null;
         } else {
             final String node = currentIt.next();
-            System.out.println(node);
-            System.out.println(outputBody);
+//            System.out.println(node);
+//            System.out.println(outputBody);
             if (outputBody) {
               return EventBuilder.withBody(node, Charsets.UTF_8);
             } else {
@@ -257,7 +259,7 @@ public class JsonXpathDeserializer implements EventDeserializer {
     public void mark() throws IOException {
         ensureOpen();
         int index = currentIt.previousIndex();
-        markIt = index >= 0 ? list.listIterator(currentIt.previousIndex()) : list.listIterator(0);
+        markIt = index >= 0 ? completeList.listIterator(currentIt.previousIndex()) : completeList.listIterator(0);
         if (markIt.hasNext()) {
             markIt.next();
         }
@@ -267,7 +269,7 @@ public class JsonXpathDeserializer implements EventDeserializer {
     public void reset() throws IOException {
         ensureOpen();
         int index = markIt.previousIndex();
-        currentIt = index >= 0 ? list.listIterator(markIt.previousIndex()) : list.listIterator(0);
+        currentIt = index >= 0 ? completeList.listIterator(markIt.previousIndex()) : completeList.listIterator(0);
         if (currentIt.hasNext()) {
             currentIt.next();
         }

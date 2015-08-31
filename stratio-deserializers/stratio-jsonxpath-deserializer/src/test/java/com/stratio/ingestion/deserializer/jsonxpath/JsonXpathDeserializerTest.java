@@ -148,16 +148,21 @@ public class JsonXpathDeserializerTest {
         Event evt;
 
         evt = des.readEvent();
-        System.out.println(evt.getHeaders().get("myHeader"));
-        assertTrue(evt.getHeaders().get("myHeader").contains("client_id"));
+//        System.out.println(evt.getHeaders().get("myHeader"));
+        assertTrue(evt.getHeaders().get("myHeader").contains("YOGURT"));
         des.mark();
 
         evt = des.readEvent();
-        assertTrue(evt.getHeaders().get("myHeader").contains("lines"));
-        des.mark(); // reset!
+        assertTrue(evt.getHeaders().get("myHeader").contains("MILK"));
+        des.mark();
 
-        List<Event> readEvents = des.readEvents(2);
-        assertEquals(2, readEvents.size());
+        evt = des.readEvent();
+        assertTrue(evt.getHeaders().get("myHeader").contains("WATER"));
+        des.mark(); // reset!
+        des.mark();
+        des.reset();
+        List<Event> readEvents = des.readEvents(3);
+        assertEquals(3, readEvents.size());
 
         evt = des.readEvent();
         assertNull("Event should be null because there are no more books " + "left to read", evt);
