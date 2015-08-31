@@ -29,7 +29,8 @@
     <artifactId>stratio-deserializers</artifactId>
     <packaging>pom</packaging>
     <modules>
-	<module>stratio-xmlxpath-deserializer</module>
+	    <module>stratio-xmlxpath-deserializer</module>
+        <module>stratio-jsonxpath-deserializer</module>
     </modules>
 
 
