@@ -1,0 +1,22 @@
+{
+  "properties" : {
+    "order_id": { "type": "string", "store": true },
+    "timestamp": { "type": "string", "store": true},
+    "day_time_zone": { "type": "string", "store": true},
+    "client_id": { "type": "integer"},
+    "payment_method": { "type": "string"},
+    "latitude": { "type": "double"},
+    "longitude": { "type": "double"},
+    "credit_card": { "type": "string"},
+    "shopping_center": { "type": "string"},
+    "channel": { "type": "string"},
+    "city": { "type": "string"},
+    "country": { "type": "string"},
+    "employee": { "type": "integer"},
+    "total_amount": { "type": "double"},
+    "total_products": { "type": "integer"},
+    "order_size": { "type": "string"}
+  },
+  "_source": { "enabled": true },
+  "_all": { "enabled": false }
+}
