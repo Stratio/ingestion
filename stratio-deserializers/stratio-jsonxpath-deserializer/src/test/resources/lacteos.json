@@ -1,0 +1,35 @@
+  {
+    "timestamp": "2014-09-12T06:39:29 -02:00",
+    "day_time_zone": "afternoon",
+    "client_id": 604,
+    "payment_method": "credit card",
+    "credit_card": 1234123412341234,
+    "shopping_center": "Sevilla",
+    "channel": "OFFLINE",
+    "city": "Sevilla",
+    "country": "Spain",
+    "employee": 34,
+    "total_amount": 2273.08,
+    "total_products": 14,
+    "order_size": "MEDIUM",
+    "lines": [
+      {
+        "product": "YOGURT",
+        "family": "Feeding",
+        "quantity": 2,
+        "price": 14.95
+      },
+      {
+        "product": "MILK",
+        "family": "Feeding",
+        "quantity": 1,
+        "price": 39.22
+      },
+      {
+        "product": "WATER",
+        "family": "Feeding",
+        "quantity": 1,
+        "price": 4.84
+      }
+    ]
+  }
