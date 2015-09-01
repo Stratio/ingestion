@@ -3,7 +3,8 @@ CREATE KEYSPACE IF NOT EXISTS ingestion WITH replication = {
 
 USE ingestion;
 
-CREATE TABLE IF NOT EXISTS orders (
+CREATE TABLE IF NOT EXISTS lines (
+  line_id UUID,
   order_id UUID,
   timestamp text,
   day_time_zone text,
@@ -19,12 +20,15 @@ CREATE TABLE IF NOT EXISTS orders (
   employee int,
   total_amount double,  
   total_products int,
-  order_size text,
-  PRIMARY KEY (client_id, timestamp, order_id));
-  
+  order_size text,  
+  product text,
+  family text,
+  price double,
+  quantitiy int,
+  PRIMARY KEY (line_id));
 
-ALTER TABLE orders ADD lucene text;
-CREATE CUSTOM INDEX orders_idx ON orders (lucene) 
+ALTER TABLE lines ADD lucene text;
+CREATE CUSTOM INDEX lines_idx ON lines (lucene) 
 USING 'com.stratio.cassandra.lucene.Index' WITH OPTIONS = {       
 'refresh_seconds':'60',        
 'ram_buffer_mb':'64',       
@@ -35,7 +39,6 @@ USING 'com.stratio.cassandra.lucene.Index' WITH OPTIONS = {
    day_time_zone:{type:"string"},
    client_id:{type:"integer"},
    payment_method:{type:"string"},
-   point:{type:"geo_point", latitude:"latitude", longitude:"longitude"},
    credit_card:{type:"string"},
    shopping_center:{type:"string"},
    channel:{type:"string"},
@@ -44,7 +47,11 @@ USING 'com.stratio.cassandra.lucene.Index' WITH OPTIONS = {
    total_amount:{type:"double"},
    total_products:{type:"integer"},
    order_size:{type:"string"},
-   employee:{type:"integer"}
+   employee:{type:"integer"},
+   product:{type:"string"},
+   family:{type:"string"},
+   price:{type:"double"},
+   quantitiy:{type:"integer"}
   }
 }'};
 

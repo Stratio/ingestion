@@ -63,6 +63,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.flume</groupId>
+            <artifactId>flume-ng-embedded-agent</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+
 
 	</dependencies>
 
