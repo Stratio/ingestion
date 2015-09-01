@@ -38,7 +38,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-
+import com.stratio.ingestion.deserializer.xmlxpath.ResettableInputStreamInputStream;
+import com.stratio.ingestion.deserializer.xmlxpath.XmlXpathDeserializer;
 import com.stratio.ingestion.serialization.tracker.TransientPositionTracker;
 
 @RunWith(JUnit4.class)
