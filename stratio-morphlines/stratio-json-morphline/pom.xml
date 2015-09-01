@@ -41,6 +41,13 @@
             <artifactId>flume-ng-core</artifactId>
             <version>${flume.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.flume</groupId>
+            <artifactId>flume-ng-embedded-agent</artifactId>
+            <version>${flume.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.kitesdk</groupId>
             <artifactId>kite-morphlines-core</artifactId>
@@ -67,8 +74,24 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.4.4</version>
         </dependency>
-
-
-
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.jrh3k5</groupId>
+                <artifactId>flume-plugin-maven-plugin</artifactId>
+                <version>1.1</version> <!-- or latest version -->
+                <executions>
+                    <execution>
+                        <id>build-project-plugin</id>
+                        <goals>
+                            <goal>build-project-plugin</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
