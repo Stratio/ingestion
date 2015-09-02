@@ -20,6 +20,7 @@ import static com.stratio.ingestion.interceptor.Constants.LINES;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +65,7 @@ public class JsonInterceptor implements Interceptor {
 
                 try {
                     rootNode = objectMapper.readTree("{\"" + LINES + "\":" + linesFieldValue + "}");
+
                 } catch (IOException e) {
                     LOGGER.error("Error parsing \"lines\" fields in JSON", e);
                 }
@@ -75,7 +77,11 @@ public class JsonInterceptor implements Interceptor {
                         Map.Entry<String, JsonNode> next = productFields.next();
                         headersTmp.put(next.getKey(), next.getValue().getValueAsText());
                     }
-                    partialEventsList.add(EventBuilder.withBody("", StandardCharsets.UTF_8, headersTmp));
+                    String body = createJsonFromHeaders(headersTmp);
+                    partialEventsList.add(EventBuilder.withBody(body, StandardCharsets
+                                    .UTF_8,
+                            headersTmp));
+                    LOGGER.info("##################Body Events: " + body);
                 }
             } else {
                 partialEventsList.add(ev);
@@ -103,6 +109,34 @@ public class JsonInterceptor implements Interceptor {
             LOGGER.info("Creating StaticInterceptor -> JsonInterceptor.");
             return new JsonInterceptor();
         }
+    }
+
+    private String createJsonFromHeaders(Map<String, String> headers) {
+
+        Map<String, Object> mapTyped = new HashMap<>();
+
+        for (String key : headers.keySet()) {
+            String value = headers.get(key);
+            Object obj = value;
+            try {
+                obj = Long.valueOf(value);
+            } catch (NumberFormatException nfe) {
+
+            }
+            try {
+                obj = Double.valueOf(value);
+            } catch (NumberFormatException nfe) {
+
+            }
+            mapTyped.put(key,obj);
+        }
+
+        try {
+            return objectMapper.writeValueAsString(mapTyped);
+        } catch (IOException e) {
+            LOGGER.error("Error to generate json from headers");
+        }
+        return "";
     }
 
 }
