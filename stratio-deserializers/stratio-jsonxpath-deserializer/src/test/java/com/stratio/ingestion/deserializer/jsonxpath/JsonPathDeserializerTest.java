@@ -15,6 +15,7 @@
  */
 package com.stratio.ingestion.deserializer.jsonxpath;
 
+import com.google.common.collect.Lists;
 import com.stratio.ingestion.serialization.tracker.TransientPositionTracker;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -29,7 +30,10 @@ import org.junit.runners.JUnit4;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.apache.flume.agent.embedded.EmbeddedAgent;
 
 import static org.junit.Assert.*;
 
@@ -98,7 +102,51 @@ public class JsonPathDeserializerTest {
         System.out.println("Event : "+ evt.toString());
     }    
     
+    @Test
+    public void embeddedTest() throws Exception {
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put("sources", "spoolSource");
+        properties.put("sinks", "logSink");
+        properties.put("channels", "c1");
+        
+        properties.put("sources.spoolSource.type", "spoolDir");
+        
+        properties.put("channel.type", "memory");
+        properties.put("channel.capacity", "200");
+        
+        properties.put("logSink.type", "avro");
+        properties.put("sink2.type", "avro");
+        properties.put("sink1.hostname", "collector1.apache.org");
+        properties.put("sink1.port", "5564");
+        properties.put("sink2.hostname", "collector2.apache.org");
+        properties.put("sink2.port",  "5565");
+        properties.put("processor.type", "load_balance");
+        properties.put("source.interceptors", "i1");
+        properties.put("source.interceptors.i1.type", "static");
+        properties.put("source.interceptors.i1.key", "key1");
+        properties.put("source.interceptors.i1.value", "value1");
 
+        EmbeddedAgent agent = new EmbeddedAgent("myagent");
+
+        agent.configure(properties);
+        agent.start();
+
+        List<Event> events = Lists.newArrayList();
+
+        events.add(event);
+        events.add(event);
+        events.add(event);
+        events.add(event);
+
+        agent.putAll(events);
+
+        
+
+        agent.stop();
+        
+        
+        
+    }
 
 
 }
