@@ -1,0 +1,14 @@
+{
+  "properties" : {    
+    "order_id": { "type": "string", "store": true },
+    "client_id": { "type": "integer"},
+    "shopping_center": { "type": "string"},
+    "city": { "type": "string"},
+    "payment_method": { "type": "string"},        
+    "timestamp": { "type": "string", "store": true},
+    "day_time_zone": { "type": "string", "store": true}
+
+  },  
+  "_source": { "enabled": true},
+  "_all": { "enabled": false }
+}

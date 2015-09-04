@@ -1,0 +1,32 @@
+{
+    "title": "Apache Access Log Schema",
+    "type": "object",
+    "bodyType": "object",
+    "bodyField": "data",
+    "additionalProperties": false,
+    "properties": {
+
+        "log_host": {
+            "type": "string"
+        },
+        "log_date": {
+            "type": "date"
+        },
+        "log_http_method": {
+            "type": "string"
+        },
+        "log_url_path": {
+            "type": "string"
+        },
+        "log_http_version": {
+            "type": "string"
+        },
+        "log_http_code": {
+            "type": "string"
+        },
+        "log_bytes_returned": {
+            "type": "string"
+        }
+
+    }
+}
