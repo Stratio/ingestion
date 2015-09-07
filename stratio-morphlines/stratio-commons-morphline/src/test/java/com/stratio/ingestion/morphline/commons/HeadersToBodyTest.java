@@ -16,12 +16,15 @@
 package com.stratio.ingestion.morphline.commons;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +37,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class HeadersToBodyTest {
 
@@ -75,7 +80,14 @@ public class HeadersToBodyTest {
                 "_attachment_body", "asfasdfasdf"
         );
         command.process(record);
-        assertThat(record.getFirstValue(Fields.ATTACHMENT_BODY)).isEqualTo("{\"field3\":\"value2\",\"field1\":\"value1\"}");
+        // Sometimes this test fails. Looks like it doesn't return the body always ordered
+        //assertThat(record.getFirstValue(Fields.ATTACHMENT_BODY)).isEqualTo("{\"field3\":\"value2\",\"field1\":\"value1\"}");
+        //assertThat(record.getFirstValue(Fields.ATTACHMENT_BODY)).
+
+        JsonNode rootNode= new ObjectMapper().readTree(record.getFirstValue(Fields.ATTACHMENT_BODY).toString());
+        assertEquals("value1", rootNode.get("field1").asText());
+        assertEquals("value2", rootNode.get("field3").asText());
+        assertFalse(rootNode.has("field2"));
         collectorChild.reset();
 
     }
