@@ -252,9 +252,9 @@ public class JDBCSinkTest {
 
         rs = conn.prepareStatement("SELECT * FROM public.test").executeQuery();
         rs.next();
-        for (int i = 1; i <= 3; i++) {
-            System.out.println(rs.getString(i));
-        }
+//        for (int i = 1; i <= 3; i++) {
+//            System.out.println(rs.getString(i));
+//        }
         assertThat(rs.getInt("myInteger")).isEqualTo(64);
         assertThat(rs.getString("myString")).isEqualTo("bar");
         conn.close();

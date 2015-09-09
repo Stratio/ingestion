@@ -35,10 +35,7 @@ import org.apache.flume.Transaction;
 import org.apache.flume.channel.MemoryChannel;
 import org.apache.flume.conf.Configurables;
 import org.apache.flume.event.EventBuilder;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -57,6 +54,7 @@ public class KafkaSinkTest {
     private KafkaSink kafkaSink;
     private SimpleConsumer simpleConsumer;
 
+    @Ignore
     @Before
     public void setUp() {
 
@@ -100,6 +98,7 @@ public class KafkaSinkTest {
 
     }
 
+    @Ignore
     @After
     public void tearDown() throws IOException {
         kafkaSink.stop();
@@ -108,6 +107,7 @@ public class KafkaSinkTest {
         zookeeperServer.shutdown();
     }
 
+    @Ignore
     @Test
     public void test() throws EventDeliveryException, UnsupportedEncodingException {
         Transaction tx = channel.getTransaction();

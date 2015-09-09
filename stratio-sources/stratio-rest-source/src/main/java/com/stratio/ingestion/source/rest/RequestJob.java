@@ -15,7 +15,6 @@
  */
 package com.stratio.ingestion.source.rest;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +23,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.flume.Event;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -35,7 +33,9 @@ import org.quartz.SchedulerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.stratio.ingestion.source.rest.exception.RestSourceException;
 import com.stratio.ingestion.source.rest.handler.RestSourceHandler;
+import com.stratio.ingestion.source.rest.url.UrlHandler;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -49,18 +49,19 @@ public class RequestJob implements Job {
 
     public static final String APPLICATION_TYPE = "applicationType";
     public static final String METHOD = "method";
-    public static final String URL = "url";
     public static final String HEADERS = "headers";
     public static final String DEFAULT_REST_SOURCE_HANDLER = "com.stratio.ingestion.source"
             + ".rest.DefaultRestSourceHandler";
-    public static final String HANDLER = "handler";
+    public static final String HANDLER = "restSourceHandler";
+    public static final String URL_HANDLER = "urlHandler";
 
     private Map<String, String> properties;
     private LinkedBlockingQueue<Event> queue;
     private Client client;
     private MediaType mediaType;
     private JobExecutionContext context;
-    private RestSourceHandler handler;
+    private RestSourceHandler restSourceHandler;
+    private UrlHandler urlHandler;
 
     /**
      * {@inheritDoc}
@@ -80,8 +81,11 @@ public class RequestJob implements Job {
             ClientResponse response = getResponse(resourceBuilder);
 
             if (response != null) {
-                String responseString = response.getEntity(String.class);
-                queue.addAll(handler.getEvents(responseString, responseToHeaders(response.getHeaders())));
+                String responseAsString = response.getEntity(String.class);
+                final List<Event> events = restSourceHandler
+                        .getEvents(responseAsString, responseToHeaders(response.getHeaders()));
+                queue.addAll(events);
+                urlHandler.updateFilterParameters(getLastEvent(events));
             }
 
         } catch (Exception e) {
@@ -89,8 +93,17 @@ public class RequestJob implements Job {
         }
     }
 
+    protected String getLastEvent(List<Event> events) {
+        String lastEventAsString = "";
+        if (CollectionUtils.isNotEmpty(events)) {
+            final Event lastEvent = events.get(events.size() - 1);
+            lastEventAsString = new String(lastEvent.getBody());
+        }
+        return lastEventAsString;
+    }
+
     private WebResource.Builder getBuilder() {
-        WebResource resource = client.resource(properties.get(URL));
+        WebResource resource = client.resource(urlHandler.buildUrl(properties));
         WebResource.Builder resourceBuilder = setApplicationType(resource, properties.get(APPLICATION_TYPE));
         addHeaders(resourceBuilder, properties.get(HEADERS));
         return resourceBuilder;
@@ -151,22 +164,9 @@ public class RequestJob implements Job {
         queue = (LinkedBlockingQueue<Event>) context.get("queue");
         properties = (Map<String, String>) context.get("properties");
         client = (Client) context.get("client");
-        handler = (RestSourceHandler)context.get("handler");
+        restSourceHandler = (RestSourceHandler) context.get(HANDLER);
+        urlHandler = (UrlHandler) context.get(URL_HANDLER);
 
-    }
-
-    private RestSourceHandler getHandler(SchedulerContext context) {
-        RestSourceHandler handler = null;
-        try {
-            handler = (RestSourceHandler) Class.forName((String) context.get(HANDLER)).newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return handler;
     }
 
     /**
@@ -201,14 +201,11 @@ public class RequestJob implements Job {
             for (Map.Entry<String, Object> entry : headers.entrySet()) {
                 builder.header(entry.getKey(), entry.getValue());
             }
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RestSourceException("An error occurred during headers parsing", e);
         }
 
         return builder;
     }
+
 }

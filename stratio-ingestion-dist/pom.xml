@@ -16,18 +16,17 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.stratio.ingestion</groupId>
-	<artifactId>stratio-ingestion</artifactId>
-  <version>0.4.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    <artifactId>stratio-ingestion-dist</artifactId>
+    <packaging>pom</packaging>
 
-  <modules>
-    <module>../flume</module>
-    <module>..</module>
-  </modules>
+    <parent>
+        <artifactId>stratio-ingestion-parent</artifactId>
+        <groupId>com.stratio.ingestion</groupId>
+        <version>0.5.0-SNAPSHOT</version>
+    </parent>
 
     <!-- Required here for unix-maven-plugin -->
     <name>Stratio Ingestion</name>
@@ -44,6 +43,12 @@
             <artifactId>kite-morphlines-all</artifactId>
             <version>0.17.0</version>
             <type>pom</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -55,6 +60,122 @@
             <artifactId>zookeeper</artifactId>
             <version>3.4.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.flume</groupId>
+            <artifactId>flume-ng-dist</artifactId>
+            <version>${flume.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flume</groupId>
+            <artifactId>flume-ng-core</artifactId>
+            <version>${flume.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flume</groupId>
+            <artifactId>flume-ng-sdk</artifactId>
+            <version>${flume.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-rest-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-snmptraps-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-cassandra-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-checkpointfilter-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-commons-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-druid-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-elasticsearch-serializer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-geoip-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-geolocateairport-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-irc-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-jdbc-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-kafka-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-mongodb-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-nlp-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-redis-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-stratiostreaming-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-wikipediacleaner-morphline</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-xmlxpath-deserializer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Dependency needed in HDFS sink -->
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.10</version>
+        </dependency>
+
     </dependencies>
 
     <profiles>
@@ -71,7 +192,7 @@
                         <version>2.4.1</version>
                         <executions>
                             <execution>
-                               <id>distro-assembly</id>
+                                <id>distro-assembly</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>single</goal>
@@ -89,35 +210,87 @@
                     <plugin>
                         <groupId>com.stratio.mojo.unix</groupId>
                         <artifactId>unix-maven-plugin</artifactId>
-                        <version>1.0-alpha-9</version>
+                        <version>1.1.6</version>
                         <inherited>false</inherited>
                         <extensions>true</extensions>
-                        <executions>
-                            <execution>
-                                <id>package-unix</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>package-deb</goal>
-                                    <goal>package-rpm</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                         <configuration>
+                            <outputFileName>stratio-ingestion</outputFileName>
+                            <excludeDirectoryAttributes>
+                                <dir>/opt</dir>
+                                <dir>/var</dir>
+                            </excludeDirectoryAttributes>
                             <contact>Stratio</contact>
                             <contactEmail>ingestion@stratio.com</contactEmail>
                             <deb>
                                 <section>devel</section>
                             </deb>
                             <rpm>
-                                <group>Development/System</group>
+                                <group>stratio</group>
+                                <requires>bash</requires>
                             </rpm>
                             <assembly>
+                                <mkdirs>
+                                    <path>/var/log/sds/ingestion</path>
+                                    <attributes>
+                                        <user>stratio</user>
+                                        <group>stratio</group>
+                                    </attributes>
+                                </mkdirs>
                                 <copyDirectory>
-                                    <from>target/stratio-ingestion-${project.version}-bin/stratio-ingestion-${project.version}-bin</from>
+                                    <from>
+                                        target/stratio-ingestion-${project.version}-bin/stratio-ingestion-${project.version}
+                                    </from>
                                     <to>/opt/sds/ingestion</to>
+                                    <directoryAttributes>
+                                        <user>stratio</user>
+                                        <group>stratio</group>
+                                    </directoryAttributes>
+                                    <fileAttributes>
+                                        <user>stratio</user>
+                                        <group>stratio</group>
+                                    </fileAttributes>
                                 </copyDirectory>
                             </assembly>
+                            <defaults>
+                                <directoryAttributes>
+                                    <mode>0755</mode>
+                                </directoryAttributes>
+                                <fileAttributes>
+                                    <mode>0644</mode>
+                                </fileAttributes>
+                            </defaults>
                         </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>deb</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>package-deb</goal>
+                                </goals>
+                                <configuration>
+                                    <architecture>all</architecture>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>rpm</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>package-rpm</goal>
+                                </goals>
+                                <configuration>
+                                    <architecture>noarch</architecture>
+                                </configuration>
+                            </execution>
+                            <!--<execution>-->
+                                <!--<id>zip</id>-->
+                                <!--<phase>package</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>package-zip</goal>-->
+                                <!--</goals>-->
+                            <!--</execution>-->
+                        </executions>
+
                     </plugin>
                 </plugins>
             </build>

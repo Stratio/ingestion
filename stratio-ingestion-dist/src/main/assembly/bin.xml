@@ -15,118 +15,78 @@
     limitations under the License.
 
 -->
-<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
     <id>bin</id>
     <formats>
         <format>dir</format>
         <format>tar.gz</format>
     </formats>
-    <baseDirectory>${assembly.baseDirectory}</baseDirectory>
+    <!--<baseDirectory>${assembly.baseDirectory}</baseDirectory>-->
     <moduleSets>
-      <moduleSet>
-        <includes>
-          <include>org.apache.flume:*</include>
-          <include>org.apache.flume.flume-ng-sources:*</include>
-          <include>org.apache.flume.flume-ng-sinks:*</include>
-          <include>org.apache.flume.flume-ng-channels:*</include>
-        </includes>
-        <excludes>
-          <exclude>org.apache.flume:flume-ng-dist</exclude>
-          <exclude>org.apache.flume:flume-ng-tests</exclude>
-          <exclude>org.apache.flume:flume-tools</exclude>
-          <exclude>org.apache.flume.flume-ng-clients:flume-ng-log4jappender</exclude>
-        </excludes>
-        <binaries>
-          <outputDirectory>/lib</outputDirectory>
-          <unpack>false</unpack>
-          <!-- http://stackoverflow.com/questions/22044800/maven-assembly-plugin-ignoring-classifier-in-exclude -->
-          <excludes>
-            <exclude>*</exclude>
-          </excludes>
-        </binaries>
-      </moduleSet>
-      <moduleSet>
-        <includes>
-          <include>org.apache.flume.flume-ng-clients:flume-ng-log4jappender</include>
-        </includes>
-        <binaries>
-          <outputDirectory>/tools</outputDirectory>
-          <unpack>false</unpack>
-          <includes>
-            <include>org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:jar-with-dependencies</include>
-          </includes>
-        </binaries>
-      </moduleSet>
-      <moduleSet>
-        <includes>
-          <include>com.stratio.ingestion:*</include>
-        </includes>
-        <binaries>
-          <outputDirectory>/lib</outputDirectory>
-          <unpack>false</unpack>
-          <!-- http://stackoverflow.com/questions/22044800/maven-assembly-plugin-ignoring-classifier-in-exclude -->
-          <excludes>
-            <exclude>*</exclude>
-          </excludes>
-        </binaries>
-      </moduleSet>
+        <moduleSet>
+            <includes>
+                <include>com.stratio.ingestion:*</include>
+            </includes>
+            <binaries>
+                <outputDirectory>/lib</outputDirectory>
+                <unpack>false</unpack>
+                <!-- http://stackoverflow.com/questions/22044800/maven-assembly-plugin-ignoring-classifier-in-exclude -->
+                <excludes>
+                    <exclude>*</exclude>
+                </excludes>
+            </binaries>
+        </moduleSet>
     </moduleSets>
     <dependencySets>
         <dependencySet>
+            <excludes>
+                <exclude>org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:jar-with-dependencies:1.6.0</exclude>
+            </excludes>
             <outputDirectory>/lib</outputDirectory>
-            <useStrictFiltering>true</useStrictFiltering>
+            <useStrictFiltering>false</useStrictFiltering>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveDependencies>true</useTransitiveDependencies>
         </dependencySet>
+        <dependencySet>
+            <includes>
+                <include>org.apache.flume.flume-ng-clients:flume-ng-log4jappender:jar:jar-with-dependencies:1.6.0</include>
+            </includes>
+            <outputDirectory>/tools</outputDirectory>
+            <useStrictFiltering>false</useStrictFiltering>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+        </dependencySet>
     </dependencySets>
-  <fileSets>
-    <fileSet>
-      <directory>../examples</directory>
-      <outputDirectory>/examples</outputDirectory>
-      <includes>
-        <include>**</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>../flume</directory>
-      <excludes>
-        <exclude>flume-ng-configuration/**</exclude>
-        <exclude>flume-ng-sdk/**</exclude>
-        <exclude>flume-ng-core/**</exclude>
-        <exclude>flume-ng-node/**</exclude>
-        <exclude>flume-ng-dist/**</exclude>
-        <exclude>flume-ng-channels/**</exclude>
-        <exclude>flume-ng-sinks/**</exclude>
-        <exclude>flume-ng-sources/**</exclude>
-        <exclude>flume-ng-legacy-sources/**</exclude>
-        <exclude>flume-ng-clients/**</exclude>
-        <exclude>flume-ng-embedded-agent/**</exclude>
-        <exclude>flume-tools/**</exclude>
-        <exclude>**/target/**</exclude>
-        <exclude>**/.classpath</exclude>
-        <exclude>**/.project</exclude>
-        <exclude>**/.settings/**</exclude>
-        <exclude>lib/**</exclude>
-      </excludes>
-      <includes>
-        <include>DEVNOTES</include>
-        <include>README</include>
-        <include>LICENSE</include>
-        <include>NOTICE</include>
-        <include>CHANGELOG</include>
-        <include>RELEASE-NOTES</include>
-        <include>bin/**</include>
-        <include>conf/**</include>
-      </includes>
-      <outputDirectory>/</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>../flume/target/site</directory>
-      <includes>
-        <include>/**</include>
-      </includes>
-      <outputDirectory>/docs</outputDirectory>
-    </fileSet>
-  </fileSets>
+    <fileSets>
+        <fileSet>
+            <directory>../examples</directory>
+            <outputDirectory>/examples</outputDirectory>
+            <includes>
+                <include>**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/resources/bin</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>/bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/resources/conf</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>/conf</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/resources/flume-docs</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+    </fileSets>
 </assembly>
