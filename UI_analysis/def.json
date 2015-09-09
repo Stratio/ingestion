@@ -1,0 +1,728 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "avro",
+        "component": "source",
+        "type": "avro",
+        "name": "Avro Source",
+        "description": "*************************",
+        "settings": {
+          "bind": {
+            "type": "string",
+            "name": "Bind address",
+            "description": "hostname or IP address to listen on",
+            "default": "127.0.0.1",
+            "required": true
+          },
+          "port": {
+            "type": "string",
+            "name": "Port to bind to",
+            "description": "Port # to bind to",
+            "default": "4141",
+            "required": true
+          },
+          "threads": {
+            "type": "",
+            "name": "",
+            "description": "Maximum number of worker threads to spawn",
+            "default": "",
+            "required": false
+          },
+          "compression-type": {
+            "type": "",
+            "name": "",
+            "description": "This can be “none” or “deflate”. The compression-type must match the compression-type of matching AvroSource",
+            "default": "none",
+            "required": false
+          },
+          "ssl": {
+            "type": "",
+            "name": "",
+            "description": "Set this to true to enable SSL encryption. You must also specify a “keystore” and a “keystore-password”.",
+            "default": "false",
+            "required": false
+          },
+          "keystore": {
+            "type": "",
+            "name": "",
+            "description": "This is the path to a Java keystore file. Required for SSL.",
+            "default": "",
+            "required": false
+          },
+          "keystore-password": {
+            "type": "",
+            "name": "",
+            "description": "The password for the Java keystore. Required for SSL.",
+            "default": "",
+            "required": false
+          },
+          "keystore-type": {
+            "type": "",
+            "name": "",
+            "description": "The type of the Java keystore. This can be “JKS” or “PKCS12”.",
+            "default": "",
+            "required": false
+          },
+          "exclude-protocols": {
+            "type": "",
+            "name": "",
+            "description": "Space-separated list of SSL/TLS protocols to exclude. SSLv3 will always be excluded in addition to the protocols specified.",
+            "default": "",
+            "required": false
+          },
+          "ipFilter": {
+            "type": "",
+            "name": "",
+            "description": "Set this to true to enable ipFiltering for netty",
+            "default": "false",
+            "required": false
+          },
+          "ipFilter.rules": {
+            "type": "",
+            "name": "",
+            "description": "Define N netty ipFilter pattern rules with this config.",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+        },
+        "ui": {
+        }
+      },
+      {
+        "id": "thrift",
+        "component": "source",
+        "type": "thrift",
+        "name": "Thrift Source",
+        "description": "**************************",
+        "settings": {
+          "bind": {
+            "type": "",
+            "name": "",
+            "description": "hostname or IP address to listen on",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "",
+            "name": "",
+            "description": "Port # to bind to",
+            "default": "",
+            "required": true
+          },
+          "threads": {
+            "type": "",
+            "name": "",
+            "description": "Maximum number of worker threads to spawn",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "exec",
+        "component": "source",
+        "type": "exec",
+        "name": "Exec Source",
+        "description": "********************",
+        "settings": {
+          "command": {
+            "type": "",
+            "name": "",
+            "description": "The command to execute",
+            "default": "",
+            "required": true
+          },
+          "shell": {
+            "type": "",
+            "name": "",
+            "description": "A shell invocation used to run the command. e.g. /bin/sh -c. Required only for commands relying on shell features like wildcards, back ticks, pipes etc.",
+            "default": "",
+            "required": false
+          },
+          "restartThrottle": {
+            "type": "",
+            "name": "",
+            "description": "Amount of time (in millis) to wait before attempting a restart",
+            "default": "10000",
+            "required": false
+          },
+          "restart": {
+            "type": "",
+            "name": "",
+            "description": "Whether the executed cmd should be restarted if it dies",
+            "default": "false",
+            "required": false
+          },
+          "logStdErr": {
+            "type": "",
+            "name": "",
+            "description": "Whether the command’s stderr should be logged",
+            "default": "false",
+            "required": false
+          },
+          "batchSize": {
+            "type": "",
+            "name": "",
+            "description": "The max number of lines to read and send to the channel at a time",
+            "default": "20",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "jms",
+        "component": "source",
+        "type": "jms",
+        "name": "JMS Source",
+        "description": "*******************",
+        "settings": {
+          "initialContextFactory": {
+            "type": "",
+            "name": "",
+            "description": "Inital Context Factory, e.g: org.apache.activemq.jndi.ActiveMQInitialContextFactory",
+            "default": "",
+            "required": true
+          },
+          "connectionFactory": {
+            "type": "",
+            "name": "",
+            "description": "The JNDI name the connection factory shoulld appear as",
+            "default": "",
+            "required": true
+          },
+          "providerURL": {
+            "type": "",
+            "name": "",
+            "description": "The JMS provider URL",
+            "default": "",
+            "required": true
+          },
+          "destinationName": {
+            "type": "",
+            "name": "",
+            "description": "Destination name",
+            "default": "",
+            "required": true
+          },
+          "destinationType": {
+            "type": "",
+            "name": "",
+            "description": "Destination type (queue or topic)",
+            "default": "",
+            "required": true
+          },
+          "messageSelector": {
+            "type": "",
+            "name": "",
+            "description": "Message selector to use when creating the consumer",
+            "default": "",
+            "required": false
+          },
+          "userName": {
+            "type": "",
+            "name": "",
+            "description": "Username for the destination/provider",
+            "default": "",
+            "required": false
+          },
+          "passwordFile": {
+            "type": "",
+            "name": "",
+            "description": "File containing the password for the destination/provider",
+            "default": "",
+            "required": false
+          },
+          "batchSize": {
+            "type": "",
+            "name": "",
+            "description": "Number of messages to consume in one batch",
+            "default": "100",
+            "required": false
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": false
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": false
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+//      {
+//        "id": "spooldir",
+//        "component": "source",
+//        "type": "spooldir",
+//        "name": "Spooling Directory Source",
+//        "description": "This source lets you ingest data by placing files to be ingested into a “spooling” directory on disk. This source will watch the specified directory for new files, and will parse events out of new files as they appear. The event parsing logic is pluggable. After a given file has been fully read into the channel, it is renamed to indicate completion (or optionally deleted).",
+//        "settings": {
+//          "spoolDir": {
+//            "type": "directory",
+//            "name": "Spooling directory",
+//            "description": "The directory from which to read files from.",
+//            "required": true
+//          },
+//          "fileSuffix": {
+//            "type": "string",
+//            "name": "File suffix",
+//            "description": "Suffix to append to completely ingested files",
+//            "default": ".COMPLETED",
+//            "required": false
+//          },
+//          "deletePolicy": {
+//            "type": "enum",
+//            "enum_items": [
+//              "never",
+//              "immediate"
+//            ],
+//            "default": "never",
+//            "required": false
+//          },
+//          "batchSize": {
+//            "type": "integer",
+//            "name": "Batch size",
+//            "description": "Granularity at which to batch transfer to the channel",
+//            "min": 1,
+//            "default": 100,
+//            "required": false
+//          },
+//          "deserializer": {
+//            "type": "component",
+//            "component_type": "deserializer",
+//            "name": "Serializer",
+//            "includeAs": "class",
+//            "extraSettings": false
+//          }
+//        },
+//        "ports": {
+//          "channels": {
+//            "type": "channel",
+//            "min": 1,
+//            "direction": "output"
+//          }
+//        },
+//        "ui": {
+//          "groups": [
+//            {
+//              "name": "General",
+//              "fields": [
+//                "spoolDir",
+//                "fileSuffix",
+//                "deletePolicy"
+//              ]
+//            },
+//            {
+//              "name": "Tuning",
+//              "fields": ["batchSize"]
+//            }
+//          ]
+//        }
+//      },
+      {
+        "id": "netcat",
+        "component": "source",
+        "type": "netcat",
+        "name": "NetCat Source",
+        "description": "**************************",
+        "settings": {
+          "bind": {
+            "type": "",
+            "name": "",
+            "description": "Host name or IP address to bind to",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "",
+            "name": "",
+            "description": "Port # to bind to",
+            "default": "",
+            "required": true
+          },
+          "max-line-length": {
+            "type": "",
+            "name": "",
+            "description": "Max line length per event body (in bytes)",
+            "default": "512",
+            "required": false
+          },
+          "ack-every-event": {
+            "type": "",
+            "name": "",
+            "description": "Respond with an “OK” for every event received",
+            "default": "true",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "sequence",
+        "component": "source",
+        "type": "seq",
+        "name": "",
+        "description": "*********************",
+        "settings": {
+          "batchSize": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "1",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "syslogTCP",
+        "component": "source",
+        "type": "syslogtcp",
+        "name": "Syslog TCP Source",
+        "description": "*******************",
+        "settings": {
+          "host": {
+            "type": "",
+            "name": "",
+            "description": "Host name or IP address to bind to",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "",
+            "name": "",
+            "description": "Port # to bind to",
+            "default": "",
+            "required": true
+          },
+          "eventSize": {
+            "type": "",
+            "name": "",
+            "description": "Maximum size of a single event line, in bytes",
+            "default": "2500",
+            "required": false
+          },
+          "keepFields": {
+            "type": "",
+            "name": "",
+            "description": "Setting this to true will preserve the Priority, Timestamp and Hostname in the body of the event.",
+            "default": "false",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "",
+        "component": "",
+        "type": "",
+        "name": "",
+        "description": "",
+        "settings": {
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "",
+        "component": "",
+        "type": "",
+        "name": "",
+        "description": "",
+        "settings": {
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "",
+        "component": "",
+        "type": "",
+        "name": "",
+        "description": "",
+        "settings": {
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "",
+        "component": "",
+        "type": "",
+        "name": "",
+        "description": "",
+        "settings": {
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "",
+        "component": "",
+        "type": "",
+        "name": "",
+        "description": "",
+        "settings": {
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "",
+        "component": "",
+        "type": "",
+        "name": "",
+        "description": "",
+        "settings": {
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+      {
+        "id": "",
+        "component": "",
+        "type": "",
+        "name": "",
+        "description": "",
+        "settings": {
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      {
+        "id": "",
+        "component": "",
+        "type": "",
+        "name": "",
+        "description": "",
+        "settings": {
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          },
+          "": {
+            "type": "",
+            "name": "",
+            "description": "",
+            "default": "",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      },
+
+
+
+
+
+
+
+
+
+
+      {
+      }
+    ]
+  }
+}

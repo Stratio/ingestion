@@ -1,0 +1,67 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "spoolDir",
+        "type": "source",
+        "name": "Spooling Directory Source",
+        "description": "This source lets you ingest data by placing files to be ingested into a “spooling” directory on disk. This source will watch the specified directory for new files, and will parse events out of new files as they appear. The event parsing logic is pluggable. After a given file has been fully read into the channel, it is renamed to indicate completion (or optionally deleted).",
+        "settings": {
+          "spoolDir": {
+            "type": "directory",
+            "name": "Spooling directory",
+            "description": "The directory from which to read files from.",
+            "required": true
+          },
+          "fileSuffix": {
+            "type": "string",
+            "name": "File suffix",
+            "description": "Suffix to append to completely ingested files",
+            "default": ".COMPLETED",
+            "required": true
+          },
+          "deletePolicy": {
+            "type": "enum",
+            "enum_items": ["never", "immediate"],
+            "default": "never",
+            "required": true
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "Granularity at which to batch transfer to the channel",
+            "min": 1,
+            "default": 100,
+            "required": true
+          },
+          "deserializer": {
+            "type": "component",
+            "component_type": "deserializer",
+            "name": "Serializer",
+            "includeAs": "class",
+            "extraSettings": true
+          }
+        },
+        "ports": {
+          "channels": {
+            "type": "channel",
+            "min": 1,
+            "direction": "output"
+          }
+        },
+        "ui": {
+          "groups": [
+            {
+              "name": "General",
+              "fields": ["spoolDir", "fileSuffix", "deletePolicy"]
+            },
+            {
+              "name": "Tuning",
+              "fields": ["batchSize"]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
