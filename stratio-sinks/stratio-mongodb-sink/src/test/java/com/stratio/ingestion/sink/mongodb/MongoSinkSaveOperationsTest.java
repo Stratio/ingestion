@@ -127,8 +127,6 @@ public class MongoSinkSaveOperationsTest {
 	
 	        DBObject result = fongo.getDB("test").getCollection("test").findOne();
 	
-	        System.out.println(result.toString());
-	
 	        assertThat(result).isNotNull();
 	        assertThat(result.get("_id")).isEqualTo("123456");
 	        assertThat(result.get("array")).isNotNull();
@@ -162,8 +160,6 @@ public class MongoSinkSaveOperationsTest {
 	
 	        DBObject result = fongo.getDB("test").getCollection("test").findOne();
 	
-	        System.out.println(result.toString());
-	
 	        assertThat(result).isNotNull();
 	        assertThat(result.get("_id")).isEqualTo("123456");
 	        assertThat(result.get("array")).isNotNull();
@@ -195,8 +191,6 @@ public class MongoSinkSaveOperationsTest {
 	        mongoSink.process();
 	
 	        DBObject result = fongo.getDB("test").getCollection("test").findOne();
-	
-	        System.out.println(result.toString());
 	
 	        assertThat(result).isNotNull();
 	        assertThat(result.get("_id")).isEqualTo("123456");
@@ -231,8 +225,6 @@ public class MongoSinkSaveOperationsTest {
 	
 	        DBObject result = fongo.getDB("test").getCollection("test").findOne();
 	
-	        System.out.println(result.toString());
-	
 	        assertThat(result).isNotNull();
 	        assertThat(result.get("_id")).isEqualTo("123456");
 	        assertThat(result.get("array")).isNotNull();
@@ -263,8 +255,6 @@ public class MongoSinkSaveOperationsTest {
 	
 	        DBObject result = fongo.getDB("test").getCollection("test").findOne();
 	
-	        System.out.println(result.toString());
-	
 	        assertThat(result).isNotNull();
 	        assertThat(result.get("_id")).isEqualTo("123456");
 	        assertThat(result.get("array")).isNotNull();
@@ -273,6 +263,115 @@ public class MongoSinkSaveOperationsTest {
 	        assertThat(((com.mongodb.BasicDBList)result.get("array")).get(0)).isEqualTo(1);
 	        assertThat(((com.mongodb.BasicDBList)result.get("array")).get(1)).isEqualTo(2);
 	        assertThat(((com.mongodb.BasicDBList)result.get("array")).get(2)).isEqualTo(3);
+    	}
+    }
+
+    @Test
+    public void updateNoUpsertTest() throws Exception {
+        setField(mongoSink, "saveOperation", com.stratio.ingestion.sink.mongodb.MongoSink.SAVE_OPERATION.UPDATE);
+        setField(mongoSink, "idFieldName", "doc_id");
+        
+    	{
+	        Transaction tx = channel.getTransaction();
+	        tx.begin();
+	
+	        ObjectNode jsonBody = new ObjectNode(JsonNodeFactory.instance);
+	        jsonBody.put("doc_id", "123456");
+	        jsonBody.put("field", "VALUE");
+	
+	        Event event = EventBuilder.withBody(jsonBody.toString().getBytes(Charsets.UTF_8));
+	        channel.put(event);
+	
+	        tx.commit();
+	        tx.close();
+	
+	        mongoSink.process();
+	
+	        DBObject result = fongo.getDB("test").getCollection("test").findOne();
+	
+	        assertThat(result).isNull();
+    	}
+    }
+
+    @Test
+    public void updateUpsertTest() throws Exception {
+        setField(mongoSink, "saveOperation", com.stratio.ingestion.sink.mongodb.MongoSink.SAVE_OPERATION.UPDATE);
+        setField(mongoSink, "idFieldName", "doc_id");
+        setField(mongoSink, "upsertUpdate", Boolean.TRUE);
+        
+    	{
+	        Transaction tx = channel.getTransaction();
+	        tx.begin();
+	
+	        ObjectNode jsonBody = new ObjectNode(JsonNodeFactory.instance);
+	        jsonBody.put("doc_id", "123456");
+	        jsonBody.put("field", "VALUE");
+	
+	        Event event = EventBuilder.withBody(jsonBody.toString().getBytes(Charsets.UTF_8));
+	        channel.put(event);
+	
+	        tx.commit();
+	        tx.close();
+	
+	        mongoSink.process();
+	
+	        DBObject result = fongo.getDB("test").getCollection("test").findOne();
+
+	        assertThat(result).isNotNull();
+	        assertThat(result.get("doc_id")).isEqualTo("123456");
+	        assertThat(result.get("field")).isEqualTo("VALUE");
+    	}
+    }
+
+    @Test
+    public void updateTest() throws Exception {
+    	{
+	        Transaction tx = channel.getTransaction();
+	        tx.begin();
+	
+	        ObjectNode jsonBody = new ObjectNode(JsonNodeFactory.instance);
+	        jsonBody.put("doc_id", "123456");
+	        jsonBody.put("field", "VALUE");
+	
+	        Event event = EventBuilder.withBody(jsonBody.toString().getBytes(Charsets.UTF_8));
+	        channel.put(event);
+	
+	        tx.commit();
+	        tx.close();
+	
+	        mongoSink.process();
+	
+	        DBObject result = fongo.getDB("test").getCollection("test").findOne();
+		
+	        assertThat(result).isNotNull();
+	        assertThat(result.get("doc_id")).isEqualTo("123456");
+	        assertThat(result.get("field")).isEqualTo("VALUE");
+    	}
+
+        setField(mongoSink, "saveOperation", com.stratio.ingestion.sink.mongodb.MongoSink.SAVE_OPERATION.UPDATE);
+        setField(mongoSink, "idFieldName", "doc_id");
+        
+    	{
+	        Transaction tx = channel.getTransaction();
+	        tx.begin();
+	
+	        ObjectNode jsonBody = new ObjectNode(JsonNodeFactory.instance);
+	        jsonBody.put("doc_id", "123456");
+	        jsonBody.put("field", "VALUE_2");
+	
+	        Event event = EventBuilder.withBody(jsonBody.toString().getBytes(Charsets.UTF_8));
+	        channel.put(event);
+	
+	        tx.commit();
+	        tx.close();
+	
+	        mongoSink.process();
+	
+	        DBObject result = fongo.getDB("test").getCollection("test").findOne();
+	
+	        assertThat(result).isNotNull();
+	        assertThat(result.get("doc_id")).isEqualTo("123456");
+	        assertThat(result.get("field")).isEqualTo("VALUE_2");
     	}
     }
 

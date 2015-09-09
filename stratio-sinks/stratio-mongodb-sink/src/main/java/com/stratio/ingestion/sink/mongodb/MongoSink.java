@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.flume.Channel;
 import org.apache.flume.ChannelException;
 import org.apache.flume.Context;
@@ -42,6 +42,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.WriteConcern;
+import com.mongodb.WriteResult;
 
 /**
  *
@@ -86,17 +87,19 @@ public class MongoSink extends AbstractSink implements Configurable {
 	private static final String CONF_SAVE_OPERATION = "saveOperation";
 	private static final String CONF_ID_FIELD_NAME = "idFieldName";
 	private static final String CONF_FIELD_NAME = "fieldName";
+	private static final String CONF_UPSERT_UPDATE = "upsertUpdate";
+	private static final String CONF_MULTI_UPDATE = "multiUpdate";
 	private static final int DEFAULT_BATCH_SIZE = 25;
 	private static final boolean DEFAULT_DYNAMIC = false;
 	private static final String DEFAULT_DYNAMIC_DB_FIELD = "db";
 	private static final String DEFAULT_DYNAMIC_COLLECTION_FIELD = "collection";
 	private static final SAVE_OPERATION DEFAULT_SAVE_OPERATION = SAVE_OPERATION.SAVE;
+	private static final boolean DEFAULT_UPSERT_UPDATE = false;
+	private static final boolean DEFAULT_MULTI_UPDATE = false;
 
 	public static enum SAVE_OPERATION {
-		ADD_TO_SET, SAVE, SET;
+		ADD_TO_SET, SAVE, SET, UPDATE;
 	}
-
-	private static final String DEFAULT_CONF_SAVE_OPERATION = SAVE_OPERATION.SAVE.name();
 
 	private SinkCounter sinkCounter;
 	private int batchSize;
@@ -111,6 +114,8 @@ public class MongoSink extends AbstractSink implements Configurable {
 	private SAVE_OPERATION saveOperation;
 	private String idFieldName;
 	private String fieldName;
+	private boolean upsertUpdate;
+	private boolean multiUpdate;
 
 	public MongoSink() {
 		super();
@@ -154,15 +159,22 @@ public class MongoSink extends AbstractSink implements Configurable {
 			this.sinkCounter = new SinkCounter(this.getName());
 			this.batchSize = context.getInteger(CONF_BATCH_SIZE, DEFAULT_BATCH_SIZE);
 			
-			if(this.saveOperation.equals(SAVE_OPERATION.ADD_TO_SET) || this.saveOperation.equals(SAVE_OPERATION.SET)){
+			if(this.saveOperation.equals(SAVE_OPERATION.ADD_TO_SET) || this.saveOperation.equals(SAVE_OPERATION.SET) || this.saveOperation.equals(SAVE_OPERATION.UPDATE)){
 				this.idFieldName = context.getString(CONF_ID_FIELD_NAME, null);
 				this.fieldName = context.getString(CONF_FIELD_NAME, null);
 				
 				if(StringUtils.isEmpty(this.idFieldName)){
-					throw new IllegalArgumentException(String.format("%s cannot be null for $%s operation", CONF_ID_FIELD_NAME, this.saveOperation));
+					throw new IllegalArgumentException(String.format("%s cannot be null for %s operation", CONF_ID_FIELD_NAME, this.saveOperation));
 				}
-				if(StringUtils.isEmpty(this.fieldName)){
-					throw new IllegalArgumentException(String.format("%s cannot be null for $%s operation", CONF_FIELD_NAME, this.saveOperation));
+				
+				if(this.saveOperation.equals(SAVE_OPERATION.UPDATE)){
+					this.upsertUpdate = context.getBoolean(CONF_UPSERT_UPDATE, DEFAULT_UPSERT_UPDATE);
+					this.multiUpdate = context.getBoolean(CONF_MULTI_UPDATE, DEFAULT_MULTI_UPDATE);
+				}
+				else{
+					if(StringUtils.isEmpty(this.fieldName)){
+						throw new IllegalArgumentException(String.format("%s cannot be null for %s operation", CONF_FIELD_NAME, this.saveOperation));
+					}
 				}
 			}
 		} catch (IOException ex) {
@@ -195,14 +207,14 @@ public class MongoSink extends AbstractSink implements Configurable {
 	                	case ADD_TO_SET:
 	                	{
 	                		if(document.get(idFieldName)==null){
-	                			throw new MongoSinkException(String.format("Cannot execute $%s operation because %s is empty", this.idFieldName, this.saveOperation));
+	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.idFieldName, this.saveOperation));
 	                		}
 	                		if(document.get(fieldName)==null){
-	                			throw new MongoSinkException(String.format("Cannot execute $%s operation because %s is empty", this.fieldName, this.saveOperation));
+	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.fieldName, this.saveOperation));
 	                		}
 	                		
 	                    	BasicDBObject searchQuery = new BasicDBObject();
-	                    	searchQuery.append("_id", document.get(idFieldName));
+	                    	searchQuery.append(idFieldName, document.get(idFieldName));
 	                    	
 	                    	BasicDBObject updateQuery = new BasicDBObject();                    	  
 	                    	
@@ -214,21 +226,25 @@ public class MongoSink extends AbstractSink implements Configurable {
 	                    	
 	                    	updateQuery.append("$addToSet", value);
 	
-	                    	getDBCollection(event).update(searchQuery, updateQuery);
+	                    	WriteResult result = getDBCollection(event).update(searchQuery, updateQuery);
+	                    	
+	                    	if(result ==null || result.getN()==0){
+	                    		log.warn(String.format("The %s opperation has not modified any document. Please revise the configuration.", this.saveOperation));
+	                    	}
 	                    	
 	                    	break;
 	                	}
 	                	case SET:
 	                	{
 	                		if(document.get(idFieldName)==null){
-	                			throw new MongoSinkException(String.format("Cannot execute $%s operation because %s is empty", this.idFieldName, this.saveOperation));
+	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.idFieldName, this.saveOperation));
 	                		}
 	                		if(document.get(fieldName)==null){
-	                			throw new MongoSinkException(String.format("Cannot execute $%s operation because %s is empty", this.fieldName, this.saveOperation));
+	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.fieldName, this.saveOperation));
 	                		}
 	                		
 	                    	BasicDBObject searchQuery = new BasicDBObject();
-	                    	searchQuery.append("_id", document.get(idFieldName));
+	                    	searchQuery.append(idFieldName, document.get(idFieldName));
 	                    	
 	                    	BasicDBObject updateQuery = new BasicDBObject();     
 	                    	
@@ -236,15 +252,37 @@ public class MongoSink extends AbstractSink implements Configurable {
 	                    	value.put(fieldName, document.get(fieldName));
 	                    	
 	                    	updateQuery.append("$set", value);
+	                    	
 	
-	                    	getDBCollection(event).update(searchQuery, updateQuery);
+	                    	WriteResult result = getDBCollection(event).update(searchQuery, updateQuery);
+	                    	
+	                    	if(result ==null || result.getN()==0){
+	                    		log.warn(String.format("The %s opperation has not modified any document. Please revise the configuration.", this.saveOperation));
+	                    	}
 	                    	
 	                    	break;
                 		}
+                    	case UPDATE:
+                    	{
+	                		if(document.get(idFieldName)==null){
+	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.idFieldName, this.saveOperation));
+	                		}
+	                		
+                			BasicDBObject searchQuery = new BasicDBObject();
+	                    	searchQuery.append(idFieldName, document.get(idFieldName));
+	                    	
+	                    	WriteResult result = getDBCollection(event).update(searchQuery, document, this.upsertUpdate, this.multiUpdate);
+	                    	
+	                    	if(result ==null || result.getN()==0){
+	                    		log.warn(String.format("The %s opperation has not modified any document. Please revise the configuration.", this.saveOperation));
+	                    	}
+	                    	
+	                    	break;
+            			}
                     	case SAVE:
                     	default:
                     	{
-                    		getDBCollection(event).save(document);
+	                		getDBCollection(event).save(document);
             			}
                     }
                 }

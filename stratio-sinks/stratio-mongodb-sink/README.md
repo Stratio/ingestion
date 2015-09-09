@@ -16,12 +16,28 @@ The available config parameters are:
 - `dynamicCollection` *(string)*: Name of the event header that will be looked up for the collection name. This will only work when dynamic mode is enabled. Defaults to "collection".
 
 - `mongoUri` *(string, required)*: A [Mongo client URI](http://api.mongodb
-.org/java/current/com/mongodb/MongoClientURI.html) defining the MongoDB server address and, 
-optionally authentication, default database and collection. When dynamic mode is enabled, 
-the collection defined here will be 
+.org/java/current/com/mongodb/MongoClientURI.html) defining the MongoDB server address and,
+optionally authentication, default database and collection. When dynamic mode is enabled,
+the collection defined here will be
 used as a fallback.
 
-- `mappingFile` *(string)*: Path to a [JSON schema](http://json-schema.org/) to be used for type mapping purposes. See the *Type Mapping* section for further information. 
+- `mappingFile` *(string)*: Path to a [JSON schema](http://json-schema.org/) to be used for type mapping purposes. See the *Type Mapping* section for further information.
+
+- `saveOperation` *(string)*: The type of save operation to perform.
+
+  - `SAVE` *(default)*: a MongoDB save operation.
+  - `ADD_TO_SET`: an $addToSet MongoDB update operation.
+  - `SET`: a $set MongoDB update operation.
+  - `UPDATE`: a MongoDB update operation.
+
+
+- `idFieldName` *(string, required)* *[only for ADD_TO_SET | SET | UPDATE saveOperation]*: this is the field to use as the identifier for executing the save operations.
+
+- `fieldName` *(string, required)* *[only for ADD_TO_SET | SET saveOperation]*: this is the field which is going to be updated.
+
+- `upsertUpdate` *(boolean)* *[only for UPDATE saveOperation]*:  If true, the update operation will create the document if it would not exist.
+
+- `multiUpdate` *(boolean)* *[only for UPDATE saveOperation]*:  If true, the update operation will modify all the documents which have that id. If false, it will only update the first one.
 
 Type mapping
 ============
@@ -98,7 +114,7 @@ Let's see how an event is mapped to a MongoDB document by default, with no JSON 
       "myDate2": "2014/12/30"
       "myBinary": "U3RyYXRpbw==",
       "myObjectId": "507c7f79bcf86cd7994f6c0e",
-      "data": BinData([0x7b, 0x22, 0x6d, 0x79, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x34, 0x22, 0x3a, 0x20, 0x22, 
+      "data": BinData([0x7b, 0x22, 0x6d, 0x79, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x34, 0x22, 0x3a, 0x20, 0x22,
       0x73, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x34, 0x22, 0x7d]),
       "geolocation": "Point#[111.11,222.22]"
     }
@@ -208,7 +224,7 @@ Sample Complete-flow Flume config
 
 The following file describes an example configuration of an Flume agent that uses a [Spooling directory source](http://flume.apache.org/FlumeUserGuide.html#spooling-directory-source), a [File channel](http://flume.apache.org/FlumeUserGuide.html#file-channel) and our MongoDB Sink
 
-``` 
+```
     # Name the components on this agent
     agent.sources = r1
     agent.sinks = mongoSink
@@ -222,7 +238,7 @@ The following file describes an example configuration of an Flume agent that use
     agent.sinks.mongoSink.type = com.stratio.ingestion.sink.mongodb.MongoSink
     agent.sinks.mongoSink.mongoUri = mongodb://localhost/testdb.testcoll
     agent.sinks.mongoSink.dynamic = false
-    agent.sinks.mongoSink.batchSize = 200 
+    agent.sinks.mongoSink.batchSize = 200
     agent.sinks.mongoSink.mappingFile = /home/flume/conf/schema.json
 
     # Use a channel which buffers events in file
@@ -236,4 +252,3 @@ The following file describes an example configuration of an Flume agent that use
     # Bind the source and sink to the channel
     agent.sources.r1.channels = c1
     agent.sinks.mongoSink.channel = c1
-
