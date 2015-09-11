@@ -85,10 +85,12 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     protected static final String CONF_HEADERS = "headers";
     protected static final String CONF_BODY = "body";
     protected static final String CONF_HANDLER = "restSourceHandler";
-    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.restSourceHandler"
+    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.handler"
             + ".DefaultRestSourceHandler";
     protected static final String CONF_SKIP_SSL = "skipSsl";
     protected static final String URL_HANDLER = "urlHandler";
+    protected static final String DEFAULT_URL_HANDLER = "com.stratio.ingestion.source.rest.url."
+            + "DefaultUrlHandler";
     protected static final String URL_CONF = "urlHandlerConfig";
 
     private LinkedBlockingQueue<Event> queue = new LinkedBlockingQueue<Event>(QUEUE_SIZE);
@@ -124,7 +126,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         properties.put(CONF_BODY, context.getString(CONF_BODY, DEFAULT_BODY));
         properties.put(CONF_HANDLER, context.getString(CONF_HANDLER, DEFAULT_REST_HANDLER));
         properties.put(URL_CONF, context.getString(URL_CONF));
-        properties.put(URL_HANDLER, context.getString(URL_HANDLER));
+        properties.put(URL_HANDLER, context.getString(URL_HANDLER, DEFAULT_URL_HANDLER));
         restSourceHandler = initRestSourceHandler(context);
         urlHandler = initUrlHandler(context);
         client = initClient(context);
