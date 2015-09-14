@@ -20,6 +20,9 @@ You can use our Vagrant Box to run the example, just type: ``vagrant init strati
 
 You can edit the /opt/sds/ingestion/examples/airlines-map/conf/flume-conf.properties for customizing the example. By default, we have activated two sinks: ElasticSearch and Cassandra, but we provide the configuration for Stratio Streaming Sink commented in the same file.
 
+Due to an issue in virtualbox in Windows 10 computers, sandbox could not install properly the network interfaces. There is an official Virtualbox patch it. Just download and run as administrator:
+https://www.virtualbox.org/attachment/ticket/14040/VBox-Win10-fix-14040.exe
+If you've this problem in your local, please run this VirtualBox fix in the background while executing vagrant up.
 
 Running the example
 ===================
