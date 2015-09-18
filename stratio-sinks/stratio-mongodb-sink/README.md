@@ -15,10 +15,9 @@ The available config parameters are:
 
 - `dynamicCollection` *(string)*: Name of the event header that will be looked up for the collection name. This will only work when dynamic mode is enabled. Defaults to "collection".
 
-- `mongoUri` *(string, required)*: A [Mongo client URI](http://api.mongodb
-.org/java/current/com/mongodb/MongoClientURI.html) defining the MongoDB server address and, 
-optionally authentication, default database and collection. When dynamic mode is enabled, 
-the collection defined here will be 
+- `mongoUri` *(string, required)*: A [Mongo client URI](http://api.mongodb.org/java/current/com/mongodb/MongoClientURI.html) defining the MongoDB server address and,
+optionally authentication, default database and collection. When dynamic mode is enabled,
+the collection defined here will be
 used as a fallback.
 
 - `mappingFile` *(string)*: Path to a [JSON schema](http://json-schema.org/) to be used for type mapping purposes. See the *Type Mapping* section for further information. 

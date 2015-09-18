@@ -339,7 +339,7 @@
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
                 <module>stratio-ingestion-dist</module>
-                <module>doc</module>
+                <module>stratio-ui</module>
             </modules>
         </profile>
         <profile>
@@ -350,6 +350,7 @@
                 <module>stratio-morphlines</module>
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
+                <module>stratio-ui</module>
             </modules>
         </profile>
     </profiles>

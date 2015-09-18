@@ -1,0 +1,56 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "stratioStreaming",
+        "component": "sink",
+        "type": "stratioStreaming",
+        "name": "Stratio streaming Sink",
+        "description": "The StratioStreaming Sink will insert flume events to an specific stream. The configuration is located in the flume config (see sample below.)",
+        "settings": {
+          "kafka": {
+            "type": "string",
+            "name": "Kafka",
+            "description": "Kafka brokers (comma separated list) where the Stratio Streaming/Kafka instance is running",
+            "default": "localhost:9092",
+            "required": true
+          },
+          "zookeeper": {
+            "type": "string",
+            "name": "Zookeeper",
+            "description": "Zookeeper quorum where the Stratio Streaming/Zookeeper instance is running",
+            "default": "localhost:2181",
+            "required": true
+          },
+          "streamDefinitionFile": {
+            "type": "string",
+            "name": "Stream definition file",
+            "description": "stream definition file path",
+            "default": "",
+            "required": true
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "The size to batch insert statement. We recommend 100 as an optimum value to this property. Please do not forget increase the channel.capacity property on your channel component over the sink.batchSize property.",
+            "default": 20,
+            "required": false
+          },
+          "confFile": {
+            "type": "string",
+            "name": "Configuration file",
+            "description": "Path to a configuration file with initialization statements",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

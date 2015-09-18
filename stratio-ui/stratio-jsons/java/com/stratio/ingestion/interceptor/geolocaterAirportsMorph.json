@@ -1,0 +1,56 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "geolocaterAirports",
+        "component": "interceptor",
+        "type": "morphline",
+        "name": "Geolocater Airports Interceptor",
+        "description": "This interceptor takes the coordinates",
+        "settings": {
+          "originFieldName": {
+            "type": "string",
+            "name": "Origin field name",
+            "description": "The name of the origin",
+            "default": "",
+            "required": true
+          },
+          "originLatLonFieldName": {
+            "type": "string",
+            "name": "Origin latitute longitude",
+            "description": "The coordinates of the origin",
+            "default": "",
+            "required": true
+          },
+          "destinationFieldName": {
+            "type": "string",
+            "name": "Iso code output",
+            "description": "The name of the destination",
+            "default": "",
+            "required": true
+          },
+          "destinationLatLonFieldName": {
+            "type": "string",
+            "name": "Origin latitute longitude",
+            "description": "The coordinates of the destination",
+            "default": "",
+            "required": true
+          },
+          "resourceFile": {
+            "type": "string",
+            "name": "Resource file",
+            "description": "The file with all the airports data",
+            "default": "airports.dat",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

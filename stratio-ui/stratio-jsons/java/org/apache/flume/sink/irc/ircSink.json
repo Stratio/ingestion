@@ -1,0 +1,87 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "irc",
+        "type": "irc",
+        "name": "IRC Sink",
+        "description": "The IRC sink takes messages from attached channel and relays those to configured IRC destinations.",
+        "settings": {
+          "hostname": {
+            "type": "",
+            "name": "Host name",
+            "description": "The hostname or IP address to connect to",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "integer",
+            "name": "Port",
+            "description": "The port number of remote host to connect",
+            "default": 6667,
+            "required": false
+          },
+          "nick": {
+            "type": "",
+            "name": "Nick",
+            "description": "Nick name",
+            "default": "",
+            "required": true
+          },
+          "user": {
+            "type": "",
+            "name": "User",
+            "description": "User name",
+            "default": "",
+            "required": false
+          },
+          "password": {
+            "type": "",
+            "name": "Password",
+            "description": "User password",
+            "default": "",
+            "required": false
+          },
+          "chan": {
+            "type": "",
+            "name": "Channel",
+            "description": "channel",
+            "default": "",
+            "required": true
+          },
+          "name": {
+            "type": "",
+            "name": "Name",
+            "description": "",
+            "default": "",
+            "required": false
+          },
+          "splitlines": {
+            "type": "",
+            "name": "Split lines",
+            "description": "(boolean)",
+            "default": "",
+            "required": false
+          },
+          "splitchars": {
+            "type": "",
+            "name": "Split chars",
+            "description": "line separator (if you were to enter the default value into the config file, then you would need to escape the backslash, like this: “\n”)",
+            "default": "n",
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

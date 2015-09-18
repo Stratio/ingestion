@@ -49,6 +49,30 @@ import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.net.HostAndPort;
 
+/**
+ * The Cassandra Sink component allows to save Flume-flow events into Cassandra.
+ *It tries to find the defined fields in the event's headers. If a "data" field is defined, it will take the body's event instead of a header.
+ *
+ * Available configuration parameters are:
+ *
+ * <p><ul>
+ * <li><tt>tables</tt> <em>(string, required)</em>: One or more table names separated with commas.
+ * Table names must be fully qualified with keyspace (e.g. keyspace1.table1,keyspace2.table2)</li>
+ * <li><tt>hosts</tt> <em>(string, required)</em>: A comma-separated list of Cassandra hosts. It is recommended to specify
+ * at least two host of the cluster. The result of the cluster will be auto-discovered. (Default: localhost:9042)</li>
+ * <li><tt>username</tt> <em>(string)</em>: A valid database username.</li>
+ * <li><tt>password</tt> <em>(string)</em>: Password.</li>
+ * <li><tt>batchSize</tt> <em>(integer)</em>: The size to batch insert statement. We recommend 100 as an optimum value
+ * to this property.
+ * Please do not forget increase the channel.capacity property on your channel component over the sink.batchSize property. (Default: 100)</li>
+ * <li><tt>consistency</tt> <em>(string)</em>: The consistency level for this insert. Default value are QUORUM, available
+ * options are described here: [Cassandra data consistency](http://www.datastax.com/documentation/cassandra/2.0/cassandra/dml/dml_config_consistency_c.html)
+ * (Default: QUORUM)</em></li>
+ * <li><tt>cqlFile</tt> <em>(string)</em>: Path to a CQL file with initialization statements such as keyspace and table creation.</li>
+ * </ul></p>
+ *
+ */
+
 public class CassandraSink extends AbstractSink implements Configurable {
 
   private static final Logger log = LoggerFactory.getLogger(CassandraSink.class);

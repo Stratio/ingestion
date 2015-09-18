@@ -1,0 +1,129 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "avro",
+        "type": "avro",
+        "name": "Avro Sink",
+        "description": "This sink forms one half of Flume’s tiered collection support. Flume events sent to this sink are turned into Avro events and sent to the configured hostname / port pair. The events are taken from the configured Channel in batches of the configured batch size.",
+        "settings": {
+          "hostname": {
+            "type": "",
+            "name": "Host name",
+            "description": "The hostname or IP address to bind to.",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "",
+            "name": "Port",
+            "description": "The port # to listen on.",
+            "default": "",
+            "required": true
+          },
+          "batch-size": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "number of event to batch together for send",
+            "default": 100,
+            "required": false
+          },
+          "connect-timeout": {
+            "type": "integer",
+            "name": "Connect timeout",
+            "description": "Amount of time (ms) to allow for the first (handshake) request.",
+            "default": 20000,
+            "required": false
+          },
+          "request-timeout": {
+            "type": "integer",
+            "name": "Request timeout",
+            "description": "Amount of time (ms) to allow for requests after the first.",
+            "default": 20000,
+            "required": false
+          },
+          "reset-connection-interval": {
+            "type": "",
+            "name": "Reset connection interval",
+            "description": "Amount of time (s) before the connection to the next hop is reset. This will force the Avro Sink to reconnect to the next hop. This will allow the sink to connect to hosts behind a hardware load-balancer when news hosts are added without having to restart the agent.",
+            "default": "none",
+            "required": false
+          },
+          "compression-type": {
+            "type": "",
+            "name": "Compression type",
+            "description": "This can be “none” or “deflate”. The compression-type must match the compression-type of matching AvroSource",
+            "default": "none",
+            "required": false
+          },
+          "compression-level": {
+            "type": "integer",
+            "name": "Compression level",
+            "description": "The level of compression to compress event. 0 = no compression and 1-9 is compression. The higher the number the more compression",
+            "default": 6,
+            "required": false
+          },
+          "ssl": {
+            "type": "",
+            "name": "Ssl",
+            "description": "Set to true to enable SSL for this AvroSink. When configuring SSL, you can optionally set a “truststore”, “truststore-password”, “truststore-type”, and specify whether to “trust-all-certs”.",
+            "default": "false",
+            "required": false
+          },
+          "trust-all-certs": {
+            "type": "",
+            "name": "Trust all certs",
+            "description": "If this is set to true, SSL server certificates for remote servers (Avro Sources) will not be checked. This should NOT be used in production because it makes it easier for an attacker to execute a man-in-the-middle attack and “listen in” on the encrypted connection.",
+            "default": "false",
+            "required": false
+          },
+          "truststore": {
+            "type": "",
+            "name": "Trust store",
+            "description": "The path to a custom Java truststore file. Flume uses the certificate authority information in this file to determine whether the remote Avro Source’s SSL authentication credentials should be trusted. If not specified, the default Java JSSE certificate authority files (typically “jssecacerts” or “cacerts” in the Oracle JRE) will be used.",
+            "default": "",
+            "required": false
+          },
+          "truststore-password": {
+            "type": "",
+            "name": "Trust store password",
+            "description": "The password for the specified truststore.",
+            "default": "minute",
+            "required": false
+          },
+          "truststore-type": {
+            "type": "",
+            "name": "Trust store type",
+            "description": "The type of the Java truststore. This can be “JKS” or other supported Java truststore type.",
+            "default": "JKS",
+            "required": false
+          },
+          "exclude-protocols": {
+            "type": "",
+            "name": "Exclude protocols",
+            "description": "Space-separated list of SSL/TLS protocols to exclude. SSLv3 will always be excluded in addition to the protocols specified.",
+            "default": "SSLv3",
+            "required": false
+          },
+          "maxIoWorkers": {
+            "type": "",
+            "name": "max Io workers",
+            "description": "The maximum number of I/O worker threads. This is configured on the NettyAvroRpcClient NioClientSocketChannelFactory.",
+            "default": "2 * the number of available processors in the machine",
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

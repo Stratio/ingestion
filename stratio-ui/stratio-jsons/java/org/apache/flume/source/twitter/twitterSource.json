@@ -1,0 +1,63 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "twitter",
+        "component": "source",
+        "type": "org.apache.flume.source.twitter.TwitterSource",
+        "name": "Twitter 1% firehose Source",
+        "description": "Experimental source that connects via Streaming API to the 1% sample twitter firehose, continously downloads tweets, converts them to Avro format and sends Avro events to a downstream Flume sink. Requires the consumer and access tokens and secrets of a Twitter developer account.",
+        "settings": {
+          "consumerKey": {
+            "type": "",
+            "name": "Consumer key",
+            "description": "OAuth consumer key",
+            "default": "",
+            "required": true
+          },
+          "consumerSecret": {
+            "type": "",
+            "name": "Consumer secret",
+            "description": "OAuth consumer secret",
+            "default": "",
+            "required": true
+          },
+          "accessToken": {
+            "type": "enum",
+            "name": "Access token",
+            "description": "OAuth access token",
+            "default": "",
+            "required": true
+          },
+          "accessTokenSecret": {
+            "type": "",
+            "name": "Access token secret",
+            "description": "OAuth token secret",
+            "default": "",
+            "required": true
+          },
+          "maxBatchSize": {
+            "type": "integer",
+            "name": "Max batch size",
+            "description": "Maximum number of twitter messages to put in a single batch",
+            "default": 1000,
+            "required": false
+          },
+          "maxBatchDurationMillis": {
+            "type": "integer",
+            "name": "Max batch duration milliseconds",
+            "description": "Maximum number of milliseconds to wait before closing a batch",
+            "default": 1000
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

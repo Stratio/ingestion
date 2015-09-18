@@ -1,0 +1,56 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "jsonMorphline",
+        "component": "interceptor",
+        "type": "morphline",
+        "name": "Json Interceptor",
+        "description": "This interceptor takes a JSON file and formats the data",
+        "settings": {
+          "order_id": {
+            "type": "string",
+            "name": "Order id",
+            "description": "The id order",
+            "default": "",
+            "required": true
+          },
+          "timestamp": {
+            "type": "string",
+            "name": "Timestamp",
+            "description": "Timestamp field",
+            "default": "",
+            "required": true
+          },
+          "longitude": {
+            "type": "string",
+            "name": "Longitude",
+            "description": "Longitude field",
+            "default": "",
+            "required": true
+          },
+          "lines": {
+            "type": "string",
+            "name": "Lines",
+            "description": "Lines field",
+            "default": "",
+            "required": true
+          },
+          "jsonFile": {
+            "type": "string",
+            "name": "Json file",
+            "description": "The json file",
+            "default": "",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

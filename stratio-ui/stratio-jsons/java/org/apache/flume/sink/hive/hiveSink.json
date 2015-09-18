@@ -1,0 +1,129 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "hive",
+        "type": "hive",
+        "name": "Hive Sink",
+        "description": "This sink writes events into the Hadoop Distributed File System (HDFS). It currently supports creating text and sequence files. It supports compression in both file types. The files can be rolled (close current file and create a new one) periodically based on the elapsed time or size of data or number of events. It also buckets/partitions data by attributes like timestamp or machine where the event originated. The HDFS directory path may contain formatting escape sequences that will replaced by the HDFS sink to generate a directory/file name to store the events. Using this sink requires hadoop to be installed so that Flume can use the Hadoop jars to communicate with the HDFS cluster. Note that a version of Hadoop that supports the sync() call is required.",
+        "settings": {
+          "hive.metastore": {
+            "type": "",
+            "name": "Hive metastore",
+            "description": "Hive metastore URI (eg thrift://a.b.com:9083 )",
+            "default": "",
+            "required": true
+          },
+          "hive.database": {
+            "type": "",
+            "name": "Hive database",
+            "description": "Hive database name",
+            "default": "FlumeData",
+            "required": true
+          },
+          "hive.table": {
+            "type": "",
+            "name": "Hive table",
+            "description": "Hive table name",
+            "default": "",
+            "required": true
+          },
+          "hive.partition": {
+            "type": "",
+            "name": "Hive partition",
+            "description": "Comma separate list of partition values identifying the partition to write to. May contain escape sequences. E.g: If the table is partitioned by (continent: string, country :string, time : string) then ‘Asia,India,2014-02-26-01-21’ will indicate continent=Asia,country=India,time=2014-02-26-01-21",
+            "default": "",
+            "required": false
+          },
+          "hive.txnsPerBatchAsk": {
+            "type": "integer",
+            "name": "Txns per batch ask",
+            "description": "Hive grants a batch of transactions instead of single transactions to streaming clients like Flume. This setting configures the number of desired transactions per Transaction Batch. Data from all transactions in a single batch end up in a single file. Flume will write a maximum of batchSize events in each transaction in the batch. This setting in conjunction with batchSize provides control over the size of each file. Note that eventually Hive will transparently compact these files into larger files.",
+            "default": 100,
+            "required": false
+          },
+          "heartBeatInterval": {
+            "type": "integer",
+            "name": "Heartbeat interval",
+            "description": "(In seconds) Interval between consecutive heartbeats sent to Hive to keep unused transactions from expiring. Set this value to 0 to disable heartbeats.",
+            "default": 240,
+            "required": false
+          },
+          "autoCreatePartitions": {
+            "type": "",
+            "name": "Auto create partitions",
+            "description": "Flume will automatically create the necessary Hive partitions to stream to",
+            "default": "true",
+            "required": false
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "Max number of events written to Hive in a single Hive transaction",
+            "default": 15000,
+            "required": false
+          },
+          "maxOpenConnections": {
+            "type": "integer",
+            "name": "Max open connections",
+            "description": "Allow only this number of open connections. If this number is exceeded, the least recently used connection is closed.",
+            "default": 500,
+            "required": false
+          },
+          "callTimeout": {
+            "type": "integer",
+            "name": "Call timeout",
+            "description": "(In milliseconds) Timeout for Hive & HDFS I/O operations, such as openTxn, write, commit, abort.",
+            "default": 10000,
+            "required": false
+          },
+          "serializer": {
+            "type": "",
+            "name": "Serializer",
+            "description": "Serializer is responsible for parsing out field from the event and mapping them to columns in the hive table. Choice of serializer depends upon the format of the data in the event. Supported serializers: DELIMITED and JSON",
+            "default": "",
+            "required": false
+          },
+          "roundUnit": {
+            "type": "",
+            "name": "Round unit",
+            "description": "The unit of the round down value - second, minute or hour.",
+            "default": "minute",
+            "required": false
+          },
+          "roundValue": {
+            "type": "integer",
+            "name": "Round value",
+            "description": "Rounded down to the highest multiple of this (in the unit configured using hive.roundUnit), less than current time",
+            "default": 1,
+            "required": false
+          },
+          "timeZone": {
+            "type": "",
+            "name": "Timezone",
+            "description": " 	Name of the timezone that should be used for resolving the escape sequences in partition, e.g. America/Los_Angeles.",
+            "default": "Local Time",
+            "required": false
+          },
+          "useLocalTimeStamp": {
+            "type": "",
+            "name": "Use local timestamp",
+            "description": "Use the local time (instead of the timestamp from the event header) while replacing the escape sequences.",
+            "default": "false",
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

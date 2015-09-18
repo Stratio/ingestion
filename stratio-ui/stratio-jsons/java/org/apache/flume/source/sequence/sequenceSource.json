@@ -1,0 +1,42 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "sequence",
+        "component": "source",
+        "type": "seq",
+        "name": "Sequence Generator Source",
+        "description": "A simple sequence generator that continuously generates events with a counter that starts from 0 and increments by 1. Useful mainly for testing.",
+        "settings": {
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "",
+            "default": 1,
+            "required": false
+          },
+          "selector.type": {
+            "type": "",
+            "name": "Selector type",
+            "description": "replicating or multiplexing",
+            "default": "replicating",
+            "required": false
+          },
+          "interceptors": {
+            "type": "",
+            "name": "Interceptors",
+            "description": "Space-separated list of interceptors",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

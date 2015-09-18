@@ -1,0 +1,161 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "file",
+        "component": "channel",
+        "type": "file",
+        "name": "File Channel",
+        "description": "By default the File Channel uses paths for checkpoint and data directories that are within the user home as specified above. As a result if you have more than one File Channel instances active within the agent, only one will be able to lock the directories and cause the other channel initialization to fail. It is therefore necessary that you provide explicit paths to all the configured channels, preferably on different disks. Furthermore, as file channel will sync to disk after every commit, coupling it with a sink/source that batches events together may be necessary to provide good performance where multiple disks are not available for checkpoint and data directories.",
+        "settings": {
+          "checkpointDir": {
+            "type": "",
+            "name": "Checkpoint directory",
+            "description": "The directory where checkpoint file will be stored",
+            "default": "~/.flume/file-channel/checkpoint",
+            "required": false
+          },
+          "useDualCheckpoints": {
+            "type": "",
+            "name": "Use dual checkpoints",
+            "description": "Backup the checkpoint. If this is set to true, backupCheckpointDir must be set",
+            "default": "false",
+            "required": false
+          },
+          "backupCheckpointDir": {
+            "type": "",
+            "name": "Backup checkpoint directory",
+            "description": "JDBC connection URL",
+            "default": "",
+            "required": false
+          },
+          "dataDirs": {
+            "type": "Data directories",
+            "name": "DB username",
+            "description": "~/.flume/file-channel/data",
+            "default": "sa",
+            "required": false
+          },
+          "transactionCapacity": {
+            "type": "integer",
+            "name": "Transaction capacity",
+            "description": "The maximum size of transaction supported by the channel",
+            "default": 10000,
+            "required": false
+          },
+          "checkpointInterval": {
+            "type": "integer",
+            "name": "Checkpoint interval",
+            "description": "Amount of time (in millis) between checkpoints",
+            "default": 30000,
+            "required": false
+          },
+          "maxFileSize": {
+            "type": "integer",
+            "name": "Max file size",
+            "description": "Max size (in bytes) of a single log file",
+            "default": 2146435071,
+            "required": false
+          },
+          "minimumRequiredSpace": {
+            "type": "integer",
+            "name": "Minimum required space",
+            "description": "Minimum Required free space (in bytes). To avoid data corruption, File Channel stops accepting take/put requests when free space drops below this value",
+            "default": 524288000,
+            "required": false
+          },
+          "capacity": {
+            "type": "integer",
+            "name": "Capacity",
+            "description": "",
+            "default": 1000000,
+            "required": false
+          },
+          "keep-alive": {
+            "type": "integer",
+            "name": "Keep alive",
+            "description": "Amount of time (in sec) to wait for a put operation",
+            "default": 3,
+            "required": false
+          },
+          "use-log-replay-v1": {
+            "type": "",
+            "name": "Use log replay v1",
+            "description": "Expert: Use old replay logic",
+            "default": "false",
+            "required": false
+          },
+          "use-fast-replay": {
+            "type": "",
+            "name": "Use fast replay",
+            "description": "Expert: Replay without using queue",
+            "default": "false",
+            "required": false
+          },
+          "checkpointOnClose": {
+            "type": "",
+            "name": "Checkpoint close",
+            "description": "Controls if a checkpoint is created when the channel is closed. Creating a checkpoint on close speeds up subsequent startup of the file channel by avoiding replay.",
+            "default": "true",
+            "required": false
+          },
+          "encryption.activeKey": {
+            "type": "",
+            "name": "Encryption active key",
+            "description": "Key name used to encrypt new data",
+            "default": "",
+            "required": false
+          },
+          "encryption.cipherProvider": {
+            "type": "",
+            "name": "Encryption cipher provider",
+            "description": "Cipher provider type, supported types: AESCTRNOPADDING",
+            "default": "",
+            "required": false
+          },
+          "encryption.keyProvider": {
+            "type": "",
+            "name": "Encryption key provider",
+            "description": "",
+            "default": "tre",
+            "required": false
+          },
+          "encryption.keyProvider.keyStoreFile": {
+            "type": "",
+            "name": "Encryption key provider key store file",
+            "description": "Path to the keystore file",
+            "default": "",
+            "required": false
+          },
+          "encrpytion.keyProvider.keyStorePasswordFile 	": {
+            "type": "",
+            "name": "Encryption key provider key store password file",
+            "description": "Path to the keystore password file",
+            "default": "",
+            "required": false
+          },
+          "encryption.keyProvider.keys": {
+            "type": "",
+            "name": "Encryption key provider keys",
+            "description": "List of all keys (e.g. history of the activeKey setting)",
+            "default": "",
+            "required": false
+          },
+          "encyption.keyProvider.keys.*.passwordFile": {
+            "type": "",
+            "name": "Encryption key provider keys password file",
+            "description": "Path to the optional key password file",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

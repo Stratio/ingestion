@@ -58,7 +58,38 @@ import io.druid.granularity.QueryGranularity;
 import io.druid.query.aggregation.AggregatorFactory;
 
 /**
- * Created by eambrosio on 27/03/15.
+ * The Druid Sink component allows to save Flume-flow events to Druid.
+ *
+ * Available configuration parameters are:
+ *
+ * <p><ul>
+ * <li><tt>indexService</tt> <em>(string, required)</em>: Overlord's service name</li>
+ * <li><tt>discoveryPath</tt> <em>(string, required)</em>: Your overlord's druid.discovery.curator.path</li>
+ * <li><tt>dimensions</tt> <em>(string, required)</em>:  Comma separated list with event headers you want to stored.
+ * Similar to columns inrelational databases. </li>
+ * <li><tt>firehosePattern</tt> <em>(string)</em>: Firehoses describe the data stream source. Make up a service pattern,
+ * include %s somewhere in it. This will be used for internal service-discovery purposes, to help druid sink find Druid
+ * indexing tasks. By default, *druid:firehose:%s*.</li>
+ * <li><tt>dataSource</tt> <em>(string)</em>: Source name where events will be stored. Very similar to a table in relational
+ * databases. By default, *sampleSource*.</li>
+ * <li><tt>aggregators</tt> <em>(string)</em>: Different specifications of processing over available metrics. By default,
+ * *count* aggregator.</li>
+ * <li><tt>zookeeperLocation</tt> <em>(string)</em>: Zookeeper location (hostname:port).By default, *127.0.0.1:2181*.</li>
+ * <li><tt>timestampField</tt> <em>(integer)</em>: The field name where event timestamp info is extracted from. By default, *timestamp*.</li>
+ * <li><tt>segmentGranularity</tt> <em>(string)</em>: Time granularity (minute, hour, day, week, month) for loading data at query
+ * time. Recommended, more than queryGranularity.  By default, *HOUR*.</li>
+ * <li><tt>queryGranularity</tt> <em>(string)</em>: Time granularity (minute, hour, day, week, month) for rollup. At least, less
+ * than segmentGranularity. Recommended: minute, hour, day, week, month.  By default, *NONE*.</li>
+ * <li><tt>period</tt> <em>(string)</em>: While reading, events with timestamp older than now minus this value, will be discarded.  By
+ * default, *PT10M*.</li>
+ * <li><tt>partitions</tt> <em>(string)</em>: This is used to scale ingestion up to handle larger streams.  By default, *1*.</li>
+ * <li><tt>replicants</tt> <em>(string, required)</em>: This is used to provide higher availability and parallelism for queries.  By default, *1*.</li>
+ * <li><tt>baseSleepTime</tt> <em>(string)</em>: Initial amount of time to wait between retries.  By default, *1000*.</li>
+ * <li><tt>maxRetries</tt> <em>(string)</em>: Max number of times to retry.  By default, *3*.</li>
+ * <li><tt>maxSleep</tt> <em>(string)</em>: Max time in ms to sleep on each retry.  By default, *30000*.</li>
+ * <li><tt>batchSize</tt> <em>(integer)</em>: Number of events to batch together to be send to our data source.  By default, *1000*.</li>
+ * </ul></p>
+ *
  */
 public class DruidSink extends AbstractSink implements Configurable {
 

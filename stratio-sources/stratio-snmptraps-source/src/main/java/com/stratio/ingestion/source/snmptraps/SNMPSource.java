@@ -63,6 +63,28 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Charsets;
 
+/**
+ *
+ * A Flume source that listens to snmp traps.
+ *
+ * Configuration parameters are:
+ *
+ * <p>
+ * <ul>
+ * <li><tt>hostname</tt> <em>(string, required)</em>: target URI.</li>
+ * <li><tt>port</tt> <em>(integer)</em>: Port. Default: 6667 .</li>
+ * <li><tt>nick</tt> <em>(string, required)</em>: Nickname.</li>
+ * <li><tt>channels</tt> <em>(string, required)</em>: Comma separated channels without hash. Example: ubuntu,
+ * trivial. </li>
+ * <li><tt>user</tt> <em>(string)</em>: The username. Is used to register the connection.</li>
+ * <li><tt>name</tt> <em>(string)</em>: The realname. Is used to register the connection.</li>
+ * <li><tt>password</tt> <em>(string)</em>: Password. Required if you are registered.</li>
+ * <li><<tt>replyPing</tt> <em>(boolean)</em>: Automatically sends pong when receives a ping. Default: False.</li>
+ * </ul>
+ * </p>
+ *
+ */
+
 public class SNMPSource extends AbstractSource implements EventDrivenSource, Configurable {
 
     private static final Logger log = LoggerFactory.getLogger(SNMPSource.class);

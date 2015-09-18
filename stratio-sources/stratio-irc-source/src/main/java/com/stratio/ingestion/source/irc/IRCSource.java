@@ -50,15 +50,16 @@ import com.google.common.base.Preconditions;
  *
  * <p>
  * <ul>
- * <li><tt>hostname</tt> <em>(string, required)</em>: target URI.</li>
- * <li><tt>port</tt> <em>(integer)</em>: Port. Default: 6667 .</li>
- * <li><tt>nick</tt> <em>(string, required)</em>: Nickname.</li>
- * <li><tt>channels</tt> <em>(string, required)</em>: Comma separated channels without hash. Example: ubuntu,
- * trivial. </li>
- * <li><tt>user</tt> <em>(string)</em>: The username. Is used to register the connection.</li>
- * <li><tt>name</tt> <em>(string)</em>: The realname. Is used to register the connection.</li>
- * <li><tt>password</tt> <em>(string)</em>: Password. Required if you are registered.</li>
- * <li><<tt>replyPing</tt> <em>(boolean)</em>: Automatically sends pong when receives a ping. Default: False.</li>
+ * <li><tt>address</tt> <em>(string, required)</em>: Address to listen snmp traps. Default: localhost</li>
+ * <li><tt>snmpTrapPort</tt> <em>(integer, required)</em>: Port to listen snmp traps. Default: 162</li>
+ * <li><tt>snmpVersion</tt> <em>(string)</em>: SNMP Protocol version. Possible values: V1,V2c,V3. Default: V1</li>
+ * <li><tt>snmpTrapVersion</tt> <em>(string)</em>: SNMP Trap Protocol version. Possible values: V1,V2c,V3. Default: V1</li>
+ * <li><tt>encryptionType</tt> <em>(string)</em>: Encryption. Possible values: SHA, MD5. Default: MD5</li>
+ * <li><tt>authenticationType</tt> <em>(string)</em>: SNMP Authentication. Possible values: AUTH_NOPRIV, NOAUTH_NOPRIV, AUTH_PRIV. Default: NOAUTH_NOPRIV</li>
+ * <li><tt>username</tt> <em>(string)</em>: username. Required when authenticationType -> AUTH_NOPRIV, AUTH_PRIV</li>
+ * <li><<tt>password</tt> <em>(boolean)</em>: password. Required when authenticationType -> AUTH_NOPRIV, AUTH_PRIV</li>
+ *  <li><tt>privacyProtocol</tt> <em>(string)</em>: Privacy protocol. Required when authenticationType -> AUTH_PRIV. Possible values: PrivDES, Priv3DES, PrivAES128, PrivAES192, PrivAES256, PrivAES192With3DESKeyExtension, PrivAES256With3DESKeyExtension. Default: PRIVDES.</li>
+ * <li><<tt>privacyPassphrase</tt> <em>(boolean)</em>: Privacy passphrase. Required when authenticationType -> AUTH_PRIV.</li>
  * </ul>
  * </p>
  *

@@ -1,0 +1,25 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "custom",
+        "type": "The component type name, needs to be your FQCN",
+        "name": "Custom Sink",
+        "description": "A custom sink is your own implementation of the Sink interface. A custom sink’s class and its dependencies must be included in the agent’s classpath when starting the Flume agent. The type of the custom sink is its FQCN. ",
+        "settings": {
+
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

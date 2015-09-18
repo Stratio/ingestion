@@ -1,0 +1,49 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "scribe",
+        "component": "source",
+        "type": "org.apache.flume.source.scribe.ScribeSource",
+        "name": "Scribe Source",
+        "description": "Scribe is another type of ingest system. To adopt existing Scribe ingest system, Flume should use ScribeSource based on Thrift with compatible transfering protocol. For deployment of Scribe please follow the guide from Facebook.",
+        "settings": {
+          "port": {
+            "type": "",
+            "name": "Port",
+            "description": "Port that Scribe should be connected",
+            "default": "1499",
+            "required": true
+          },
+          "maxReadBufferBytes": {
+            "type": "byte",
+            "name": "Max read buffer bytes",
+            "description": "Thrift Default FrameBuffer Size",
+            "default": 16384000,
+            "required": true
+          },
+          "workerThreads": {
+            "type": "integer",
+            "name": "Worker threads",
+            "description": "Handing threads number in Thrift",
+            "default": 5,
+            "required": true
+          },
+          "selector.type": {
+            "type": "",
+            "name": "Selector type",
+            "description": "replicating or multiplexing",
+            "default": "replicating",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

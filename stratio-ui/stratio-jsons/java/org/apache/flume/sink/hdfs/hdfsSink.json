@@ -1,0 +1,227 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "hdfs",
+        "type": "sink",
+        "name": "HDFS Sink",
+        "description": "This sink writes events into the Hadoop Distributed File System (HDFS). It currently supports creating text and sequence files. It supports compression in both file types. The files can be rolled (close current file and create a new one) periodically based on the elapsed time or size of data or number of events. It also buckets/partitions data by attributes like timestamp or machine where the event originated. The HDFS directory path may contain formatting escape sequences that will replaced by the HDFS sink to generate a directory/file name to store the events. Using this sink requires hadoop to be installed so that Flume can use the Hadoop jars to communicate with the HDFS cluster. Note that a version of Hadoop that supports the sync() call is required.",
+        "settings": {
+          "hdfs.path": {
+            "type": "directory",
+            "name": "Spooling directory",
+            "description": "HDFS directory path (eg hdfs://namenode/flume/webdata/)",
+            "default": "",
+            "required": true
+          },
+          "hdfs.filePrefix": {
+            "type": "string",
+            "name": "File prefix",
+            "description": "Name prefixed to files created by Flume in hdfs directory",
+            "default": "FlumeData",
+            "required": false
+          },
+          "hdfs.fileSuffix": {
+            "type": "integer",
+            "name": "File suffix",
+            "description": "Suffix to append to file (eg .avro - NOTE: period is not automatically added)",
+            "default": "",
+            "required": false
+          },
+          "hdfs.inUsePrefix": {
+            "type": "",
+            "name": "In use prefix",
+            "description": "Prefix that is used for temporal files that flume actively writes into",
+            "default": "",
+            "required": false
+          },
+          "hdfs.inUseSuffix": {
+            "type": "",
+            "name": "In use suffix",
+            "description": "Suffix that is used for temporal files that flume actively writes into",
+            "default": ".tmp",
+            "required": false
+          },
+          "hdfs.rollInterval": {
+            "type": "integer",
+            "name": "Roll interval",
+            "description": "Number of seconds to wait before rolling current file (0 = never roll based on time interval)",
+            "default": 30,
+            "required": false
+          },
+          "hdfs.rollSize": {
+            "type": "integer",
+            "name": "Roll size",
+            "description": "File size to trigger roll, in bytes (0: never roll based on file size)",
+            "default": 1024,
+            "required": false
+          },
+          "hdfs.rollCount": {
+            "type": "integer",
+            "name": "Roll count",
+            "description": "Number of events written to file before it rolled (0 = never roll based on number of events)",
+            "default": 10,
+            "required": false
+          },
+          "hdfs.idleTimeout": {
+            "type": "integer",
+            "name": "Idle timeout",
+            "description": "Timeout after which inactive files get closed (0 = disable automatic closing of idle files)",
+            "default": 0,
+            "required": false
+          },
+          "hdfs.batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": " number of events written to file before it is flushed to HDFS",
+            "default": 100,
+            "required": false
+          },
+          "hdfs.codeC": {
+            "type": "",
+            "name": "CodeC",
+            "description": "Compression codec. one of following : gzip, bzip2, lzo, lzop, snappy",
+            "default": "",
+            "required": false
+          },
+          "hdfs.fileType": {
+            "type": "",
+            "name": "File type",
+            "description": "File format: currently SequenceFile, DataStream or CompressedStream (1)DataStream will not compress output file and please don’t set codeC (2)CompressedStream requires set hdfs.codeC with an available codeC",
+            "default": "SequenceFile",
+            "required": false
+          },
+          "hdfs.maxOpenFiles": {
+            "type": "integer",
+            "name": "Max open files",
+            "description": "Allow only this number of open files. If this number is exceeded, the oldest file is closed.",
+            "default": 5000,
+            "required": false
+          },
+          "hdfs.minBlockReplicas": {
+            "type": "",
+            "name": "Min block replicas",
+            "description": "Specify minimum number of replicas per HDFS block. If not specified, it comes from the default Hadoop config in the classpath.",
+            "default": "",
+            "required": false
+          },
+          "hdfs.writeFormat": {
+            "type": "",
+            "name": "Write format",
+            "description": "Format for sequence file records. One of “Text” or “Writable” (the default).",
+            "default": "",
+            "required": false
+          },
+          "hdfs.callTimeout": {
+            "type": "integer",
+            "name": "Call timeout",
+            "description": "Number of milliseconds allowed for HDFS operations, such as open, write, flush, close. This number should be increased if many HDFS timeout operations are occurring.",
+            "default": 10000,
+            "required": false
+          },
+          "hdfs.threadsPoolSize": {
+            "type": "integer",
+            "name": "Threads pool size",
+            "description": "Number of threads per HDFS sink for HDFS IO ops (open, write, etc.)",
+            "default": 10,
+            "required": false
+          },
+          "hdfs.rollTimerPoolSize": {
+            "type": "integer",
+            "name": "Roll timer pool size",
+            "description": "Number of threads per HDFS sink for scheduling timed file rolling",
+            "default": 1,
+            "required": false
+          },
+          "hdfs.kerberosPrincipal": {
+            "type": "",
+            "name": "Kerberos principal",
+            "description": "Kerberos user principal for accessing secure HDFS",
+            "default": "",
+            "required": false
+          },
+          "hdfs.kerberosKeytab": {
+            "type": "",
+            "name": "Kerberos key tab",
+            "description": "Kerberos keytab for accessing secure HDFS",
+            "default": "",
+            "required": false
+          },
+          "hdfs.proxyUser": {
+            "type": "",
+            "name": "Proxy user",
+            "description": "",
+            "default": "",
+            "required": false
+          },
+          "hdfs.round": {
+            "type": "",
+            "name": "Round",
+            "description": "Should the timestamp be rounded down (if true, affects all time based escape sequences except %t)",
+            "default": "false",
+            "required": false
+          },
+          "hdfs.roundValue": {
+            "type": "integer",
+            "name": "Round value",
+            "description": "Rounded down to the highest multiple of this (in the unit configured using hdfs.roundUnit), less than current time.",
+            "default": 1,
+            "required": false
+          },
+          "hdfs.roundUnit": {
+            "type": "",
+            "name": "Round unit",
+            "description": "The unit of the round down value - second, minute or hour.",
+            "default": "second",
+            "required": false
+          },
+          "hdfs.timeZone": {
+            "type": "",
+            "name": "Time zone",
+            "description": "Name of the timezone that should be used for resolving the directory path, e.g. America/Los_Angeles.",
+            "default": "Local Time",
+            "required": false
+          },
+          "hdfs.useLocalTimeStamp": {
+            "type": "",
+            "name": "use local Timestamp",
+            "description": "Use the local time (instead of the timestamp from the event header) while replacing the escape sequences.",
+            "default": "false",
+            "required": false
+          },
+          "hdfs.closeTries": {
+            "type": "integer",
+            "name": "Close tries",
+            "description": "Number of times the sink must try renaming a file, after initiating a close attempt. If set to 1, this sink will not re-try a failed rename (due to, for example, NameNode or DataNode failure), and may leave the file in an open state with a .tmp extension. If set to 0, the sink will try to rename the file until the file is eventually renamed (there is no limit on the number of times it would try). The file may still remain open if the close call fails but the data will be intact and in this case, the file will be closed only after a Flume restart.",
+            "default": 0,
+            "required": false
+          },
+          "hdfs.retryInterval": {
+            "type": "integer",
+            "name": "Retry interval",
+            "description": " Time in seconds between consecutive attempts to close a file. Each close call costs multiple RPC round-trips to the Namenode, so setting this too low can cause a lot of load on the name node. If set to 0 or less, the sink will not attempt to close the file if the first attempt fails, and may leave the file open or with a ”.tmp” extension.",
+            "default": 180,
+            "required": false
+          },
+          "serializer": {
+            "type": "",
+            "name": "Serializer",
+            "description": "Other possible options include avro_event or the fully-qualified class name of an implementation of the EventSerializer.Builder interface.",
+            "default": "TEXT",
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "avro",
+        "component": "source",
+        "type": "avro",
+        "name": "Avro Source",
+        "description": "Listens on Avro port and receives events from external Avro client streams. When paired with the built-in Avro Sink on another (previous hop) Flume agent, it can create tiered collection topologies. ",
+        "settings": {
+          "bind": {
+            "type": "string",
+            "name": "Bind address",
+            "description": "hostname or IP address to listen on",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "string",
+            "name": "Port to bind to",
+            "description": "Port # to bind to",
+            "default": "",
+            "required": true
+          },
+          "threads": {
+            "type": "",
+            "name": "Threads",
+            "description": "Maximum number of worker threads to spawn",
+            "default": "",
+            "required": false
+          },
+          "interceptors": {
+            "type": "",
+            "name": "Interceptors",
+            "description": "Space-separated list of interceptors",
+            "default": "",
+            "required": false
+          },
+          "compression-type": {
+            "type": "",
+            "name": "Compression-type",
+            "description": "This can be “none” or “deflate”. The compression-type must match the compression-type of matching AvroSource",
+            "default": "none",
+            "required": false
+          },
+          "ssl": {
+            "type": "",
+            "name": "Ssl",
+            "description": "Set this to true to enable SSL encryption. You must also specify a “keystore” and a “keystore-password”.",
+            "default": "false",
+            "required": false
+          },
+          "keystore": {
+            "type": "",
+            "name": "Keystore",
+            "description": "This is the path to a Java keystore file. Required for SSL.",
+            "default": "",
+            "required": false
+          },
+          "keystore-password": {
+            "type": "",
+            "name": "Keystore password",
+            "description": "The password for the Java keystore. Required for SSL.",
+            "default": "",
+            "required": false
+          },
+          "keystore-type": {
+            "type": "",
+            "name": "Keystore type",
+            "description": "The type of the Java keystore. This can be “JKS” or “PKCS12”.",
+            "default": "JKS",
+            "required": false
+          },
+          "exclude-protocols": {
+            "type": "",
+            "name": "Exclude protocols",
+            "description": "Space-separated list of SSL/TLS protocols to exclude. SSLv3 will always be excluded in addition to the protocols specified.",
+            "default": "SSLv3",
+            "required": false
+          },
+          "ipFilter": {
+            "type": "",
+            "name": "Ip Filter",
+            "description": "Set this to true to enable ipFiltering for netty",
+            "default": "false",
+            "required": false
+          },
+          "ipFilter.rules": {
+            "type": "",
+            "name": "Ip Filter Rules",
+            "description": "Define N netty ipFilter pattern rules with this config.",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+        },
+        "ui": {
+        }
+      }
+    ]
+  }
+}

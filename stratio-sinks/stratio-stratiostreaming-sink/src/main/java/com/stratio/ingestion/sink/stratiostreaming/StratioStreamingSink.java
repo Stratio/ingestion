@@ -33,6 +33,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
 
+/**
+ * The StratioStreaming Sink will insert flume events to an specific stream. The configuration is located in the
+ * flume config.
+ *
+ * Available configuration parameters are:
+ *
+ * <p><ul>
+ * <li><tt>kafka</tt> <em>(string, required)</em>: Kafka brokers (comma separated list) where the Stratio Streaming/Kafka
+ * instance is running</li>
+ * <li><tt>zookeeper</tt> <em>(string, required)</em>: Zookeeper quorum where the Stratio Streaming/Zookeeper instance
+ * is running</li>
+ * <li><tt>streamDefinitionFile</tt> <em>(string, required)</em>: stream definition file path</li>
+ * <li><tt>batchFile</tt> <em>(string)</em>: The size to batch insert statement. (Default: 20)</li>
+ * </ul></p>
+ *
+ */
+
 public class StratioStreamingSink
         extends AbstractSink
         implements Configurable {

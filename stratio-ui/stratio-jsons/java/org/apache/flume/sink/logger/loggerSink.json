@@ -1,0 +1,31 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "logger",
+        "type": "logger",
+        "name": "Logger Sink",
+        "description": "Logs event at INFO level. Typically useful for testing/debugging purpose.",
+        "settings": {
+          "maxBytesToLog": {
+            "type": "",
+            "name": "Max bytes to log",
+            "description": "Maximum number of bytes of the Event body to log",
+            "default": "16",
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

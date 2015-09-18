@@ -1,0 +1,77 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "kafka",
+        "component": "source",
+        "type": "org.apache.flume.source.kafka,KafkaSource",
+        "name": "Kafka source",
+        "description": "Kafka Source is an Apache Kafka consumer that reads messages from a Kafka topic. If you have multiple Kafka sources running, you can configure them with the same Consumer Group so each will read a unique set of partitions for the topic.",
+        "settings": {
+          "zookeeperConnect": {
+            "type": "",
+            "name": "Zookeeper connect",
+            "description": "URI of ZooKeeper used by Kafka cluster",
+            "default": "",
+            "required": true
+          },
+          "groupId": {
+            "type": "",
+            "name": "Group ID",
+            "description": "Unique identified of consumer group. Setting the same id in multiple sources or agents indicates that they are part of the same consumer group",
+            "default": "flume",
+            "required": true
+          },
+          "topic": {
+            "type": "",
+            "name": "Topic",
+            "description": "Kafka topic we’ll read messages from. At the time, this is a single topic only.",
+            "default": "",
+            "required": true
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "Maximum number of messages written to Channel in one batch",
+            "default": 1000,
+            "required": false
+          },
+          "batchDurationMillis": {
+            "type": "integer",
+            "name": "Batch duration milliseconds",
+            "description": "Maximum time (in ms) before a batch will be written to Channel The batch will be written whenever the first of size and time will be reached.",
+            "default": 1000,
+            "required": false
+          },
+          "backoffSleepIncrement": {
+            "type": "integer",
+            "name": "Backoff sleep increment",
+            "description": "Initial and incremental wait time that is triggered when a Kafka Topic appears to be empty. Wait period will reduce aggressive pinging of an empty Kafka Topic. One second is ideal for ingestion use cases but a lower value may be required for low latency operations with interceptors.",
+            "default": 1000,
+            "required": false
+          },
+          "maxBackoffSleep": {
+            "type": "integer",
+            "name": "Max backoff sleep",
+            "description": "Maximum wait time that is triggered when a Kafka Topic appears to be empty. Five seconds is ideal for ingestion use cases but a lower value may be required for low latency operations with interceptors.",
+            "default": 5000,
+            "required": false
+          },
+          "OtherKafkaConsumerProperties": {
+            "type": "",
+            "name": "Other Kafka Consumer Properties",
+            "description": "These properties are used to configure the Kafka Consumer. Any producer property supported by Kafka can be used. The only requirement is to prepend the property name with the prefix kafka.. For example: kafka.consumer.timeout.ms Check Kafka documentation <https://kafka.apache.org/08/configuration.html#consumerconfigs> for details",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}
