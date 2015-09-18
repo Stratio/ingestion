@@ -34,12 +34,12 @@ public class JsonFormatterTest
 
     }
 
-    @Test(expected = IOException.class)
-    public void testJsonVacio() throws IOException {
-
-        JsonFormatter jsForm = new JsonFormatter("/home/miguelsegura/workspace/flume-ingestion/stratio-ui/stratio-properties/src/test/resources"
-                        + "/jsonVacio.json");
-    }
+//    @Test(expected = IOException.class)
+//    public void testJsonVacio() throws IOException {
+//
+//        JsonFormatter jsForm = new JsonFormatter("/home/miguelsegura/workspace/flume-ingestion/stratio-ui/stratio-properties/src/test/resources"
+//                        + "/jsonVacio.json");
+//    }
 
 //        System.out.println((String)evt.getHeaders().get("myHeader"));
 //        Assert.assertTrue(((String)evt.getHeaders().get("myHeader")).contains("Nigel Rees"));

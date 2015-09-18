@@ -385,7 +385,7 @@
                                 "description": "A comma-separated list of Cassandra hosts. It is recommended to specify at least two host of the cluster. The result of the cluster will be auto-discovered.",
                                 "default": "localhost:9042",
                                 "required": true,
-                                "value": "localhost:9042"
+                                "value": "localhost:9042, localhost:1000, localhost:2000"
                             }
                         ],
                         "username": [

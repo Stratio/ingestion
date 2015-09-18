@@ -128,7 +128,7 @@ public class JsonFormatter
         inputString = inputString.replace("\"", "");
         inputString = inputString.replace("[", "");
         inputString = inputString.replace("]", "");
-        inputString = inputString.replace(",", " ");
+//        inputString = inputString.replace(",", " ");
 
         return inputString;
     }
