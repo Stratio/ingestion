@@ -1,0 +1,251 @@
+{
+"sources": {
+"components": [{
+"id": "spoolSource",
+"type": "sources",
+"name": "null",
+"description": "null",
+"channels": "memoryChannel",
+"settings": [{
+"spoolDir": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": true,
+"value": "1234"
+}],
+"maxBackoff": [{
+"type": "integer",
+"name": "null",
+"description": "null",
+"required": false,
+"value": 4000
+}],
+"batchSize": [{
+"type": "integer",
+"name": "null",
+"description": "null",
+"required": false,
+"value": 100
+}],
+"inputCharset": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "UTF-8"
+}],
+"bufferMaxLines": [{
+"type": "integer",
+"name": "null",
+"description": "null",
+"required": false,
+"value": 20
+}],
+"selector.type": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "replicating"
+}]
+}]
+},
+{
+"id": "execSource",
+"type": "sources",
+"name": "null",
+"description": "null",
+"channels": "jdbcChannel",
+"settings": [{
+"command": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": true,
+"value": "comando util"
+}],
+"batchSize": [{
+"type": "integer",
+"name": "null",
+"description": "null",
+"required": false,
+"value": 20
+}],
+"batchTimeout": [{
+"type": "integer",
+"name": "null",
+"description": "null",
+"required": false,
+"value": 2500
+}],
+"selector.type": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "multiplexing"
+}]
+}]
+}]
+},
+"sinks": {
+"components": [{
+"id": "kafkaSink",
+"type": "sinks",
+"name": "null",
+"description": "null",
+"channels": "memoryChannel",
+"settings": [{
+"topic": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": true,
+"value": "topico"
+}],
+"writeBody": [{
+"type": "boolean",
+"name": "null",
+"description": "null",
+"required": false,
+"value": true
+}],
+"confFile": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "conf1.conf"
+}]
+}]
+},
+{
+"id": "cassandraSink",
+"type": "sinks",
+"name": "null",
+"description": "null",
+"channels": "jdbcChannel",
+"settings": [{
+"tables": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": true,
+"value": "Clientes Tiendas"
+}],
+"hosts": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": true,
+"value": "localhost:9042, localhost:1000, localhost:2000"
+}],
+"username": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "Prueba1"
+}],
+"password": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "1234"
+}],
+"batchSize": [{
+"type": "integer",
+"name": "null",
+"description": "null",
+"required": false,
+"value": 100
+}],
+"cqlFile": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "file1.cql"
+}]
+}]
+}]
+},
+"channels": {
+"components": [{
+"id": "memoryChannel",
+"type": "channels",
+"name": "null",
+"description": "null",
+"sources": "kafkaSink",
+"settings": [{
+"capacity": [{
+"type": "integer",
+"name": "null",
+"description": "null",
+"required": false,
+"value": 100
+}],
+"transactionCapacity": [{
+"type": "integer",
+"name": "null",
+"description": "null",
+"required": false,
+"value": 100
+}]
+}]
+},
+{
+"id": "jdbcChannel",
+"type": "sources",
+"name": "null",
+"description": "null",
+"sources": "cassandraSink",
+"settings": [{
+"db.type": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "DERBY"
+}],
+"driver.class": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "org.apache.derby.jdbc.EmbeddedDriver"
+}],
+"db.username": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "Prueba1"
+}],
+"db.password": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "1234"
+}],
+"connection.properties.file": [{
+"type": "string",
+"name": "null",
+"description": "null",
+"required": false,
+"value": "prop1.txt"
+}],
+"maximum.connections": [{
+"type": "integer",
+"name": "null",
+"description": "null",
+"required": false,
+"value": 3
+}]
+}]
+}]
+}
+}

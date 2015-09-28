@@ -1,0 +1,88 @@
+{
+    "descriptors": {
+        "components": [
+            {
+                "id": "cassandra",
+                "component": "sink",
+                "type": "cassandra",
+                "name": "Cassandra Sink",
+                "description": "The Cassandra Sink component allows to save Flume-flow events into Cassandra.It tries to find the defined fields in the event's headers. If a data field is defined, it will take the body's event instead of a header.",
+                "settings": [
+                    {
+                        "tables": [
+                            {
+                                "type": "string",
+                                "name": "Table names",
+                                "description": "One or more table names separated with commas. Table names must be fully qualified with keyspace (e.g. keyspace1.table1,keyspace2.table2)",
+                                "default": "",
+                                "required": true,
+                                "value": "tablas"
+                            }
+                        ],
+                        "hosts": [
+                            {
+                                "type": "string",
+                                "name": "Hosts",
+                                "description": "A comma-separated list of Cassandra hosts. It is recommended to specify at least two host of the cluster. The result of the cluster will be auto-discovered.",
+                                "default": "localhost:9042",
+                                "required": true,
+                                "value": "localhost:9042"
+                            }
+                        ],
+                        "username": [
+                            {
+                                "type": "string",
+                                "name": "User name",
+                                "description": "Database user.",
+                                "default": "",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "password": [
+                            {
+                                "type": "string",
+                                "name": "Password",
+                                "description": "Database password.",
+                                "default": "",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "batchSize": [
+                            {
+                                "type": "integer",
+                                "name": "Batch size",
+                                "description": "The size to batch insert statement. We recommend 100 as an optimum value to this property. Please do not forget increase the channel.capacity property on your channel component over the sink.batchSize property.",
+                                "default": 100,
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "consistency": [
+                            {
+                                "type": "string",
+                                "name": "Consistency",
+                                "description": "The consistency level for this insert. Default value are QUORUM, available options are described here: [Cassandra data consistency](http://www.datastax.com/documentation/cassandra/2.0/cassandra/dml/dml_config_consistency_c.html)",
+                                "default": "QUORUM",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "cqlFile": [
+                            {
+                                "type": "string",
+                                "name": "CQL file",
+                                "description": "Path to a CQL file with initialization statements such as keyspace and table creation.",
+                                "default": "",
+                                "required": false,
+                                "value": null
+                            }
+                        ]
+                    }
+                ],
+                "channels": "xxxxx"
+            }
+        ]
+    }
+}

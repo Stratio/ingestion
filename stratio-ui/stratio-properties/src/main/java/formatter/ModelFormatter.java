@@ -21,9 +21,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.stratio.ingestion.model.AgentComponent;
 import com.stratio.ingestion.model.Attribute;
 import com.stratio.ingestion.model.channel.Channel;
@@ -37,7 +34,7 @@ public class ModelFormatter {
 
 
 
-    private static final Logger log = LoggerFactory.getLogger(PropertiesFormatter.class);
+//    private static final Logger log = LoggerFactory.getLogger(PropertiesFormatter.class);
 
     private String element;
 
@@ -119,25 +116,8 @@ public class ModelFormatter {
 
                 List<Attribute> attributes = source.getSettings();
 
-                for (Attribute atrib : attributes) {
-                    String type = atrib.getType();
+                writeAttributes(attributes, bw, elements, source.getId());
 
-                    if (type.equals("string") && atrib.getValueString() != null) {
-                        bw.write("a1." + elements + "." + source.getId() + "." + atrib.getId() + "=" + atrib
-                                .getValueString());
-                        bw.newLine();
-                    }
-                    if (type.equals("integer")) {
-                        bw.write("a1." + elements + "." + source.getId() + "." + atrib.getId() + "=" + atrib
-                                .getValueInteger());
-                        bw.newLine();
-                    }
-                    if (type.equals("boolean")) {
-                        bw.write("a1." + elements + "." + source.getId() + "." + atrib.getId() + "=" + atrib
-                                .getValueBoolean());
-                        bw.newLine();
-                    }
-                }
                 bw.newLine();
             }
         }catch (Exception e) {
@@ -161,25 +141,26 @@ public class ModelFormatter {
 
                 List<Attribute> attributes = sink.getSettings();
 
-                for (Attribute atrib : attributes) {
-                    String type = atrib.getType();
-
-                    if (type.equals("string") && atrib.getValueString() != null) {
-                        bw.write("a1." + elements + "." + sink.getId() + "." + atrib.getId() + "=" + atrib
-                                .getValueString());
-                        bw.newLine();
-                    }
-                    if (type.equals("integer")) {
-                        bw.write("a1." + elements + "." + sink.getId() + "." + atrib.getId() + "=" + atrib
-                                .getValueInteger());
-                        bw.newLine();
-                    }
-                    if (type.equals("boolean")) {
-                        bw.write("a1." + elements + "." + sink.getId() + "." + atrib.getId() + "=" + atrib
-                                .getValueBoolean());
-                        bw.newLine();
-                    }
-                }
+                writeAttributes(attributes, bw, elements, sink.getId());
+//                for (Attribute atrib : attributes) {
+//                    String type = atrib.getType();
+//
+//                    if (type.equals("string") && atrib.getValueString() != null) {
+//                        bw.write("a1." + elements + "." + sink.getId() + "." + atrib.getId() + "=" + atrib
+//                                .getValueString());
+//                        bw.newLine();
+//                    }
+//                    if (type.equals("integer")) {
+//                        bw.write("a1." + elements + "." + sink.getId() + "." + atrib.getId() + "=" + atrib
+//                                .getValueInteger());
+//                        bw.newLine();
+//                    }
+//                    if (type.equals("boolean")) {
+//                        bw.write("a1." + elements + "." + sink.getId() + "." + atrib.getId() + "=" + atrib
+//                                .getValueBoolean());
+//                        bw.newLine();
+//                    }
+//                }
                 bw.newLine();
             }
         }catch (Exception e) {
@@ -203,25 +184,26 @@ public class ModelFormatter {
 
                 List<Attribute> attributes = channel.getSettings();
 
-                for (Attribute atrib : attributes) {
-                    String type = atrib.getType();
-
-                    if (type.equals("string") && atrib.getValueString() != null) {
-                        bw.write("a1." + elements + "." + channel.getId() + "." + atrib.getId() + "=" + atrib
-                                .getValueString());
-                        bw.newLine();
-                    }
-                    if (type.equals("integer")) {
-                        bw.write("a1." + elements + "." + channel.getId() + "." + atrib.getId() + "=" + atrib
-                                .getValueInteger());
-                        bw.newLine();
-                    }
-                    if (type.equals("boolean")) {
-                        bw.write("a1." + elements + "." + channel.getId() + "." + atrib.getId() + "=" + atrib
-                                .getValueBoolean());
-                        bw.newLine();
-                    }
-                }
+                writeAttributes(attributes, bw, elements, channel.getId());
+//                for (Attribute atrib : attributes) {
+//                    String type = atrib.getType();
+//
+//                    if (type.equals("string") && atrib.getValueString() != null) {
+//                        bw.write("a1." + elements + "." + channel.getId() + "." + atrib.getId() + "=" + atrib
+//                                .getValueString());
+//                        bw.newLine();
+//                    }
+//                    if (type.equals("integer")) {
+//                        bw.write("a1." + elements + "." + channel.getId() + "." + atrib.getId() + "=" + atrib
+//                                .getValueInteger());
+//                        bw.newLine();
+//                    }
+//                    if (type.equals("boolean")) {
+//                        bw.write("a1." + elements + "." + channel.getId() + "." + atrib.getId() + "=" + atrib
+//                                .getValueBoolean());
+//                        bw.newLine();
+//                    }
+//                }
                 bw.newLine();
             }
         }catch (Exception e) {
@@ -231,12 +213,15 @@ public class ModelFormatter {
 
     private void writeSourcesConnections(List<Source> sources, BufferedWriter bw, String elements) throws IOException {
         try {
-
-
             for (Source source : sources) {
-                bw.write("a1." + elements + "." + source.getId() + ".channels=" + source.getChannels());
-                bw.newLine();
+                String channels = source.getChannels();
 
+                if(channels.isEmpty()){
+                    throw new IOException("Cannot connect sources");
+                }else{
+                    bw.write("a1." + elements + "." + source.getId() + ".channels=" + channels);
+                    bw.newLine();
+                }
             }
         }catch (Exception e) {
             throw new IOException("Cannot connect sources", e);
@@ -245,11 +230,15 @@ public class ModelFormatter {
 
     private void writeSinksConnections(List<Sink> sinks, BufferedWriter bw, String elements) throws IOException {
         try {
-
-
             for (Sink sink : sinks) {
-                bw.write("a1." + elements + "." + sink.getId() + ".channels=" + sink.getChannels());
-                bw.newLine();
+                String channels = sink.getChannels();
+
+                if(channels.isEmpty()){
+                    throw new IOException("Cannot connect sinks");
+                }else{
+                    bw.write("a1." + elements + "." + sink.getId() + ".channels=" + channels);
+                    bw.newLine();
+                }
 
             }
         }catch (Exception e) {
@@ -257,4 +246,37 @@ public class ModelFormatter {
         }
     }
 
+    private void writeAttributes(List<Attribute> attributes, BufferedWriter bw, String element, String elementId)
+            throws IOException {
+        try {
+            for (Attribute atrib : attributes) {
+                String type = atrib.getType();
+                boolean required = atrib.getRequired();
+
+                if(required && atrib.getValueString().equals(null) && atrib.getValueInteger().equals(null) && atrib
+                        .getValueBoolean().equals(null)) {
+                    throw new IOException("Cannot write attributes, required field without value");
+                }
+
+                if (type.equals("string") && atrib.getValueString() != null) {
+                    bw.write("a1." + element + "." + elementId + "." + atrib.getId() + "=" + atrib
+                            .getValueString());
+                    bw.newLine();
+                }
+                if (type.equals("integer") && atrib.getValueInteger() != null) {
+                    bw.write("a1." + element + "." + elementId + "." + atrib.getId() + "=" + atrib
+                            .getValueInteger());
+                    bw.newLine();
+                }
+                if (type.equals("boolean") && atrib.getValueBoolean() != null) {
+                    bw.write("a1." + element + "." + elementId + "." + atrib.getId() + "=" + atrib
+                            .getValueBoolean());
+                    bw.newLine();
+                }
+
+            }
+        }catch(Exception e) {
+            throw new IOException("Cannot write attributes, required field not found", e);
+        }
+    }
 }

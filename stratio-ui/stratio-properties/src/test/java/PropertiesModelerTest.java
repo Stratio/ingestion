@@ -23,6 +23,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.stratio.ingestion.model.AgentComponent;
+
+import formatter.JsonFormatter;
 import modeler.PropertiesModeler;
 
 
@@ -40,75 +43,65 @@ public class PropertiesModelerTest {
     @Test
     public void testJsonLleno() throws IOException {
 
-        PropertiesModeler propModel = new PropertiesModeler("src/test/resources/prop2.properties");
+        PropertiesModeler propModel = new PropertiesModeler();
+
+        AgentComponent agent = propModel.propertiesAgentModeler("src/test/resources/correctProp.properties");
+
+        JsonFormatter jsonProp = new JsonFormatter(agent);
 
     }
 
+    @Test(expected = NumberFormatException.class)
+    public void testIntNull() throws IOException, NumberFormatException {
 
-//    @Test(expected = NullPointerException.class)
-//    public void testRequiredFields() throws IOException {
-//
-//        JsonModeler jsModel = new JsonModeler("src/test/resources"
-//                + "/jsonPropertiesReqWrong.json");
-//
-//        AgentComponent agent = jsModel.getAgent();
-//
-//        List<Source> sourcesList = agent.getSources();
-//        for(Source source :sourcesList){
-//            checkRequiredSettings(source.getSettings());
-//        }
-//
-//        List<Sink> sinksList = agent.getSinks();
-//        for(Sink sink :sinksList){
-//            checkRequiredSettings(sink.getSettings());
-//        }
-//
-//        List<Channel> channelList = agent.getChannels();
-//        for(Channel channel :channelList){
-//            checkRequiredSettings(channel.getSettings());
-//        }
-//    }
-//
-//    @Test(expected = NullPointerException.class)
-//    public void testComponentsConnected() throws IOException {
-//
-//        JsonModeler jsModel = new JsonModeler("src/test/resources"
-//                + "/jsonPropertiesConnectWrong.json");
-//
-//        AgentComponent agent = jsModel.getAgent();
-//
-//        List<Source> sourcesList = agent.getSources();
-//        for(Source source :sourcesList){
-//            checkConnections(source.getId(), source.getChannels());
-//        }
-//
-//        List<Sink> sinksList = agent.getSinks();
-//        for(Sink sink :sinksList){
-//            checkConnections(sink.getId(), sink.getChannels());
-//        }
-//
-//        List<Channel> channelList = agent.getChannels();
-//        for(Channel channel :channelList){
-//            checkConnections(channel.getId(), channel.getSources());
-//        }
-//    }
-//
-//
-//    public void checkRequiredSettings(List<Attribute> listSettings) throws NullPointerException {
-//        for(Attribute atrib : listSettings){
-//            if(atrib.getRequired() && (atrib.getValueInteger().equals(null) && atrib.getValueString().equals(null) &&
-//                    atrib.getValueBoolean().equals(null))){
-//                throw new NullPointerException("Fields not correct");
-//            }
-//        }
-//    }
-//
-//    public void checkConnections(String component, String componentConnect) throws NullPointerException {
-//
-//        if(componentConnect.equals(null) || componentConnect.equals("")){
-//            throw new NullPointerException("Component "+component+" not connected");
-//        }
-//
-//    }
+        PropertiesModeler propModel = new PropertiesModeler();
+
+        AgentComponent agent = propModel.propertiesAgentModeler("src/test/resources/intNull.properties");
+
+//        JsonFormatter jsonProp = new JsonFormatter(agent);
+
+    }
+
+    @Test(expected = IOException.class)
+    public void testStringNull() throws IOException, NumberFormatException {
+
+        PropertiesModeler propModel = new PropertiesModeler();
+
+        AgentComponent agent = propModel.propertiesAgentModeler("src/test/resources/stringNull.properties");
+
+//        JsonFormatter jsonProp = new JsonFormatter(agent);
+
+    }
+
+    @Test(expected = IOException.class)
+    public void testIncorrectComp() throws IOException {
+
+        PropertiesModeler propModel = new PropertiesModeler();
+
+        AgentComponent agent = propModel.propertiesAgentModeler("src/test/resources/incorrectComp.properties");
+
+        //        JsonFormatter jsonProp = new JsonFormatter(agent);
+
+    }
+
+    @Test(expected = IOException.class)
+    public void testEmptyProp() throws IOException {
+
+        PropertiesModeler propModel = new PropertiesModeler();
+
+        AgentComponent agent = propModel.propertiesAgentModeler("src/test/resources/emptyProp.properties");
+
+//        JsonFormatter jsonProp = new JsonFormatter(agent);
+
+    }
+
+    @Test(expected = IOException.class)
+    public void testComponentsConnected() throws IOException {
+
+        PropertiesModeler propModel = new PropertiesModeler();
+
+        AgentComponent agent = propModel.propertiesAgentModeler("src/test/resources/notConnected.properties");
+    }
+
 
 }

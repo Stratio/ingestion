@@ -1,0 +1,58 @@
+{
+    "descriptors": {
+        "components": [
+            {
+                "id": "kafkaSink",
+                "component": "sink",
+                "type": "kafka",
+                "name": "Kafka Sink",
+                "description": "Kafka Sink.  Send events to Kafka.",
+                "settings": [
+                    {
+                        "topic": [
+                            {
+                                "type": "string",
+                                "name": "Topic",
+                                "description": "Name of topic where event will be sent to.",
+                                "default": null,
+                                "required": true,
+                                "value": "topico"
+                            }
+                        ],
+                        "writeBody": [
+                            {
+                                "type": "boolean",
+                                "name": "Write body",
+                                "description": "true to send body in raw String format and false to send headers in json String format.",
+                                "default": "false",
+                                "required": false,
+                                "value": true
+                            }
+                        ],
+                        "kafka.<producer-property>": [
+                            {
+                                "type": "string",
+                                "name": "User name",
+                                "description": "This sink accept any kafka producer property. Just write it after prefix kafka. Example: kafka.metadata.broker.list",
+                                "default": null,
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "confFile": [
+                            {
+                                "type": "string",
+                                "name": "Configuration file",
+                                "description": "Path to a configuration file with initialization statements",
+                                "default": null,
+                                "required": false,
+                                "value": "conf1.conf"
+                            }
+                        ]
+                    }
+                ],
+                "channels": "xxxx"
+            }
+        ]
+    }
+}
