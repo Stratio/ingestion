@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package jsonFormatter;
+package formatter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,18 +34,18 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class JsonFormatter
+public class PropertiesFormatter
          {
-    private static final Logger log = LoggerFactory.getLogger(JsonFormatter.class);
+    private static final Logger log = LoggerFactory.getLogger(PropertiesFormatter.class);
 
     private String element;
 
-    public JsonFormatter(String jsonFile)
+    public PropertiesFormatter(String jsonFile)
             throws IOException {
 
         try {
 
-            String ruta = "/home/miguelsegura/workspace/flume-ingestion/stratio-ui/stratio-properties/src/test"
+            String ruta = "src/test"
                     + "/resources/prop.properties";
             File archivo = new File(ruta);
             BufferedWriter bw;
@@ -99,40 +99,45 @@ public class JsonFormatter
 
             bw.close();
 
-
-            return;
         } catch (Exception e) {
             throw new IOException("Cannot serialize JSON", e);
         }
     }
 
-    private String readFile(String fileName) throws IOException {
-         BufferedReader br = new BufferedReader(new FileReader(fileName));
-         try {
-             StringBuilder sb = new StringBuilder();
-             String line = br.readLine();
-
-             while (line != null) {
-                 sb.append(line);
-
-                 line = br.readLine();
-             }
-             return sb.toString();
-         } finally {
-             br.close();
-         }
-     }
 
     private String formatString(String inputString){
 
         inputString = inputString.replace("\"", "");
         inputString = inputString.replace("[", "");
         inputString = inputString.replace("]", "");
-//        inputString = inputString.replace(",", " ");
 
         return inputString;
     }
 
+    private boolean checkTypes(String type, JsonNode value){
+
+         boolean isCorrectType = false;
+
+
+
+         if (type.equals("string") && !value.equals("null")){
+             isCorrectType = value.isTextual();//getClass().equals(String.class);
+         }
+         if (type.equals("boolean")){
+             isCorrectType = value.getClass().equals(Boolean.class);
+         }
+         if (type.equals("integer")){
+             isCorrectType = value.getClass().equals(Integer.class);
+         }
+         if (type.equals("char")){
+             isCorrectType = value.getClass().equals(Character.class);
+         }
+         if (type.equals("byte")){
+             isCorrectType = value.getClass().equals(Byte.class);
+         }
+
+         return isCorrectType;
+    }
 
     private void createPropierties(JsonNode rootNode, BufferedWriter bw, String elements) throws IOException {
         JsonNode sourcesNode = rootNode.path(elements);
@@ -178,7 +183,11 @@ public class JsonFormatter
                 JsonNode set = settings.next();
                 Iterator<JsonNode> valuesIte = set.getElements();
                 JsonNode values = valuesIte.next();
+                JsonNode typeField = values.path("type");
                 JsonNode valueField = values.path("value");
+                String typeString = typeField.toString();
+                typeString = formatString(typeString);
+                checkTypes(typeString, valueField);
                 String value = valueField.toString();
                 value = formatString(value);
                 valueList.add(value);

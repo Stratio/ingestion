@@ -20,24 +20,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import jsonFormatter.JsonFormatter;
+import formatter.PropertiesFormatter;
 
 @RunWith(JUnit4.class)
-public class JsonFormatterTest
+public class PropertiesFormatterTest
 {
 
     @Test
     public void testJsonLleno() throws IOException {
 
-        JsonFormatter jsForm = new JsonFormatter("/home/miguelsegura/workspace/flume-ingestion/stratio-ui/stratio-properties/src/test/resources"
-                        + "/ejemploProp.json");
+        PropertiesFormatter jsForm = new PropertiesFormatter("src/test/resources"
+                        + "/jsonPropertiesCorrect.json");
 
     }
 
 //    @Test(expected = IOException.class)
 //    public void testJsonVacio() throws IOException {
 //
-//        JsonFormatter jsForm = new JsonFormatter("/home/miguelsegura/workspace/flume-ingestion/stratio-ui/stratio-properties/src/test/resources"
+//        PropertiesFormatter jsForm = new PropertiesFormatter("/home/miguelsegura/workspace/flume-ingestion/stratio-ui/stratio-properties/src/test/resources"
 //                        + "/jsonVacio.json");
 //    }
 
