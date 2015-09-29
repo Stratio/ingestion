@@ -34,6 +34,7 @@ import org.apache.flume.sink.AbstractSink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -167,16 +168,15 @@ public class MongoSink extends AbstractSink implements Configurable {
 					throw new IllegalArgumentException(String.format("%s cannot be null for %s operation", CONF_ID_FIELD_NAME, this.saveOperation));
 				}
 				
-				if(this.saveOperation.equals(SAVE_OPERATION.UPDATE)){
-					this.upsertUpdate = context.getBoolean(CONF_UPSERT_UPDATE, DEFAULT_UPSERT_UPDATE);
-					this.multiUpdate = context.getBoolean(CONF_MULTI_UPDATE, DEFAULT_MULTI_UPDATE);
+				if (this.saveOperation.equals(SAVE_OPERATION.ADD_TO_SET) && StringUtils.isEmpty(this.fieldName)) {
+					throw new IllegalArgumentException(String.format("%s cannot be null for %s operation", CONF_FIELD_NAME, this.saveOperation));
 				}
-				else{
-					if(StringUtils.isEmpty(this.fieldName)){
-						throw new IllegalArgumentException(String.format("%s cannot be null for %s operation", CONF_FIELD_NAME, this.saveOperation));
-					}
-				}
+
+				this.upsertUpdate = context.getBoolean(CONF_UPSERT_UPDATE, DEFAULT_UPSERT_UPDATE);
+				this.multiUpdate = context.getBoolean(CONF_MULTI_UPDATE, DEFAULT_MULTI_UPDATE);
 			}
+			
+			log.info(String.format("Configured MongoSink [operation=%s, this.idFieldName=%s, this.fieldName=%s]", this.saveOperation, this.idFieldName, this.fieldName));
 		} catch (IOException ex) {
 			throw new MongoSinkException(ex);
 		}
@@ -189,92 +189,121 @@ public class MongoSink extends AbstractSink implements Configurable {
     public Status process() throws EventDeliveryException {
         Status status = Status.BACKOFF;
         Transaction transaction = this.getChannel().getTransaction();
+
+		log.debug("Executing MongoSink.process");
+        
         try {
             transaction.begin();
             List<Event> eventList = this.takeEventsFromChannel(
                     this.getChannel(), this.batchSize);
             status = Status.READY;
+
+            int eventDrainSuccessCount = 0;
+            
             if (!eventList.isEmpty()) {
                 if (eventList.size() == this.batchSize) {
                     this.sinkCounter.incrementBatchCompleteCount();
                 } else {
                     this.sinkCounter.incrementBatchUnderflowCount();
                 }
+                
                 for (Event event : eventList) {
-                    final DBObject document = this.eventParser.parse(event);
+                	DBObject document = null;
+                	
+                	try{
+	                    document = this.eventParser.parse(event);
+                	}
+                    catch(Throwable t){
+            			log.info(String.format("Error while parsing event[%s]", event.toString()));
+            			
+                    	log.error(String.format("Error while parsing event[%s]", event), t);
+                    	
+                    	continue;
+                    }
+	                    
+            		log.debug(String.format("Executing %s opperation[this.idFieldName=%s, this.fieldName=%s] for %s", this.saveOperation, this.idFieldName, this.fieldName, document.toString()));
                     
                     switch(saveOperation){
 	                	case ADD_TO_SET:
 	                	{
-	                		if(document.get(idFieldName)==null){
-	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.idFieldName, this.saveOperation));
+	                		if(document.get(this.idFieldName)==null){
+	                			log.info(String.format("Cannot execute %s operation because %s is empty: \n%s", this.saveOperation, this.idFieldName, document.toString()));
+	                			
+	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.saveOperation, this.idFieldName));
 	                		}
-	                		if(document.get(fieldName)==null){
-	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.fieldName, this.saveOperation));
+	                		if(document.get(this.fieldName)==null){
+	                			log.info(String.format("Cannot execute %s operation because %s is empty: \n%s", this.saveOperation, this.fieldName, document.toString()));
+	                			
+	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.saveOperation, this.fieldName));
 	                		}
 	                		
 	                    	BasicDBObject searchQuery = new BasicDBObject();
-	                    	searchQuery.append(idFieldName, document.get(idFieldName));
+	                    	searchQuery.append(this.idFieldName, document.get(this.idFieldName));
 	                    	
 	                    	BasicDBObject updateQuery = new BasicDBObject();                    	  
 	                    	
+	                    	
+	                    	Object o = document.get(this.fieldName);
+	                    	
+	                    	if(!(o instanceof BasicDBList)){
+	                    		o = new BasicDBList();
+	                    		((BasicDBList)o).add(document.get(this.fieldName));
+	                    	}
+	                    	
 	                    	BasicDBObject each = new BasicDBObject();
-	                    	each.put("$each", document.get(fieldName));
+	                    	each.put("$each", o);
 	                    	
 	                    	BasicDBObject value = new BasicDBObject();
-	                    	value.put(fieldName, each);
+	                    	value.put(this.fieldName, each);
 	                    	
 	                    	updateQuery.append("$addToSet", value);
 	
-	                    	WriteResult result = getDBCollection(event).update(searchQuery, updateQuery);
+	                    	WriteResult result = getDBCollection(event).update(searchQuery, updateQuery, this.upsertUpdate, this.multiUpdate);
 	                    	
 	                    	if(result ==null || result.getN()==0){
-	                    		log.warn(String.format("The %s opperation has not modified any document. Please revise the configuration.", this.saveOperation));
+	                    		log.info(String.format("The %s opperation has not modified any document. Please revise the configuration.", this.saveOperation));
 	                    	}
 	                    	
 	                    	break;
 	                	}
 	                	case SET:
 	                	{
-	                		if(document.get(idFieldName)==null){
-	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.idFieldName, this.saveOperation));
-	                		}
-	                		if(document.get(fieldName)==null){
-	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.fieldName, this.saveOperation));
+	                		if(document.get(this.idFieldName)==null){
+	                			log.info(String.format("Cannot execute %s operation because %s is empty: \n%s", this.saveOperation, this.idFieldName, document.toString()));
+	                			
+	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.saveOperation, this.idFieldName));
 	                		}
 	                		
 	                    	BasicDBObject searchQuery = new BasicDBObject();
-	                    	searchQuery.append(idFieldName, document.get(idFieldName));
+	                    	searchQuery.append(this.idFieldName, document.get(this.idFieldName));
 	                    	
 	                    	BasicDBObject updateQuery = new BasicDBObject();     
 	                    	
-	                    	BasicDBObject value = new BasicDBObject();
-	                    	value.put(fieldName, document.get(fieldName));
-	                    	
-	                    	updateQuery.append("$set", value);
-	                    	
+	                    	updateQuery.append("$set", document);
 	
-	                    	WriteResult result = getDBCollection(event).update(searchQuery, updateQuery);
+	                    	WriteResult result = getDBCollection(event).update(searchQuery, updateQuery, this.upsertUpdate, this.multiUpdate);
 	                    	
 	                    	if(result ==null || result.getN()==0){
-	                    		log.warn(String.format("The %s opperation has not modified any document. Please revise the configuration.", this.saveOperation));
+	                    		log.info(String.format("The %s opperation has not modified any document. Please revise the configuration.", this.saveOperation));
 	                    	}
 	                    	
 	                    	break;
                 		}
                     	case UPDATE:
                     	{
-	                		if(document.get(idFieldName)==null){
-	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.idFieldName, this.saveOperation));
+	                		if(document.get(this.idFieldName)==null){
+	                			log.info(String.format("Cannot execute %s operation because %s is empty: \n%s", this.saveOperation, this.idFieldName, document.toString()));
+	                			
+	                			throw new MongoSinkException(String.format("Cannot execute %s operation because %s is empty", this.saveOperation, this.idFieldName));
 	                		}
 	                		
                 			BasicDBObject searchQuery = new BasicDBObject();
-	                    	searchQuery.append(idFieldName, document.get(idFieldName));
+	                    	searchQuery.append(this.idFieldName, document.get(this.idFieldName));
 	                    	
 	                    	WriteResult result = getDBCollection(event).update(searchQuery, document, this.upsertUpdate, this.multiUpdate);
 	                    	
 	                    	if(result ==null || result.getN()==0){
-	                    		log.warn(String.format("The %s opperation has not modified any document. Please revise the configuration.", this.saveOperation));
+	                    		log.info(String.format("The %s opperation has not modified any document. Please revise the configuration.", this.saveOperation));
 	                    	}
 	                    	
 	                    	break;
@@ -285,20 +314,27 @@ public class MongoSink extends AbstractSink implements Configurable {
 	                		getDBCollection(event).save(document);
             			}
                     }
+                    
+                    eventDrainSuccessCount++;
                 }
-                this.sinkCounter.addToEventDrainSuccessCount(eventList.size());
+                this.sinkCounter.addToEventDrainSuccessCount(eventDrainSuccessCount);
             } else {
                 this.sinkCounter.incrementBatchEmptyCount();
             }
+            
+    		log.debug(String.format("Executed MongoSink.process: eventDrainSuccessCount=%s", eventDrainSuccessCount));
+            
             transaction.commit();
             status = Status.READY;
         } catch (ChannelException e) {
-            e.printStackTrace();
+        	log.error("Unexpected error while executing MongoSink.process", e);
+        	
             transaction.rollback();
             status = Status.BACKOFF;
             this.sinkCounter.incrementConnectionFailedCount();
         } catch (Throwable t) {
-            t.printStackTrace();
+        	log.error("Unexpected error while executing MongoSink.process", t);
+        	
             transaction.rollback();
             status = Status.BACKOFF;
             if (t instanceof Error) {

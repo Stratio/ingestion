@@ -69,6 +69,11 @@ class EventParser {
                 return stringValue;
             }
         }
+        
+        if(StringUtils.isEmpty(stringValue)){
+        	return null;
+        }
+        
         switch (fd.getType()) {
         case DOUBLE:
             return Double.parseDouble(stringValue);
