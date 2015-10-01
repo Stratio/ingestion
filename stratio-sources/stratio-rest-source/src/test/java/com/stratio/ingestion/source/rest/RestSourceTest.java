@@ -125,8 +125,6 @@ public class RestSourceTest extends TestCase {
         rest.configure(contextSource);
         rest.start();
         PollableSource.Status status = rest.process();
-        System.out.println(status);
-        System.out.println();
         rest.stop();
     }
 

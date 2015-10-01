@@ -51,46 +51,27 @@ public class DateCheckpointTypeTest extends TestCase {
 
     @Test(expected = NullPointerException.class)
     public void testBuildFilter() throws Exception {
-
         String filter = dateCheckpointType.buildFilter(fieldValue, context);
-        System.out.println(filter);
-        System.out.println();
     }
 
     @Test
     public void testBuildDefaultFilter() throws Exception {
-
         String filter = dateCheckpointType.buildDefaultFilter(context);
-        System.out.println(filter);
-        System.out.println();
     }
 
     @Test(expected = ParseException.class)
     public void testParseFilter() throws Exception {
-
         Object filter = dateCheckpointType.parseFilter(objString, context);
-        System.out.println(filter);
-        System.out.println();
     }
 
     @Test
     public void testIsValidCurrentCheckpoint() throws Exception {
         Boolean filter = dateCheckpointType.isValidCurrentCheckpoint(currentCheckPoint, context);
-        System.out.println(filter);
-        System.out.println();
     }
 
     @Test(expected = ParseException.class)
     public void testIsNotValidCurrentCheckpoint() throws Exception {
         Boolean filter = dateCheckpointType.isValidCurrentCheckpoint(currentBadCheckPoint, context);
-        System.out.println(filter);
-        System.out.println();
     }
-//    public void testBuildDefaultFilter() throws Exception {
-//
-//    }
-//
-
-//
 
 }
