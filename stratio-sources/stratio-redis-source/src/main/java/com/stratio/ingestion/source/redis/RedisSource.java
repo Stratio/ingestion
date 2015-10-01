@@ -15,10 +15,11 @@
  */
 package com.stratio.ingestion.source.redis;
 
+import static com.stratio.ingestion.source.redis.RedisConstants.*;
+
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.EventDrivenSource;
@@ -29,7 +30,6 @@ import org.apache.flume.source.AbstractSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import redis.clients.jedis.Jedis;
@@ -37,8 +37,6 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
 import redis.clients.jedis.exceptions.JedisConnectionException;
-
-import static com.stratio.ingestion.source.redis.RedisConstants.*;
 
 /**
  *
@@ -192,61 +190,61 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
             JedisPoolConfig poolConfig = new JedisPoolConfig();
             String prop;
 
-            if((prop = poolProps.get(CONF_TESTONBORROW)) == null){
+            if((prop = poolProps.get(CONF_TESTONBORROW)).equals(null)){
                 poolConfig.setTestOnBorrow(DEFAULT_TESTONBORROW);
             } else {
                 log.info("Setting testOnBorrow property to " + prop);
                 poolConfig.setTestOnBorrow(Boolean.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_MAXTOTAL)) == null){
+            if((prop = poolProps.get(CONF_MAXTOTAL)).equals(null)){
                 poolConfig.setMaxTotal(DEFAULT_MAXTOTAL);
             } else {
                 log.info("Setting maxTotal property to " + prop);
                 poolConfig.setMaxTotal(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_MAXIDLE)) == null){
+            if((prop = poolProps.get(CONF_MAXIDLE)).equals(null)){
                 poolConfig.setMaxTotal(DEFAULT_MAXIDLE);
             } else {
                 log.info("Setting maxIdle property to " + prop);
                 poolConfig.setMaxIdle(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_MINIDLE)) == null){
+            if((prop = poolProps.get(CONF_MINIDLE)).equals(null)){
                 poolConfig.setMinIdle(DEFAULT_MINIDLE);
             } else {
                 log.info("Setting minIdle property to " + prop);
                 poolConfig.setMinIdle(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_MAXWAITINMILLIS)) == null){
+            if((prop = poolProps.get(CONF_MAXWAITINMILLIS)).equals(null)){
                 poolConfig.setMaxWaitMillis(DEFAULT_MAXWAITINMILLIS);
             } else {
                 log.info("Setting maxWaitInMillis property to " + prop);
                 poolConfig.setMaxWaitMillis(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_TESTWHILEIDLE)) == null){
+            if((prop = poolProps.get(CONF_TESTWHILEIDLE)).equals(null)){
                 poolConfig.setTestWhileIdle(DEFAULT_TESTWHILEIDLE);
             } else {
                 log.info("Setting testWhileIdle property to " + prop);
                 poolConfig.setTestWhileIdle(Boolean.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_TESTONRETURN)) == null){
+            if((prop = poolProps.get(CONF_TESTONRETURN)).equals(null)){
                 poolConfig.setTestOnReturn(DEFAULT_TESTONRETURN);
             } else {
                 log.info("Setting testOnReturn property to " + prop);
                 poolConfig.setTestOnReturn(Boolean.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_MINEVICTABLEIDLETIMEINMILLIS)) == null){
+            if((prop = poolProps.get(CONF_MINEVICTABLEIDLETIMEINMILLIS)).equals(null)){
                 poolConfig.setMinEvictableIdleTimeMillis(DEFAULT_MINEVICTABLEIDLETIMEINMILLIS);
             } else {
                 log.info("Setting minEvictableIdleTimeInMillis property to " + prop);
                 poolConfig.setMinEvictableIdleTimeMillis(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_TIMEBETWEETNEVICTIONRUNSMILLIS)) == null){
+            if((prop = poolProps.get(CONF_TIMEBETWEETNEVICTIONRUNSMILLIS)).equals(null)){
                 poolConfig.setTimeBetweenEvictionRunsMillis(DEFAULT_TIMEBETWEETNEVICTIONRUNSMILLIS);
             } else {
                 log.info("Setting timeBetweenEvictionRunMillis property to " + prop);
                 poolConfig.setTimeBetweenEvictionRunsMillis(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_NUMTESTSPEREVICTIONRUN)) == null){
+            if((prop = poolProps.get(CONF_NUMTESTSPEREVICTIONRUN)).equals(null)){
                 poolConfig.setNumTestsPerEvictionRun(DEFAULT_NUMTESTSPEREVICTIONRUN);
             } else {
                 log.info("Setting numTestsPerEvictionRun property to " + prop);
