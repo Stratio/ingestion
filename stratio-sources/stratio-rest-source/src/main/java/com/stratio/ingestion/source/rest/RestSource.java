@@ -171,7 +171,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
             scheduler.start();
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         }
 
     }
@@ -179,14 +179,14 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     private UrlHandler initUrlHandler(Context context) {
         UrlHandler handler = null;
         try {
-            handler = (UrlHandler) Class.forName((String) properties.get("urlHandler")).newInstance();
+            handler = (UrlHandler) Class.forName((String) properties.get(URL_HANDLER)).newInstance();
             handler.configure(context);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            log.error("RestSource error. " + e.getMessage());
         }
 
         return handler;
@@ -199,11 +199,11 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
             handler = (RestSourceHandler) Class.forName((String) properties.get(CONF_HANDLER)).newInstance();
             handler.configure(context);
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         }
         return handler;
     }
@@ -238,7 +238,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         try {
             scheduler.interrupt(jobDetail.getKey());
         } catch (UnableToInterruptJobException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         }
     }
 
@@ -254,7 +254,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
             try {
                 Thread.sleep(frequency * 1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("RestSource error. " + e.getMessage());
             }
         }
 

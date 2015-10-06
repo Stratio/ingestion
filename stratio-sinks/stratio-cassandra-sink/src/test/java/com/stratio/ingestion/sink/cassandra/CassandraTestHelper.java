@@ -35,13 +35,16 @@ public abstract class CassandraTestHelper {
    * @return @{link java.net.InetSocketAddress} for a Cassandra cluster.
    */
   public static InetSocketAddress getCassandraContactPoint() {
-    String cassandraIp = System.getProperty("cassandra.ip");
+    String cassandraIp = System.getProperty("cassandra.hosts.0").split(":")[0];
     if (cassandraIp == null) {
       cassandraIp = "127.0.0.1";
     }
-    String cassandraPort = System.getProperty("cassandra.port");
-    if (cassandraPort == null) {
-      cassandraPort = "9042";
+    String cassandraPort = "9042";
+    if(System.getProperty("cassandra.hosts.0").length() > 1) {
+      cassandraPort = System.getProperty("cassandra.hosts.0").split(":")[1];
+//      if (cassandraPort == null) {
+//        cassandraPort = "9042";
+//      }
     }
     try {
       return new InetSocketAddress(InetAddress.getByName(cassandraIp), Integer.parseInt(cassandraPort));
