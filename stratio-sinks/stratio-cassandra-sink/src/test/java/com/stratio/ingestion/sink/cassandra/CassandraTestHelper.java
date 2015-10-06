@@ -35,7 +35,7 @@ public abstract class CassandraTestHelper {
    * @return @{link java.net.InetSocketAddress} for a Cassandra cluster.
    */
   public static InetSocketAddress getCassandraContactPoint() {
-    String cassandraIp = System.getProperty("cassandra.ip");
+    String cassandraIp = System.getProperty("cassandra.hosts.0");
     if (cassandraIp == null) {
       cassandraIp = "127.0.0.1";
     }
