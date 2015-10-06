@@ -56,14 +56,8 @@ public class MongoFilterHandlerTestIT {
     private MongoClient mongoClient;
 
     public static String getMongoHost() {
-        String mongoIp = System.getProperty("mongo.ip");
-        if (mongoIp == null) {
-            mongoIp = "127.0.0.1";
-        }
-        String mongoPort = System.getProperty("mongo.port");
-        if (mongoPort == null) {
-            mongoPort = "27017";
-        }
+        String mongoIp = System.getProperty("mongo.ip", "127.0.0.1");
+        String mongoPort = System.getProperty("mongo.port", "27017");
         return mongoIp + ":" + mongoPort;
     }
 
