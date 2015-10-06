@@ -87,30 +87,6 @@ public class KafkaSinkTestIT {
         }
         KAFKA_HOSTS= KAFKA_HOSTS.substring(0, KAFKA_HOSTS.length() -1);
 
-
-
-//            // ZOOKEPER CONNECTION
-//            client = CuratorFrameworkFactory.newClient(ZOOKEEPER_HOSTS, 25 * 1000, 10 * 1000, new ExponentialBackoffRetry(
-//                    1000, 3));
-//            client.start();
-//            client.getZookeeperClient().blockUntilConnectedOrTimedOut();
-//
-//            if (client.getState().compareTo(CuratorFrameworkState.STARTED) != 0) {
-//                throw new Exception("Connection to Zookeeper timed out after seconds");
-//            } else {
-//                backgroundZookeeperCleanerTasks = Executors.newFixedThreadPool(1);
-//                backgroundZookeeperCleanerTasks.submit(new ZookeeperBackgroundCleaner(client));
-//            }
-//
-//
-//
-//
-//                self.backgroundZookeeperCleanerTasks.shutdownNow();
-//                self.client.close();
-
-
-
-//        zkUtils= ZKUtils.getZKUtils(ZOOKEEPER_HOSTS);
         LOGGER.debug("Using Zookeeper hosts: " + ZOOKEEPER_HOSTS);
         LOGGER.debug("Using Zookeeper hosts: " + KAFKA_HOSTS);
 //        try {
@@ -119,7 +95,6 @@ public class KafkaSinkTestIT {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-//
 //        try {
 //            kafkaServer = new KafkaServer();
 //            kafkaServer.start();
@@ -127,11 +102,10 @@ public class KafkaSinkTestIT {
 //            e.printStackTrace();
 //        }
 
-//        String localhostKafka = System.getProperty("kafka.ip");
-//        String localhostZookeeper = System.getProperty("zookeeper.ip");
+        String[] connection = KAFKA_HOSTS.split(":");
 
 //        simpleConsumer = new SimpleConsumer("localhost", 9092, 60000, 1024, CLIENT_ID);
-        simpleConsumer = new SimpleConsumer("172.17..0.3", 9092, 60000, 1024, CLIENT_ID);
+        simpleConsumer = new SimpleConsumer(connection[0], Integer.parseInt(connection[1]), 60000, 1024, CLIENT_ID);
 
         kafkaSink = new KafkaSink();
 
