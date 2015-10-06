@@ -69,6 +69,7 @@
         <quartz.version>2.2.1</quartz.version>
         <maxmind.version>0.3.3</maxmind.version>
         <jersey.core.version>1.18.3</jersey.core.version>
+        <stratio.morphlines.version>0.1.0-SNAPSHOT</stratio.morphlines.version>
     </properties>
 
     <dependencyManagement>
@@ -298,7 +299,6 @@
                         <exclude>**/src/test/resources/**</exclude>
                         <exclude>**/src/main/resources/**</exclude>
                         <!-- The following files were written by other authors -->
-                        <exclude>stratio-morphlines/stratio-commons-morphline/src/test/java/**/Collector.java</exclude>
                         <exclude>**/src/test/java/**/TransientPositionTracker.java</exclude>
                         <exclude>**/src/main/java/cue/lang/**</exclude>
                         <exclude>flume/**</exclude>
@@ -335,21 +335,10 @@
             <modules>
                 <module>stratio-sources</module>
                 <module>stratio-sinks</module>
-                <module>stratio-morphlines</module>
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
                 <module>stratio-ingestion-dist</module>
                 <module>doc</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>travis-test</id>
-            <modules>
-                <module>stratio-sources</module>
-                <module>stratio-sinks</module>
-                <module>stratio-morphlines</module>
-                <module>stratio-serializers</module>
-                <module>stratio-deserializers</module>
             </modules>
         </profile>
     </profiles>

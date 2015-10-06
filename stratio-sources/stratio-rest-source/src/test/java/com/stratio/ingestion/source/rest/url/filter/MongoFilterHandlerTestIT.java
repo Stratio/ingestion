@@ -65,14 +65,7 @@ public class MongoFilterHandlerTestIT {
         if(System.getProperty("mongo.hosts.0").length() > 1) {
             mongoPort = System.getProperty("mongo.hosts.0").split(":")[1];
         }
-//        String mongoIp = System.getProperty("mongo.ip");
-//        if (mongoIp == null) {
-//            mongoIp = "127.0.0.1";
-//        }
-//        String mongoPort = System.getProperty("mongo.port");
-//        if (mongoPort == null) {
-//            mongoPort = "27017";
-//        }
+
         return mongoIp + ":" + mongoPort;
     }
 
