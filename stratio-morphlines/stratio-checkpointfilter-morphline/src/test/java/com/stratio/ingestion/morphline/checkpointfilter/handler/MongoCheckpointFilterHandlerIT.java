@@ -47,14 +47,14 @@ public class MongoCheckpointFilterHandlerIT {
     private MongoClient mongoClient;
 
     public static String getMongoHost() {
-      String mongoIp = System.getProperty("mongo.ip");
-      if (mongoIp == null) {
-        mongoIp = "127.0.0.1";
-      }
-      String mongoPort = System.getProperty("mongo.port");
-      if (mongoPort == null) {
-        mongoPort = "27017";
-      }
+        String mongoIp = System.getProperty("mongo.hosts.0").split(":")[0];
+        if (mongoIp == null) {
+            mongoIp = "127.0.0.1";
+        }
+        String mongoPort = "27017";
+        if(System.getProperty("mongo.hosts.0").length() > 1) {
+            mongoPort = System.getProperty("mongo.hosts.0").split(":")[1];
+        }
       return mongoIp + ":" + mongoPort;
     }
 
