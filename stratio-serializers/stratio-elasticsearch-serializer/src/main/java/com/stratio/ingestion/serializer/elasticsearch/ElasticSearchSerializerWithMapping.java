@@ -21,18 +21,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Charsets;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.conf.ComponentConfiguration;
-import org.apache.flume.event.SimpleEvent;
 import org.apache.flume.sink.elasticsearch.ContentBuilderUtil;
 import org.apache.flume.sink.elasticsearch.ElasticSearchIndexRequestBuilderFactory;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -41,14 +37,11 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.io.BytesStream;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.indices.IndexAlreadyExistsException;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 
@@ -95,7 +88,7 @@ public class ElasticSearchSerializerWithMapping implements
 			String indexPrefix, String indexType, Event event)
 			throws IOException {
 		IndexRequestBuilder request = prepareIndex(client);
-		TimestampedEvent timestampedEvent = new TimestampedEvent(event);
+		TimeStampedEvent timestampedEvent = new TimeStampedEvent(event);
 		long timestamp = timestampedEvent.getTimestamp();
 		String indexName = getIndexName(indexPrefix, timestamp);
 		
@@ -202,50 +195,4 @@ public class ElasticSearchSerializerWithMapping implements
 
 }
 
-/**
- * {@link Event} implementation that has a timestamp. The timestamp is taken
- * from the "@timestamp" header or set to current time if "@timestamp" is not
- * present or is invalid.
- */
-final class TimestampedEvent extends SimpleEvent {
 
-  private static final Logger log = LoggerFactory.getLogger(TimestampedEvent.class);
-
-	private final long timestamp;
-
-	TimestampedEvent(Event base) {
-        super();
-		setBody(base.getBody());
-		Map<String, String> headers = Maps.newHashMap(base.getHeaders());
-
-    String timestampHeader = headers.get("@timestamp");
-    Long ts = null;
-    if (!StringUtils.isBlank(timestampHeader)) {
-      try {
-        ts = Long.parseLong(timestampHeader);
-        headers.put("@timestamp", ISODateTimeFormat.dateTime().withZoneUTC().print(ts));
-      } catch (RuntimeException ex) {
-        log.trace("Could not parse timestamp as long: {}", timestampHeader);
-        try {
-          ts = ISODateTimeFormat.dateOptionalTimeParser().withZoneUTC().parseMillis(timestampHeader);
-        } catch (RuntimeException ex2) {
-          log.trace("Could not parse timestamp as dateOptionalTime: {}", timestampHeader);
-        }
-      }
-    }
-
-    if (ts == null) {
-      DateTime now = DateTime.now();
-      ts = now.getMillis();
-      headers.put("@timestamp", ISODateTimeFormat.dateTime().withZoneUTC().print(now));
-    }
-
-    this.timestamp = ts;
-
-		setHeaders(headers);
-	}
-
-	long getTimestamp() {
-		return timestamp;
-	}
-}

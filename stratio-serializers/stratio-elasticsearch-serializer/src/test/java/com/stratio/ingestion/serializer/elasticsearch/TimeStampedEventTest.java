@@ -15,21 +15,22 @@
  */
 package com.stratio.ingestion.serializer.elasticsearch;
 
+import static org.fest.assertions.Assertions.assertThat;
+
+import java.util.Arrays;
+import java.util.Map;
+
 import org.apache.flume.event.EventBuilder;
 import org.elasticsearch.common.joda.time.format.ISODateTimeFormat;
 import org.joda.time.DateTimeUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import static org.fest.assertions.Assertions.*;
-
-import java.util.Arrays;
-import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
 @RunWith(JUnit4.class)
-public class TimestampedEventTest {
+public class TimeStampedEventTest {
 
     @Test
     public void checkTimestamp() {
@@ -38,7 +39,7 @@ public class TimestampedEventTest {
                 ImmutableMap.of("@timestamp", Long.toString(now)),
                 ImmutableMap.of("@timestamp", ISODateTimeFormat.dateTime().withZoneUTC().print(now))
                 )) {
-            final TimestampedEvent timestampedEvent = new TimestampedEvent(EventBuilder.withBody(new byte[0], headers));
+            final TimeStampedEvent timestampedEvent = new TimeStampedEvent(EventBuilder.withBody(new byte[0], headers));
             assertThat(timestampedEvent.getTimestamp()).isEqualTo(now);
             assertThat(timestampedEvent.getHeaders().get("@timestamp")).isEqualTo(ISODateTimeFormat.dateTime().withZoneUTC().print(now));
         }
@@ -49,7 +50,7 @@ public class TimestampedEventTest {
                 ImmutableMap.of("timestamp", ""),
                 ImmutableMap.of("@timestamp", "")
         )) {
-            final TimestampedEvent timestampedEvent = new TimestampedEvent(EventBuilder.withBody(new byte[0], headers));
+            final TimeStampedEvent timestampedEvent = new TimeStampedEvent(EventBuilder.withBody(new byte[0], headers));
             assertThat(timestampedEvent.getTimestamp()).isEqualTo(now);
             assertThat(timestampedEvent.getHeaders().get("@timestamp")).isEqualTo(ISODateTimeFormat.dateTime().withZoneUTC().print(now));
         }
