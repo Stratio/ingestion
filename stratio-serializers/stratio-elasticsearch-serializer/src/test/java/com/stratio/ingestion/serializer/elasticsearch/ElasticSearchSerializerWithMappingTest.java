@@ -42,11 +42,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestElasticSearchSerializerWithMapping {
+public class ElasticSearchSerializerWithMappingTest {
 	
 	private final static String INDEX_PREFIX = "flume";
 	private final static String INDEX_TYPE = "log";
 	private final static String MAPPING_PATH = "/mapping.json";
+	private final static String BAD_MAPPING_PATH = "/mapping2.json";
 	private final static String TIMESTAMP_HEADER = "timestamp";
 	private final static long DAY_IN_MILLIS = 86400000;
 
@@ -84,10 +85,34 @@ public class TestElasticSearchSerializerWithMapping {
         node = null;
     }
 
+	@Test(expected = NullPointerException.class)
+	public void badFileTest() throws IOException {
+//		FileUtils.deleteDirectory(new File("data/test"));
+//		String jsonMapping = IOUtils.toString(this.getClass()
+//				.getResourceAsStream(MAPPING_PATH));
+//		expectedESMapping = trimAllWhitespace("{\"" + INDEX_TYPE + "\":" + jsonMapping + "}");
+
+		URL resourceUrl = getClass().getResource(MAPPING_PATH);
+		Context context = new Context();
+		context.put("mappingFile2", resourceUrl.getPath());
+		serializer = new ElasticSearchSerializerWithMapping();
+		serializer.configure(context);
+	}
+
+	@Test
+	public void goodFileTest() throws IOException {
+		URL resourceUrl = getClass().getResource("/emptyFile");
+		Context context = new Context();
+		context.put("mappingFile", resourceUrl.getPath());
+		serializer = new ElasticSearchSerializerWithMapping();
+		serializer.configure(context);
+	}
+
+
 	@Test
 	public void sameTimestampEventsShouldCreateOnlyOneIndexWithTheExpectedMapping() throws IOException {
 		Event event = createExampleEvent(System.currentTimeMillis());
-		String indexName = getIndexName(INDEX_PREFIX, new TimestampedEvent(event).getTimestamp());
+		String indexName = getIndexName(INDEX_PREFIX, new TimeStampedEvent(event).getTimestamp());
 
 		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event);
 		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event);
@@ -101,9 +126,9 @@ public class TestElasticSearchSerializerWithMapping {
 	public void differentTimestampEventsShouldCreateDifferentIndecesWithTheExpectedMapping() throws IOException {
 		long timestamp = System.currentTimeMillis();
 		Event event1 = createExampleEvent(timestamp);
-		String indexName1 = getIndexName(INDEX_PREFIX,  new TimestampedEvent(event1).getTimestamp());
+		String indexName1 = getIndexName(INDEX_PREFIX,  new TimeStampedEvent(event1).getTimestamp());
 		Event event2 = createExampleEvent(timestamp + DAY_IN_MILLIS);
-		String indexName2 = getIndexName(INDEX_PREFIX,  new TimestampedEvent(event2).getTimestamp());
+		String indexName2 = getIndexName(INDEX_PREFIX,  new TimeStampedEvent(event2).getTimestamp());
 
 		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event1);
 		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event2);
