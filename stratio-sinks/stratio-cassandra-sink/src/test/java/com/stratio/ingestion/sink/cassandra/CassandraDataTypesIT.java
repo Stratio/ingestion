@@ -265,6 +265,7 @@ public class CassandraDataTypesIT {
   }
 
   private void testFieldType(final String field, final String value, final Status result) {
+    //System.out.println();
     headers.put(field, value);
     addEventToChannel(headers);
     boolean thrown = false;
