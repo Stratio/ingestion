@@ -36,10 +36,14 @@ Running the example
 To run the agents (in deattached mode) just type:
 
 ```
-
 screen -S ingestion -t ingestion -m bin/run_flume.sh
-
 ```
+
+After start the agent you can run the orders generator (https://github.com/Stratio/fakenator/tree/feature/INGESTION-29_hbase_demo):
+```
+java  -jar fakenator-1.0-SNAPSHOT-jar-with-dependencies.jar -r 3 -t 1000
+```
+
 
 In local environments you can use docker instances of Cassandra and Hbase to run the example. Example to run Hbase 
 using docker:
