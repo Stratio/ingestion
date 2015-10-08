@@ -69,7 +69,7 @@
         <quartz.version>2.2.1</quartz.version>
         <maxmind.version>0.3.3</maxmind.version>
         <jersey.core.version>1.18.3</jersey.core.version>
-        <stratio.morphlines.version>0.1.0-SNAPSHOT</stratio.morphlines.version>
+        <stratio.morphlines.version></stratio.morphlines.version>
     </properties>
 
     <dependencyManagement>

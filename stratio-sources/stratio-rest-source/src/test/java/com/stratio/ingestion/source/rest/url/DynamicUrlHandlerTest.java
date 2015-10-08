@@ -51,8 +51,8 @@ public class DynamicUrlHandlerTest extends TestCase {
         properties.put("prueba2", "prueba2");
         properties.put("prueba3", "prueba3");
 
-        dynamicUrlHandler = new DynamicUrlHandler();
-        dynamicUrlHandler.buildUrl(properties);
+//        dynamicUrlHandler = new DynamicUrlHandler();
+//        dynamicUrlHandler.buildUrl(properties);
     }
 
     @Ignore
@@ -62,8 +62,8 @@ public class DynamicUrlHandlerTest extends TestCase {
         properties.put("prueba2", "prueba2");
         properties.put("prueba3", "prueba3");
 
-        dynamicUrlHandler = new DynamicUrlHandler();
-        dynamicUrlHandler.buildUrl(properties);
+//        dynamicUrlHandler = new DynamicUrlHandler();
+//        dynamicUrlHandler.buildUrl(properties);
     }
 
 //    public void testUpdateFilterParameters() throws Exception {
