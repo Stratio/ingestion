@@ -21,6 +21,7 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -30,11 +31,10 @@ import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
 import org.apache.flume.sink.elasticsearch.ElasticSearchIndexRequestBuilderFactory;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
-import org.elasticsearch.common.Strings;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.collect.Maps;
 import org.elasticsearch.common.settings.ImmutableSettings;
@@ -43,80 +43,136 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.stratio.ingestion.serializer.elasticsearch.ElasticSearchSerializerWithMapping;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
-public class TestElasticSearchSerializerWithMapping {
-	
+public class ElasticSearchSerializerWithMappingTestIT {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchSerializerWithMappingTestIT.class);
 	private final static String INDEX_PREFIX = "flume";
 	private final static String INDEX_TYPE = "log";
 	private final static String MAPPING_PATH = "/mapping.json";
+	private final static String BAD_MAPPING_PATH = "/mapping2.json";
 	private final static String TIMESTAMP_HEADER = "timestamp";
 	private final static long DAY_IN_MILLIS = 86400000;
 
+	protected static Config conf;
 	private Node node;
 	private ElasticSearchSerializerWithMapping serializer;
 	private Client client;
+	private Client elasticSearchClient;
 	private String expectedESMapping = "";
-	
+
 	@Before
 	public void setUpES() throws IOException {
         FileUtils.deleteDirectory(new File("data/test"));
         String jsonMapping = IOUtils.toString(this.getClass()
                 .getResourceAsStream(MAPPING_PATH));
 		expectedESMapping = trimAllWhitespace("{\"" + INDEX_TYPE + "\":" + jsonMapping + "}");
-		
+
 		URL resourceUrl = getClass().getResource(MAPPING_PATH);
 		Context context = new Context();
 		context.put("mappingFile", resourceUrl.getPath());
 		serializer = new ElasticSearchSerializerWithMapping();
 		serializer.configure(context);
-		
-		ImmutableSettings.Builder ESSettings = ImmutableSettings.settingsBuilder()
-                .put("http.enabled", "false")
-                .put("cluster.name", "test");
-		node = nodeBuilder().local(true).settings(ESSettings.build()).node();
-		client = node.client();	
+
+		conf = ConfigFactory.load();
+
+		LOGGER.debug("Connecting to Elastic Search: " + conf.getStringList("elasticsearch.hosts").toString());
+
+		List<String> elasticSearchHosts = conf.getStringList("elasticsearch.hosts");
+		String elasticSearchClusterName = conf.getString("elasticsearch.clusterName");
+
+
+		ImmutableSettings.Builder settings = ImmutableSettings.settingsBuilder()
+				.put("client.transport.ignore_cluster_name", true)
+				.put("cluster.name", elasticSearchClusterName);
+//				.build();
+		TransportClient tc = new TransportClient(settings);
+		node = nodeBuilder().local(true).settings(settings.build()).node();
+//		for (String elasticSearchHost : elasticSearchHosts) {
+//			String[] elements = elasticSearchHost.split(":");
+//			tc.addTransportAddress(new InetSocketTransportAddress(elements[0], Integer.parseInt(elements[1])));
+//		}
+//		elasticSearchClient = tc;
+		elasticSearchClient = node.client();
+
+//		ImmutableSettings.Builder ESSettings = ImmutableSettings.settingsBuilder()
+//                .put("http.enabled", "false")
+//                .put("cluster.name", "test");
+//		node = nodeBuilder().local(true).settings(ESSettings.build()).node();
+//		client = node.client();
 	}
+
+
+
 
     @After
     public void tearDownES() throws IOException {
-        client.close();
-        node.stop();
+//        client.close();
+//        node.stop();
         node.close();
         client = null;
         node = null;
+		elasticSearchClient.close();
     }
-	
+
+	@Test(expected = NullPointerException.class)
+	public void badFileTest() throws IOException {
+//		FileUtils.deleteDirectory(new File("data/test"));
+//		String jsonMapping = IOUtils.toString(this.getClass()
+//				.getResourceAsStream(MAPPING_PATH));
+//		expectedESMapping = trimAllWhitespace("{\"" + INDEX_TYPE + "\":" + jsonMapping + "}");
+
+		URL resourceUrl = getClass().getResource(MAPPING_PATH);
+		Context context = new Context();
+		context.put("mappingFile2", resourceUrl.getPath());
+		serializer = new ElasticSearchSerializerWithMapping();
+		serializer.configure(context);
+	}
+
+	@Test
+	public void goodFileTest() throws IOException {
+		URL resourceUrl = getClass().getResource("/emptyFile");
+		Context context = new Context();
+		context.put("mappingFile", resourceUrl.getPath());
+		serializer = new ElasticSearchSerializerWithMapping();
+		serializer.configure(context);
+	}
+
+
 	@Test
 	public void sameTimestampEventsShouldCreateOnlyOneIndexWithTheExpectedMapping() throws IOException {
 		Event event = createExampleEvent(System.currentTimeMillis());
-		String indexName = getIndexName(INDEX_PREFIX, new TimestampedEvent(event).getTimestamp());
-		
-		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event);	
-		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event);
+		String indexName = getIndexName(INDEX_PREFIX, new TimeStampedEvent(event).getTimestamp());
+
+		serializer.createIndexRequest(elasticSearchClient, INDEX_PREFIX, INDEX_TYPE, event);
+		serializer.createIndexRequest(elasticSearchClient, INDEX_PREFIX, INDEX_TYPE, event);
 		ImmutableOpenMap<String, MappingMetaData> mappings = getIndices().get(indexName).getMappings();
 		String mappingActual = mappings.get(INDEX_TYPE).source().string();
-		
+
 		Assert.assertTrue("The index must exists and its mapping must be the same as the expected", mappingActual.equals(expectedESMapping));
 	}
-	
+
 	@Test
 	public void differentTimestampEventsShouldCreateDifferentIndecesWithTheExpectedMapping() throws IOException {
 		long timestamp = System.currentTimeMillis();
 		Event event1 = createExampleEvent(timestamp);
-		String indexName1 = getIndexName(INDEX_PREFIX,  new TimestampedEvent(event1).getTimestamp());
+		String indexName1 = getIndexName(INDEX_PREFIX,  new TimeStampedEvent(event1).getTimestamp());
 		Event event2 = createExampleEvent(timestamp + DAY_IN_MILLIS);
-		String indexName2 = getIndexName(INDEX_PREFIX,  new TimestampedEvent(event2).getTimestamp());
-		
-		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event1);	
-		serializer.createIndexRequest(client, INDEX_PREFIX, INDEX_TYPE, event2);
+		String indexName2 = getIndexName(INDEX_PREFIX,  new TimeStampedEvent(event2).getTimestamp());
+
+		serializer.createIndexRequest(elasticSearchClient, INDEX_PREFIX, INDEX_TYPE, event1);
+		serializer.createIndexRequest(elasticSearchClient, INDEX_PREFIX, INDEX_TYPE, event2);
 		ImmutableOpenMap<String, IndexMetaData> indices = getIndices();
 		ImmutableOpenMap<String, MappingMetaData> mappingsIndex1 = indices.get(indexName1).getMappings();
 		ImmutableOpenMap<String, MappingMetaData> mappingsIndex2 = indices.get(indexName2).getMappings();
 		String mappingIndex1 = mappingsIndex1.get(INDEX_TYPE).source().string();
 		String mappingIndex2 = mappingsIndex2.get(INDEX_TYPE).source().string();
-		
+
 		Assert.assertTrue("The first index must exists and its mapping must be the same as the expected", mappingIndex1.equals(expectedESMapping));
 		Assert.assertTrue("The second index must exists and its mapping must be the same as the expected", mappingIndex2.equals(expectedESMapping));
 	}
@@ -126,7 +182,7 @@ public class TestElasticSearchSerializerWithMapping {
 				.append(ElasticSearchIndexRequestBuilderFactory.df
 						.format(timestamp)).toString();
 	}
-	
+
 	private Event createExampleEvent(long timestamp) {
 		String message = "test body";
 	    Map<String, String> headers = Maps.newHashMap();
@@ -135,9 +191,9 @@ public class TestElasticSearchSerializerWithMapping {
 	    event.setHeaders(headers);
 	    return event;
 	}
-	
+
 	private ImmutableOpenMap<String, IndexMetaData> getIndices() {
-		ClusterStateResponse clusterStateResponse = client.admin().cluster().prepareState().execute().actionGet();
+		ClusterStateResponse clusterStateResponse = elasticSearchClient.admin().cluster().prepareState().execute().actionGet();
 		return clusterStateResponse.getState().getMetaData().getIndices();
 	}
 

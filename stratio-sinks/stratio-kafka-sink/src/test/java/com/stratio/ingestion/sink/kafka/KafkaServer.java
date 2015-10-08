@@ -20,14 +20,14 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.io.Files;
+
 import kafka.server.KafkaConfig;
 import kafka.server.KafkaServerStartable;
 
-import com.google.common.io.Files;
-
 public class KafkaServer {
-    public static final String KAFKA_PORT = "9092";
-
+//    public static final String KAFKA_PORT = "9092";
+    public static final String KAFKA_PORT = System.getProperty("kafka.port");
     private static final int WAIT_SECONDS = 5;
 
     private KafkaServerStartable kafkaServer;
@@ -38,13 +38,23 @@ public class KafkaServer {
         String dirPath = dir.getAbsolutePath();
         System.out.println("Storing Kafka files in " + dirPath);
 
+        String localhostKafka = System.getProperty("kafka.ip");
+        String localhostZookeeper = System.getProperty("zookeeper.ip");
+        String portKafka = System.getProperty("kafka.port");
+        String portZookeeper = System.getProperty("zookeeper.port");
+
         Properties properties = new Properties();
         properties.put("broker.id", "0");
         properties.put("host.name", "localhost");
+//        properties.put("host.name", localhostKafka);
         properties.put("port", KAFKA_PORT);
         properties.put("log.dir", dirPath);
         properties.put("log.flush.interval.messages", "1");
-        properties.put("zookeeper.connect", "localhost:" + ZookeeperServer.CLIENT_PORT);
+//        properties.put("zookeeper.connect", "localhost:" + ZookeeperServer.CLIENT_PORT);
+        properties.put("zookeeper.connect", localhostZookeeper+":" + ZookeeperServer.CLIENT_PORT);
+//        properties.put("zookeeper.connect", "port:" + ZookeeperServer.CLIENT_PORT);
+//        Integer clientPort = Integer.parseInt(System.getProperty("zookeeper.port"));
+//        properties.put("zookeeper.connect", "localhost:" + clientPort);
         properties.put("replica.socket.timeout.ms", "1500");
         properties.put("auto.create.topics.enable", "true");
         properties.put("num.partitions", "1");

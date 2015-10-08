@@ -15,7 +15,13 @@
  */
 package com.stratio.ingestion.source.snmptraps;
 
-import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.*;
+import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_AUTH;
+import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_PASSWD;
+import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_PRIV_PASSPHRASE;
+import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_PRIV_PROTOCOL;
+import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_SNMP_TRAP_VERSION;
+import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_TRAP_PORT;
+import static com.stratio.ingestion.source.snmptraps.SNMPSourceConstants.CONF_USERNAME;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,7 +44,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class SNMPSourceTest {
+public class SNMPSourceTestIT {
 
     private static final String STMP_TRAP_PORT = "1620";
 
