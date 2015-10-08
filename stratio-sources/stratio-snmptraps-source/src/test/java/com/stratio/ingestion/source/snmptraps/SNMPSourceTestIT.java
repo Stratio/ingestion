@@ -38,12 +38,13 @@ import org.apache.flume.channel.ReplicatingChannelSelector;
 import org.apache.flume.conf.Configurables;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class SNMPSourceTest {
+public class SNMPSourceTestIT {
 
     private static final String STMP_TRAP_PORT = "1620";
 
@@ -67,7 +68,7 @@ public class SNMPSourceTest {
     }
 
     @Test
-//    @Ignore
+    @Ignore
     public void testV1NoAuth() throws InterruptedException, IOException {
         Context context = new Context();
         context.put(CONF_TRAP_PORT, STMP_TRAP_PORT);
@@ -85,7 +86,7 @@ public class SNMPSourceTest {
     }
 
     @Test
-//    @Ignore
+    @Ignore
     public void testV2NoAuth() throws InterruptedException, IOException {
         Context context = new Context();
         context.put(CONF_TRAP_PORT, STMP_TRAP_PORT);
@@ -103,7 +104,7 @@ public class SNMPSourceTest {
     }
 
     @Test
-//    @Ignore
+    @Ignore
     public void testV3NoAuth() throws InterruptedException, IOException {
         Context context = new Context();
         context.put(CONF_TRAP_PORT, STMP_TRAP_PORT);
@@ -121,7 +122,7 @@ public class SNMPSourceTest {
     }
 
     @Test
-//    @Ignore
+    @Ignore
     public void testV3Auth() throws IOException, InterruptedException {
         Context context = new Context();
         context.put(CONF_TRAP_PORT, STMP_TRAP_PORT);
@@ -142,7 +143,7 @@ public class SNMPSourceTest {
     }
 
     @Test
-//    @Ignore
+    @Ignore
     public void testV3AuthPriv() throws IOException, InterruptedException {
         Context context = new Context();
         context.put(CONF_TRAP_PORT, STMP_TRAP_PORT);

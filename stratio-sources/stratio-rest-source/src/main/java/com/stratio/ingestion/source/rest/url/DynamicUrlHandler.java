@@ -21,13 +21,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Context;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stratio.ingestion.source.rest.exception.RestSourceException;
 import com.stratio.ingestion.source.rest.url.filter.FilterHandler;
 
@@ -35,7 +34,7 @@ import com.stratio.ingestion.source.rest.url.filter.FilterHandler;
  * Created by eambrosio on 5/02/15.
  */
 public class DynamicUrlHandler implements UrlHandler {
-    private static final String PARAM_MAPPER = "urlParamMapper";
+    private static final String PARAM_MAPPER = "{\"params\":[{\"name\":\"date\", \"default\":\"1970-01-01%2000:00:00\"}]}";
     private static final String URL = "url";
     public static final String URL_CONF = "urlHandlerConfig";
 
