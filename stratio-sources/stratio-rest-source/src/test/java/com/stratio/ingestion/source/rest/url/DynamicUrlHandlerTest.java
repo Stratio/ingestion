@@ -21,9 +21,13 @@ import static org.mockito.Mockito.when;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.flume.Context;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.stratio.ingestion.source.rest.exception.RestSourceException;
+import com.stratio.ingestion.source.rest.url.filter.FilterHandler;
 
 import junit.framework.TestCase;
 
@@ -34,43 +38,85 @@ public class DynamicUrlHandlerTest extends TestCase {
 
     private static final String PARAM_MAPPER = "urlParamMapper";
     private static final String URL = "url";
+    private static final String URL_JSON = "src/test/resources/filterConfiguration.json";
+    private static final String BAD_URL_JSON = "src/test/resources/badJson.json";
+    private static final String EMPTY_URL_JSON = "src/test/resources/emptyFilter.json";
     DynamicUrlHandler dynamicUrlHandler = mock(DynamicUrlHandler.class);
     Map<String, String> properties = new HashMap();
     Map<String, String> urlContext = mock(HashMap.class);
+    JsonNode jsonNode = mock(JsonNode.class);
+    Context context = new Context();
+    FilterHandler filterHandler = mock(FilterHandler.class);
 
     @Before
     public void setUp(){
-        when(urlContext.get(PARAM_MAPPER)).thenReturn(PARAM_MAPPER);
-        when(urlContext.get(URL)).thenReturn(URL);
+
+        properties.put("url", "URL");
+        properties.put("field", "date");
+        properties.put("type", "com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType");
+        properties.put("dateFormat", "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        properties.put("mongoUri", "mongodb://socialLoginUser:temporal@180.205.132.228:50017,180.205.132.229:50017,"
+                + "180.205.132.230:50017/socialLogin.checkpoints?replicaset=socialLogin&ssl=true");
+        when(filterHandler.getLastFilter(properties)).thenReturn(properties);
+
     }
 
-    @Ignore
+    @Test(expected=RestSourceException.class)
+    public void testMethod() throws Exception {
+        try{
+            context.put("urlJson", URL_JSON);
+
+            dynamicUrlHandler = new DynamicUrlHandler();
+            dynamicUrlHandler.configure(context);
+
+        }catch(RestSourceException e){}
+        finally{
+            dynamicUrlHandler.buildUrl(properties);
+        }
+    }
+
+    @Test(expected=RestSourceException.class)
+    public void testJson() throws Exception {
+        try{
+            context.put("urlJson", URL_JSON);
+
+            dynamicUrlHandler = new DynamicUrlHandler();
+            dynamicUrlHandler.configure(context);
+
+        }catch(RestSourceException e){}
+    }
+
+    @Test(expected=RestSourceException.class)
+    public void testBadJson() throws Exception {
+        try{
+            context.put("urlJson", BAD_URL_JSON);
+
+            dynamicUrlHandler = new DynamicUrlHandler();
+            dynamicUrlHandler.configure(context);
+
+        }catch(RestSourceException e){}
+    }
+
+    @Test(expected=RestSourceException.class)
+    public void testEmptyJson() throws Exception {
+        try{
+            context.put("urlJson", EMPTY_URL_JSON);
+
+            dynamicUrlHandler = new DynamicUrlHandler();
+            dynamicUrlHandler.configure(context);
+
+        }catch(RestSourceException e){}
+    }
+
     @Test(expected=NullPointerException.class)
-    public void testBuildUrl() throws Exception {
-        properties.put("prueba", "prueba");
-        properties.put("prueba2", "prueba2");
-        properties.put("prueba3", "prueba3");
+    public void testNoJson() throws Exception {
+        try{
+            context.put("urlJson", "");
 
-//        dynamicUrlHandler = new DynamicUrlHandler();
-//        dynamicUrlHandler.buildUrl(properties);
+            dynamicUrlHandler = new DynamicUrlHandler();
+            dynamicUrlHandler.configure(context);
+
+        }catch(NullPointerException e){}
     }
 
-    @Ignore
-    @Test(expected=NullPointerException.class)
-    public void testBuildUrl2() throws Exception {
-        properties.put("prueba", "prueba");
-        properties.put("prueba2", "prueba2");
-        properties.put("prueba3", "prueba3");
-
-//        dynamicUrlHandler = new DynamicUrlHandler();
-//        dynamicUrlHandler.buildUrl(properties);
-    }
-
-//    public void testUpdateFilterParameters() throws Exception {
-//
-//    }
-//
-//    public void testConfigure() throws Exception {
-//
-//    }
 }
