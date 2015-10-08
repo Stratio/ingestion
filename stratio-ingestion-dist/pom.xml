@@ -94,9 +94,10 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.stratio.morphlines-ng</groupId>
+            <groupId>com.stratio.morphlines</groupId>
             <artifactId>morphlines-all</artifactId>
             <version>${stratio.morphlines.version}</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.stratio.ingestion</groupId>
