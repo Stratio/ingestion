@@ -57,9 +57,15 @@ public class MongoFilterHandlerTest {
     private MongoClient mongoClient;
 
     public static String getMongoHost() {
-        String mongoIp = mongoIp = "127.0.0.1";
+        String mongoIp = System.getProperty("mongo.ip");
+        if(mongoIp == null){
+            mongoIp = ("127.0.0.1");
+        }
 
-        String mongoPort = "27017";
+        String mongoPort = System.getProperty("mongo.port");
+        if(mongoPort == null){
+            mongoPort = ("27017");
+        }
 
 
         return mongoIp + ":" + mongoPort;
@@ -279,7 +285,7 @@ public class MongoFilterHandlerTest {
         handler.initMongo("mongodb://127.0.0.1:27017/");
 
     }
-    
+
     @Test(expected = MongoFilterException.class)
      public void initMongoWithEmptyCollection() {
         handler = new MongoFilterHandler();
