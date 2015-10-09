@@ -64,7 +64,6 @@ public class IRCSourceTest extends TestCase {
 
     @Test
     public void testBadConnection(){
-
         source.start();
         source.stop();
     }
