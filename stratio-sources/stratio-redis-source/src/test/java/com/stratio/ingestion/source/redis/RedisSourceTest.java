@@ -1,3 +1,5 @@
+package com.stratio.ingestion.source.redis;
+
 import static com.stratio.ingestion.source.redis.RedisConstants.DEFAULT_HOST;
 
 import java.io.IOException;
@@ -17,9 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import com.stratio.ingestion.source.redis.RedisConstants;
-import com.stratio.ingestion.source.redis.RedisSource;
 
 import junit.framework.TestCase;
 import redis.clients.jedis.JedisPoolConfig;
