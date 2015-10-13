@@ -23,6 +23,9 @@ import org.junit.runners.JUnit4;
 import junit.framework.TestCase;
 import redis.clients.jedis.JedisPoolConfig;
 
+
+
+
 /**
  * Created by eruiz on 8/10/15.
  */
@@ -79,3 +82,4 @@ public class RedisSourceTest extends TestCase {
     }
 
 }
+
