@@ -1,5 +1,4 @@
 import static com.stratio.ingestion.source.redis.RedisConstants.DEFAULT_HOST;
-import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,8 +22,6 @@ import com.stratio.ingestion.source.redis.RedisConstants;
 import com.stratio.ingestion.source.redis.RedisSource;
 
 import junit.framework.TestCase;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
@@ -38,8 +35,7 @@ public class RedisSourceTest extends TestCase {
     static String host;
     static Integer port;
     JedisPoolConfig poolConfig;
-    Jedis jedis = mock(Jedis.class);
-    JedisPool jedisPool = mock(JedisPool.class);
+
     private Map<String, String> poolProps;
 
     @Before
