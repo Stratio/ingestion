@@ -136,11 +136,12 @@ public class MongoSink extends AbstractSink implements Configurable {
     public Status process() throws EventDeliveryException {
         Status status = Status.BACKOFF;
         Transaction transaction = this.getChannel().getTransaction();
+        log.debug("Executing MongoSink.process");
         try {
             transaction.begin();
             List<Event> eventList = this.takeEventsFromChannel(
                     this.getChannel(), this.batchSize);
-            status = Status.READY;
+            status = Status.BACKOFF;
             if (!eventList.isEmpty()) {
                 if (eventList.size() == this.batchSize) {
                     this.sinkCounter.incrementBatchCompleteCount();
@@ -158,12 +159,12 @@ public class MongoSink extends AbstractSink implements Configurable {
             transaction.commit();
             status = Status.READY;
         } catch (ChannelException e) {
-            e.printStackTrace();
+            log.error("Unexpected error while executing MongoSink.process", e);
             transaction.rollback();
             status = Status.BACKOFF;
             this.sinkCounter.incrementConnectionFailedCount();
         } catch (Throwable t) {
-            t.printStackTrace();
+            log.error("Unexpected error while executing MongoSink.process", t);
             transaction.rollback();
             status = Status.BACKOFF;
             if (t instanceof Error) {
