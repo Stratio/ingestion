@@ -69,6 +69,7 @@
         <quartz.version>2.2.1</quartz.version>
         <maxmind.version>0.3.3</maxmind.version>
         <jersey.core.version>1.18.3</jersey.core.version>
+        <sonar.coverage.exclusions>examples/**</sonar.coverage.exclusions>
         <stratio.morphlines.version>0.1.0</stratio.morphlines.version>
     </properties>
 
