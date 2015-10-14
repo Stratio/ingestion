@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 Stratio (http://stratio.com)
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -110,7 +110,7 @@ public class MongoSink extends AbstractSink implements Configurable {
             }
 
             final String mappingFilename = context.getString(CONF_MAPPING_FILE);
-            this.eventParser = (mappingFilename == null)?
+            this.eventParser = (mappingFilename == null) ?
                     new EventParser()
                     :
                     new EventParser(MappingDefinition.load(mappingFilename));
@@ -136,7 +136,7 @@ public class MongoSink extends AbstractSink implements Configurable {
     public Status process() throws EventDeliveryException {
         Status status = Status.BACKOFF;
         Transaction transaction = this.getChannel().getTransaction();
-		log.debug("Executing MongoSink.process");
+        log.debug("Executing MongoSink.process");
         try {
             transaction.begin();
             List<Event> eventList = this.takeEventsFromChannel(
@@ -199,7 +199,7 @@ public class MongoSink extends AbstractSink implements Configurable {
         if (!isDynamicMode) {
             return mongoDefaultCollection;
         }
-        final Map<String,String> headers = event.getHeaders();
+        final Map<String, String> headers = event.getHeaders();
         final String dbName = headers.get(dynamicDBField);
         final String collectionName = headers.get(dynamicCollectionField);
         if (collectionName == null) {
