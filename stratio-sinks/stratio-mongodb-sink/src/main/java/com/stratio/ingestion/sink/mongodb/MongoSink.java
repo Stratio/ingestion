@@ -108,7 +108,6 @@ public class MongoSink extends AbstractSink implements Configurable {
                     this.mongoDefaultCollection = mongoDefaultDb.getCollection(mongoClientURI.getCollection());
                 }
             }
-
             final String mappingFilename = context.getString(CONF_MAPPING_FILE);
             this.eventParser = (mappingFilename == null) ?
                     new EventParser()
