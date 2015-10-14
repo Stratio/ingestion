@@ -136,7 +136,7 @@ public class MongoSink extends AbstractSink implements Configurable {
     public Status process() throws EventDeliveryException {
         Status status = Status.BACKOFF;
         Transaction transaction = this.getChannel().getTransaction();
-        log.debug("Executing MongoSink.process");
+		log.debug("Executing MongoSink.process");
         try {
             transaction.begin();
             List<Event> eventList = this.takeEventsFromChannel(
