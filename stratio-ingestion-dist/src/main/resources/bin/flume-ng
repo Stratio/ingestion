@@ -109,6 +109,10 @@ add_hadoop_paths() {
     done
 
   fi
+  
+  if [ -n "${HADOOP_CONF_DIR}" -a -f "${HADOOP_CONF_DIR}" ]; then
+    FLUME_CLASSPATH="$FLUME_CLASSPATH:${HADOOP_CONF_DIR}"
+  fi
 }
 add_HBASE_paths() {
   local HBASE_IN_PATH=$(PATH="${HBASE_HOME}/bin:$PATH" \
