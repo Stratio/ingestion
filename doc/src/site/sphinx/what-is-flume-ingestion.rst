@@ -53,19 +53,6 @@ sources, sinks and transformations.
 In addition, a sink could be a big data storage but also another
 real-time system (Apache Kafka, Spark Streaming).
 
-Compile & Package
-=================
-
-::
-
-    $ git submodule init
-    $ git submodule update
-    $ mvn install
-    $ cd stratio-ingestion-dist
-    $ mvn clean compile package
-
-Distribution will be available at ``stratio-ingestion-dist/target/stratio-ingestion-0.4.0-SNAPSHOT-bin.tar.gz``
-
 Interesting facts about Flume-Ingestion
 =======================================
 
@@ -75,8 +62,23 @@ Interesting facts about Flume-Ingestion
    better T from ETL, and so we have also developed a bunch of custom
    transformations.
 
--  Stratio ingestion is fully open source and we work very close to the
-   Flume community.
+-  Stratio ingestion is fully open source and we work very close to the Flume community.
+
+Ingestion Architecture
+======================
+
+Each agent consists of three major components:
+
+-   Sources are active components that receive data for some other application producing that data.
+
+-   Channels are passive components that buffer data received by the agent, behaving like queues.
+
+-   Sinks poll their respective channels continuously to read and remove events.
+
+ .. image:: images/ingestion_architecture.jpg
+    :width: 70%
+    :align: center
+
 
 Flume Ingestion FAQ
 ===================
@@ -101,3 +103,20 @@ if it does not exist in the engine.*
 .. _Apache Flume: http://flume.apache.org/
 .. _Morphlines: http://kitesdk.org/docs/current/kite-morphlines/index.html
 .. _Stratio Streaming: https://github.com/Stratio/stratio-streaming
+
+
+
+Release Notes
+=============
+
+The project is actively developed and repository is available on Github. You can get the last version and release
+notes from the `project page on Github <https://github.com/Stratio/Ingestion/releases>`_.
+
+Where to go from here
+=====================
+
+To explore and play with Stratio Ingestion, we recommend to visit the following:
+
+-   :ref:`wikipedia-pagecounts-demo`: Execute one of the existing demos to understand better how to use Ingestion
+agent
+-   :ref:`configuration`: Check some configuration details to understand how to setup your first Ingestion agent
