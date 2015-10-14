@@ -20,7 +20,6 @@ import static org.apache.flume.sink.elasticsearch.ElasticSearchEventSerializer.c
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -71,9 +70,9 @@ public class ElasticSearchSerializerWithMappingTest {
 
 		conf = ConfigFactory.load();
 
-		LOGGER.debug("Connecting to Elastic Search: " + conf.getStringList("elasticsearch.hosts").toString());
+		LOGGER.debug("Connecting to Elastic Search: " + conf.getString("elasticsearch.hosts").toString());
 
-		List<String> elasticSearchHosts = conf.getStringList("elasticsearch.hosts");
+		String elasticSearchHosts = conf.getString("elasticsearch.hosts");
 		String elasticSearchClusterName = conf.getString("elasticsearch.clusterName");
 
 

@@ -18,12 +18,19 @@ package com.stratio.ingestion.source.redis;
 import static com.stratio.ingestion.source.redis.RedisConstants.DEFAULT_HOST;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.flume.Channel;
+import org.apache.flume.ChannelSelector;
 import org.apache.flume.Context;
+import org.apache.flume.channel.ChannelProcessor;
+import org.apache.flume.channel.MemoryChannel;
+import org.apache.flume.channel.ReplicatingChannelSelector;
+import org.apache.flume.conf.Configurables;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -45,23 +52,22 @@ public class RedisSourceTest extends TestCase {
 
     private Map<String, String> poolProps;
 
-//    @Before
-//    public void setUp() {
-//        source = new RedisSource();
-//        channel = new MemoryChannel();
-//
-//        Configurables.configure(channel, new Context());
-//
-//        List<Channel> channels = new ArrayList<Channel>();
-//        channels.add(channel);
-//
-//        ChannelSelector rcs = new ReplicatingChannelSelector();
-//        rcs.setChannels(channels);
-//
-//        source.setChannelProcessor(new ChannelProcessor(rcs));
-//    }
+    @Before
+    public void setUp() {
+        source = new RedisSource();
+        channel = new MemoryChannel();
 
-    @Ignore
+        Configurables.configure(channel, new Context());
+
+        List<Channel> channels = new ArrayList<Channel>();
+        channels.add(channel);
+
+        ChannelSelector rcs = new ReplicatingChannelSelector();
+        rcs.setChannels(channels);
+
+        source.setChannelProcessor(new ChannelProcessor(rcs));
+    }
+
     @Test
     //            (expected = redis.clients.jedis.exceptions.JedisConnectionException.class)
     public void testConnection() throws InterruptedException, IOException {
