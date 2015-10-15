@@ -110,7 +110,7 @@ add_hadoop_paths() {
 
   fi
   
-  if [ -n "${HADOOP_CONF_DIR}" -a -f "${HADOOP_CONF_DIR}" ]; then
+  if [ -n "${HADOOP_CONF_DIR}" -a -d "${HADOOP_CONF_DIR}" ]; then
     FLUME_CLASSPATH="$FLUME_CLASSPATH:${HADOOP_CONF_DIR}"
   fi
 }
