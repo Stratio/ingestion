@@ -21,12 +21,14 @@ import org.apache.flume.Transaction;
 import org.apache.flume.channel.MemoryChannel;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import junit.framework.TestCase;
 
+@Ignore
 @RunWith(JUnit4.class)
 public class IRCSourceTest extends TestCase {
 
@@ -35,7 +37,7 @@ public class IRCSourceTest extends TestCase {
 
 //    IRCSource ircSource = new IRCSource();
     Context context = new Context();
-
+    @Ignore
     @Before
     public void setUp() {
 
