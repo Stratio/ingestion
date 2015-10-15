@@ -2,7 +2,8 @@ FLUME-INGESTION
 ===================
 
 
-[![Build Status](https://travis-ci.org/Stratio/flume-ingestion.svg?branch=master)](https://travis-ci.org/Stratio/flume-ingestion)
+[![Build Status](https://travis-ci.org/Stratio/Ingestion.svg?branch=master)](https://travis-ci
+.org/Stratio/Ingestion)
 
 
 Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
@@ -20,7 +21,7 @@ Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
  - SNMP (v1, v2c and 3)
  - redis, Kafka (0.8.1.1)
  - MongoDB, JDBC, Cassandra and Druid
- - Stratio Streaming (Complex Event Processing engine)
+ - Stratio Decision (Complex Event Processing engine)
  - REST client, Flume agents stats
  
  You can find more documentation about us [here](http://docs.stratio.com/modules/flume-ingestion/development/)
@@ -40,7 +41,7 @@ Flume Ingestion components
 * Custom sinks to write the data to:
     - Cassandra
     - MongoDB
-    - [Stratio Streaming](https://github.com/Stratio/stratio-streaming)
+    - [Stratio Decision](https://github.com/Stratio/stratio-streaming)
     - JDBC
     - Kafka
     - Druid

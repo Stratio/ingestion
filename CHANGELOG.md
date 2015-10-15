@@ -2,8 +2,13 @@
 
 Only listing significant user-visible, not internal code cleanups and minor bug fixes.
 
-## 0.5.0 (upcoming)
+## 0.5.0 (October 2015)
 
+ * Added new example "Cassandra-hbase"
+ * Updated documentation.
+ * Bugs fixing
+
+Downloads
 ## 0.4.1 (August 2015)
 
 * Updated ElasticSearch version to 1.7.1.
