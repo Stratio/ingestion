@@ -31,7 +31,6 @@ public class Channel {
     private String description;
     private List<Attribute> settings;
     private String sources;
-//    private boolean isConnected;
 
     public String getId() {
         return id;
@@ -81,11 +80,4 @@ public class Channel {
         this.sources = sources;
     }
 
-//    public boolean isConnected() {
-//        return isConnected;
-//    }
-//
-//    public void setIsConnected(boolean isConnected) {
-//        this.isConnected = isConnected;
-//    }
 }

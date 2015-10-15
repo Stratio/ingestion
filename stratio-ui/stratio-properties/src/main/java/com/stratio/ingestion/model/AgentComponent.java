@@ -38,24 +38,9 @@ public class AgentComponent {
         inputString = inputString.replace("\"", "");
         inputString = inputString.replace("[", "");
         inputString = inputString.replace("]", "");
-        //        inputString = inputString.replace(",", " ");
 
         return inputString;
     }
-
-//    public void addSource(Source source){
-//        sources.add(source);
-//    }
-//
-//    public void addSink(Sink sink){
-//
-//        sinks.add(sink);
-//    }
-//
-//    public void addChannel(Channel channel){
-//
-//        channels.add(channel);
-//    }
 
     public List<Source> getSources() {
         return sources;
