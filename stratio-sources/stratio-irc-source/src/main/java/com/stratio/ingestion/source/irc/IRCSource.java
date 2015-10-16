@@ -35,10 +35,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.codec.Charsets;
 import org.apache.flume.Context;
 import org.apache.flume.EventDrivenSource;
 import org.apache.flume.channel.ChannelProcessor;
 import org.apache.flume.conf.Configurable;
+import org.apache.flume.event.EventBuilder;
 import org.apache.flume.instrumentation.SourceCounter;
 import org.apache.flume.source.AbstractSource;
 import org.schwering.irc.lib.IRCConnection;
@@ -354,17 +356,13 @@ public class IRCSource extends AbstractSource implements Configurable, EventDriv
             ChannelProcessor channelProcessor = getChannelProcessor();
             sourceCounter.addToEventReceivedCount(1);
             sourceCounter.incrementAppendBatchReceivedCount();
-//            channelProcessor.processEvent(EventBuilder.withBody(message,
-//                    Charsets.UTF_8, headers));
+            channelProcessor.processEvent(EventBuilder.withBody(message,
+                    Charsets.UTF_8, headers));
             sourceCounter.addToEventAcceptedCount(1);
             sourceCounter.incrementAppendBatchAcceptedCount();
             headers.clear();
         }
 
-    }
-
-    public IRCConnectionListener getIRCConnectionListener(){
-        return new IRCConnectionListener();
     }
 
     @Override
@@ -396,7 +394,7 @@ public class IRCSource extends AbstractSource implements Configurable, EventDriv
             createConnection();
         } catch (Exception e) {
             logger.error("Unable to create irc client using hostname:"
-                    + hostname + " port:" + port + ". Exception follows.", e);
+                    + hostname + " port:" + port );
 
             destroyConnection();
 
@@ -415,31 +413,6 @@ public class IRCSource extends AbstractSource implements Configurable, EventDriv
 
         logger.debug("IRC source {} stopped.", this.getName());
 
-    }
-
-    public void setHeaders() {
-        IRCSource.IRCConnectionListener ircConnectionListener = this.getIRCConnectionListener();
-        IRCUser ircUser = new IRCUser(nick, user, hostname);
-        IRCModeParser ircModeParser = new IRCModeParser("line");
-        ircConnectionListener.onDisconnected();
-        ircConnectionListener.onError("message");
-        ircConnectionListener.onError(14, "message");
-        ircConnectionListener.onInvite("chan", ircUser, "nick");
-        ircConnectionListener.onJoin("chan", ircUser);
-        ircConnectionListener.onKick("chan", ircUser, "nick", "message");
-        ircConnectionListener.onMode(ircUser, "nick", "mode");
-        ircConnectionListener.onMode("chan", ircUser, ircModeParser);
-        ircConnectionListener.onNick(ircUser, "nick");
-        ircConnectionListener.onNotice("target", ircUser, "message");
-        ircConnectionListener.onPart("chan", ircUser, "message");
-        ircConnectionListener.onPing("ping");
-        ircConnectionListener.onPrivmsg("chan", ircUser, "message");
-        ircConnectionListener.onQuit(ircUser, "message");
-        ircConnectionListener.onRegistered();
-        ircConnectionListener.onReply(12, "value", "message");
-        ircConnectionListener.onTopic("chan", ircUser, "topic");
-        ircConnectionListener.unknown("prefix", "command", "middle", "trailing");
-        Map<String, String> user = ircConnectionListener.getUser(ircUser);
     }
 
     private void createConnection() throws IOException, InterruptedException {
