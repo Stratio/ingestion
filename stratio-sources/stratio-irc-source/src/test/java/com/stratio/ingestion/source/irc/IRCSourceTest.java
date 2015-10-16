@@ -57,12 +57,8 @@ public class IRCSourceTest extends TestCase {
 
     @Test(expected = NullPointerException.class)
     public void testBadConnection(){
-        try {
             source.start();
             source.stop();
-        }catch(Exception e){
-            throw new NullPointerException();
-        }
     }
 
     public void checkEventsChannel() {

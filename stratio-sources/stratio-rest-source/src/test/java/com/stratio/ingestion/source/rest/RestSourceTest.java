@@ -22,7 +22,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -34,6 +33,7 @@ import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.EventDeliveryException;
 import org.apache.flume.PollableSource;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -126,22 +126,20 @@ public class RestSourceTest extends TestCase {
         rest.start();
         PollableSource.Status status = rest.process();
         rest.stop();
-    }
-
-    @Test
-    public void checkInitClient() throws EventDeliveryException {
-        rest.configure(contextSource);
+        Assert.assertEquals(status, "READY");
     }
 
     @Test
     public void checkInitRestSource() throws EventDeliveryException {
-        RestSource restS = new RestSource(client);
+        RestSource restSource = new RestSource(client);
+        Assert.assertNotNull(restSource);
     }
 
     @Test
     public void checkStartFailure() throws EventDeliveryException {
         when(schedulerContext.get("client")).thenReturn(null);
         rest.start();
+        Assert.assertNull(rest.getName());
     }
 
     @Test
@@ -149,6 +147,7 @@ public class RestSourceTest extends TestCase {
         when(contextSource.getString(URL_HANDLER, DEFAULT_URL_HANDLER)).thenReturn("urlHandler");
         rest.configure(contextSource);
         rest.start();
+        Assert.assertNull(rest.getName());
     }
 
     @Test
@@ -156,6 +155,7 @@ public class RestSourceTest extends TestCase {
         when(contextSource.getString(CONF_HANDLER, DEFAULT_REST_HANDLER)).thenReturn("RestSourceHandler");
         rest.configure(contextSource);
         rest.start();
+        Assert.assertNotNull(rest);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -165,24 +165,4 @@ public class RestSourceTest extends TestCase {
         rest.start();
     }
 
-    @Test(expected = NullPointerException.class)
-    public void checkStopFailure() throws NoSuchAlgorithmException {
-        rest.stop();
-    }
-
-    public void testConfigure() throws Exception {
-
-    }
-
-    public void testStart() throws Exception {
-
-    }
-
-    public void testProcess() throws Exception {
-
-    }
-
-    public void testStop() throws Exception {
-
-    }
 }

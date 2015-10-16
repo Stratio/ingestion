@@ -129,8 +129,6 @@ public class DynamicUrlHandler implements UrlHandler {
         urlContext.put("filterHandler", jsonNode.findValue("filterHandler").asText());
         urlContext.put("filterConfiguration", jsonNode.findValue("filterConfiguration").asText());
         JsonNode listParams = jsonNode.path("urlParamMapper");
-
-//        listParams.toString();
         urlContext.put("urlParamMapper", listParams.toString());
         return urlContext;
     }

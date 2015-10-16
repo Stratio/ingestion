@@ -97,6 +97,7 @@ public class ElasticSearchSerializerWithMappingTest {
 		serializer = new ElasticSearchSerializerWithMapping();
 		serializer.configure(context);
 
+		Assert.assertNotNull(serializer);
 	}
 
 
