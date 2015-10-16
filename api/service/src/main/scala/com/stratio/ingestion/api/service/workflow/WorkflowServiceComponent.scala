@@ -15,21 +15,40 @@
  */
 package com.stratio.ingestion.api.service.workflow
 
+import scala.concurrent.Future
+
+case class Workflow(id: String,
+	name: String,
+	description: String,
+	state: String,
+	agents: Seq[String]
+)
+
+import spray.json._
+
+object WorkflowParser extends DefaultJsonProtocol {
+
+	implicit lazy val workflowFormat = jsonFormat5(Workflow)
+}
+
 trait WorkflowServiceComponent {
 
-	val service: WorkflowService
+	val workflowService: WorkflowService
+
+	val dummyWorkflow1 = Workflow("id-1", "name-1", "description-1", "state-1", Seq("agent1", "agent2"))
+	val dummyWorkflow2 = Workflow("id-2", "name-2", "description-2", "state-2", Seq("agent1"))
 
 	trait WorkflowService {
 
-		def getAll
+		def getAll: Future[Seq[Workflow]]
 
-		def create
+		def create(workflow: Workflow): Future[Workflow]
 
-		def update
+		def update(workflow: Workflow): Future[Workflow]
 
-		def get(id: String)
+		def get(id: String): Future[Workflow]
 
-		def delete(id: String)
+		def delete(id: String): Future[Workflow]
 
 	}
 }

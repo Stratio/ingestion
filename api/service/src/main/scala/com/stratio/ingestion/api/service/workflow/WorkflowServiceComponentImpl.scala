@@ -15,21 +15,39 @@
  */
 package com.stratio.ingestion.api.service.workflow
 
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
 trait WorkflowServiceComponentImpl extends WorkflowServiceComponent{
 
-	val service: WorkflowService = new WorkflowServiceImpl{}
+	val workflowService: WorkflowService = new WorkflowServiceImpl{}
 
 	trait WorkflowServiceImpl extends WorkflowService {
 
-		def getAll = ???
+		def getAll: Future[Seq[Workflow]] =
+			Future {
+				Seq(dummyWorkflow1, dummyWorkflow2)
+			}
 
-		def create = ???
+		def create(workflow: Workflow): Future[Workflow] =
+			Future {
+				workflow
+			}
 
-		def update = ???
+		def update(workflow: Workflow): Future[Workflow] =
+			Future {
+				workflow
+			}
 
-		def get(id: String)	= ???
+		def get(id: String): Future[Workflow] =
+			Future {
+				dummyWorkflow1
+			}
 
-		def delete(id: String) = ???
+		def delete(id: String): Future[Workflow] =
+			Future {
+				dummyWorkflow1
+			}
 
 	}
 }

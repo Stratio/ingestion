@@ -16,9 +16,13 @@
 package com.stratio.ingestion.api.service.workflow
 
 import spray.routing._
+import spray.httpx.SprayJsonSupport._
+import WorkflowParser._
 
 trait WorkflowRoute extends HttpService {
 	self: WorkflowServiceComponent =>
+
+  implicit def executionContext = actorRefFactory.dispatcher
 
 	lazy val workflowRoute =
 		pathPrefix("workflows") {
@@ -26,13 +30,13 @@ trait WorkflowRoute extends HttpService {
 				get {
 					getAllWorkflows
 				} ~
-				post {
-					createWorkflow
+        (post & entity(as[Workflow])){ workflow =>
+					createWorkflow(workflow)
 				} ~
-				put {
-					updateWorkflow
+        (put & entity(as[Workflow])){ workflow =>
+					updateWorkflow(workflow)
 				}
-			}
+			} ~
 			path(Segment) { id =>
 				get {
 					getWorkflow(id)
@@ -43,14 +47,28 @@ trait WorkflowRoute extends HttpService {
 			}
 		}
 
-	def getAllWorkflows	= ???
+	def getAllWorkflows	=
+		complete {
+      workflowService.getAll
+    }
 
-	def createWorkflow	= ???
+	def createWorkflow(workflow: Workflow)	=
+    complete {
+      workflowService.create(workflow)
+    }
 
-	def updateWorkflow	= ???
+	def updateWorkflow(workflow: Workflow) =
+    complete {
+      workflowService.update(workflow)
+    }
 
-	def getWorkflow(id: String)	= ???
+	def getWorkflow(id: String)	=
+    complete {
+      workflowService.get(id)
+    }
 
-	def deleteWorkflow(id: String)	= ???
-
+	def deleteWorkflow(id: String) =
+    complete {
+      workflowService.delete(id)
+    }
 }
