@@ -51,7 +51,6 @@ public class MongoFilterHandlerTestIT {
     private static final String MONGO_URI = "mongoUri";
     private MongoFilterHandler handler;
 
-//    @Mock
     private Map<String, String> context = mock(HashMap.class);
 
     private MongoClient mongoClient;
@@ -165,7 +164,6 @@ public class MongoFilterHandlerTestIT {
 
         final Map<String, String> lastCheckpoint = handler.getLastFilter(context);
         assertThat(lastCheckpoint).isNotNull();
-//        assertThat(lastCheckpoint.get("date")).isEqualTo("2014-12-16T16:32:33.000+0100");
     }
 
     @Test
@@ -179,8 +177,6 @@ public class MongoFilterHandlerTestIT {
                 .thenReturn(DATE_FORMAT_YYYY_MM_DD_T_HH_MM_SS_XXX);
         when(context.get("mongoUri"))
                 .thenReturn("mongodb://" + mongoHost + "/" + DB_TEST + ".validCollection");
-//        when(context.get("mongoUri"))
-//                .thenReturn("mongodb://127.0.0.1:27017/" + DB_TEST + ".validCollection");
         handler = spy(new MongoFilterHandler());
         when(context.get("filterType"))
                 .thenReturn("com.stratio.ingestion.source.rest.url.filter.type.DateCheckpointType");
@@ -191,8 +187,7 @@ public class MongoFilterHandlerTestIT {
                 "{\"date\":\"2015-02-04T16:10:00.000+0100\",\"santanderId\":\"1234567890\"}");
 
         verify(handler).saveDocument(any(DBObject.class));
-//        assertThat(handler.getLastFilter(context).get("date")).isEqualToIgnoringCase("2015-02-04T16:10:00"
-//                + ".000+0100");
+
     }
 
     @Test(expected = MongoFilterException.class)

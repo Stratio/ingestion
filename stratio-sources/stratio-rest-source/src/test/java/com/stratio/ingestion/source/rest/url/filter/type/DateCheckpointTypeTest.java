@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,14 +50,17 @@ public class DateCheckpointTypeTest extends TestCase {
         when(context.get("lastCheckpoint")).thenReturn("2001-09-04T12:08:56.235-0700");
     }
 
-    @Test(expected = NullPointerException.class)
+//    @Test(expected = NullPointerException.class)
+    @Test
     public void testBuildFilter() throws Exception {
         String filter = dateCheckpointType.buildFilter(fieldValue, context);
+        Assert.assertNotNull(filter);
     }
 
     @Test
     public void testBuildDefaultFilter() throws Exception {
         String filter = dateCheckpointType.buildDefaultFilter(context);
+        Assert.assertNotNull(filter);
     }
 
     @Test(expected = ParseException.class)
@@ -67,6 +71,7 @@ public class DateCheckpointTypeTest extends TestCase {
     @Test
     public void testIsValidCurrentCheckpoint() throws Exception {
         Boolean filter = dateCheckpointType.isValidCurrentCheckpoint(currentCheckPoint, context);
+        Assert.assertNotNull(filter);
     }
 
     @Test(expected = ParseException.class)
