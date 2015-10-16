@@ -1,0 +1,655 @@
+{
+  "sources": {
+    "components": [
+      {
+        "id": "spoolSource",
+        "component": "source",
+        "type": "spooldir",
+        "name": "Spooling Directory Source",
+        "description": "This source lets you ingest data by placing files to be ingested into a “spooling” directory on disk. This source will watch the specified directory for new files, and will parse events out of new files as they appear. The event parsing logic is pluggable. After a given file has been fully read into the channel, it is renamed to indicate completion (or optionally deleted).",
+        "settings": [
+          {
+            "spoolDir": [
+              {
+                "type": "string",
+                "name": "Spooling directory",
+                "description": "The directory from which to read files from.",
+                "required": true,
+                "value": "1234"
+              }
+            ],
+            "fileSuffix": [
+              {
+                "type": "string",
+                "name": "File suffix",
+                "description": "Suffix to append to completely ingested files",
+                "default": ".COMPLETED",
+                "required": false,
+                "value": null
+              }
+            ],
+            "deletePolicy": [
+              {
+                "type": "string",
+                "name": "Delete policy",
+                "description": "When to delete completed files: never or immediate",
+                "default": "never",
+                "required": false,
+                "value": null
+              }
+            ],
+            "fileHeader": [
+              {
+                "type": "string",
+                "name": "File header",
+                "description": "Whether to add a header storing the absolute path filename.",
+                "default": "false",
+                "required": false,
+                "value": null
+              }
+            ],
+            "fileHeaderKey": [
+              {
+                "type": "string",
+                "name": "File header key",
+                "description": "Header key to use when appending absolute path filename to event header.",
+                "default": "file",
+                "required": false,
+                "value": null
+              }
+            ],
+            "basenameHeader": [
+              {
+                "type": "string",
+                "name": "Base name header",
+                "description": "Whether to add a header storing the basename of the file.",
+                "default": "false",
+                "required": false,
+                "value": null
+              }
+            ],
+            "basenameHeaderKey": [
+              {
+                "type": "string",
+                "name": "Base name header key",
+                "description": "Header Key to use when appending basename of file to event header.",
+                "default": "basename",
+                "required": false,
+                "value": null
+              }
+            ],
+            "ignorePattern": [
+              {
+                "type": "string",
+                "name": "Ignore pattern",
+                "description": "Regular expression specifying which files to ignore (skip)",
+                "default": "^$",
+                "required": false,
+                "value": null
+              }
+            ],
+            "trackerDir": [
+              {
+                "type": "string",
+                "name": "Tracker directory",
+                "description": "Directory to store metadata related to processing of files. If this path is not an absolute path, then it is interpreted as relative to the spoolDir.",
+                "default": ".flumespool",
+                "required": false,
+                "value": null
+              }
+            ],
+            "consumeOrder": [
+              {
+                "type": "string",
+                "name": "Consume order",
+                "description": "In which order files in the spooling directory will be consumed oldest, youngest and random. In case of oldest and youngest, the last modified time of the files will be used to compare the files. In case of a tie, the file with smallest laxicographical order will be consumed first. In case of random any file will be picked randomly. When using oldest and youngest the whole directory will be scanned to pick the oldest/youngest file, which might be slow if there are a large number of files, while using random may cause old files to be consumed very late if new files keep coming in the spooling directory.",
+                "default": "oldest",
+                "required": false,
+                "value": null
+              }
+            ],
+            "maxBackoff": [
+              {
+                "type": "integer",
+                "name": "Max Backoff",
+                "description": "The maximum time (in millis) to wait between consecutive attempts to write to the channel(s) if the channel is full. The source will start at a low backoff and increase it exponentially each time the channel throws a ChannelException, upto the value specified by this parameter.",
+                "default": 4000,
+                "required": false,
+                "value": 4000
+              }
+            ],
+            "batchSize": [
+              {
+                "type": "integer",
+                "name": "Batch size",
+                "description": "Granularity at which to batch transfer to the channel",
+                "default": 100,
+                "required": false,
+                "value": 100
+              }
+            ],
+            "inputCharset": [
+              {
+                "type": "string",
+                "name": "Input Charset",
+                "description": "Character set used by deserializers that treat the input file as text.",
+                "default": "UTF-8",
+                "required": false,
+                "value": "UTF-8"
+              }
+            ],
+            "decodeErrorPolicy": [
+              {
+                "type": "string",
+                "name": "Decode error policy",
+                "description": "What to do when we see a non-decodable character in the input file. FAIL: Throw an exception and fail to parse the file. REPLACE: Replace the unparseable character with the “replacement character” char, typically Unicode U+FFFD. IGNORE: Drop the unparseable character sequence.",
+                "default": "FAIL",
+                "required": false,
+                "value": null
+              }
+            ],
+            "deserializer": [
+              {
+                "type": "string",
+                "name": "Deserializer",
+                "description": "Specify the deserializer used to parse the file into events. Defaults to parsing each line as an event. The class specified must implement EventDeserializer.Builder.",
+                "default": "LINE",
+                "required": false,
+                "value": null
+              }
+            ],
+            "bufferMaxLines": [
+              {
+                "type": "integer",
+                "name": "Buffer max lines",
+                "description": "(Obselete) This option is now ignored.",
+                "default": null,
+                "required": false,
+                "value": 20
+              }
+            ],
+            "bufferMaxLineLength": [
+              {
+                "type": "integer",
+                "name": "Input Charset",
+                "description": "(Deprecated) Maximum length of a line in the commit buffer. Use deserializer.maxLineLength instead.",
+                "default": 5000,
+                "required": false,
+                "value": null
+              }
+            ],
+            "selector.type": [
+              {
+                "type": "string",
+                "name": "Selector type",
+                "description": "replicating or multiplexing",
+                "default": "replicating",
+                "required": false,
+                "value": "replicating"
+              }
+            ],
+            "interceptors": [
+              {
+                "type": "string",
+                "name": "Interceptors",
+                "description": "Space-separated list of interceptors",
+                "default": null,
+                "required": false,
+                "value": null
+              }
+            ]
+          }
+        ],
+        "channels": "memoryChannel"
+      },
+      {
+        "id": "execSource",
+        "component": "source",
+        "type": "exec",
+        "name": "Exec Source",
+        "description": "Exec source runs a given Unix command on start-up and expects that process to continuously produce data on standard out (stderr is simply discarded, unless property logStdErr is set to true). If the process exits for any reason, the source also exits and will produce no further data. This means configurations such as cat [named pipe] or tail -F [file] are going to produce the desired results where as date will probably not - the former two commands produce streams of data where as the latter produces a single event and exits.",
+        "settings": [
+          {
+            "command": [
+              {
+                "type": "string",
+                "name": "Command",
+                "description": "The command to execute",
+                "default": null,
+                "required": true,
+                "value": "comando util"
+              }
+            ],
+            "shell": [
+              {
+                "type": "string",
+                "name": "Shell",
+                "description": "A shell invocation used to run the command. e.g. /bin/sh -c. Required only for commands relying on shell features like wildcards, back ticks, pipes etc.",
+                "default": null,
+                "required": false,
+                "value": null
+              }
+            ],
+            "restartThrottle": [
+              {
+                "type": "integer",
+                "name": "Restart Throttle",
+                "description": "Amount of time (in millis) to wait before attempting a restart",
+                "default": 10000,
+                "required": false,
+                "value": null
+              }
+            ],
+            "restart": [
+              {
+                "type": "string",
+                "name": "Restart",
+                "description": "Whether the executed cmd should be restarted if it dies",
+                "default": "false",
+                "required": false,
+                "value": null
+              }
+            ],
+            "logStdErr": [
+              {
+                "type": "string",
+                "name": "LogStdErr",
+                "description": "Whether the command’s stderr should be logged",
+                "default": "false",
+                "required": false,
+                "value": null
+              }
+            ],
+            "batchSize": [
+              {
+                "type": "integer",
+                "name": "Batch size",
+                "description": "The max number of lines to read and send to the channel at a time",
+                "default": 20,
+                "required": false,
+                "value": 20
+              }
+            ],
+            "batchTimeout": [
+              {
+                "type": "integer",
+                "name": "Batch timeout",
+                "description": "Amount of time (in milliseconds) to wait, if the buffer size was not reached, before data is pusheddownstream",
+                "default": 3000,
+                "required": false,
+                "value": 2500
+              }
+            ],
+            "selector.type": [
+              {
+                "type": "string",
+                "name": "Selector type",
+                "description": "replicating or multiplexing",
+                "default": "replicating",
+                "required": false,
+                "value": "multiplexing"
+              }
+            ],
+            "interceptors": [
+              {
+                "type": "string",
+                "name": "Interceptors",
+                "description": "Space-separated list of interceptors",
+                "default": null,
+                "required": false,
+                "value": null
+              }
+            ]
+          }
+        ],
+        "channels": "jdbcChannel"
+      }
+    ]
+  },
+  "sinks": {
+    "components": [
+      {
+        "id": "kafkaSink",
+        "component": "sink",
+        "type": "kafka",
+        "name": "Kafka Sink",
+        "description": "Kafka Sink.  Send events to Kafka.",
+        "settings": [
+          {
+            "topic": [
+              {
+                "type": "string",
+                "name": "Topic",
+                "description": "Name of topic where event will be sent to.",
+                "default": null,
+                "required": true,
+                "value": "topico"
+              }
+            ],
+            "writeBody": [
+              {
+                "type": "boolean",
+                "name": "Write body",
+                "description": "true to send body in raw String format and false to send headers in json String format.",
+                "default": "false",
+                "required": false,
+                "value": true
+              }
+            ],
+            "kafka.<producer-property>": [
+              {
+                "type": "string",
+                "name": "User name",
+                "description": "This sink accept any kafka producer property. Just write it after prefix kafka. Example: kafka.metadata.broker.list",
+                "default": null,
+                "required": false,
+                "value": null
+              }
+            ],
+            "confFile": [
+              {
+                "type": "string",
+                "name": "Configuration file",
+                "description": "Path to a configuration file with initialization statements",
+                "default": null,
+                "required": false,
+                "value": "conf1.conf"
+              }
+            ]
+          }
+        ],
+        "channels": "memoryChannel"
+      },
+      {
+        "id": "cassandraSink",
+        "component": "sink",
+        "type": "cassandra",
+        "name": "Cassandra Sink",
+        "description": "The Cassandra Sink component allows to save Flume-flow events into Cassandra.It tries to find the defined fields in the event's headers. If a data field is defined, it will take the body's event instead of a header.",
+        "settings": [
+          {
+            "tables": [
+              {
+                "type": "string",
+                "name": "Table names",
+                "description": "One or more table names separated with commas. Table names must be fully qualified with keyspace (e.g. keyspace1.table1,keyspace2.table2)",
+                "default": "",
+                "required": true,
+                "value": "Clientes Tiendas"
+              }
+            ],
+            "hosts": [
+              {
+                "type": "string",
+                "name": "Hosts",
+                "description": "A comma-separated list of Cassandra hosts. It is recommended to specify at least two host of the cluster. The result of the cluster will be auto-discovered.",
+                "default": "localhost:9042",
+                "required": true,
+                "value": "localhost:9042, localhost:1000, localhost:2000"
+              }
+            ],
+            "username": [
+              {
+                "type": "string",
+                "name": "User name",
+                "description": "Database user.",
+                "default": "",
+                "required": false,
+                "value": "Prueba1"
+              }
+            ],
+            "password": [
+              {
+                "type": "string",
+                "name": "Password",
+                "description": "Database password.",
+                "default": "",
+                "required": false,
+                "value": "1234"
+              }
+            ],
+            "batchSize": [
+              {
+                "type": "integer",
+                "name": "Batch size",
+                "description": "The size to batch insert statement. We recommend 100 as an optimum value to this property. Please do not forget increase the channel.capacity property on your channel component over the sink.batchSize property.",
+                "default": 100,
+                "required": false,
+                "value": 100
+              }
+            ],
+            "consistency": [
+              {
+                "type": "string",
+                "name": "Consistency",
+                "description": "The consistency level for this insert. Default value are QUORUM, available options are described here: [Cassandra data consistency](http://www.datastax.com/documentation/cassandra/2.0/cassandra/dml/dml_config_consistency_c.html)",
+                "default": "QUORUM",
+                "required": false,
+                "value": null
+              }
+            ],
+            "cqlFile": [
+              {
+                "type": "string",
+                "name": "CQL file",
+                "description": "Path to a CQL file with initialization statements such as keyspace and table creation.",
+                "default": "",
+                "required": false,
+                "value": "file1.cql"
+              }
+            ]
+          }
+        ],
+        "channels": "jdbcChannel"
+      }
+    ]
+  },
+  "channels": {
+    "components": [
+      {
+        "id": "memoryChannel",
+        "component": "channel",
+        "type": "memory",
+        "name": "Memory Channel",
+        "description": "The events are stored in an in-memory queue with configurable max size. It’s ideal for flows that need higher throughput and are prepared to lose the staged data in the event of a agent failures.",
+        "settings": [
+          {
+            "capacity": [
+              {
+                "type": "integer",
+                "name": "Capacity",
+                "description": "The maximum number of events stored in the channel",
+                "default": 100,
+                "required": false,
+                "value": 100
+              }
+            ],
+            "transactionCapacity": [
+              {
+                "type": "integer",
+                "name": "Transaction capacity",
+                "description": "The maximum number of events the channel will take from a source or give to a sink per transaction",
+                "default": 100,
+                "required": false,
+                "value": 100
+              }
+            ],
+            "keep-alive": [
+              {
+                "type": "integer",
+                "name": "Keep alive",
+                "description": "Timeout in seconds for adding or removing an event",
+                "default": 3,
+                "required": false,
+                "value": null
+              }
+            ],
+            "byteCapacityBufferPercentage": [
+              {
+                "type": "integer",
+                "name": "Byte capacity buffer percentage",
+                "description": "Defines the percent of buffer between byteCapacity and the estimated total size of all events in the channel, to account for data in headers. See below",
+                "default": 20,
+                "required": false,
+                "value": null
+              }
+            ],
+            "byteCapacity": [
+              {
+                "type": "string",
+                "name": "Byte capacity",
+                "description": " Maximum total bytes of memory allowed as a sum of all events in this channel. The implementation only counts the Event body, which is the reason for providing the byteCapacityBufferPercentage configuration parameter as well. Defaults to a computed value equal to 80% of the maximum memory available to the JVM (i.e. 80% of the -Xmx value passed on the command line). Note that if you have multiple memory channels on a single JVM, and they happen to hold the same physical events (i.e. if you are using a replicating channel selector from a single source) then those event sizes may be double-counted for channel byteCapacity purposes. Setting this value to 0 will cause this value to fall back to a hard internal limit of about 200 GB.",
+                "default": "see description",
+                "required": false,
+                "value": null
+              }
+            ]
+          }
+        ],
+        "sources": "spoolSource"
+      },
+      {
+        "id": "jdbcChannel",
+        "component": "channel",
+        "type": "jdbc",
+        "name": "JDBC Channel",
+        "description": "The events are stored in a persistent storage that’s backed by a database. The JDBC channel currently supports embedded Derby. This is a durable channel that’s ideal for flows where recoverability is important.",
+        "settings": [
+          {
+            "db.type": [
+              {
+                "type": "string",
+                "name": "DB type",
+                "description": "Database vendor, needs to be DERBY.",
+                "default": "DERBY",
+                "required": false,
+                "value": "DERBY"
+              }
+            ],
+            "driver.class": [
+              {
+                "type": "string",
+                "name": "Driver class",
+                "description": "Class for vendor’s JDBC driver",
+                "default": "org.apache.derby.jdbc.EmbeddedDriver",
+                "required": false,
+                "value": "org.apache.derby.jdbc.EmbeddedDriver"
+              }
+            ],
+            "driver.url": [
+              {
+                "type": "string",
+                "name": "Driver URL",
+                "description": "JDBC connection URL",
+                "default": "(constructed from other properties)",
+                "required": false,
+                "value": null
+              }
+            ],
+            "db.username": [
+              {
+                "type": "string",
+                "name": "DB username",
+                "description": "User id for db connection",
+                "default": "sa",
+                "required": false,
+                "value": "Prueba1"
+              }
+            ],
+            "db.password": [
+              {
+                "type": "string",
+                "name": "DB password",
+                "description": "password for db connection",
+                "default": null,
+                "required": false,
+                "value": "1234"
+              }
+            ],
+            "connection.properties.file": [
+              {
+                "type": "string",
+                "name": "Connection properties file",
+                "description": "JDBC Connection property file path",
+                "default": null,
+                "required": false,
+                "value": "prop1.txt"
+              }
+            ],
+            "create.schema": [
+              {
+                "type": "boolean",
+                "name": "Create schema",
+                "description": "If true, then creates db schema if not there",
+                "default": true,
+                "required": false,
+                "value": null
+              }
+            ],
+            "create.index": [
+              {
+                "type": "boolean",
+                "name": "Create index",
+                "description": "Create indexes to speed up lookups",
+                "default": true,
+                "required": false,
+                "value": null
+              }
+            ],
+            "create.foreignkey": [
+              {
+                "type": "boolean",
+                "name": "Create foreign key",
+                "description": null,
+                "default": true,
+                "required": false,
+                "value": null
+              }
+            ],
+            "transaction.isolation": [
+              {
+                "type": "string",
+                "name": "Transaction isolation",
+                "description": "Isolation level for db session READ_UNCOMMITTED, READ_COMMITTED, SERIALIZABLE, REPEATABLE_READ",
+                "default": "READ_COMMITTED",
+                "required": false,
+                "value": null
+              }
+            ],
+            "maximum.connections": [
+              {
+                "type": "integer",
+                "name": "Maximum connections",
+                "description": "Max connections allowed to db",
+                "default": 10,
+                "required": false,
+                "value": 3
+              }
+            ],
+            "maximum.capacity": [
+              {
+                "type": "string",
+                "name": "Maximum capacity",
+                "description": "Max number of events in the channel",
+                "default": "0 (unlimited)",
+                "required": false,
+                "value": null
+              }
+            ],
+            "sysprop.user.home": [
+              {
+                "type": "string",
+                "name": "Sysprop user home",
+                "description": "Home path to store embedded Derby database",
+                "default": null,
+                "required": false,
+                "value": null
+              }
+            ]
+          }
+        ],
+        "sources": "execSource"
+      }
+    ]
+  }
+}
