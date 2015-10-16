@@ -33,7 +33,6 @@ public class IRCSourceTest extends TestCase {
     static IRCSource source;
     static MemoryChannel channel;
 
-//    IRCSource ircSource = new IRCSource();
     Context context = new Context();
 
     @Before
@@ -41,7 +40,6 @@ public class IRCSourceTest extends TestCase {
 
         source = new IRCSource();
         channel = new MemoryChannel();
-//        context.put("port", "6667");ntext());
 
         context.put("host", "localhost");
         context.put("port", "6667");
@@ -57,48 +55,15 @@ public class IRCSourceTest extends TestCase {
         source.configure(context);
     }
 
-    @Test
-    public void dummy(){
-        Assert.assertTrue(true); //TODO: Dummy //st to avoid surefire failure
-    }
-
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testBadConnection(){
-        source.start();
-        source.stop();
-    }
-
-    @Test
-    public void testSetHeaders() {
-        source.setHeaders();
-    }
-
-    /*@Test
-    public void testConnection() throws InterruptedException, IOException {
-        Context context = new Context();
-        *//*context.put(CONF_HOST, "irc.freenode.org");
-        context.put(CONF_USER, "stratiogms");
-        context.put(CONF_NICK, "stratio");
-        context.put(CONF_CHANNELS, "stratiotest");*//*
-        context.put(CONF_HOST, "irc.twitch.tv");
-        context.put(CONF_USER, "antnavper");
-        context.put(CONF_NICK, "antnavper");
-        context.put(CONF_CHANNELS, "amazhs,beyondthesummit,tsm_wildturtle,starladder1,therace");
-        context.put(CONF_PASSWORD, "oauth:s362vqqdy4rp4ljblybvjhnq9eg3ev");
-
-
-        Configurables.configure(source, context);
-        source.start();
-
-        while(true){
-            Transaction txn = channel.getTransaction();
-            txn.begin();
-            channel.take();
-            txn.commit();
-            txn.close();
+        try {
+            source.start();
+            source.stop();
+        }catch(Exception e){
+            throw new NullPointerException();
         }
-    }*/
-
+    }
 
     public void checkEventsChannel() {
         Transaction txn = channel.getTransaction();
