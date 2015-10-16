@@ -70,14 +70,19 @@
 					<groupId>org.specs2</groupId>
 					<artifactId>specs2_${scala.version}</artifactId>
 				</exclusion>
-				<exclusion>
-					<groupId>com.typesafe.akka</groupId>
-					<artifactId>akka-testkit_${scala.version}</artifactId>
-				</exclusion>
 			</exclusions>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.scalatest</groupId>
+			<artifactId>scalatest_2.10</artifactId>
+			<version>2.2.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
