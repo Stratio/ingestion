@@ -21,8 +21,6 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-
 
 import org.apache.flume.Channel;
 import org.apache.flume.Context;
@@ -61,14 +59,12 @@ public class KafkaSinkTestIT {
     private static String ZOOKEEPER_HOSTS= "";
     private static String KAFKA_HOSTS= "";
 
-    private ZookeeperServer zookeeperServer;
-    private KafkaServer kafkaServer;
     private Channel channel;
     private KafkaSink kafkaSink;
     private SimpleConsumer simpleConsumer;
     private static Config conf;
-    private ExecutorService backgroundZookeeperCleanerTasks;
-//    @Ignore
+
+
     @Before
     public void setUp() {
 
@@ -89,22 +85,9 @@ public class KafkaSinkTestIT {
 
         LOGGER.debug("Using Zookeeper hosts: " + ZOOKEEPER_HOSTS);
         LOGGER.debug("Using Zookeeper hosts: " + KAFKA_HOSTS);
-//        try {
-//            zookeeperServer = new ZookeeperServer();
-//            zookeeperServer.start();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            kafkaServer = new KafkaServer();
-//            kafkaServer.start();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         String[] connection = KAFKA_HOSTS.split(":");
 
-//        simpleConsumer = new SimpleConsumer("localhost", 9092, 60000, 1024, CLIENT_ID);
         simpleConsumer = new SimpleConsumer(connection[0], Integer.parseInt(connection[1]), 60000, 1024, CLIENT_ID);
 
         kafkaSink = new KafkaSink();
@@ -132,16 +115,13 @@ public class KafkaSinkTestIT {
 
     }
 
-//    @Ignore
     @After
     public void tearDown() throws IOException {
         kafkaSink.stop();
         simpleConsumer.close();
-//        kafkaServer.shutdown();
-//        zookeeperServer.shutdown();
+
     }
 
-//    @Ignore
     @Test
     public void test() throws EventDeliveryException, UnsupportedEncodingException {
         Transaction tx = channel.getTransaction();
@@ -171,7 +151,6 @@ public class KafkaSinkTestIT {
         FetchResponse fetchResponse = simpleConsumer.fetch(req);
         ByteBufferMessageSet messageSet = fetchResponse.messageSet("test", 0);
 
-//        Assert.assertTrue(messageSet.sizeInBytes() > 0);
         for (MessageAndOffset messageAndOffset : messageSet) {
             ByteBuffer payload = messageAndOffset.message().payload();
             byte[] bytes = new byte[payload.limit()];

@@ -61,7 +61,7 @@ public class DynamicUrlHandlerTest extends TestCase {
 
     }
 
-    @Test(expected=RestSourceException.class)
+    @Test
     public void testMethod() throws Exception {
         try{
             context.put("urlJson", URL_JSON);
@@ -69,7 +69,10 @@ public class DynamicUrlHandlerTest extends TestCase {
             dynamicUrlHandler = new DynamicUrlHandler();
             dynamicUrlHandler.configure(context);
 
-        }catch(RestSourceException e){}
+        }catch(RestSourceException e){
+            assertNotNull(e.getMessage());
+            assertEquals(e.getMessage(), "An error occurred during FilterHandler instantiation");
+        }
         finally{
             dynamicUrlHandler.buildUrl(properties);
         }
@@ -77,46 +80,38 @@ public class DynamicUrlHandlerTest extends TestCase {
 
     @Test(expected=RestSourceException.class)
     public void testJson() throws Exception {
+        context.put("urlJson", URL_JSON);
+        dynamicUrlHandler = new DynamicUrlHandler();
         try{
-            context.put("urlJson", URL_JSON);
-
-            dynamicUrlHandler = new DynamicUrlHandler();
             dynamicUrlHandler.configure(context);
-
-        }catch(RestSourceException e){}
+        }catch(RestSourceException e){
+            assertNotNull(e.getMessage());
+            assertEquals(e.getMessage(), "An error occurred during FilterHandler instantiation");
+        }
     }
 
-    @Test(expected=RestSourceException.class)
-    public void testBadJson() throws Exception {
+    @Test
+    public void testBadJson() {
+        context.put("urlJson", BAD_URL_JSON);
+        dynamicUrlHandler = new DynamicUrlHandler();
         try{
-            context.put("urlJson", BAD_URL_JSON);
-
-            dynamicUrlHandler = new DynamicUrlHandler();
             dynamicUrlHandler.configure(context);
-
-        }catch(RestSourceException e){}
+        }catch(RestSourceException e){
+            assertNotNull(e.getMessage());
+            assertEquals(e.getMessage(), "An error ocurred while json parsing. Verify configuration  file");
+        }
     }
 
-    @Test(expected=RestSourceException.class)
+    @Test
     public void testEmptyJson() throws Exception {
+        context.put("urlJson", EMPTY_URL_JSON);
+        dynamicUrlHandler = new DynamicUrlHandler();
         try{
-            context.put("urlJson", EMPTY_URL_JSON);
-
-            dynamicUrlHandler = new DynamicUrlHandler();
             dynamicUrlHandler.configure(context);
-
-        }catch(RestSourceException e){}
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testNoJson() throws Exception {
-        try{
-            context.put("urlJson", "");
-
-            dynamicUrlHandler = new DynamicUrlHandler();
-            dynamicUrlHandler.configure(context);
-
-        }catch(NullPointerException e){}
+        }catch(RestSourceException e){
+            assertNotNull(e.getMessage());
+            assertEquals(e.getMessage(), "An error ocurred while json parsing. Verify configuration  file");
+        }
     }
 
 }
