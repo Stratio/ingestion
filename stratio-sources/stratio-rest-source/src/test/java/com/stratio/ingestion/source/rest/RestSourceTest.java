@@ -126,7 +126,7 @@ public class RestSourceTest extends TestCase {
         rest.start();
         PollableSource.Status status = rest.process();
         rest.stop();
-        Assert.assertEquals(status, "READY");
+        Assert.assertEquals(status, PollableSource.Status.READY);
     }
 
     @Test
