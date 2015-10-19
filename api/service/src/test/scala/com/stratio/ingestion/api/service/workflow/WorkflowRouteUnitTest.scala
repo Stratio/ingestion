@@ -31,7 +31,7 @@ class WorkflowRouteUnitTest extends WordSpec
   with ScalatestRouteTest
   with HttpService
   with WorkflowRoute
-  with DummyWorkflowServiceComponent {
+  with WorkflowServiceComponentTest {
 
   def actorRefFactory = system
   val rootPath = "workflows"

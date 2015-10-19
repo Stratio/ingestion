@@ -18,7 +18,7 @@ package com.stratio.ingestion.api.service.workflow
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-trait DummyWorkflowServiceComponent extends WorkflowServiceComponent{
+trait WorkflowServiceComponentTest extends WorkflowServiceComponent{
 
 	val workflowService: WorkflowService = new WorkflowServiceDummy{}
 
