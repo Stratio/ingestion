@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.stratio.ingestion.model.AgentComponent;
 import com.stratio.ingestion.model.Attribute;
+import com.stratio.ingestion.model.ModelValidator;
 import com.stratio.ingestion.model.channel.Channel;
 import com.stratio.ingestion.model.sink.Sink;
 import com.stratio.ingestion.model.source.Source;
@@ -45,6 +46,7 @@ public class JsonModeler {
 
     private String element;
     private AgentComponent agent = new AgentComponent();
+    private ModelValidator modelValidator = new ModelValidator();
 
     public JsonModeler(String jsonFile) throws IOException {
 
@@ -76,7 +78,7 @@ public class JsonModeler {
 
 
     private AgentComponent getAttributesComponents(JsonNode rootNode, String elements, AgentComponent component) throws
-            IOException {
+            IOException, Exception {
 
         JsonNode sourcesNode = rootNode.path(elements);
 
@@ -173,6 +175,7 @@ public class JsonModeler {
                         attribute.setValueBoolean(valueBoolean);
                     }
 
+                    modelValidator.checkAttributes(attribute);
                     attributesList.add(attribute);
 
                 }

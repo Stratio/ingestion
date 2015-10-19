@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.stratio.ingestion.model.AgentComponent;
 import com.stratio.ingestion.model.Attribute;
+import com.stratio.ingestion.model.ModelValidator;
 import com.stratio.ingestion.model.channel.Channel;
 import com.stratio.ingestion.model.sink.Sink;
 import com.stratio.ingestion.model.source.Source;
@@ -37,6 +38,7 @@ public class ModelFormatter {
 //    private static final Logger log = LoggerFactory.getLogger(PropertiesFormatter.class);
 
     private String element;
+    private ModelValidator modelValidator = new ModelValidator();
 
     public ModelFormatter(AgentComponent agentComponent)
             throws IOException {
@@ -216,12 +218,11 @@ public class ModelFormatter {
             for (Source source : sources) {
                 String channels = source.getChannels();
 
-                if(channels.isEmpty()){
-                    throw new IOException("Cannot connect sources");
-                }else{
-                    bw.write("a1." + elements + "." + source.getId() + ".channels=" + channels);
-                    bw.newLine();
-                }
+                modelValidator.checkChannelSource(source);
+
+                bw.write("a1." + elements + "." + source.getId() + ".channels=" + channels);
+                bw.newLine();
+
             }
         }catch (Exception e) {
             throw new IOException("Cannot connect sources", e);
@@ -233,12 +234,11 @@ public class ModelFormatter {
             for (Sink sink : sinks) {
                 String channels = sink.getChannels();
 
-                if(channels.isEmpty()){
-                    throw new IOException("Cannot connect sinks");
-                }else{
-                    bw.write("a1." + elements + "." + sink.getId() + ".channels=" + channels);
-                    bw.newLine();
-                }
+                modelValidator.checkChannelSink(sink);
+
+                bw.write("a1." + elements + "." + sink.getId() + ".channels=" + channels);
+                bw.newLine();
+
 
             }
         }catch (Exception e) {
@@ -251,12 +251,14 @@ public class ModelFormatter {
         try {
             for (Attribute atrib : attributes) {
                 String type = atrib.getType();
-                boolean required = atrib.getRequired();
 
-                if(required && atrib.getValueString().equals(null) && atrib.getValueInteger().equals(null) && atrib
-                        .getValueBoolean().equals(null)) {
-                    throw new IOException("Cannot write attributes, required field without value");
-                }
+                modelValidator.checkAttributes(atrib);
+//                boolean required = atrib.getRequired();
+
+//                if(required && atrib.getValueString().equals(null) && atrib.getValueInteger().equals(null) && atrib
+//                        .getValueBoolean().equals(null)) {
+//                    throw new IOException("Cannot write attributes, required field without value");
+//                }
 
                 if (type.equals("string") && atrib.getValueString() != null) {
                     bw.write("a1." + element + "." + elementId + "." + atrib.getId() + "=" + atrib
@@ -276,7 +278,7 @@ public class ModelFormatter {
 
             }
         }catch(Exception e) {
-            throw new IOException("Cannot write attributes, required field not found", e);
+            throw new IOException("Can't write attributes, required field not found", e);
         }
     }
 }

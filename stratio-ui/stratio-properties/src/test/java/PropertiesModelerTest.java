@@ -41,7 +41,7 @@ public class PropertiesModelerTest {
 //    }
 
     @Test
-    public void testJsonLleno() throws IOException {
+    public void testJsonLleno() throws IOException, Exception {
 
         PropertiesModeler propModel = new PropertiesModeler();
 
@@ -52,7 +52,7 @@ public class PropertiesModelerTest {
     }
 
     @Test(expected = NumberFormatException.class)
-    public void testIntNull() throws IOException, NumberFormatException {
+    public void testIntNull() throws IOException, NumberFormatException, Exception {
 
         PropertiesModeler propModel = new PropertiesModeler();
 
@@ -63,7 +63,7 @@ public class PropertiesModelerTest {
     }
 
     @Test(expected = IOException.class)
-    public void testStringNull() throws IOException, NumberFormatException {
+    public void testStringNull() throws IOException, NumberFormatException, Exception {
 
         PropertiesModeler propModel = new PropertiesModeler();
 
@@ -73,8 +73,8 @@ public class PropertiesModelerTest {
 
     }
 
-    @Test(expected = IOException.class)
-    public void testIncorrectComp() throws IOException {
+    @Test(expected = Exception.class)
+    public void testIncorrectComp() throws IOException, Exception {
 
         PropertiesModeler propModel = new PropertiesModeler();
 
@@ -85,7 +85,7 @@ public class PropertiesModelerTest {
     }
 
     @Test(expected = IOException.class)
-    public void testEmptyProp() throws IOException {
+    public void testEmptyProp() throws IOException, Exception {
 
         PropertiesModeler propModel = new PropertiesModeler();
 
@@ -95,8 +95,8 @@ public class PropertiesModelerTest {
 
     }
 
-    @Test(expected = IOException.class)
-    public void testComponentsConnected() throws IOException {
+    @Test(expected = Exception.class)
+    public void testComponentsConnected() throws IOException, Exception {
 
         PropertiesModeler propModel = new PropertiesModeler();
 

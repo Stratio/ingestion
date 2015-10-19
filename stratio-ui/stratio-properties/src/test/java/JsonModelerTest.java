@@ -45,7 +45,7 @@ public class JsonModelerTest {
     }
 
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IOException.class)
     public void testRequiredFields() throws IOException {
 
         JsonModeler jsModel = new JsonModeler("src/test/resources"
@@ -69,7 +69,7 @@ public class JsonModelerTest {
         }
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IOException.class)
     public void testComponentsConnected() throws IOException {
 
         JsonModeler jsModel = new JsonModeler("src/test/resources"

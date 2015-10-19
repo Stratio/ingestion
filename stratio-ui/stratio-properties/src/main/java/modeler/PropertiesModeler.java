@@ -28,6 +28,7 @@ import java.util.Set;
 
 import com.stratio.ingestion.model.AgentComponent;
 import com.stratio.ingestion.model.Attribute;
+import com.stratio.ingestion.model.ModelValidator;
 import com.stratio.ingestion.model.channel.Channel;
 import com.stratio.ingestion.model.sink.Sink;
 import com.stratio.ingestion.model.source.Source;
@@ -42,10 +43,11 @@ public class PropertiesModeler {
 
     private AgentComponent agentComponent = new AgentComponent();
     private JsonTypesExtractor jsonType = new JsonTypesExtractor();
+    private ModelValidator modelValidator = new ModelValidator();
 
     public PropertiesModeler(){}
 
-    public AgentComponent propertiesAgentModeler(String ruta) throws IOException, NumberFormatException {
+    public AgentComponent propertiesAgentModeler(String ruta) throws IOException, NumberFormatException, Exception {
         try {
 
             ContentHandler handler = null;
@@ -64,7 +66,7 @@ public class PropertiesModeler {
         }
     }
 
-    public void fillAttributes(String rutaArchivo) throws IOException, NumberFormatException {
+    public void fillAttributes(String rutaArchivo) throws IOException, NumberFormatException, Exception {
         try {
             OrderedProperties properties = new OrderedProperties();
             properties.load(new FileInputStream(new File(rutaArchivo)));
@@ -95,10 +97,7 @@ public class PropertiesModeler {
 
                 String typeComponent = keys[1].toString();
 
-                if(!typeComponent.equals("sources") && !typeComponent.equals("sinks") && !typeComponent.equals
-                        ("channels")){
-                    throw new IOException("Cannot serialize JSON, incorrect component");
-                }
+                modelValidator.checkComponent(typeComponent);
 
                 if (keys.length >= 3) {
 
@@ -199,19 +198,13 @@ public class PropertiesModeler {
             agentComponent.setChannels(channelsList);
 
             List<Sink> channelsSinks = agentComponent.getSinks();
-            for(int i=0; i<channelsSinks.size(); i++){
-                String nameSink = channelsSinks.get(i).getChannels();
-                if(nameSink==null){
-                    throw new IOException("Cannot serialize JSON, a sink isn't connected to a channel");
-                }
-            }
+            modelValidator.checkSinkConnection(channelsSinks);
+
             List<Channel> channelSource = agentComponent.getChannels();
-            for(int i=0; i<channelSource.size(); i++){
-                String nameSource = channelSource.get(i).getSources();
-                if(nameSource == null){
-                    throw new IOException("Cannot serialize JSON, a channel isn't connected to a source");
-                }
-            }
+            modelValidator.checkChannelConnection(channelSource);
+
+            List<Source> sourceChannel = agentComponent.getSources();
+            modelValidator.checkSourceConnection(sourceChannel);
 
             if(sourcesList.isEmpty() || sinksList.isEmpty() || channelsList.isEmpty()){
                 throw new IOException("Cannot serialize JSON, a component is empty");
