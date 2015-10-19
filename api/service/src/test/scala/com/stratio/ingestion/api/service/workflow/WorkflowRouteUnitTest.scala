@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,6 +34,7 @@ with WorkflowRoute
 with WorkflowServiceComponentTest {
 
   def actorRefFactory = system
+
   val rootPath = "workflows"
 
   import WorkflowParser._
@@ -45,13 +46,13 @@ with WorkflowServiceComponentTest {
 
       "return a workflow" in {
         Get(s"/$rootPath/$workflowId") ~> workflowRoute ~> check {
-          status should equal (OK)
+          status should equal(OK)
           responseAs[Workflow] === dummyWorkflow1
         }
       }
       "return 404 when the workflow is not found" ignore {
         Get(s"/$rootPath/$workflowId") ~> workflowRoute ~> check {
-          status should equal (NotFound)
+          status should equal(NotFound)
         }
       }
     }
@@ -59,13 +60,13 @@ with WorkflowServiceComponentTest {
     "GET all workflows" should {
       "return all workflows" in {
         Get(s"/$rootPath/") ~> workflowRoute ~> check {
-          status should equal (OK)
+          status should equal(OK)
           responseAs[Seq[Workflow]] === Seq(dummyWorkflow1, dummyWorkflow2)
         }
       }
       "return empty list when there isn't any workflow" ignore {
         Get(s"/$rootPath/") ~> workflowRoute ~> check {
-          status should equal (OK)
+          status should equal(OK)
           responseAs[Seq[Workflow]] === Seq()
         }
       }
@@ -74,7 +75,7 @@ with WorkflowServiceComponentTest {
     "POST workflow" should {
       "create a workflow" in {
         Post(s"/$rootPath/", dummyWorkflow1) ~> workflowRoute ~> check {
-          status should equal (OK)
+          status should equal(OK)
           responseAs[Workflow] === dummyWorkflow1
         }
       }
@@ -83,7 +84,7 @@ with WorkflowServiceComponentTest {
     "PUT workflow" should {
       "update a workflow" in {
         Put(s"/$rootPath/", dummyWorkflow1) ~> workflowRoute ~> check {
-          status should equal (OK)
+          status should equal(OK)
           responseAs[Workflow] === dummyWorkflow1
         }
       }
@@ -95,13 +96,13 @@ with WorkflowServiceComponentTest {
 
       "remove a workflow" in {
         Delete(s"/$rootPath/$workflowId") ~> workflowRoute ~> check {
-          status should equal (OK)
+          status should equal(OK)
           responseAs[Workflow] === dummyWorkflow1
         }
       }
       "return 404 when the workflow is not found" ignore {
         Delete(s"/$rootPath/$workflowId") ~> workflowRoute ~> check {
-          status should equal (NotFound)
+          status should equal(NotFound)
         }
       }
     }

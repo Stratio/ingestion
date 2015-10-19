@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,16 +15,16 @@
  */
 package com.stratio.ingestion.api.service
 
-import akka.actor.{ ActorSystem, Props }
+import akka.actor.{ActorSystem, Props}
 import akka.io.IO
 
 import spray.can.Http
 
 object Boot extends App {
 
-	implicit val system = ActorSystem("my-actor-system")
+  implicit val system = ActorSystem("my-actor-system")
 
-	val api = system.actorOf(Props[ApiActor], "api-actor")
+  val api = system.actorOf(Props[ApiActor], "api-actor")
 
-	IO(Http) ! Http.Bind(listener = api, interface = "0.0.0.0", port = 8080)
+  IO(Http) ! Http.Bind(listener = api, interface = "0.0.0.0", port = 8080)
 }

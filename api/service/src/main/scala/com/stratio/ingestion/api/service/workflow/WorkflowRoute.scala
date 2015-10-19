@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,55 +20,55 @@ import spray.httpx.SprayJsonSupport._
 import WorkflowParser._
 
 trait WorkflowRoute extends HttpService {
-	self: WorkflowServiceComponent =>
+  self: WorkflowServiceComponent =>
 
-	implicit def executionContext = actorRefFactory.dispatcher
+  implicit def executionContext = actorRefFactory.dispatcher
 
-	lazy val workflowRoute =
-		pathPrefix("workflows") {
-			pathEndOrSingleSlash {
-				get {
-					getAllWorkflows
-				} ~
-					(post & entity(as[Workflow])){ workflow =>
-						createWorkflow(workflow)
-					} ~
-					(put & entity(as[Workflow])){ workflow =>
-						updateWorkflow(workflow)
-					}
-			} ~
-				path(Segment) { id =>
-					get {
-						getWorkflow(id)
-					} ~
-						delete {
-							deleteWorkflow(id)
-						}
-				}
-		}
+  lazy val workflowRoute =
+    pathPrefix("workflows") {
+      pathEndOrSingleSlash {
+        get {
+          getAllWorkflows
+        } ~
+          (post & entity(as[Workflow])) { workflow =>
+            createWorkflow(workflow)
+          } ~
+          (put & entity(as[Workflow])) { workflow =>
+            updateWorkflow(workflow)
+          }
+      } ~
+        path(Segment) { id =>
+          get {
+            getWorkflow(id)
+          } ~
+            delete {
+              deleteWorkflow(id)
+            }
+        }
+    }
 
-	def getAllWorkflows	=
-		complete {
-			workflowService.getAll
-		}
+  def getAllWorkflows =
+    complete {
+      workflowService.getAll
+    }
 
-	def createWorkflow(workflow: Workflow)	=
-		complete {
-			workflowService.create(workflow)
-		}
+  def createWorkflow(workflow: Workflow) =
+    complete {
+      workflowService.create(workflow)
+    }
 
-	def updateWorkflow(workflow: Workflow) =
-		complete {
-			workflowService.update(workflow)
-		}
+  def updateWorkflow(workflow: Workflow) =
+    complete {
+      workflowService.update(workflow)
+    }
 
-	def getWorkflow(id: String)	=
-		complete {
-			workflowService.get(id)
-		}
+  def getWorkflow(id: String) =
+    complete {
+      workflowService.get(id)
+    }
 
-	def deleteWorkflow(id: String) =
-		complete {
-			workflowService.delete(id)
-		}
+  def deleteWorkflow(id: String) =
+    complete {
+      workflowService.delete(id)
+    }
 }
