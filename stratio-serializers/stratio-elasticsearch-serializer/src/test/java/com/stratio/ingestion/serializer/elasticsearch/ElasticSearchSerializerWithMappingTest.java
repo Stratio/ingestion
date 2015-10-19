@@ -16,7 +16,6 @@
 package com.stratio.ingestion.serializer.elasticsearch;
 
 import static org.apache.flume.sink.elasticsearch.ElasticSearchEventSerializer.charset;
-import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,14 +31,11 @@ import org.apache.flume.event.EventBuilder;
 import org.apache.flume.sink.elasticsearch.ElasticSearchIndexRequestBuilderFactory;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.collect.Maps;
-import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.node.Node;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,9 +45,9 @@ import org.slf4j.LoggerFactory;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
-public class ElasticSearchSerializerWithMappingTestIT {
+public class ElasticSearchSerializerWithMappingTest {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchSerializerWithMappingTestIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchSerializerWithMappingTest.class);
 	private final static String INDEX_PREFIX = "flume";
 	private final static String INDEX_TYPE = "log";
 	private final static String MAPPING_PATH = "/mapping.json";
@@ -73,12 +69,6 @@ public class ElasticSearchSerializerWithMappingTestIT {
                 .getResourceAsStream(MAPPING_PATH));
 		expectedESMapping = trimAllWhitespace("{\"" + INDEX_TYPE + "\":" + jsonMapping + "}");
 
-		URL resourceUrl = getClass().getResource(MAPPING_PATH);
-		Context context = new Context();
-		context.put("mappingFile", resourceUrl.getPath());
-		serializer = new ElasticSearchSerializerWithMapping();
-		serializer.configure(context);
-
 		conf = ConfigFactory.load();
 
 		LOGGER.debug("Connecting to Elastic Search: " + conf.getStringList("elasticsearch.hosts").toString());
@@ -87,45 +77,10 @@ public class ElasticSearchSerializerWithMappingTestIT {
 		String elasticSearchClusterName = conf.getString("elasticsearch.clusterName");
 
 
-		ImmutableSettings.Builder settings = ImmutableSettings.settingsBuilder()
-				.put("client.transport.ignore_cluster_name", true)
-				.put("cluster.name", elasticSearchClusterName);
-//				.build();
-		TransportClient tc = new TransportClient(settings);
-		node = nodeBuilder().local(true).settings(settings.build()).node();
-//		for (String elasticSearchHost : elasticSearchHosts) {
-//			String[] elements = elasticSearchHost.split(":");
-//			tc.addTransportAddress(new InetSocketTransportAddress(elements[0], Integer.parseInt(elements[1])));
-//		}
-//		elasticSearchClient = tc;
-		elasticSearchClient = node.client();
-
-//		ImmutableSettings.Builder ESSettings = ImmutableSettings.settingsBuilder()
-//                .put("http.enabled", "false")
-//                .put("cluster.name", "test");
-//		node = nodeBuilder().local(true).settings(ESSettings.build()).node();
-//		client = node.client();
 	}
-
-
-
-
-    @After
-    public void tearDownES() throws IOException {
-//        client.close();
-//        node.stop();
-        node.close();
-        client = null;
-        node = null;
-		elasticSearchClient.close();
-    }
 
 	@Test(expected = NullPointerException.class)
 	public void badFileTest() throws IOException {
-//		FileUtils.deleteDirectory(new File("data/test"));
-//		String jsonMapping = IOUtils.toString(this.getClass()
-//				.getResourceAsStream(MAPPING_PATH));
-//		expectedESMapping = trimAllWhitespace("{\"" + INDEX_TYPE + "\":" + jsonMapping + "}");
 
 		URL resourceUrl = getClass().getResource(MAPPING_PATH);
 		Context context = new Context();
@@ -136,15 +91,17 @@ public class ElasticSearchSerializerWithMappingTestIT {
 
 	@Test
 	public void goodFileTest() throws IOException {
-		URL resourceUrl = getClass().getResource("/emptyFile");
+		URL resourceUrl = getClass().getResource(MAPPING_PATH);
 		Context context = new Context();
 		context.put("mappingFile", resourceUrl.getPath());
 		serializer = new ElasticSearchSerializerWithMapping();
 		serializer.configure(context);
+
+		Assert.assertNotNull(serializer);
 	}
 
 
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void sameTimestampEventsShouldCreateOnlyOneIndexWithTheExpectedMapping() throws IOException {
 		Event event = createExampleEvent(System.currentTimeMillis());
 		String indexName = getIndexName(INDEX_PREFIX, new TimeStampedEvent(event).getTimestamp());
@@ -157,7 +114,7 @@ public class ElasticSearchSerializerWithMappingTestIT {
 		Assert.assertTrue("The index must exists and its mapping must be the same as the expected", mappingActual.equals(expectedESMapping));
 	}
 
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void differentTimestampEventsShouldCreateDifferentIndecesWithTheExpectedMapping() throws IOException {
 		long timestamp = System.currentTimeMillis();
 		Event event1 = createExampleEvent(timestamp);
