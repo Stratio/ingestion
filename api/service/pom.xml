@@ -62,6 +62,16 @@
 			<version>${akka.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.gettyimages</groupId>
+			<artifactId>spray-swagger_2.10</artifactId>
+			<version>0.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>swagger-ui</artifactId>
+			<version>2.0.12</version>
+		</dependency>
+		<dependency>
 			<groupId>io.spray</groupId>
 			<artifactId>spray-testkit_${scala.version}</artifactId>
 			<version>${spray.version}</version>
