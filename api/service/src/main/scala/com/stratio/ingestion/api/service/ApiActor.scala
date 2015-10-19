@@ -18,9 +18,9 @@ package com.stratio.ingestion.api.service
 import spray.routing._
 
 class ApiActor
-	extends HttpServiceActor
+  extends HttpServiceActor
   with ApiRoutes
   with ApiServicesImpl {
 
-	def receive = runRoute(route)
+  def receive = runRoute(route)
 }

@@ -22,7 +22,7 @@ import WorkflowParser._
 trait WorkflowRoute extends HttpService {
 	self: WorkflowServiceComponent =>
 
-  implicit def executionContext = actorRefFactory.dispatcher
+	implicit def executionContext = actorRefFactory.dispatcher
 
 	lazy val workflowRoute =
 		pathPrefix("workflows") {
@@ -30,45 +30,45 @@ trait WorkflowRoute extends HttpService {
 				get {
 					getAllWorkflows
 				} ~
-        (post & entity(as[Workflow])){ workflow =>
-					createWorkflow(workflow)
-				} ~
-        (put & entity(as[Workflow])){ workflow =>
-					updateWorkflow(workflow)
-				}
+					(post & entity(as[Workflow])){ workflow =>
+						createWorkflow(workflow)
+					} ~
+					(put & entity(as[Workflow])){ workflow =>
+						updateWorkflow(workflow)
+					}
 			} ~
-			path(Segment) { id =>
-				get {
-					getWorkflow(id)
-				} ~
-				delete {
-					deleteWorkflow(id)
+				path(Segment) { id =>
+					get {
+						getWorkflow(id)
+					} ~
+						delete {
+							deleteWorkflow(id)
+						}
 				}
-			}
 		}
 
 	def getAllWorkflows	=
 		complete {
-      workflowService.getAll
-    }
+			workflowService.getAll
+		}
 
 	def createWorkflow(workflow: Workflow)	=
-    complete {
-      workflowService.create(workflow)
-    }
+		complete {
+			workflowService.create(workflow)
+		}
 
 	def updateWorkflow(workflow: Workflow) =
-    complete {
-      workflowService.update(workflow)
-    }
+		complete {
+			workflowService.update(workflow)
+		}
 
 	def getWorkflow(id: String)	=
-    complete {
-      workflowService.get(id)
-    }
+		complete {
+			workflowService.get(id)
+		}
 
 	def deleteWorkflow(id: String) =
-    complete {
-      workflowService.delete(id)
-    }
+		complete {
+			workflowService.delete(id)
+		}
 }

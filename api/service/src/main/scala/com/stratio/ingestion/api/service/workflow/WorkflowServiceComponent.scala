@@ -18,11 +18,11 @@ package com.stratio.ingestion.api.service.workflow
 import scala.concurrent.Future
 
 case class Workflow(id: String,
-	name: String,
-	description: String,
-	state: String,
-	agents: Seq[String]
-)
+										name: String,
+										description: String,
+										state: String,
+										agents: Seq[String]
+										 )
 
 import spray.json._
 

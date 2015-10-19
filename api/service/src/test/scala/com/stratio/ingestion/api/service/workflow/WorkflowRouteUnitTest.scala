@@ -26,12 +26,12 @@ import spray.httpx.SprayJsonSupport._
 
 @RunWith(classOf[JUnitRunner])
 class WorkflowRouteUnitTest extends WordSpec
-  with Matchers
-  with BeforeAndAfterEach
-  with ScalatestRouteTest
-  with HttpService
-  with WorkflowRoute
-  with WorkflowServiceComponentTest {
+with Matchers
+with BeforeAndAfterEach
+with ScalatestRouteTest
+with HttpService
+with WorkflowRoute
+with WorkflowServiceComponentTest {
 
   def actorRefFactory = system
   val rootPath = "workflows"
@@ -41,10 +41,10 @@ class WorkflowRouteUnitTest extends WordSpec
   "The workflow route" when {
     "GET workflow" should {
 
-    	val workflowId = 1
+      val workflowId = 1
 
       "return a workflow" in {
-      	Get(s"/$rootPath/$workflowId") ~> workflowRoute ~> check {
+        Get(s"/$rootPath/$workflowId") ~> workflowRoute ~> check {
           status should equal (OK)
           responseAs[Workflow] === dummyWorkflow1
         }
