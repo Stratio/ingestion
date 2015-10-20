@@ -1,0 +1,70 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "splillableMemory",
+        "component": "channel",
+        "type": "SPILLABLEMEMORY",
+        "name": "Spillable Memory Channel",
+        "description": "The events are stored in an in-memory queue and on disk. The in-memory queue serves as the primary store and the disk as overflow. The disk store is managed using an embedded File channel. When the in-memory queue is full, additional incoming events are stored in the file channel. This channel is ideal for flows that need high throughput of memory channel during normal operation, but at the same time need the larger capacity of the file channel for better tolerance of intermittent sink side outages or drop in drain rates. The throughput will reduce approximately to file channel speeds during such abnormal situations. In case of an agent crash or restart, only the events stored on disk are recovered when the agent comes online. This channel is currently experimental and not recommended for use in production.",
+        "settings": {
+          "memoryCapacity": {
+            "type": "integer",
+            "name": "Memory capacity",
+            "description": "Maximum number of events stored in memory queue. To disable use of in-memory queue, set this to zero.",
+            "default": 10000,
+            "required": false
+          },
+          "overflowCapacity": {
+            "type": "integer",
+            "name": "Overflow capacity",
+            "description": "Maximum number of events stored in overflow disk (i.e File channel). To disable use of overflow, set this to zero.",
+            "default": 100000000,
+            "required": false
+          },
+          "overflowTimeout": {
+            "type": "integer",
+            "name": "Overflow timeout",
+            "description": "The number of seconds to wait before enabling disk overflow when memory fills up.",
+            "default": 3,
+            "required": false
+          },
+          "byteCapacityBufferPercentage": {
+            "type": "integer",
+            "name": "Byte capacity buffer percentage",
+            "description": "Defines the percent of buffer between byteCapacity and the estimated total size of all events in the channel, to account for data in headers. See below.",
+            "default": 20,
+            "required": false
+          },
+          "byteCapacity": {
+            "type": "",
+            "name": "Byte capacity",
+            "description": "Maximum bytes of memory allowed as a sum of all events in the memory queue. The implementation only counts the Event body, which is the reason for providing the byteCapacityBufferPercentage configuration parameter as well. Defaults to a computed value equal to 80% of the maximum memory available to the JVM (i.e. 80% of the -Xmx value passed on the command line). Note that if you have multiple memory channels on a single JVM, and they happen to hold the same physical events (i.e. if you are using a replicating channel selector from a single source) then those event sizes may be double-counted for channel byteCapacity purposes. Setting this value to 0 will cause this value to fall back to a hard internal limit of about 200 GB.",
+            "default": "see description",
+            "required": false
+          },
+          "avgEventSize": {
+            "type": "integer",
+            "name": "Average event size",
+            "description": "Estimated average size of events, in bytes, going into the channel",
+            "default": 500,
+            "required": false
+          },
+          "<file channel properties>": {
+            "type": "",
+            "name": "File channel properties",
+            "description": "Any file channel property with the exception of ‘keep-alive’ and ‘capacity’ can be used. The keep-alive of file channel is managed by Spillable Memory Channel. Use ‘overflowCapacity’ to set the File channel’s capacity.",
+            "default": "see file channel",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

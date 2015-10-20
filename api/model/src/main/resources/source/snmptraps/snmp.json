@@ -1,0 +1,91 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "snmp",
+        "component": "source",
+        "type": "snmp",
+        "name": "SnmpTraps Source",
+        "description": "A Flume source that listens to snmp traps.",
+        "settings": {
+          "address": {
+            "type": "string",
+            "name": "Address",
+            "description": "Address to listen snmp traps.",
+            "default": "localhost",
+            "required": true
+          },
+          "snmpTrapPort": {
+            "type": "integer",
+            "name": "SnmpTrap Port",
+            "description": "Port to listen snmp traps.",
+            "default": 162,
+            "required": true
+          },
+          "snmpVersion": {
+            "type": "string",
+            "name": "Snmp version",
+            "description": "SNMP Protocol version. Possible values: V1,V2c,V3.",
+            "default": "V1",
+            "required": true
+          },
+          "snmpTrapVersion": {
+            "type": "string",
+            "name": "SnmpTrap version",
+            "description": "SNMP Trap Protocol version. Possible values: V1,V2c,V3.",
+            "default": "V1",
+            "required": false
+          },
+          "encryptionType": {
+            "type": "string",
+            "name": "Encryption type",
+            "description": "Encryption. Possible values: SHA, MD5.",
+            "default": "MD5",
+            "required": false
+          },
+          "authenticationType": {
+            "type": "string",
+            "name": "Authentication type",
+            "description": "SNMP Authentication. Possible values: AUTH_NOPRIV, NOAUTH_NOPRIV, AUTH_PRIV.",
+            "default": "NOAUTH_NOPRIV",
+            "required": false
+          },
+          "username": {
+            "type": "string",
+            "name": "User name",
+            "description": "Username. Required when authenticationType -> AUTH_NOPRIV, AUTH_PRIV",
+            "default": "",
+            "required": false
+          },
+          "password": {
+            "type": "string",
+            "name": "Password",
+            "description": "Password. Required when authenticationType -> AUTH_NOPRIV, AUTH_PRIV",
+            "default": "",
+            "required": false
+          },
+          "privacyProtocol": {
+            "type": "string",
+            "name": "Body",
+            "description": "Privacy protocol. Required when authenticationType -> AUTH_PRIV. Possible values: PrivDES, Priv3DES, PrivAES128, PrivAES192, PrivAES256, PrivAES192With3DESKeyExtension, PrivAES256With3DESKeyExtension.",
+            "default": "PRIVDES",
+            "required": false
+          },
+          "privacyPassphrase": {
+            "type": "string",
+            "name": "Privacy passphrase",
+            "description": "Privacy passphrase. Required when authenticationType -> AUTH_PRIV.",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

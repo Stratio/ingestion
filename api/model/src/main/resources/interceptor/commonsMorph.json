@@ -1,0 +1,22 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "commons",
+        "component": "interceptor",
+        "type": "morphline",
+        "name": "Commons Interceptor",
+        "description": "",
+        "settings": {
+
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "multiSyslogTCP",
+        "component": "source",
+        "type": "multiport_syslogtcp",
+        "name": "Multiport Syslog TCP Source",
+        "description": "This is a newer, faster, multi-port capable version of the Syslog TCP source. Note that the ports configuration setting has replaced port. Multi-port capability means that it can listen on many ports at once in an efficient manner. This source uses the Apache Mina library to do that. Provides support for RFC-3164 and many common RFC-5424 formatted messages. Also provides the capability to configure the character set used on a per-port basis.",
+        "settings": {
+          "host": {
+            "type": "",
+            "name": "Host",
+            "description": "Host name or IP address to bind to",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "",
+            "name": "Port",
+            "description": "Port # to bind to",
+            "default": "",
+            "required": true
+          },
+          "eventSize": {
+            "type": "integer",
+            "name": "Event size",
+            "description": "Maximum size of a single event line, in bytes",
+            "default": 2500,
+            "required": false
+          },
+          "keepFields": {
+            "type": "",
+            "name": "Keep fields",
+            "description": "Setting this to true will preserve the Priority, Timestamp and Hostname in the body of the event.",
+            "default": "none",
+            "required": false
+          },
+          "portHeader": {
+            "type": "",
+            "name": "Port header",
+            "description": "If specified, the port number will be stored in the header of each event using the header name specified here. This allows for interceptors and channel selectors to customize routing logic based on the incoming port.",
+            "default": "",
+            "required": false
+          },
+          "charset.default": {
+            "type": "",
+            "name": "Charset default",
+            "description": "Default character set used while parsing syslog events into strings.",
+            "default": "UTF-8",
+            "required": false
+          },
+          "charset.port.<port>": {
+            "type": "",
+            "name": "Charset port",
+            "description": "Character set is configurable on a per-port basis.",
+            "default": "",
+            "required": false
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "",
+            "description": "Maximum number of events to attempt to process per request loop. Using the default is usually fine.",
+            "default": 100,
+            "required": false
+          },
+          "readBufferSize": {
+            "type": "integer",
+            "name": "",
+            "description": "Size of the internal Mina read buffer. Provided for performance tuning. Using the default is usually fine.",
+            "default": 1024,
+            "required": false
+          },
+          "numProcessors": {
+            "type": "",
+            "name": "",
+            "description": "Number of processors available on the system for use while processing messages. Default is to auto-detect # of CPUs using the Java Runtime API. Mina will spawn 2 request-processing threads per detected CPU, which is often reasonable.",
+            "default": "(auto-detected)",
+            "required": false
+          },
+          "selector.type": {
+            "type": "",
+            "name": "Selector type",
+            "description": "replicating or multiplexing",
+            "default": "replicating",
+            "required": false
+          },
+          "interceptors": {
+            "type": "",
+            "name": "Interceptors",
+            "description": "Space-separated list of interceptors",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

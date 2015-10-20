@@ -1,0 +1,31 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "null",
+        "type": "null",
+        "name": "Null Sink",
+        "description": "Discards all events it receives from the channel.",
+        "settings": {
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "",
+            "default": 100,
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

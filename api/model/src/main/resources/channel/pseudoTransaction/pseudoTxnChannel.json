@@ -1,0 +1,35 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "pseudoTrans",
+        "component": "channel",
+        "type": "org.apache.flume.channel.PseudoTxnMemoryChannel",
+        "name": "Pseudo Transaction Channel",
+        "description": "The Pseudo Transaction Channel is only for unit testing purposes and is NOT meant for production use.",
+        "settings": {
+          "capacity": {
+            "type": "integer",
+            "name": "Capacity",
+            "description": "The maximum number of events stored in the channel",
+            "default": 50,
+            "required": false
+          },
+          "keep-alive": {
+            "type": "integer",
+            "name": "Keep alive",
+            "description": "Timeout in seconds for adding or removing an event",
+            "default": 3,
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

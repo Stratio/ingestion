@@ -1,0 +1,109 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "jms",
+        "component": "source",
+        "type": "jms",
+        "name": "JMS Source",
+        "description": "*******************",
+        "settings": {
+          "initialContextFactory": {
+            "type": "",
+            "name": "Initial context factory",
+            "description": "Inital Context Factory, e.g: org.apache.activemq.jndi.ActiveMQInitialContextFactory",
+            "default": "",
+            "required": true
+          },
+          "connectionFactory": {
+            "type": "",
+            "name": "Connection factory",
+            "description": "The JNDI name the connection factory shoulld appear as",
+            "default": "",
+            "required": true
+          },
+          "providerURL": {
+            "type": "",
+            "name": "Provider URL",
+            "description": "The JMS provider URL",
+            "default": "",
+            "required": true
+          },
+          "destinationName": {
+            "type": "",
+            "name": "Destination name",
+            "description": "Destination name",
+            "default": "",
+            "required": true
+          },
+          "destinationType": {
+            "type": "",
+            "name": "Destination type",
+            "description": "Destination type (queue or topic)",
+            "default": "",
+            "required": true
+          },
+          "messageSelector": {
+            "type": "",
+            "name": "Message selector",
+            "description": "Message selector to use when creating the consumer",
+            "default": "",
+            "required": false
+          },
+          "userName": {
+            "type": "",
+            "name": "User name",
+            "description": "Username for the destination/provider",
+            "default": "",
+            "required": false
+          },
+          "passwordFile": {
+            "type": "",
+            "name": "Password file",
+            "description": "File containing the password for the destination/provider",
+            "default": "",
+            "required": false
+          },
+          "batchSize": {
+            "type": "",
+            "name": "",
+            "description": "Number of messages to consume in one batch",
+            "default": "100",
+            "required": false
+          },
+          "converterType": {
+            "type": "",
+            "name": "Converter type",
+            "description": "Class to use to convert messages to flume events. See below.",
+            "default": "DEFAULT",
+            "required": false
+          },
+          "converter.*": {
+            "type": "",
+            "name": "Converter.*",
+            "description": "Converter propierties",
+            "default": "",
+            "required": false
+          },
+          "converterCharset": {
+            "type": "",
+            "name": "Converter Charset",
+            "description": "Default converter only. Charset to use when converting JMS TextMessages to byte arrays.",
+            "default": "UTF-8",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}
+
+
+
+

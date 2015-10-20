@@ -1,0 +1,56 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "syslogUDP",
+        "component": "source",
+        "type": "syslogudp",
+        "name": "Syslog UDP Source",
+        "description": "The UDP source treats an entire message as a single event.",
+        "settings": {
+          "host": {
+            "type": "",
+            "name": "Host",
+            "description": "Host name or IP address to bind to",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "",
+            "name": "Port",
+            "description": "Port # to bind to",
+            "default": "",
+            "required": true
+          },
+          "keepFields": {
+            "type": "",
+            "name": "Keep fields",
+            "description": "Setting this to true will preserve the Priority, Timestamp and Hostname in the body of the event.",
+            "default": "none",
+            "required": false
+          },
+          "selector.type": {
+            "type": "",
+            "name": "Selector type",
+            "description": "replicating or multiplexing",
+            "default": "replicating",
+            "required": false
+          },
+          "interceptors": {
+            "type": "",
+            "name": "Interceptors",
+            "description": "Space-separated list of interceptors",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

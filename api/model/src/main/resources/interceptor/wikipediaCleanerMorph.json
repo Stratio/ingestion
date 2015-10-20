@@ -1,0 +1,35 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "wikipediaCleaner",
+        "component": "interceptor",
+        "type": "morphline",
+        "name": "Wikipedia cleaner Interceptor",
+        "description": "The stratio wikipedia cleaner command cleans the wikipedia markup from a text.",
+        "settings": {
+          "input": {
+            "type": "string",
+            "name": "Input",
+            "description": "Input field",
+            "default": "",
+            "required": true
+          },
+          "output": {
+            "type": "string",
+            "name": "Output",
+            "description": "Output field",
+            "default": "",
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

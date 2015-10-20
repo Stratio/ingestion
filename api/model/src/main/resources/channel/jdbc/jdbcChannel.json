@@ -1,0 +1,148 @@
+{
+    "descriptors": {
+        "components": [
+            {
+                "id": "jdbc",
+                "component": "channel",
+                "type": "jdbc",
+                "name": "JDBC Channel",
+                "description": "The events are stored in a persistent storage that’s backed by a database. The JDBC channel currently supports embedded Derby. This is a durable channel that’s ideal for flows where recoverability is important.",
+                "settings": [
+                    {
+                        "db.type": [
+                            {
+                                "type": "string",
+                                "name": "DB type",
+                                "description": "Database vendor, needs to be DERBY.",
+                                "default": "DERBY",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "driver.class": [
+                            {
+                                "type": "string",
+                                "name": "Driver class",
+                                "description": "Class for vendor’s JDBC driver",
+                                "default": "org.apache.derby.jdbc.EmbeddedDriver",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "driver.url": [
+                            {
+                                "type": "string",
+                                "name": "Driver URL",
+                                "description": "JDBC connection URL",
+                                "default": "(constructed from other properties)",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "db.username": [
+                            {
+                                "type": "string",
+                                "name": "DB username",
+                                "description": "User id for db connection",
+                                "default": "sa",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "db.password": [
+                            {
+                                "type": "string",
+                                "name": "DB password",
+                                "description": "password for db connection",
+                                "default": "",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "connection.properties.file": [
+                            {
+                                "type": "string",
+                                "name": "Connection properties file",
+                                "description": "JDBC Connection property file path",
+                                "default": "",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "create.schema": [
+                            {
+                                "type": "boolean",
+                                "name": "Create schema",
+                                "description": "If true, then creates db schema if not there",
+                                "default": "true",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "create.index": [
+                            {
+                                "type": "boolean",
+                                "name": "Create index",
+                                "description": "Create indexes to speed up lookups",
+                                "default": "true",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "create.foreignkey": [
+                            {
+                                "type": "boolean",
+                                "name": "Create foreign key",
+                                "description": "",
+                                "default": "true",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "transaction.isolation": [
+                            {
+                                "type": "string",
+                                "name": "Transaction isolation",
+                                "description": "Isolation level for db session READ_UNCOMMITTED, READ_COMMITTED, SERIALIZABLE, REPEATABLE_READ",
+                                "default": "READ_COMMITTED",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "maximum.connections": [
+                            {
+                                "type": "integer",
+                                "name": "Maximum connections",
+                                "description": "Max connections allowed to db",
+                                "default": 10,
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "maximum.capacity": [
+                            {
+                                "type": "integer",
+                                "name": "Maximum capacity",
+                                "description": "Max number of events in the channel",
+                                "default": "0 (unlimited)",
+                                "required": false,
+                                "value": null
+                            }
+                        ],
+                        "sysprop.user.home": [
+                            {
+                                "type": "string",
+                                "name": "Sysprop user home",
+                                "description": "Home path to store embedded Derby database",
+                                "default": "",
+                                "required": false,
+                                "value": null
+                            }
+                        ]
+                    }
+                ],
+                "channels": "xxxxx"
+            }
+        ]
+    }
+}

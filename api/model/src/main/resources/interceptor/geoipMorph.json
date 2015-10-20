@@ -1,0 +1,49 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "geoip",
+        "component": "interceptor",
+        "type": "morphline",
+        "name": "Geoip Interceptor",
+        "description": "The stratio geoIP command works as the [kite one](http://kitesdk.org/docs/0.12.0/kite-morphlines/morphlinesReferenceGuide.html#/geoIP). It will save the iso code and the longitude-latitude pair in two header fields.",
+        "settings": {
+          "input": {
+            "type": "string",
+            "name": "Handler",
+            "description": "The name of the input field that contains zero or more IP addresses.",
+            "default": "log_host",
+            "required": true
+          },
+          "database": {
+            "type": "string",
+            "name": "Database",
+            "description": "The relative or absolute path of a Maxmind database file on the local file system.",
+            "default": "/path/to/GeoLite2-City.mmdb",
+            "required": true
+          },
+          "isoCodeOutput": {
+            "type": "string",
+            "name": "Iso code output",
+            "description": "",
+            "default": "log_iso_code",
+            "required": false
+          },
+          "longitudeLatituteOutput": {
+            "type": "string",
+            "name": "Longitude latitute output",
+            "description": "",
+            "default": "log_longitude_latitude",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

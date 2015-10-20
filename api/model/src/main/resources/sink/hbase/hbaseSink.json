@@ -1,0 +1,87 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "hbase",
+        "type": "hbase",
+        "name": "HBase Sink",
+        "description": "This sink writes data to HBase. The Hbase configuration is picked up from the first hbase-site.xml encountered in the classpath. A class implementing HbaseEventSerializer which is specified by the configuration is used to convert the events into HBase puts and/or increments. These puts and increments are then written to HBase. This sink provides the same consistency guarantees as HBase, which is currently row-wise atomicity. In the event of Hbase failing to write certain events, the sink will replay all events in that transaction.",
+        "settings": {
+          "table": {
+            "type": "",
+            "name": "Table",
+            "description": "The name of the table in Hbase to write to.",
+            "default": "",
+            "required": true
+          },
+          "columnFamily": {
+            "type": "",
+            "name": "Column family",
+            "description": "The column family in Hbase to write to.",
+            "default": "",
+            "required": true
+          },
+          "zookeeperQuorum": {
+            "type": "",
+            "name": "Zookeeper quorum",
+            "description": "The quorum spec. This is the value for the property hbase.zookeeper.quorum in hbase-site.xml",
+            "default": "",
+            "required": false
+          },
+          "znodeParent": {
+            "type": "",
+            "name": "Znode parent",
+            "description": "The base path for the znode for the -ROOT- region. Value of zookeeper.znode.parent in hbase-site.xml",
+            "default": "/hbase",
+            "required": false
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "Number of events to be written per txn.",
+            "default": 100,
+            "required": false
+          },
+          "coalesceIncrements": {
+            "type": "",
+            "name": "Coalesce increments",
+            "description": "The directory where files will be stored",
+            "default": "false",
+            "required": false
+          },
+          "serializer": {
+            "type": "",
+            "name": "Serializer",
+            "description": "Default increment column = “iCol”, payload column = “pCol”.",
+            "default": "org.apache.flume.sink.hbase.SimpleHbaseEventSerializer",
+            "required": false
+          },
+          "kerberosPrincipal": {
+            "type": "",
+            "name": "Kerberos principal",
+            "description": " 	Kerberos user principal for accessing secure HBase",
+            "default": "",
+            "required": false
+          },
+          "kerberosKeytab": {
+            "type": "",
+            "name": "Kerberos key tab",
+            "description": " 	Kerberos keytab for accessing secure HBase",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

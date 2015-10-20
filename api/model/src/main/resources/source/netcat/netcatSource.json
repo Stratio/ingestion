@@ -1,0 +1,63 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "netcat",
+        "component": "source",
+        "type": "netcat",
+        "name": "NetCat Source",
+        "description": "A netcat-like source that listens on a given port and turns each line of text into an event. Acts like nc -k -l [host] [port]. In other words, it opens a specified port and listens for data. The expectation is that the supplied data is newline separated text. Each line of text is turned into a Flume event and sent via the connected channel.",
+        "settings": {
+          "bind": {
+            "type": "",
+            "name": "Bind",
+            "description": "Host name or IP address to bind to",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "",
+            "name": "Port",
+            "description": "Port # to bind to",
+            "default": "",
+            "required": true
+          },
+          "max-line-length": {
+            "type": "integer",
+            "name": "Max line length",
+            "description": "Max line length per event body (in bytes)",
+            "default": 512,
+            "required": false
+          },
+          "ack-every-event": {
+            "type": "",
+            "name": "ACK every event",
+            "description": "Respond with an “OK” for every event received",
+            "default": "true",
+            "required": false
+          },
+          "selector.type": {
+            "type": "",
+            "name": "Selector type",
+            "description": "replicating or multiplexing",
+            "default": "replicating",
+            "required": false
+          },
+          "interceptors": {
+            "type": "",
+            "name": "Interceptors",
+            "description": "Space-separated list of interceptors",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

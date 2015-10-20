@@ -1,0 +1,77 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "rest",
+        "component": "source",
+        "type": "rest",
+        "name": "Rest Source",
+        "description": "Make a request to a RESTful Service.",
+        "settings": {
+          "url": {
+            "type": "string",
+            "name": "URL",
+            "description": "Target URI",
+            "default": "",
+            "required": true
+          },
+          "frequency": {
+            "type": "integer",
+            "name": "Frequency",
+            "description": "Frequency, in seconds, to make the request.",
+            "default": 10,
+            "required": true
+          },
+          "method": {
+            "type": "string",
+            "name": "Method",
+            "description": "Method type. Possible values: GET, POST.",
+            "default": "GET",
+            "required": true
+          },
+          "applicationType": {
+            "type": "string",
+            "name": "Application type",
+            "description": "Application Type. Possible values: JSON, TEXT.",
+            "default": "JSON",
+            "required": false
+          },
+          "headers": {
+            "type": "string",
+            "name": "Headers",
+            "description": "Headers json. e.g.: { Accept-Charset: utf-8, Date: Tue, 15 Nov 1994 08:12:31 GMT}",
+            "default": "",
+            "required": false
+          },
+          "body": {
+            "type": "string",
+            "name": "Body",
+            "description": "Body for post request.",
+            "default": "",
+            "required": false
+          },
+          "handler": {
+            "type": "string",
+            "name": "Handler",
+            "description": "Handlder implementation classname. This handler will transform the rest service response into one, or many,events.",
+            "default": "com.stratio.ingestion.source.rest.handler.DefaultRestSourceHandler",
+            "required": false
+          },
+          "jsonPath": {
+            "type": "string",
+            "name": "JsonPath",
+            "description": "Field path from which we want recovery the response data.",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

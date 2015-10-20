@@ -1,0 +1,122 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "kiteDataset",
+        "type": "org.apache.flume.sink.kite.DatasetSink",
+        "name": "Kite Dataset Sink",
+        "description": "Experimental sink that writes events to a Kite Dataset. This sink will deserialize the body of each incoming event and store the resulting record in a Kite Dataset. It determines target Dataset by loading a dataset by URI.The only supported serialization is avro, and the record schema must be passed in the event headers, using either flume.avro.schema.literal with the JSON schema representation or flume.avro.schema.url with a URL where the schema may be found (hdfs:/... URIs are supported). This is compatible with the Log4jAppender flume client and the spooling directory source’s Avro deserializer using deserializer.schemaType = LITERAL.",
+        "settings": {
+          "kite.dataset.uri": {
+            "type": "",
+            "name": "Dataset URI",
+            "description": "URI of the dataset to open",
+            "default": "",
+            "required": true
+          },
+          "kite.repo.uri": {
+            "type": "",
+            "name": "Repository URI",
+            "description": "URI of the repository to open (deprecated; use kite.dataset.uri instead)",
+            "default": "",
+            "required": false
+          },
+          "kite.dataset.namespace": {
+            "type": "",
+            "name": "Dataset namespace",
+            "description": "Namespace of the Dataset where records will be written (deprecated; use kite.dataset.uri instead)",
+            "default": "",
+            "required": false
+          },
+          "kite.dataset.name": {
+            "type": "",
+            "name": "Dataset name",
+            "description": "Name of the Dataset where records will be written (deprecated; use kite.dataset.uri instead)",
+            "default": "",
+            "required": false
+          },
+          "kite.batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "Number of records to process in each batch",
+            "default": 100,
+            "required": false
+          },
+          "kite.rollInterval": {
+            "type": "integer",
+            "name": "Roll interval",
+            "description": "Maximum wait time (seconds) before data files are released",
+            "default": 30,
+            "required": false
+          },
+          "kite.flushable.commitOnBatch": {
+            "type": "",
+            "name": "Commit on batch",
+            "description": "If true, the Flume transaction will be commited and the writer will be flushed on each batch of kite.batchSize records. This setting only applies to flushable datasets. When true, it’s possible for temp files with commited data to be left in the dataset directory. These files need to be recovered by hand for the data to be visible to DatasetReaders.",
+            "default": "true",
+            "required": false
+          },
+          "kite.syncable.syncOnBatch": {
+            "type": "",
+            "name": "Synchronize on batch",
+            "description": "Controls whether the sink will also sync data when committing the transaction. This setting only applies to syncable datasets. Syncing gaurentees that data will be written on stable storage on the remote system while flushing only gaurentees that data has left Flume’s client buffers. When the kite.flushable.commitOnBatch property is set to false, this property must also be set to false.",
+            "default": "true",
+            "required": false
+          },
+          "kite.entityParser": {
+            "type": "",
+            "name": "Entity parser",
+            "description": "Parser that turns Flume Events into Kite entities. Valid values are avro and the fully-qualified class name of an implementation of the EntityParser.Builder interface.",
+            "default": "avro",
+            "required": false
+          },
+          "kite.failurePolicy": {
+            "type": "",
+            "name": "Failure policy",
+            "description": "Policy that handles non-recoverable errors such as a missing Schema in the Event header. The default value, retry, will fail the current batch and try again which matches the old behavior. Other valid values are save, which will write the raw Event to the kite.error.dataset.uri dataset, and the fully-qualified class name of an implementation of the FailurePolicy.Builder interface.",
+            "default": "retry",
+            "required": false
+          },
+          "kite.error.dataset.uri": {
+            "type": "",
+            "name": "Error dataset URI",
+            "description": "URI of the dataset where failed events are saved when kite.failurePolicy is set to save. Required when the kite.failurePolicy is set to save.",
+            "default": "org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer",
+            "required": false
+          },
+          "auth.kerberosPrincipal": {
+            "type": "",
+            "name": "Kerberos principal",
+            "description": "Kerberos user principal for secure authentication to HDFS",
+            "default": "",
+            "required": false
+          },
+          "auth.kerberosKeytab": {
+            "type": "",
+            "name": "Kerberos key tab",
+            "description": "Kerberos keytab location (local FS) for the principal",
+            "default": "",
+            "required": false
+          },
+          "auth.proxyUser": {
+            "type": "",
+            "name": "Proxy user",
+            "description": "The effective user for HDFS actions, if different from the kerberos principal",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

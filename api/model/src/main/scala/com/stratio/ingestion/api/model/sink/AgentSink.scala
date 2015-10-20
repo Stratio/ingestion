@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,18 +15,18 @@
  */
 package com.stratio.ingestion.api.model.sink
 
-import com.stratio.ingestion.api.model.Attribute
-import com.stratio.ingestion.api.model.channel.Channel
+import com.stratio.ingestion.api.model.channel.AgentChannel
+import com.stratio.ingestion.api.model.commons.{Entity, Attribute}
 
 /**
  * Created by eruiz on 15/10/15.
  */
-case class Sink(
-	id:String,
-	typo:String,
-	name:String,
-	description:String,
-	settings:Seq[Attribute],
-	channels:Seq[Channel]
-)
-// case class Sink(id:String,typo:String, name:String, description:String)
+case class AgentSink(
+                 id: String,
+                 typo: String,
+                 name: String,
+                 description: String,
+                 settings: Seq[Attribute],
+                 channels: Seq[AgentChannel]
+                 ) extends Entity
+

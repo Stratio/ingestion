@@ -1,0 +1,147 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "druid",
+        "component": "sink",
+        "type": "druid",
+        "name": "Druid Sink",
+        "description": "The Druid Sink component allows to save Flume-flow events to Druid.",
+        "settings": {
+          "indexService": {
+            "type": "string",
+            "name": "Index service",
+            "description": "Overlord's service name",
+            "default": "",
+            "required": true
+          },
+          "discoveryPath": {
+            "type": "string",
+            "name": "Discovery path",
+            "description": "Your overlord's druid.discovery.curator.path",
+            "default": "",
+            "required": true
+          },
+          "dimensions": {
+            "type": "string",
+            "name": "Dimensions",
+            "description": "Comma separated list with event headers you want to stored. Similar to columns inrelational databases.",
+            "default": "",
+            "required": true
+          },
+          "firehosePattern": {
+            "type": "string",
+            "name": "Firehose pattern",
+            "description": "Firehoses describe the data stream source. Make up a service pattern, include %ssomewhere in it. This will be used for internal service-discovery purposes, to help druid sink find Druidindexing tasks",
+            "default": "druid:firehose:%s",
+            "required": false
+          },
+          "dataSource": {
+            "type": "string",
+            "name": "Datasource",
+            "description": "Source name where events will be stored. Very similar to a table in relational databases.",
+            "default": "sampleSource",
+            "required": false
+          },
+          "aggregators": {
+            "type": "string",
+            "name": "Aggregators",
+            "description": "Different specifications of processing over available metrics.",
+            "default": "*count* aggregator",
+            "required": false
+          },
+          "zookeeperLocation": {
+            "type": "string",
+            "name": "Zookeeper location",
+            "description": "Zookeeper location (hostname:port).",
+            "default": "127.0.0.1:2181",
+            "required": false
+          },
+          "timestampField": {
+            "type": "string",
+            "name": "Timestamp field",
+            "description": "The field name where event timestamp info is extracted from.",
+            "default": "Timestamp",
+            "required": false
+          },
+          "segmentGranularity": {
+            "type": "string",
+            "name": "Segment granularity",
+            "description": "Time granularity (minute, hour, day, week, month) for loading data at query time.Recommended, more than queryGranularity.",
+            "default": "HOUR",
+            "required": false
+          },
+          "queryGranularity": {
+            "type": "string",
+            "name": "Query granularity",
+            "description": "Time granularity (minute, hour, day, week, month) for rollup. At least, less thansegmentGranularity. Recommended: minute, hour, day, week, month.",
+            "default": "NONE",
+            "required": false
+          },
+          "period": {
+            "type": "string",
+            "name": "Period",
+            "description": "While reading, events with timestamp older than now minus this value, will be discarded.",
+            "default": "PT10M",
+            "required": false
+          },
+          "partitions": {
+            "type": "integer",
+            "name": "Partitions",
+            "description": " This is used to scale ingestion up to handle larger streams.",
+            "default": 1,
+            "required": false
+          },
+          "replicants": {
+            "type": "integer",
+            "name": "Replicants",
+            "description": "This is used to provide higher availability and parallelism for queries.",
+            "default": 1,
+            "required": false
+          },
+          "baseSleepTime": {
+            "type": "integer",
+            "name": "Base sleep time",
+            "description": "Initial amount of time to wait between retries.",
+            "default": 1000,
+            "required": false
+          },
+          "maxRetries": {
+            "type": "integer",
+            "name": "Max retries",
+            "description": "Max number of times to retry.",
+            "default": 3,
+            "required": false
+          },
+          "maxSleep": {
+            "type": "integer",
+            "name": "Max sleep",
+            "description": "Max time in ms to sleep on each retry.",
+            "default": 30000,
+            "required": false
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "Number of events to batch together to be send to our data source.",
+            "default": 1000,
+            "required": false
+          },
+          "confFile": {
+            "type": "string",
+            "name": "Configuration file",
+            "description": "Path to a configuration file with initialization statements",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

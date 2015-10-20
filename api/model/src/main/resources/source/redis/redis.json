@@ -1,0 +1,64 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "redis",
+        "component": "source",
+        "type": "redis",
+        "name": "Redis Source",
+        "description": "Redis Subscribe Source with connection Pool.",
+        "settings": {
+          "host": {
+            "type": "string",
+            "name": "Host",
+            "description": "Redis host",
+            "default": "localhost",
+            "required": true
+          },
+          "port": {
+            "type": "integer",
+            "name": "Port",
+            "description": "Redis port",
+            "default": 6379,
+            "required": true
+          },
+          "subscribe": {
+            "type": "string",
+            "name": "Subscribe",
+            "description": "Channels to subscribe. Comma separated channels values.",
+            "default": "",
+            "required": true
+          },
+          "psubscribe": {
+            "type": "string",
+            "name": "User",
+            "description": "Channels to subscribe with given pattern.",
+            "default": "",
+            "required": false
+          },
+          "charset": {
+            "type": "string",
+            "name": "Charset",
+            "description": "Charset",
+            "default": "UTF-8",
+            "required": false
+          },
+          "property": {
+            "type": "string",
+            "name": "Property",
+            "description": "Prefix for pool properties. Set whatever property you want to Jedis Pool.",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}
+

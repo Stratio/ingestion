@@ -1,0 +1,56 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "checkpointFilter",
+        "component": "interceptor",
+        "type": "morphline",
+        "name": "CheckpointFilter Interceptor",
+        "description": "The stratio checkpointFilter command works as a common timer filter with some improvements.When command starts, it gets the last checkpoint stored a checkpoint handler. By  now, only MongoCheckpointFilterHandler is avalible.Then, the command uses that value to filter the records. It will compare that value with parametrized record field.Finally, the checkpoint value will be updated periodically to prevent existent records  are stored again when fatal error occurs.  Source Selector  with checkpoint field is needed at morphline config file.",
+        "settings": {
+          "handler": {
+            "type": "string",
+            "name": "Handler",
+            "description": "handler to recover/update the last checkpoint value (e.g. MongoCheckpointFilterHandler)",
+            "default": "com.stratio.ingestion.morphline.checkpointfilter.handler.MongoCheckpointHandler",
+            "required": true
+          },
+          "field": {
+            "type": "string",
+            "name": "Field",
+            "description": "field where checkpoint value is stored",
+            "default": "date",
+            "required": true
+          },
+          "type": {
+            "type": "string",
+            "name": "Type",
+            "description": "checkpoint value type (e.g. DataCheckpointType)",
+            "default": "com.stratio.ingestion.morphline.checkpointfilter.type.DateCheckpointType",
+            "required": true
+          },
+          "format": {
+            "type": "string",
+            "name": "Format",
+            "description": "if necessary, checkpoint value format",
+            "default": "dd/MM/yyyy",
+            "required": true
+          },
+          "chunksize": {
+            "type": "integer",
+            "name": "Chunk size",
+            "description": "set the number of processed records without checkpoint value updating.",
+            "default": 1000,
+            "required": true
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}
