@@ -20,7 +20,19 @@ import spray.routing._
 class ApiActor
   extends HttpServiceActor
   with ApiRoutes
-  with ApiServicesImpl {
+  with ApiServicesImpl
+  with SwaggerService {
 
-  def receive = runRoute(route)
+  def receive =
+    runRoute(route ~ swaggerService.routes ~
+      get {
+        pathPrefix("swagger") {
+          pathEndOrSingleSlash {
+            getFromResource("swagger-ui/index.html")
+          }
+        } ~
+          pathPrefix("webjars") {
+            getFromResourceDirectory("META-INF/resources/webjars")
+          }
+      })
 }
