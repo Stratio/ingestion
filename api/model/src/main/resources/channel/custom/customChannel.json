@@ -1,0 +1,22 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "custom",
+        "component": "channel",
+        "type": "The component type name, needs to be a FQCN",
+        "name": "Custom Channel",
+        "description": "A custom channel is your own implementation of the Channel interface. A custom channel’s class and its dependencies must be included in the agent’s classpath when starting the Flume agent. The type of the custom channel is its FQCN.",
+        "settings": {
+
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

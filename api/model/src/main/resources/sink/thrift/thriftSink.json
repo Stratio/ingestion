@@ -1,0 +1,129 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "thrift",
+        "type": "thrift",
+        "name": "Thrift Sink",
+        "description": "This sink forms one half of Flume’s tiered collection support. Flume events sent to this sink are turned into Thrift events and sent to the configured hostname / port pair. The events are taken from the configured Channel in batches of the configured batch size.Thrift sink can be configured to start in secure mode by enabling kerberos authentication. To communicate with a Thrift source started in secure mode, the Thrift sink should also operate in secure mode. client-principal and client-keytab are the properties used by the Thrift sink to authenticate to the kerberos KDC. The server-principal represents the principal of the Thrift source this sink is configured to connect to in secure mode.",
+        "settings": {
+          "hostname": {
+            "type": "",
+            "name": "Host name",
+            "description": "The hostname or IP address to bind to.",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "",
+            "name": "Port",
+            "description": "The port # to listen on.",
+            "default": "",
+            "required": true
+          },
+          "batch-size": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "number of event to batch together for send",
+            "default": 100,
+            "required": false
+          },
+          "connect-timeout": {
+            "type": "integer",
+            "name": "Connect timeout",
+            "description": "Amount of time (ms) to allow for the first (handshake) request.",
+            "default": 20000,
+            "required": false
+          },
+          "request-timeout": {
+            "type": "integer",
+            "name": "Request timeout",
+            "description": "Amount of time (ms) to allow for requests after the first.",
+            "default": 20000,
+            "required": false
+          },
+          "connection-reset-interval": {
+            "type": "",
+            "name": "Connection reset interval",
+            "description": "Amount of time (s) before the connection to the next hop is reset. This will force the Avro Sink to reconnect to the next hop. This will allow the sink to connect to hosts behind a hardware load-balancer when news hosts are added without having to restart the agent.",
+            "default": "none",
+            "required": false
+          },
+          "ssl": {
+            "type": "",
+            "name": "Ssl",
+            "description": "Set to true to enable SSL for this AvroSink. When configuring SSL, you can optionally set a “truststore”, “truststore-password”, “truststore-type”, and specify whether to “trust-all-certs”.",
+            "default": "false",
+            "required": false
+          },
+          "truststore": {
+            "type": "",
+            "name": "Trust store",
+            "description": "The path to a custom Java truststore file. Flume uses the certificate authority information in this file to determine whether the remote Avro Source’s SSL authentication credentials should be trusted. If not specified, the default Java JSSE certificate authority files (typically “jssecacerts” or “cacerts” in the Oracle JRE) will be used.",
+            "default": "",
+            "required": false
+          },
+          "truststore-password": {
+            "type": "",
+            "name": "Trust store password",
+            "description": "The password for the specified truststore.",
+            "default": "minute",
+            "required": false
+          },
+          "truststore-type": {
+            "type": "",
+            "name": "Trust store type",
+            "description": "The type of the Java truststore. This can be “JKS” or other supported Java truststore type.",
+            "default": "JKS",
+            "required": false
+          },
+          "exclude-protocols": {
+            "type": "",
+            "name": "Exclude protocols",
+            "description": "Space-separated list of SSL/TLS protocols to exclude. SSLv3 will always be excluded in addition to the protocols specified.",
+            "default": "SSLv3",
+            "required": false
+          },
+          "kerberos": {
+            "type": "",
+            "name": "Kerberos",
+            "description": "Set to true to enable kerberos authentication. In kerberos mode, client-principal, client-keytab and server-principal are required for successful authentication and communication to a kerberos enabled Thrift Source.",
+            "default": "false",
+            "required": false
+          },
+          "client-principal": {
+            "type": "",
+            "name": "Client principal",
+            "description": "The kerberos principal used by the Thrift Sink to authenticate to the kerberos KDC.",
+            "default": "",
+            "required": false
+          },
+          "client-keytab": {
+            "type": "",
+            "name": "Client key tab",
+            "description": "The keytab location used by the Thrift Sink in combination with the client-principal to authenticate to the kerberos KDC.",
+            "default": "",
+            "required": false
+          },
+          "server-principal": {
+            "type": "",
+            "name": "Server principal",
+            "description": "The kerberos principal of the Thrift Source to which the Thrift Sink is configured to connect to.",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

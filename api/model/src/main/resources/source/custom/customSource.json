@@ -1,0 +1,35 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "custom",
+        "component": "source",
+        "type": "The component type name, needs to be your FQCN",
+        "name": "Custom Source",
+        "description": "A custom source is your own implementation of the Source interface. A custom source’s class and its dependencies must be included in the agent’s classpath when starting the Flume agent. The type of the custom source is its FQCN.",
+        "settings": {
+          "selector.type": {
+            "type": "",
+            "name": "Selector type",
+            "description": "replicating or multiplexing",
+            "default": "replicating",
+            "required": false
+          },
+          "interceptors": {
+            "type": "",
+            "name": "Interceptors",
+            "description": "Space-separated list of interceptors",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

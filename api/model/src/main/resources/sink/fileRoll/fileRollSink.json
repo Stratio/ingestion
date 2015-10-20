@@ -1,0 +1,52 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "fileRoll",
+        "type": "file_roll",
+        "name": "File Roll Sink",
+        "description": "Stores events on the local filesystem.",
+        "settings": {
+          "sink.directory": {
+            "type": "directory",
+            "name": "Sink directory",
+            "description": "The directory where files will be stored",
+            "default": "",
+            "required": true
+          },
+          "sink.rollInterval": {
+            "type": "integer",
+            "name": "Sink roll interval",
+            "description": "Roll the file every 30 seconds. Specifying 0 will disable rolling and cause all events to be written to a single file.",
+            "default": 30,
+            "required": false
+          },
+          "sink.serializer": {
+            "type": "",
+            "name": "Sink serializer",
+            "description": "Other possible options include avro_event or the FQCN of an implementation of EventSerializer.Builder interface.",
+            "default": "TEXT",
+            "required": false
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "",
+            "default": 100,
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

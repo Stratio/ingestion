@@ -1,0 +1,63 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "syslogTCP",
+        "component": "source",
+        "type": "syslogtcp",
+        "name": "Syslog TCP Source",
+        "description": "The original, tried-and-true syslog TCP source.The TCP sources create a new event for each string of characters separated by a newline (‘n’).",
+        "settings": {
+          "host": {
+            "type": "",
+            "name": "Host",
+            "description": "Host name or IP address to bind to",
+            "default": "",
+            "required": true
+          },
+          "port": {
+            "type": "",
+            "name": "Port",
+            "description": "Port # to bind to",
+            "default": "",
+            "required": true
+          },
+          "eventSize": {
+            "type": "integer",
+            "name": "Event size",
+            "description": "Maximum size of a single event line, in bytes",
+            "default": 2500,
+            "required": false
+          },
+          "keepFields": {
+            "type": "",
+            "name": "Keep fields",
+            "description": "Setting this to true will preserve the Priority, Timestamp and Hostname in the body of the event.",
+            "default": "none",
+            "required": false
+          },
+          "selector.type": {
+            "type": "",
+            "name": "Selector type",
+            "description": "replicating or multiplexing",
+            "default": "replicating",
+            "required": false
+          },
+          "interceptors": {
+            "type": "",
+            "name": "Interceptors",
+            "description": "Space-separated list of interceptors",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "jdbc",
+        "component": "sink",
+        "type": "jdbc",
+        "name": "JDBC Sink",
+        "description": "Stratio JDBC Sink saves Flume events to any database with a JDBC driver.It can operate either with automatic headers-to-tables mapping or with custom SQL queries.",
+        "settings": {
+          "driver": {
+            "type": "string",
+            "name": "Driver",
+            "description": "The driver class (e.g. `org.h2.Driver`, `org.postgresql.Driver`). **NOTE: Stratio JDBC Sink does not include any JDBC driver. You must add a JDBC driver to your Flume classpath.**",
+            "default": "",
+            "required": true
+          },
+          "connectionString": {
+            "type": "string",
+            "name": "Connection string",
+            "description": "A valid connection string to a database. Check the documentation for your JDBC driver for more information.",
+            "default": "",
+            "required": true
+          },
+          "username": {
+            "type": "string",
+            "name": "User name",
+            "description": "A valid database username.",
+            "default": "",
+            "required": false
+          },
+          "password": {
+            "type": "string",
+            "name": "Password",
+            "description": "Password.",
+            "default": "",
+            "required": false
+          },
+          "sqlDialect": {
+            "type": "string",
+            "name": "SQL dialect",
+            "description": "The SQL dialect of your database. This should be one of the following: `CUBRID`, `DERBY`, `FIREBIRD`, `H2`, `HSQLDB`, `MARIADB`, `MYSQL`, `POSTGRES`, `SQLITE`.",
+            "default": "",
+            "required": false
+          },
+          "table": {
+            "type": "string",
+            "name": "Table",
+            "description": "A table to store your events. *This is only used for automatic mapping.*",
+            "default": "",
+            "required": false
+          },
+          "sql": {
+            "type": "string",
+            "name": "SQL",
+            "description": "A custom SQL query to use. If specified, this query will be used instead of automatic mapping. E.g. `INSERT INTO tweets (text, num_hashtags, timestamp) VALUES (${body:string}, ${header.numberOfHashtags:integer}, ${header.date:timestamp})`. Note the variable format: the first part is either `body` or `header.yourHeaderName` and then the SQL type.",
+            "default": "",
+            "required": false
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "Number of events that will be grouped in the same query and transaction.",
+            "default": 20,
+            "required": false
+          },
+          "confFile": {
+            "type": "string",
+            "name": "Configuration file",
+            "description": "Path to a configuration file with initialization statements",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

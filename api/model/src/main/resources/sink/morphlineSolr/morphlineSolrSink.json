@@ -1,0 +1,80 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "morphlineSolr",
+        "type": "org.apache.flume.sink.solr.morphline.MorphlineSolrSink",
+        "name": "MorphlineSolr Sink",
+        "description": "This sink extracts data from Flume events, transforms it, and loads it in near-real-time into Apache Solr servers, which in turn serve queries to end users or search applications.This sink is well suited for use cases that stream raw data into HDFS (via the HdfsSink) and simultaneously extract, transform and load the same data into Solr (via MorphlineSolrSink). In particular, this sink can process arbitrary heterogeneous raw data from disparate data sources and turn it into a data model that is useful to Search applications.",
+        "settings": {
+          "morphlineFile": {
+            "type": "",
+            "name": "Morphline File",
+            "description": " The relative or absolute path on the local file system to the morphline configuration file. Example: /etc/flume-ng/conf/morphline.conf",
+            "default": "",
+            "required": true
+          },
+          "morphlineId": {
+            "type": "",
+            "name": "Morphline ID",
+            "description": "Optional name used to identify a morphline if there are multiple morphlines in a morphline config file",
+            "default": "null",
+            "required": false
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "The maximum number of events to take per flume transaction.",
+            "default": 1000,
+            "required": false
+          },
+          "batchDurationMillis": {
+            "type": "integer",
+            "name": "Batch duration milliseconds",
+            "description": "The maximum duration per flume transaction (ms). The transaction commits after this duration or when batchSize is exceeded, whichever comes first.",
+            "default": 1000,
+            "required": false
+          },
+          "handlerClass": {
+            "type": "",
+            "name": "Handler class",
+            "description": "The FQCN of a class implementing org.apache.flume.sink.solr.morphline.MorphlineHandler",
+            "default": "org.apache.flume.sink.solr.morphline.MorphlineHandlerImpl",
+            "required": false
+          },
+          "isProductionMode": {
+            "type": "",
+            "name": "Is production mode",
+            "description": "This flag should be enabled for mission critical, large-scale online production systems that need to make progress without downtime when unrecoverable exceptions occur. Corrupt or malformed parser input data, parser bugs, and errors related to unknown Solr schema fields produce unrecoverable exceptions.",
+            "default": "false",
+            "required": false
+          },
+          "recoverableExceptionClasses": {
+            "type": "",
+            "name": "Recoverable exception classes",
+            "description": "Comma separated list of recoverable exceptions that tend to be transient, in which case the corresponding task can be retried. Examples include network connection errors, timeouts, etc. When the production mode flag is set to true, the recoverable exceptions configured using this parameter will not be ignored and hence will lead to retries.",
+            "default": "org.apache.solr.client.solrj.SolrServerException",
+            "required": false
+          },
+          "isIgnoringRecoverableExceptions": {
+            "type": "",
+            "name": "Is ignoring recoverable exceptions",
+            "description": "false",
+            "default": "This flag should be enabled, if an unrecoverable exception is accidentally misclassified as recoverable. This enables the sink to make progress and avoid retrying an event forever.",
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}

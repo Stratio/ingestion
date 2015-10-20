@@ -1,0 +1,77 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "http",
+        "component": "source",
+        "type": "http",
+        "name": "HTTP Source",
+        "description": "A source which accepts Flume Events by HTTP POST and GET. GET should be used for experimentation only. HTTP requests are converted into flume events by a pluggable “handler” which must implement the HTTPSourceHandler interface. This handler takes a HttpServletRequest and returns a list of flume events. All events handled from one Http request are committed to the channel in one transaction, thus allowing for increased efficiency on channels like the file channel. If the handler throws an exception, this source will return a HTTP status of 400. If the channel is full, or the source is unable to append events to the channel, the source will return a HTTP 503 - Temporarily unavailable status.",
+        "settings": {
+          "port": {
+            "type": "",
+            "name": "Port",
+            "description": "Port # to bind to",
+            "default": "",
+            "required": true
+          },
+          "bind": {
+            "type": "",
+            "name": "Bind",
+            "description": "The hostname or IP address to listen on",
+            "default": "0.0.0.0",
+            "required": false
+          },
+          "handler": {
+            "type": "",
+            "name": "Handler",
+            "description": "The FQCN of the handler class.",
+            "default": "org.apache.flume.source.http.JSONHandler",
+            "required": false
+          },
+          "selectorType": {
+            "type": "",
+            "name": "Selector type",
+            "description": "replicating or multiplexing",
+            "default": "replicating",
+            "required": false
+          },
+          "interceptors": {
+            "type": "",
+            "name": "Interceptors",
+            "description": "Space-separated list of interceptors",
+            "default": "",
+            "required": false
+          },
+          "enableSSL": {
+            "type": "",
+            "name": "Enable SSL",
+            "description": "Set the property true, to enable SSL. HTTP Source does not support SSLv3.",
+            "default": "false",
+            "required": false
+          },
+          "excludeProtocols": {
+            "type": "",
+            "name": "Exclude protocols",
+            "description": "Space-separated list of SSL/TLS protocols to exclude. SSLv3 is always excluded.",
+            "default": "SSLv3",
+            "required": false
+          },
+          "keystore": {
+            "type": "",
+            "name": "Key store",
+            "description": "Location of the keystore includng keystore file name",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

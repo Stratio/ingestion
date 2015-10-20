@@ -1,0 +1,49 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "stress",
+        "component": "source",
+        "type": "org.apache.flume.source.StressSource",
+        "name": "Stress Source",
+        "description": "StressSource is an internal load-generating source implementation which is very useful for stress tests. It allows User to configure the size of Event payload, with empty headers. User can configure total number of events to be sent as well maximum number of Successful Event to be delivered.",
+        "settings": {
+          "size": {
+            "type": "byte",
+            "name": "Size",
+            "description": "Payload size of each Event. Unit:byte",
+            "default": 500,
+            "required": false
+          },
+          "maxTotalEvents": {
+            "type": "integer",
+            "name": "Event size",
+            "description": "Maximum number of Events to be sent",
+            "default": -1,
+            "required": false
+          },
+          "maxSuccessfulEvents": {
+            "type": "integer",
+            "name": "",
+            "description": "Maximum number of Events successfully sent",
+            "default": -1,
+            "required": false
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "",
+            "description": "Number of Events to be sent in one batch",
+            "default": -1,
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

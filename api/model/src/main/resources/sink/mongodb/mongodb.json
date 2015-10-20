@@ -1,0 +1,63 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "mongoDb",
+        "component": "sink",
+        "type": "mongodb",
+        "name": "MongoDB Sink",
+        "description": "The MongoDB Sink component allows to save Flume-flow events to MongoDB. It can parse both event body and headers.",
+        "settings": {
+          "mongoUri": {
+            "type": "string",
+            "name": "Mongo URI",
+            "description": "A [Mongo client URI](http://api.mongodb.org/java/current/com/mongodb/MongoClientURI.html) defining the MongoDB server address and, optionally authentication, default database and collection. When dynamic mode is enabled, the collection defined here will be used as a fallback.",
+            "default": "",
+            "required": true
+          },
+          "mappingFile": {
+            "type": "string",
+            "name": "Mapping file",
+            "description": "Path to a [JSON schema](http://json-schema.org/) to be used for type mapping purposes. See the *Type Mapping* section for further information.",
+            "default": "",
+            "required": true
+          },
+          "dynamic": {
+            "type": "boolean",
+            "name": "Dynamic",
+            "description": "If true, the dynamic mode will be enabled and the database and collection to use will be selected by the event headers.",
+            "default": "false",
+            "required": true
+          },
+          "dynamicDB": {
+            "type": "string",
+            "name": "Dynamic database",
+            "description": "Name of the event header that will be looked up for the database name. This will only work when dynamic mode is enabled.",
+            "default": "db",
+            "required": true
+          },
+          "dynamicCollection": {
+            "type": "string",
+            "name": "Dynamic collection",
+            "description": "Name of the event header that will be looked up for the collection name. This will only work when dynamic mode is enabled.",
+            "default": "collection",
+            "required": false
+          },
+          "confFile": {
+            "type": "string",
+            "name": "Configuration file",
+            "description": "Path to a configuration file with initialization statements",
+            "default": "",
+            "required": false
+          }
+        },
+        "ports": {
+
+        },
+        "ui": {
+
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "descriptors": {
+    "components": [
+      {
+        "id": "elasticSearch",
+        "type": "org.apache.flume.sink.elasticsearch.ElasticSearchSink",
+        "name": "ElasticSearch Sink",
+        "description": "This sink writes data to an elasticsearch cluster. By default, events will be written so that the Kibana graphical interface can display them - just as if logstash wrote them.The elasticsearch and lucene-core jars required for your environment must be placed in the lib directory of the Apache Flume installation. Elasticsearch requires that the major version of the client JAR match that of the server and that both are running the same minor version of the JVM. SerializationExceptions will appear if this is incorrect. To select the required version first determine the version of elasticsearch and the JVM version the target cluster is running. Then select an elasticsearch client library which matches the major version. A 0.19.x client can talk to a 0.19.x cluster; 0.20.x can talk to 0.20.x and 0.90.x can talk to 0.90.x. Once the elasticsearch version has been determined then read the pom.xml file to determine the correct lucene-core JAR version to use. The Flume agent which is running the ElasticSearchSink should also match the JVM the target cluster is running down to the minor version.",
+        "settings": {
+          "hostNames": {
+            "type": "",
+            "name": "Host names",
+            "description": "Comma separated list of hostname:port, if the port is not present the default port ‘9300’ will be used",
+            "default": "",
+            "required": true
+          },
+          "indexName": {
+            "type": "",
+            "name": "Index name",
+            "description": "The name of the index which the date will be appended to. Example ‘flume’ -> ‘flume-yyyy-MM-dd’ Arbitrary header substitution is supported, eg. %{header} replaces with value of named event header",
+            "default": "flume",
+            "required": false
+          },
+          "indexType": {
+            "type": "",
+            "name": "Index type",
+            "description": "The type to index the document to, defaults to ‘log’ Arbitrary header substitution is supported, eg. %{header} replaces with value of named event header",
+            "default": "logs",
+            "required": false
+          },
+          "clusterName": {
+            "type": "",
+            "name": "Cluster name",
+            "description": "Name of the ElasticSearch cluster to connect to",
+            "default": "elasticSearch",
+            "required": false
+          },
+          "batchSize": {
+            "type": "integer",
+            "name": "Batch size",
+            "description": "Number of events to be written per txn.",
+            "default": 100,
+            "required": false
+          },
+          "ttl": {
+            "type": "",
+            "name": "Ttl",
+            "description": "TTL in days, when set will cause the expired documents to be deleted automatically, if not set documents will never be automatically deleted. TTL is accepted both in the earlier form of integer only e.g. a1.sinks.k1.ttl = 5 and also with a qualifier ms (millisecond), s (second), m (minute), h (hour), d (day) and w (week). Example a1.sinks.k1.ttl = 5d will set TTL to 5 days. Follow http://www.elasticsearch.org/guide/reference/mapping/ttl-field/ for more information.",
+            "default": "false",
+            "required": false
+          },
+          "serializer": {
+            "type": "",
+            "name": "Serializer",
+            "description": "The ElasticSearchIndexRequestBuilderFactory or ElasticSearchEventSerializer to use. Implementations of either class are accepted but ElasticSearchIndexRequestBuilderFactory is preferred.",
+            "default": "org.apache.flume.sink.elasticsearch.ElasticSearchLogStashEventSerializer",
+            "required": false
+          }
+        },
+        "ports": {
+          "channels": {
+
+          }
+        },
+        "ui": {
+          "groups": [
+
+          ]
+        }
+      }
+    ]
+  }
+}
