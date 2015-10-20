@@ -15,16 +15,29 @@
  */
 package com.stratio.ingestion.api.service
 
+import com.stratio.ingestion.api.service.utils.VersionDirectives
 import spray.routing._
+import spray.http.StatusCodes.NotFound
 
 class ApiActor
   extends HttpServiceActor
   with ApiRoutes
   with ApiServicesImpl
-  with SwaggerService {
+  with SwaggerService
+  with VersionDirectives {
 
   def receive =
-    runRoute(route ~ swaggerService.routes ~
+    runRoute(
+      pathPrefix(Version) {
+        case 1 =>
+          routeV1
+        case apiVersion =>
+          complete((NotFound, s"Version $apiVersion not found"))
+      } ~ routeV1 //v1 by default
+    )
+
+  lazy val routeV1 =
+    route ~ swaggerService.routes ~
       get {
         pathPrefix("swagger") {
           pathEndOrSingleSlash {
@@ -34,5 +47,5 @@ class ApiActor
           pathPrefix("webjars") {
             getFromResourceDirectory("META-INF/resources/webjars")
           }
-      })
+      }
 }
