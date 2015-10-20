@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.api.service
+package com.stratio.ingestion.api.core.utils
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
+/**
+ * Created by aitor on 10/19/15.
+ */
+object Constants {
 
-import spray.can.Http
+  val ZOO_PARENT_PATH= "/stratio/ingestion"
+  val ZOO_WORKFLOWS_PATH= ZOO_PARENT_PATH + "/workflows"
 
-object Boot extends App {
-
-  implicit val system = ActorSystem("my-actor-system")
-
-  val api = system.actorOf(Props[ApiActor], "api-actor")
-
-  IO(Http) ! Http.Bind(listener = api, interface = "0.0.0.0", port = 8080)
 }

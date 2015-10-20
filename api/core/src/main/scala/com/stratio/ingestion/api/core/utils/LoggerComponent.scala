@@ -13,18 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.api.service
+package com.stratio.ingestion.api.core.utils
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
+import org.slf4j.LoggerFactory
 
-import spray.can.Http
-
-object Boot extends App {
-
-  implicit val system = ActorSystem("my-actor-system")
-
-  val api = system.actorOf(Props[ApiActor], "api-actor")
-
-  IO(Http) ! Http.Bind(listener = api, interface = "0.0.0.0", port = 8080)
+/**
+ * Created by aitor on 10/20/15.
+ */
+trait LoggerComponent {
+  val log = LoggerFactory.getLogger(this.getClass.getName)
 }

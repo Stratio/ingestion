@@ -13,18 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.api.service
+package com.stratio.ingestion.api.core.dao
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
+trait RepositoryDao {
 
-import spray.can.Http
+  def createWorkflow(): Boolean
 
-object Boot extends App {
+  def deleteWorkflow(): Boolean
 
-  implicit val system = ActorSystem("my-actor-system")
+  def getWorkflow(): Boolean
 
-  val api = system.actorOf(Props[ApiActor], "api-actor")
+  def listAll(path: String): Boolean
 
-  IO(Http) ! Http.Bind(listener = api, interface = "0.0.0.0", port = 8080)
+  def addElementToWorkflow(): Boolean
+
+  def getWorkflowElements(): Boolean
+
+  def updateElement(): Boolean
+
+  def deleteElement(): Boolean
+
+
+  
 }
