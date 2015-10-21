@@ -17,6 +17,9 @@ package com.stratio.ingestion.source.irc;
 
 
 public class IRCConstants {
+
+    public IRCConstants(){}
+
     public static final String CONF_HOST = "host";
     public static final String CONF_PORT = "port";
     public static final String CONF_NICK = "nick";

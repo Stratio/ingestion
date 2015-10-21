@@ -15,7 +15,18 @@
  */
 package com.stratio.ingestion.source.irc;
 
-import static com.stratio.ingestion.source.irc.IRCConstants.*;
+import static com.stratio.ingestion.source.irc.IRCConstants.CONF_CHANNELS;
+import static com.stratio.ingestion.source.irc.IRCConstants.CONF_HOST;
+import static com.stratio.ingestion.source.irc.IRCConstants.CONF_NAME;
+import static com.stratio.ingestion.source.irc.IRCConstants.CONF_NICK;
+import static com.stratio.ingestion.source.irc.IRCConstants.CONF_PASSWORD;
+import static com.stratio.ingestion.source.irc.IRCConstants.CONF_PORT;
+import static com.stratio.ingestion.source.irc.IRCConstants.CONF_REPLYPING;
+import static com.stratio.ingestion.source.irc.IRCConstants.CONF_USER;
+import static com.stratio.ingestion.source.irc.IRCConstants.DEFAULT_PORT;
+import static com.stratio.ingestion.source.irc.IRCConstants.DEFAULT_REPLYPING;
+import static com.stratio.ingestion.source.irc.IRCConstants.IRC_CHANNEL_PREFIX;
+import static com.stratio.ingestion.source.irc.IRCConstants.NAME_PREFIX;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.codec.Charsets;
 import org.apache.flume.Context;
 import org.apache.flume.EventDrivenSource;
 import org.apache.flume.channel.ChannelProcessor;
@@ -39,7 +51,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 
 /**
@@ -83,24 +94,41 @@ public class IRCSource extends AbstractSource implements Configurable, EventDriv
 
         Map<String, String> headers = new HashMap<String, String>();
 
+        /**
+         * @param
+         * @return void
+         */
         public void onRegistered() {
             logger.info("IRC on Registered called");
             headers.put(IRCConstants.HEADER_TYPE, "registered");
             send("", headers);
         }
 
+        /**
+         * @param
+         * @return void
+         */
         public void onDisconnected() {
             logger.error("IRC source disconnected");
             headers.put(IRCConstants.HEADER_TYPE, "disconnected");
             send("", headers);
         }
 
+        /**
+         * @param msg
+         * @return void
+         */
         public void onError(String msg) {
             logger.error("IRC source error: {}", msg);
             headers.put(IRCConstants.HEADER_TYPE, "error");
             send(msg, headers);
         }
 
+        /**
+         * @param msg
+         * @param num
+         * @return void
+         */
         public void onError(int num, String msg) {
             logger.debug("IRC source error: {} - {}", num, msg);
             headers.put(IRCConstants.HEADER_TYPE, "error");
@@ -108,114 +136,194 @@ public class IRCSource extends AbstractSource implements Configurable, EventDriv
             send(msg, headers);
         }
 
-        public void onInvite(String chan, IRCUser u, String nickPass) {
-            logger.debug("User {} was invited to channel {}.", u.getNick(), chan);
+        /**
+         * @param chan
+         * @param user
+         * @return void
+         */
+        public void onInvite(String chan, IRCUser user, String nickPass) {
+            logger.debug("User {} was invited to channel {}.", user.getNick(), chan);
             headers.put(IRCConstants.HEADER_TYPE, "invite");
             headers.put(IRCConstants.HEADER_CHANNEL, chan);
-            headers.putAll(getUser(u));
+            headers.putAll(getUser(user));
             send("", headers);
         }
 
-        public void onJoin(String chan, IRCUser u) {
-            logger.debug("User {} joined to channel {}.", u.getNick(), chan);
+        /**
+         * @param chan
+         * @param user
+         * @return void
+         */
+        public void onJoin(String chan, IRCUser user) {
+            logger.debug("User {} joined to channel {}.", user.getNick(), chan);
             headers.put(IRCConstants.HEADER_TYPE, "join");
             headers.put(IRCConstants.HEADER_CHANNEL, chan);
-            headers.putAll(getUser(u));
+            headers.putAll(getUser(user));
             send("", headers);
         }
 
-        public void onKick(String chan, IRCUser u, String nickPass, String msg) {
-            logger.debug("User {} was kicked from channel {}.", u.getNick(), chan);
+        /**
+         * @param chan
+         * @param user
+         * @param nickPass
+         * @param msg
+         * @return void
+         */
+        public void onKick(String chan, IRCUser user, String nickPass, String msg) {
+            logger.debug("User {} was kicked from channel {}.", user.getNick(), chan);
             headers.put(IRCConstants.HEADER_TYPE, "kick");
             headers.put(IRCConstants.HEADER_CHANNEL, chan);
-            headers.putAll(getUser(u));
+            headers.putAll(getUser(user));
             headers.put(IRCConstants.HEADER_NICKPASS, nickPass);
             send(msg, headers);
         }
 
-        public void onMode(IRCUser u, String nickPass, String mode) {
-            logger.debug("User {} changed mode.", u.getNick());
+        /**
+         * @param nickPass
+         * @param user
+         * @param mode
+         * @return void
+         */
+        public void onMode(IRCUser user, String nickPass, String mode) {
+            logger.debug("User {} changed mode.", user.getNick());
             headers.put(IRCConstants.HEADER_TYPE, "mode");
-            headers.putAll(getUser(u));
+            headers.putAll(getUser(user));
             headers.put(IRCConstants.HEADER_NICKPASS, nickPass);
             headers.put(IRCConstants.HEADER_MODE, mode);
             send("", headers);
         }
 
-        public void onMode(String chan, IRCUser u, IRCModeParser mp) {
-            logger.debug("User {} changed {} channel mode.", u.getNick(), chan);
+        /**
+         * @param chan
+         * @param user
+         * @param mp
+         * @return void
+         */
+        public void onMode(String chan, IRCUser user, IRCModeParser mp) {
+            logger.debug("User {} changed {} channel mode.", user.getNick(), chan);
             headers.put(IRCConstants.HEADER_TYPE, "mode");
             headers.put(IRCConstants.HEADER_CHANNEL, chan);
-            headers.putAll(getUser(u));
+            headers.putAll(getUser(user));
             headers.put(IRCConstants.HEADER_IRCMODEPARSER, mp.toString());
             send("", headers);
         }
 
-        public void onNick(IRCUser u, String nickNew) {
-            logger.debug("User {} changed his nick to {} channel mode.", u.getNick(), nickNew);
+        /**
+         * @param nickNew
+         * @param user
+         * @return void
+         */
+        public void onNick(IRCUser user, String nickNew) {
+            logger.debug("User {} changed his nick to {} channel mode.", user.getNick(), nickNew);
             headers.put(IRCConstants.HEADER_TYPE, "nick");
-            headers.putAll(getUser(u));
-            headers.put(IRCConstants.HEADER_NEWNICK, u.getNick());
+            headers.putAll(getUser(user));
+            headers.put(IRCConstants.HEADER_NEWNICK, user.getNick());
             send("", headers);
         }
 
-        public void onNotice(String target, IRCUser u, String msg) {
-            logger.debug("User {}  noticed {} to {}.", u.getNick(), msg, target);
+        /**
+         * @param target
+         * @param user
+         * @param msg
+         * @return void
+         */
+        public void onNotice(String target, IRCUser user, String msg) {
+            logger.debug("User {}  noticed {} to {}.", user.getNick(), msg, target);
             headers.put(IRCConstants.HEADER_TYPE, "notice");
-            headers.putAll(getUser(u));
+            headers.putAll(getUser(user));
             headers.put(IRCConstants.HEADER_TARGET, target);
             send(msg, headers);
         }
 
-        public void onPart(String chan, IRCUser u, String msg) {
-            logger.debug("User {} is part of channel {}.", u.getNick(), chan);
+        /**
+         * @param chan
+         * @param user
+         * @param msg
+         * @return void
+         */
+        public void onPart(String chan, IRCUser user, String msg) {
+            logger.debug("User {} is part of channel {}.", user.getNick(), chan);
             headers.put(IRCConstants.HEADER_TYPE, "part");
             headers.put(IRCConstants.HEADER_CHANNEL, chan);
-            headers.putAll(getUser(u));
+            headers.putAll(getUser(user));
             send(msg, headers);
         }
 
-        public void onPrivmsg(String chan, IRCUser u, String msg) {
-            logger.debug("User {} wrote a message to {} - {}", u.getNick(), chan, msg);
+        /**
+         * @param chan
+         * @param user
+         * @param msg
+         * @return void
+         */
+        public void onPrivmsg(String chan, IRCUser user, String msg) {
+            logger.debug("User {} wrote a message to {} - {}", user.getNick(), chan, msg);
             headers.put(IRCConstants.HEADER_TYPE, "privmsg");
             headers.put(IRCConstants.HEADER_CHANNEL, chan);
-            headers.putAll(getUser(u));
+            headers.putAll(getUser(user));
             send(msg, headers);
         }
 
-        public void onQuit(IRCUser u, String msg) {
+        /**
+         * @param msg
+         * @param user
+         * @return void
+         */
+        public void onQuit(IRCUser user, String msg) {
             logger.debug("User {} left the chat.");
             headers.put(IRCConstants.HEADER_TYPE, "quit");
-            headers.putAll(getUser(u));
+            headers.putAll(getUser(user));
             send(msg, headers);
         }
 
+        /**
+         * @param msg
+         * @param num
+         * @param value
+         * @return void
+         */
         public void onReply(int num, String value, String msg) {
             logger.debug("A numeric reply with identifier {} and value {} was received.", num, value);
             headers.put(IRCConstants.HEADER_TYPE, "reply");
             send(msg, headers);
         }
 
-        public void onTopic(String chan, IRCUser u, String topic) {
-            logger.debug("User {} changed {} channel topic to {}", u.getNick(), chan, topic);
+        /**
+         * @param chan
+         * @param user
+         * @param topic
+         * @return void
+         */
+        public void onTopic(String chan, IRCUser user, String topic) {
+            logger.debug("User {} changed {} channel topic to {}", user.getNick(), chan, topic);
             headers.put(IRCConstants.HEADER_TYPE, "topic");
-            headers.putAll(getUser(u));
+            headers.putAll(getUser(user));
             headers.put(IRCConstants.HEADER_CHANNEL, chan);
             headers.put(IRCConstants.HEADER_TOPIC, topic);
             send(topic, headers);
         }
 
-        public void onPing(String p) {
-            logger.debug("Ping {}." + p);
+        /**
+         * @param ping
+         * @return void
+         */
+        public void onPing(String ping) {
+            logger.debug("Ping {}." + ping);
             headers.put(IRCConstants.HEADER_TYPE, "ping");
             headers.put(IRCConstants.HEADER_TYPE, "unknown");
-            send(p, headers);
+            send(ping, headers);
 
             if(replyPing){
-                connection.doPong(p);
+                connection.doPong(ping);
             }
         }
 
+        /**
+         * @param prefix
+         * @param command
+         * @param middle
+         * @param trailing
+         * @return void
+         */
         public void unknown(String prefix, String command, String middle, String trailing) {
             logger.debug("Unknown event was received. ");
             headers.put(IRCConstants.HEADER_TYPE, "unknown");
@@ -226,17 +334,24 @@ public class IRCSource extends AbstractSource implements Configurable, EventDriv
             send("", headers);
         }
 
-
-
-        private Map<String, String> getUser(IRCUser u) {
+        /**
+         * @param user
+         * @return void
+         */
+        private Map<String, String> getUser(IRCUser user) {
             Map<String, String> usermap = new HashMap();
-            usermap.put(IRCConstants.HEADER_USERNAME, u.getUsername());
-            usermap.put(IRCConstants.HEADER_SERVERNAME, u.getServername());
-            usermap.put(IRCConstants.HEADER_NICK, u.getNick());
-            usermap.put(IRCConstants.HEADER_HOST, u.getHost());
+            usermap.put(IRCConstants.HEADER_USERNAME, user.getUsername());
+            usermap.put(IRCConstants.HEADER_SERVERNAME, user.getServername());
+            usermap.put(IRCConstants.HEADER_NICK, user.getNick());
+            usermap.put(IRCConstants.HEADER_HOST, user.getHost());
             return usermap;
         }
 
+        /**
+         * @param message
+         * @param headers
+         * @return void
+         */
         private void send(String message, Map<String, String> headers) {
             ChannelProcessor channelProcessor = getChannelProcessor();
             sourceCounter.addToEventReceivedCount(1);
@@ -247,6 +362,7 @@ public class IRCSource extends AbstractSource implements Configurable, EventDriv
             sourceCounter.incrementAppendBatchAcceptedCount();
             headers.clear();
         }
+
     }
 
     @Override
@@ -278,7 +394,7 @@ public class IRCSource extends AbstractSource implements Configurable, EventDriv
             createConnection();
         } catch (Exception e) {
             logger.error("Unable to create irc client using hostname:"
-                    + hostname + " port:" + port + ". Exception follows.", e);
+                    + hostname + " port:" + port );
 
             destroyConnection();
 

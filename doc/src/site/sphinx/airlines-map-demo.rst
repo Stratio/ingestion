@@ -16,10 +16,13 @@ You need an extracted full distribution of Stratio Ingestion at ``/opt/sds/inges
 Vagrant Box
 -----------
 
-You can use our Vagrant Box to run the example, just type: ``vagrant up stratio/ingestion`` to get our sandbox.
+You can use our Vagrant Box to run the example, just type: ``vagrant init stratio/ingestion`` to get our sandbox, then ``vagrant up`` to start it up.
 
-You can edit the conf/flume-conf.properties for customizing the example. By default, we have activated two sinks: ElasticSearch and Cassandra, but we provide the configuration for Stratio Streaming Sink commented in the same file.
+You can edit the /opt/sds/ingestion/examples/airlines-map/conf/flume-conf.properties for customizing the example. By default, we have activated two sinks: ElasticSearch and Cassandra, but we provide the configuration for Stratio Streaming Sink commented in the same file.
 
+Due to an issue in virtualbox in Windows 10 computers, sandbox could not install properly the network interfaces. There is an official Virtualbox patch it. Just download and run as administrator:
+https://www.virtualbox.org/attachment/ticket/14040/VBox-Win10-fix-14040.exe
+If you've this problem in your local, please run this VirtualBox fix in the background while executing vagrant up.
 
 Running the example
 ===================
@@ -27,33 +30,19 @@ Running the example
 ElasticSearch
 -------------
 
-- Edit ``conf/flume-conf-elasticsearch.properties`` to set up your ElasticSearch cluster hostnames (``a.sinks.snk.hostNames``) and cluster name (``a.sinks.snk.clusterName``). By default, they are ``127.0.0.1`` and ``elasticsearch`` respectively.
+- Edit ``/opt/sds/ingestion/examples/airlines-map/conf/flume-conf-elasticsearch.properties`` to set up your ElasticSearch cluster hostnames (``a.sinks.snk.hostNames``) and cluster name (``a.sinks.snk.clusterName``). By default, they are ``127.0.0.1`` and ``elasticsearch`` respectively.
 - Run ``bin/run_example.sh``.
 
 Kibana Dashboard
 ----------------
 
-We provide an out-of-the-box configured Kibana dashboard for visualizing the ingested data. You'll need an installation of `Kibana 4`_, elasticdump_ and a version of ElasticSearch equals or later than 1.4.4.
+- Start Kibana if it is stopped (``./opt/sds/kibana-4.0.2-linux-x64/kibana``) Enter in Kibana http://IP:5601 in Dashboard Tab You can Load saved dashboard and select "US Flights Demo Dashboard". Due to date of logs, you must select a new time filter between January 1987 and December 1988, for example. You can select that date range by clicking on the top right corner, selecting  the "Absolute" option on the left menu and establishing the dates in the calendar:
 
-.. _Kibana 4: https://www.elastic.co/downloads/kibana
-.. _elasticdump: https://github.com/taskrabbit/elasticsearch-dump/
+.. image:: /images/airlines_map_time.jpg
+    :align: center
 
-Load the provided dashboard inside ElasticSearch with the commands
+You should see something like this:
 
-::
-
-    elasticdump --input $INGESTION_HOME/examples/airlines-map/dashboards/us-flights-mapping.json
-    --output=http://[YOUR ES HOST]:[YOUR ES PORT]/.kibana --type=mapping
-
-and
-
-::
-
-    elasticdump --input $INGESTION_HOME/examples/airlines-map/dashboards/us-flights-data.json
-    --output=http://[YOUR ES HOST]:[YOUR ES PORT]/.kibana --type=data
-
-Now, you will be able to access the preconfigured Kibana 4 dashboard through an URL like this_.
-
-.. _this: http://localhost:5601/#/dashboard/US-Flights?_g=(refreshInterval:(display:Off,section:0,value:0),time:(from:'1987-12-31T23:00:00.000Z',mode:absolute,to:'1988-12-31T23:00:00.000Z'))&_a=(filters:!(),panels:!((col:1,id:Flights-by-Origin,row:1,size_x:6,size_y:6,type:visualization),(col:7,id:Flights-by-Destination,row:1,size_x:6,size_y:6,type:visualization),(col:1,id:Average-Arrival-Delay-per-day,row:7,size_x:6,size_y:4,type:visualization),(col:7,id:Average-Departure-Delay-per-day,row:7,size_x:6,size_y:4,type:visualization),(col:1,id:Top-20-Arrival-Delay-by-Unique-Carrier,row:11,size_x:3,size_y:2,type:visualization),(col:4,id:Top-20-Departure-Delay-by-Unique-Carrier,row:11,size_x:3,size_y:2,type:visualization),(col:7,id:Top-20-Average-Departure-Delay-By-Destination-Airport,row:11,size_x:3,size_y:2,type:visualization),(col:10,id:Top-20-Average-Arrival-Delay-by-Origin-Airport,row:11,size_x:3,size_y:2,type:visualization)),query:(query_string:(analyze_wildcard:!t,query:'*')),title:US-Flights)
-
+ .. image:: /images/flume-airlines.jpg
+    :align: center
 

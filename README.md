@@ -61,6 +61,7 @@ Compile & Package
 ```
 $ git submodule init
 $ git submodule update
+$ mvn install
 $ cd stratio-ingestion-dist
 $ mvn clean compile package -Ppackage
 ```
@@ -97,6 +98,6 @@ Flume Ingestion FAQ
 Changelog
 ---------
 
-See the [changelog](CHANGELOG.md) for changes.
+See the [changelog](CHANGELOG.md) for changes. 
 
 

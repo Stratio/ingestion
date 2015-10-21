@@ -85,10 +85,12 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     protected static final String CONF_HEADERS = "headers";
     protected static final String CONF_BODY = "body";
     protected static final String CONF_HANDLER = "restSourceHandler";
-    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.restSourceHandler"
+    protected static final String DEFAULT_REST_HANDLER = "com.stratio.ingestion.source.rest.handler"
             + ".DefaultRestSourceHandler";
     protected static final String CONF_SKIP_SSL = "skipSsl";
     protected static final String URL_HANDLER = "urlHandler";
+    protected static final String DEFAULT_URL_HANDLER = "com.stratio.ingestion.source.rest.url."
+            + "DefaultUrlHandler";
     protected static final String URL_CONF = "urlHandlerConfig";
 
     private LinkedBlockingQueue<Event> queue = new LinkedBlockingQueue<Event>(QUEUE_SIZE);
@@ -124,7 +126,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         properties.put(CONF_BODY, context.getString(CONF_BODY, DEFAULT_BODY));
         properties.put(CONF_HANDLER, context.getString(CONF_HANDLER, DEFAULT_REST_HANDLER));
         properties.put(URL_CONF, context.getString(URL_CONF));
-        properties.put(URL_HANDLER, context.getString(URL_HANDLER));
+        properties.put(URL_HANDLER, context.getString(URL_HANDLER, DEFAULT_URL_HANDLER));
         restSourceHandler = initRestSourceHandler(context);
         urlHandler = initUrlHandler(context);
         client = initClient(context);
@@ -169,7 +171,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
             scheduler.start();
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         }
 
     }
@@ -177,14 +179,14 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
     private UrlHandler initUrlHandler(Context context) {
         UrlHandler handler = null;
         try {
-            handler = (UrlHandler) Class.forName((String) properties.get("urlHandler")).newInstance();
+            handler = (UrlHandler) Class.forName((String) properties.get(URL_HANDLER)).newInstance();
             handler.configure(context);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            log.error("RestSource error. " + e.getMessage());
         }
 
         return handler;
@@ -197,11 +199,11 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
             handler = (RestSourceHandler) Class.forName((String) properties.get(CONF_HANDLER)).newInstance();
             handler.configure(context);
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         }
         return handler;
     }
@@ -236,7 +238,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         try {
             scheduler.interrupt(jobDetail.getKey());
         } catch (UnableToInterruptJobException e) {
-            e.printStackTrace();
+            log.error("RestSource error. " + e.getMessage());
         }
     }
 
@@ -252,7 +254,7 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
             try {
                 Thread.sleep(frequency * 1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("RestSource error. " + e.getMessage());
             }
         }
 

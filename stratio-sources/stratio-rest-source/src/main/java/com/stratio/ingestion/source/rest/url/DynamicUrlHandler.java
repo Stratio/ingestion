@@ -21,13 +21,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Context;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stratio.ingestion.source.rest.exception.RestSourceException;
 import com.stratio.ingestion.source.rest.url.filter.FilterHandler;
 
@@ -37,7 +36,7 @@ import com.stratio.ingestion.source.rest.url.filter.FilterHandler;
 public class DynamicUrlHandler implements UrlHandler {
     private static final String PARAM_MAPPER = "urlParamMapper";
     private static final String URL = "url";
-    public static final String URL_CONF = "urlHandlerConfig";
+    public static final String URL_CONF = "urlJson";
 
     private FilterHandler filterHandler;
     private Map<String, String> urlContext;
@@ -46,7 +45,7 @@ public class DynamicUrlHandler implements UrlHandler {
         String url = properties.get(URL);
 
         if (StringUtils.isNotBlank(urlContext.get(PARAM_MAPPER))) {
-            Map<String, String> filter = filterHandler.getLastFilter(properties);
+//            Map<String, String> filter = filterHandler.getLastFilter(properties);
             ObjectMapper mapper = new ObjectMapper();
             try {
                 JsonNode jsonNode = mapper.readTree(urlContext.get(PARAM_MAPPER)).get("params");
@@ -54,7 +53,7 @@ public class DynamicUrlHandler implements UrlHandler {
                 while (iterator.hasNext()) {
                     JsonNode currentNode = iterator.next();
                     if (currentNode.get("name") != null && (!(currentNode.get("name").asText().trim().equals("")))) {
-                        url = replaceParameter(url, currentNode, filter);
+                        url = replaceParameter(url, currentNode, properties);
                     }
                 }
             } catch (JsonProcessingException e) {
@@ -129,7 +128,8 @@ public class DynamicUrlHandler implements UrlHandler {
         JsonNode jsonNode = loadConfiguration(context.getString(URL_CONF));
         urlContext.put("filterHandler", jsonNode.findValue("filterHandler").asText());
         urlContext.put("filterConfiguration", jsonNode.findValue("filterConfiguration").asText());
-        urlContext.put("urlParamMapper", jsonNode.findValue("urlParamMapper").asText());
+        JsonNode listParams = jsonNode.path("urlParamMapper");
+        urlContext.put("urlParamMapper", listParams.toString());
         return urlContext;
     }
 

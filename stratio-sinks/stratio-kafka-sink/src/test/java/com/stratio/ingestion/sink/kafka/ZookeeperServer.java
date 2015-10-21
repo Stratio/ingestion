@@ -28,7 +28,7 @@ import com.google.common.io.Files;
 
 public class ZookeeperServer {
     private static final int WAIT_SECONDS = 5;
-    public static final int CLIENT_PORT = 2281;
+    public static final int CLIENT_PORT = 2181;
     private static final int NUM_CONNECTIONS = 5000;
     private static final int TICK_TIME = 2000;
 

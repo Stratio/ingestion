@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>com.stratio.ingestion</groupId>
 		<artifactId>stratio-serializers</artifactId>
-		<version>0.5.0-SNAPSHOT</version>
+		<version>0.6.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>stratio-elasticsearch-serializer</artifactId>
@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>org.elasticsearch</groupId>
 			<artifactId>elasticsearch</artifactId>
-            <version>1.3.4</version>
+            <version>1.7.1</version>
 		</dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -79,5 +79,10 @@
             <version>1.1.2</version>
             <scope>test</scope>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+    </dependencies>
 </project>

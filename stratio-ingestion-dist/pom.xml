@@ -25,7 +25,7 @@
     <parent>
         <artifactId>stratio-ingestion-parent</artifactId>
         <groupId>com.stratio.ingestion</groupId>
-        <version>0.5.0-SNAPSHOT</version>
+        <version>0.6.0-SNAPSHOT</version>
     </parent>
 
     <!-- Required here for unix-maven-plugin -->
@@ -94,14 +94,10 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.stratio.ingestion</groupId>
-            <artifactId>stratio-checkpointfilter-morphline</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.stratio.ingestion</groupId>
-            <artifactId>stratio-commons-morphline</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.stratio.morphlines</groupId>
+            <artifactId>morphlines-all</artifactId>
+            <version>${stratio.morphlines.version}</version>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.stratio.ingestion</groupId>
@@ -111,16 +107,6 @@
         <dependency>
             <groupId>com.stratio.ingestion</groupId>
             <artifactId>stratio-elasticsearch-serializer</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.stratio.ingestion</groupId>
-            <artifactId>stratio-geoip-morphline</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.stratio.ingestion</groupId>
-            <artifactId>stratio-geolocateairport-morphline</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -145,11 +131,6 @@
         </dependency>
         <dependency>
             <groupId>com.stratio.ingestion</groupId>
-            <artifactId>stratio-nlp-morphline</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.stratio.ingestion</groupId>
             <artifactId>stratio-redis-source</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -160,28 +141,19 @@
         </dependency>
         <dependency>
             <groupId>com.stratio.ingestion</groupId>
-            <artifactId>stratio-wikipediacleaner-morphline</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.stratio.ingestion</groupId>
             <artifactId>stratio-xmlxpath-deserializer</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- Dependency needed in HDFS sink -->
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.10</version>
+        </dependency>
+
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
     <profiles>
         <profile>
             <id>package</id>

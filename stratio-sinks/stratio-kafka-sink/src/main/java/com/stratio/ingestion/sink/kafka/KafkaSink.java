@@ -17,10 +17,6 @@ package com.stratio.ingestion.sink.kafka;
 
 import java.util.Properties;
 
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
-import kafka.producer.ProducerConfig;
-
 import org.apache.flume.Channel;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -34,6 +30,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
+
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
+import kafka.producer.ProducerConfig;
 
 //@formatter:off
 /**
@@ -72,6 +72,8 @@ public class KafkaSink extends AbstractSink implements Configurable {
     private Producer<String, String> producer;
     private ObjectMapper mapper;
     private boolean writeBody;
+
+    public KafkaSink(){}
 
     @Override
     public void configure(Context context) {
@@ -139,4 +141,8 @@ public class KafkaSink extends AbstractSink implements Configurable {
         super.stop();
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getName();
+    }
 }

@@ -15,84 +15,51 @@
  */
 package com.stratio.ingestion.source.irc;
 
-import static com.stratio.ingestion.source.irc.IRCConstants.CONF_CHANNELS;
-import static com.stratio.ingestion.source.irc.IRCConstants.CONF_HOST;
-import static com.stratio.ingestion.source.irc.IRCConstants.CONF_NICK;
-import static com.stratio.ingestion.source.irc.IRCConstants.CONF_PASSWORD;
-import static com.stratio.ingestion.source.irc.IRCConstants.CONF_USER;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.flume.Channel;
-import org.apache.flume.ChannelSelector;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.Transaction;
-import org.apache.flume.channel.ChannelProcessor;
 import org.apache.flume.channel.MemoryChannel;
-import org.apache.flume.channel.ReplicatingChannelSelector;
-import org.apache.flume.conf.Configurables;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import junit.framework.TestCase;
+
 @RunWith(JUnit4.class)
-public class IRCSourceTest {
+public class IRCSourceTest extends TestCase {
 
     static IRCSource source;
     static MemoryChannel channel;
 
+    Context context = new Context();
+
     @Before
     public void setUp() {
+
         source = new IRCSource();
         channel = new MemoryChannel();
 
-        Configurables.configure(channel, new Context());
+        context.put("host", "localhost");
+        context.put("port", "6667");
+        context.put("nick", "admin");
+        context.put("channels", "memory,jdbc");
+        context.put("password", "1234");
+        context.put("replyPing", "false");
+        context.put("user", "root");
+        context.put("name", "admin");
+        context.put("replyPing", "false");
 
-        List<Channel> channels = new ArrayList<Channel>();
-        channels.add(channel);
 
-        ChannelSelector rcs = new ReplicatingChannelSelector();
-        rcs.setChannels(channels);
-
-        source.setChannelProcessor(new ChannelProcessor(rcs));
+        source.configure(context);
     }
 
-    @Test
-    public void dummy() {
-        Assert.assertTrue(true); //TODO: Dummy test to avoid surefire failure
+    @Test(expected = NullPointerException.class)
+    public void testBadConnection(){
+            source.start();
+            source.stop();
     }
-
-    /*@Test
-    public void testConnection() throws InterruptedException, IOException {
-        Context context = new Context();
-        *//*context.put(CONF_HOST, "irc.freenode.org");
-        context.put(CONF_USER, "stratiogms");
-        context.put(CONF_NICK, "stratio");
-        context.put(CONF_CHANNELS, "stratiotest");*//*
-        context.put(CONF_HOST, "irc.twitch.tv");
-        context.put(CONF_USER, "antnavper");
-        context.put(CONF_NICK, "antnavper");
-        context.put(CONF_CHANNELS, "amazhs,beyondthesummit,tsm_wildturtle,starladder1,therace");
-        context.put(CONF_PASSWORD, "oauth:s362vqqdy4rp4ljblybvjhnq9eg3ev");
-
-
-        Configurables.configure(source, context);
-        source.start();
-
-        while(true){
-            Transaction txn = channel.getTransaction();
-            txn.begin();
-            channel.take();
-            txn.commit();
-            txn.close();
-        }
-    }*/
-
 
     public void checkEventsChannel() {
         Transaction txn = channel.getTransaction();
