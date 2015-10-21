@@ -15,11 +15,10 @@
  */
 package com.stratio.ingestion.api.model.commons
 
+import spray.json.JsonFormat
+
 /**
- * Created by eruiz on 16/10/15.
+ * Created by eruiz on 20/10/15.
  */
-abstract class Entity {
-  val id: String
-  val _type: String
-  val name: String
-}
+case class WorkFlow[T: JsonFormat] (id: String, name:String, description: String, agents: Seq[Agent[T]])
+//TODO Add execution order

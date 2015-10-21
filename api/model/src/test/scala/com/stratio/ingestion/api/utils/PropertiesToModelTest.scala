@@ -34,13 +34,6 @@ with ShouldMatchers {
 
       val v = PropertiesToModel.propertiesToModel("/new.properties")
       println(v)
-      //        val source = AgentSource("ID", "spoolDir", "src", "SourceDescription", Seq(), Seq())
-      //
-      //        val agent = Agent(source,Seq(),Seq())
-      //        val result = ModelToProperties.modelToProperties(agent)
-      //
-      //        result should be (PropertiesToModel.propertiesToModel("/new.properties"))
-
     }
 
 
