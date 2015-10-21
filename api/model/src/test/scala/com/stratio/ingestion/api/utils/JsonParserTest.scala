@@ -16,14 +16,15 @@
 package com.stratio.ingestion.api.utils
 
 import com.stratio.ingestion.api.model.channel.AgentChannel
-import com.stratio.ingestion.api.model.commons.Agent
+import com.stratio.ingestion.api.model.commons.{Agent, Attribute}
 import com.stratio.ingestion.api.model.sink.AgentSink
-import JsonParser._
 import com.stratio.ingestion.api.model.source.AgentSource
+import com.stratio.ingestion.api.utils.JsonParser._
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 import spray.json._
+
 
 /**
  * Created by eruiz on 15/10/15.
@@ -36,22 +37,29 @@ with ShouldMatchers {
 
   describe("The Json Parser") {
     it("should parse this sink from the json") {
+
+
+      val attribute1 = Attribute[String]( "spooldDir", "spoolDir","", true, "data/spoolDir")
+      val attribute2 = Attribute[String]( "fileHeader", "spoolDir","", false, "FALSE")
+      val source = AgentSource[String]("src", "spoolDir", "", Seq(), Seq(attribute1, attribute2))
+      val attributeChannel = Attribute[String]("capacity", "capacity", "", false, "100")
+      val channel = AgentChannel[String]("mongoChannel", "memory", "", Seq(attributeChannel), source)
+      val channel2 = AgentChannel[String]("decisionChannel", "file", "", Seq(attributeChannel), source)
+      val attributeSink = Attribute[String]("mongoUri", "mongoUri", "", true, "mongodb://127.0.0.1:27017/example.example")
+      val attributeSink2 = Attribute[String]("mappingFile", "mappingFile", "", true, "conf/mongo_schema.json")
+      val attributeSink3 = Attribute[String]("dynamic", "dynamic", "", true, "false")
+      val sink = AgentSink[String]("mongoSink", "com.stratio.ingestion.sink.mongodb.MongoSink", "", Seq
+        (attributeSink, attributeSink2, attributeSink3), channel)
+      sink should be(sink.toJson.convertTo[AgentSink[String]])
+
+      val sink2 = AgentSink[String]("1", "typo", "mongo", Seq.empty[Attribute[String]],channel)
+      channel2 should be(channel2.toJson.convertTo[AgentChannel[String]])
+
+      val agent = Agent[String]("a1",source,Seq(channel),Seq(sink,sink2))
+      println(agent)
       Given("a json sink")
-
-      val sink = AgentSink("1", "typo", "mongo", "mongoSink", Seq(), Seq())
-      sink should be(sink.toJson.convertTo[AgentSink])
-
-      val channel = AgentChannel("1", "typo", "mongo", "mongoSink", Seq(), Seq())
-      val sink2 = AgentSink("1", "typo", "mongo", "mongoSink", Seq(), Seq(channel))
-      println(sink2)
-      println(sink2.toJson)
-      sink2 should be(sink2.toJson.convertTo[AgentSink])
-
-
-      val source = AgentSource("ID", "spoolDir", "src", "SourceDescription", Seq(), Seq())
-
-      val agent = Agent(source,Seq(),Seq())
-      agent should be (agent.toJson.convertTo[Agent])
+      println(agent.toJson)
+      agent should be (agent.toJson.convertTo[Agent[String]])
     }
 
 

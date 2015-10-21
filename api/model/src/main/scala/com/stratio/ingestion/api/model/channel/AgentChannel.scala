@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,15 +17,15 @@ package com.stratio.ingestion.api.model.channel
 
 import com.stratio.ingestion.api.model.commons.{Entity, Attribute}
 import com.stratio.ingestion.api.model.source.AgentSource
+import spray.json.JsonFormat
 
 /**
  * Created by eruiz on 15/10/15.
  */
-case class AgentChannel(
-                    id: String,
-                    typo: String,
-                    name: String,
-                    description: String,
-                    settings: Seq[Attribute],
-                    sources: Seq[AgentSource]
-                    ) extends Entity
+case class AgentChannel[T: JsonFormat](
+                                        id: String,
+                                        _type: String,
+                                        name: String,
+                                        settings: Seq[Attribute[T]],
+                                        source: AgentSource[T]
+                                        ) extends Entity
