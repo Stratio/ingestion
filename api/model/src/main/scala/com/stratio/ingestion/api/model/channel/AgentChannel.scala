@@ -15,17 +15,16 @@
  */
 package com.stratio.ingestion.api.model.channel
 
-import com.stratio.ingestion.api.model.commons.{Entity, Attribute}
+import com.stratio.ingestion.api.model.commons.{Attribute, Entity}
 import com.stratio.ingestion.api.model.source.AgentSource
-import spray.json.JsonFormat
 
 /**
  * Created by eruiz on 15/10/15.
  */
-case class AgentChannel[T: JsonFormat](
+case class AgentChannel(
                                         id: String,
                                         _type: String,
                                         name: String,
-                                        settings: Seq[Attribute[T]],
-                                        source: AgentSource[T]
+                                        settings: Seq[Attribute],
+                                        source: AgentSource
                                         ) extends Entity

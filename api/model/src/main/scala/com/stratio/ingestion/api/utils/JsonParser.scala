@@ -26,10 +26,10 @@ import com.stratio.ingestion.api.model.channel.AgentChannel
  */
 object JsonParser extends DefaultJsonProtocol  {
 
-  implicit def attributeJsonFormat[T : JsonFormat] = jsonFormat5(Attribute.apply[T])
-  implicit def sourceJsonFormat[T : JsonFormat]= jsonFormat5(AgentSource.apply[T])
-  implicit def channelJsonFormat[T : JsonFormat] = jsonFormat5(AgentChannel.apply[T])
-  implicit def sinkJsonFormat[T : JsonFormat]= jsonFormat5(AgentSink.apply[T])
-  implicit def agentComponentJsonFormat[T : JsonFormat] = jsonFormat4(Agent.apply[T])
+  implicit def attributeJsonFormat = jsonFormat5(Attribute)
+  implicit def sourceJsonFormat= jsonFormat5(AgentSource)
+  implicit def channelJsonFormat = jsonFormat5(AgentChannel)
+  implicit def sinkJsonFormat= jsonFormat5(AgentSink)
+  implicit def agentComponentJsonFormat = jsonFormat4(Agent)
 
 }

@@ -18,12 +18,11 @@ package com.stratio.ingestion.api.model.commons
 import com.stratio.ingestion.api.model.channel.AgentChannel
 import com.stratio.ingestion.api.model.sink.AgentSink
 import com.stratio.ingestion.api.model.source.AgentSource
-import spray.json.JsonFormat
 
 /**
  * Created by eruiz on 15/10/15.
  */
-case class Agent[T: JsonFormat](id: String,
-                 source: AgentSource[T],
-                 channels: Seq[AgentChannel[T]],
-                 sinks: Seq[AgentSink[T]])
+case class Agent(id: String,
+                 source: AgentSource,
+                 channels: Seq[AgentChannel],
+                 sinks: Seq[AgentSink])

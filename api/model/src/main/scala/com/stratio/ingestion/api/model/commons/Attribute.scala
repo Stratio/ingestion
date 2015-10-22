@@ -15,8 +15,6 @@
  */
 package com.stratio.ingestion.api.model.commons
 
-import spray.json.JsonFormat
-
 /**
  * Created by eruiz on 15/10/15.
  */
@@ -33,11 +31,11 @@ import spray.json.JsonFormat
 //
 //}
 
-case class Attribute[T : JsonFormat](
+case class Attribute(
                       id: String, //fileHeader
                       _type: String, //Find in json (Int,string,boolean)
                       name: String, //UI
                       required: Boolean,//Find in json
-                      value: T//Generic 100
+                      value: String//Generic 100
                     //TODO Convert in a generic type
                       ) extends Entity

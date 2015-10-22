@@ -15,16 +15,15 @@
  */
 package com.stratio.ingestion.api.model.source
 
-import com.stratio.ingestion.api.model.commons.{Entity, Attribute}
-import spray.json.JsonFormat
+import com.stratio.ingestion.api.model.commons.{Attribute, Entity}
 
 /**
  * Created by eruiz on 15/10/15.
  */
-case class AgentSource[T: JsonFormat](
+case class AgentSource(
                                        id: String, //src
                                        _type: String, //spoolDir
                                        name: String, //UI
                                        interceptors: Seq[String],
-                                       settings: Seq[Attribute[T]]
+                                       settings: Seq[Attribute]
                                        ) extends Entity

@@ -15,10 +15,8 @@
  */
 package com.stratio.ingestion.api.model.commons
 
-import spray.json.JsonFormat
-
 /**
  * Created by eruiz on 20/10/15.
  */
-case class WorkFlow[T: JsonFormat] (id: String, name:String, description: String, agents: Seq[Agent[T]])
+case class WorkFlow(id: String, name:String, description: String, agents: Seq[Agent])
 //TODO Add execution order
