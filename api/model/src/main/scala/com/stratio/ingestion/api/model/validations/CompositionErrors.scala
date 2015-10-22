@@ -1,7 +1,7 @@
 package com.stratio.ingestion.api.model.validations
 
 import com.stratio.ingestion.api.model.channel.AgentChannel
-import com.stratio.ingestion.api.model.commons.{Entity, Agent}
+import com.stratio.ingestion.api.model.commons.{Attribute, Entity, Agent}
 import com.stratio.ingestion.api.model.sink.AgentSink
 import com.stratio.ingestion.api.model.source.AgentSource
 
@@ -28,59 +28,59 @@ class CompositionErrors extends ModelErrors {
   }
 
   def checkAgentSinks(agent: Agent) :  ListBuffer[String] = {
-    if(agent.sinks.==(None)){
+    if(agent.sinks.isEmpty){
       listMsg = writeErrorMessage(agent, "sink", listMessages);
     }
     listMsg
   }
 
   def checkAgentChannels(agent: Agent) :  ListBuffer[String] = {
-    if(agent.channels.==(None)){
+    if(agent.channels.isEmpty){
       listMsg = writeErrorMessage(agent, "channel", listMessages);
     }
     listMsg
   }
 
   def checkSourceSettings(source: AgentSource) :  ListBuffer[String] = {
-    if(source.settings.==(None)){
+    if(source.settings.isEmpty){
       listMsg = writeErrorMessage(source, "settings", listMessages);
     }
     listMsg
   }
 
   def checkSinkSettings(sink: AgentSink) :  ListBuffer[String] = {
-    if(sink.settings.==(None)){
+    if(sink.settings.isEmpty){
       listMsg = writeErrorMessage(sink, "settings", listMessages);
     }
     listMsg
   }
 
   def checkChannelSettings(channel: AgentChannel) :  ListBuffer[String] = {
-    if(channel.settings.==(None)){
+    if(channel.settings.isEmpty){
       listMsg = writeErrorMessage(channel, "settings", listMessages);
     }
     listMsg
   }
 
   def checkEntityIdOrType(entity: Entity) :  ListBuffer[String] = {
-    if(entity.id.==(None)){
+    if(entity.id.isEmpty){
       listMsg = writeErrorMessage(entity, "Id", listMessages)
     }
-    if(entity.typo.==(None)){
+    if(entity.typo.isEmpty){
       listMsg = writeErrorMessage(entity, "typo", listMessages)
     }
     listMsg
   }
 
   def checkSinkChannel(sink: AgentSink) :  ListBuffer[String] = {
-    if(sink.channels.==(None)){
+    if(sink.channels.isEmpty){
       listMsg = writeErrorMessage(sink, "channel", listMessages)
     }
     listMsg
   }
 
   def checkChannelSource(channel: AgentChannel) :  ListBuffer[String] = {
-    if(channel.sources.==(None)){
+    if(channel.sources.isEmpty){
       listMsg = writeErrorMessage(channel, "source", listMessages)
     }
     listMsg
@@ -91,7 +91,12 @@ class CompositionErrors extends ModelErrors {
   }
 
   def writeErrorMessage(entity: Entity, message: String, listMessages: ListBuffer[String]) :  ListBuffer[String] = {
-    listMessages += "Component " + entity.id + " of type " + entity.typo + " doesn't have " + message
+    listMessages += "Component " + entity.name + " of type " + entity.typo + " doesn't have " + message
   }
 
+  def writeErrorMessage(entity: Entity, setting: Attribute, message: String, listMessages: ListBuffer[String]) :
+  ListBuffer[String] = {
+    listMessages += "Component " + entity.name + " of type " + entity.typo + " doesn't have " +
+      message + " " + setting
+  }
 }
