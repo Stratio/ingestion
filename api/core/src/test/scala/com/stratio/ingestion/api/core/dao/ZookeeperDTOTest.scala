@@ -16,6 +16,7 @@
 package scala.com.stratio.ingestion.api.core.dao
 
 import com.stratio.ingestion.api.core.dao.ZookeeperDTO
+import com.typesafe.scalalogging.LazyLogging
 import org.apache.curator.framework.CuratorFramework
 import org.apache.curator.framework.imps.CuratorFrameworkState
 import org.junit.runner.RunWith
@@ -24,12 +25,12 @@ import org.scalatest.junit.JUnitRunner
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{ShouldMatchers, WordSpec}
 
-
 /**
  * Created by aitor on 10/19/15.
  */
 @RunWith(classOf[JUnitRunner])
 class ZookeeperDTOTest extends WordSpec
+  with LazyLogging
   with ShouldMatchers
   with MockitoSugar {
 
@@ -38,12 +39,13 @@ class ZookeeperDTOTest extends WordSpec
   }
 
   "The ZookeeperDTO" when {
+
     "call the start method" should {
       "connect to zookeeper cluster" in new DummyZookeeperDTO {
-        info("Checking if Zookeeper cluster is up")
 
         when(curatorFrameworkMock.getState()).thenReturn(CuratorFrameworkState.STARTED)
 
+        logger.debug("Connecting to Zookeeper")
         val dto= ZookeeperDTO(curatorFrameworkMock)
         dto.start() should be(true)
       }
@@ -58,6 +60,8 @@ class ZookeeperDTOTest extends WordSpec
         dto.stop() should be(true)
       }
     }
+
+
 
   }
 }
