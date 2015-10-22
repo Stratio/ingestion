@@ -30,6 +30,6 @@ object JsonParser extends DefaultJsonProtocol {
   implicit lazy val sourceJsonFormat = jsonFormat6(AgentSource)
   implicit lazy val channelJsonFormat = jsonFormat6(AgentChannel)
   implicit lazy val sinkJsonFormat = jsonFormat6(AgentSink)
-  implicit lazy val agentComponentJsonFormat = jsonFormat3(Agent)
+//  implicit lazy val agentComponentJsonFormat = jsonFormat3(Agent)
 
 }

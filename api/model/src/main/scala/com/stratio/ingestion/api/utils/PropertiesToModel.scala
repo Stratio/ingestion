@@ -52,7 +52,7 @@ object PropertiesToModel {
     val sinks = Seq(AgentSink("idSink", typoSink, nameSinks, "description", settingsSink, channels))
 
 
-    Agent(source, channels, sinks)
+//    Agent(source, channels, sinks)
 
   }
 

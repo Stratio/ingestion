@@ -50,8 +50,8 @@ with ShouldMatchers {
 
       val source = AgentSource("ID", "spoolDir", "src", "SourceDescription", Seq(), Seq())
 
-      val agent = Agent(source,Seq(),Seq())
-      agent should be (agent.toJson.convertTo[Agent])
+//      val agent = Agent(source,Seq(),Seq())
+//      agent should be (agent.toJson.convertTo[Agent])
     }
 
 

@@ -22,7 +22,7 @@ import com.stratio.ingestion.api.model.source.AgentSource
 /**
  * Created by eruiz on 15/10/15.
  */
-case class Agent(source: AgentSource, channels: Seq[AgentChannel], sinks: Seq[AgentSink])
+case class Agent(id: String, source: AgentSource, channels: Seq[AgentChannel], sinks: Seq[AgentSink])
 
 // def formatString(inputString: String) = {
 //   inputString.replace("\"", "")
