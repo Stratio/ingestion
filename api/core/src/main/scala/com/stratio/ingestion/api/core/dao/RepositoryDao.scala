@@ -15,15 +15,17 @@
  */
 package com.stratio.ingestion.api.core.dao
 
+import com.stratio.ingestion.api.model.commons.WorkFlow
+
 trait RepositoryDao {
 
-  def createWorkflow(): Boolean
+  def createWorkflow(workflow: WorkFlow): Boolean
 
-  def deleteWorkflow(): Boolean
+  def getWorkflow(id: String): WorkFlow
 
-  def getWorkflow(): Boolean
+  def listAll(): Boolean
 
-  def listAll(path: String): Boolean
+  def deleteWorkflow(id: String): Boolean
 
   def addElementToWorkflow(): Boolean
 

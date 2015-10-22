@@ -15,16 +15,17 @@
  */
 package scala.com.stratio.ingestion.api.core.dao
 
-import com.stratio.ingestion.api.core.dao.ZookeeperDTO
+import com.stratio.ingestion.api.core.dao.ZookeeperRepositoryDaoImpl
 import com.stratio.ingestion.api.core.utils._
+import com.stratio.ingestion.api.model.commons.{WorkFlow, Agent}
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.curator.framework.{CuratorFramework, CuratorFrameworkFactory}
 import org.apache.curator.retry.ExponentialBackoffRetry
+import org.apache.log4j._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{BeforeAndAfterAll, ShouldMatchers, _}
-import org.apache.log4j._
 
 /**
  * Created by aitor on 10/19/15.
@@ -40,15 +41,43 @@ class ZookeeperIT  extends WordSpec
   var curator: CuratorFramework= _
   val retryPolicy = new ExponentialBackoffRetry(1000, 3)
   var conf: Config= _
-  var dto: ZookeeperDTO= _
+  var dao: ZookeeperRepositoryDaoImpl= _
 
 
-  "The ZookeeperDTO" when {
-    "call the start method" should {
-      "connect to zookeeper cluster" in {
+  "The ZookeeperRepositoryDaoImpl" when {
+    "call the createWorkflow method" should {
+      "create a new workflow in Zookeeper cluster" in {
 
-        println("Dto status " + dto.getState().toString)
-        assert(dto.isStarted())
+        val myId= "1234"
+
+        val agents: Seq[Agent]= Seq()
+        val workflow= WorkFlow.apply(myId, "my workflow", "desc", agents)
+
+        assert(dao.createWorkflow(workflow))
+        assert(dao.getWorkflow(myId).name == "my workflow")
+        assert(dao.deleteWorkflow(myId))
+      }
+    }
+
+
+    "call the getWorkflow method" should {
+      "get an existing workflow from Zookeeper" in {
+
+        val myId= "1235"
+
+        val a= Seq.empty[String]
+        val agents= Seq.empty[String]
+        val workflow= WorkFlow(myId, "my workflow", "desc", Seq())
+
+        dao.createWorkflow(workflow)
+
+        val result= dao.getWorkflow(myId)
+        assert(dao.deleteWorkflow(myId))
+
+        assertResult("my workflow") {
+          result.name
+        }
+        //assertEquals("my workflow", dao.getWorkflow("1234").name)
       }
     }
 
@@ -62,12 +91,12 @@ class ZookeeperIT  extends WordSpec
 
     val hosts= conf.getStringList("zookeeper.hosts")
     curator= CuratorFrameworkFactory.newClient(ConfigUtils.getStringFromList(hosts), retryPolicy)
-    dto= ZookeeperDTO(curator)
-    dto.start()
+    dao= ZookeeperRepositoryDaoImpl.apply(curator)
+
   }
 
   override def afterAll() {
-    dto.stop()
+
   }
 
 }

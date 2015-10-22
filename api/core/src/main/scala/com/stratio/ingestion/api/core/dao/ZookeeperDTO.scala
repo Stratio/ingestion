@@ -15,7 +15,7 @@
  */
 package com.stratio.ingestion.api.core.dao
 
-import com.stratio.ingestion.api.core.utils.LoggerComponent
+import com.typesafe.scalalogging.LazyLogging
 import org.apache.curator.RetryPolicy
 import org.apache.curator.framework.imps.CuratorFrameworkState
 import org.apache.curator.framework.{CuratorFramework, CuratorFrameworkFactory}
@@ -24,13 +24,24 @@ import org.apache.curator.retry.ExponentialBackoffRetry
 /**
  * Created by aitor on 10/16/15.
  */
-case class ZookeeperDTO(template: CuratorFramework) extends LoggerComponent {
+case class ZookeeperDTO(template: CuratorFramework) extends LazyLogging {
 
   private val curatorZookeeperClient= template
 
   def create(path: String, contents: Array[Byte]): Boolean = {
-    //curatorZookeeperClient.create().forPath(path, contents)
+    curatorZookeeperClient.create().creatingParentsIfNeeded().forPath(path, contents)
     true
+  }
+
+  def delete(path: String): Boolean = {
+    val stat= curatorZookeeperClient.checkExists().forPath(path)
+    if (stat != null)
+      curatorZookeeperClient.delete().forPath(path)
+    true
+  }
+
+  def getElementData(path: String): Array[Byte] = {
+    curatorZookeeperClient.getData().forPath(path)
   }
 
   def start(): Boolean = {
@@ -45,10 +56,7 @@ case class ZookeeperDTO(template: CuratorFramework) extends LoggerComponent {
   }
 
   def isStarted(): Boolean = {
-    if (curatorZookeeperClient.getState() == CuratorFrameworkState.STARTED)
-      true
-    else
-      false
+    curatorZookeeperClient.getState == CuratorFrameworkState.STARTED
   }
 
 
@@ -66,10 +74,11 @@ object ZookeeperDTO {
   // Max number of times to retry
   private val DEFAULT_MAX_RETRIES= 3
 
-  def apply(template: CuratorFramework, retryPolicy: RetryPolicy=
-  new ExponentialBackoffRetry(DEFAULT_SLEEP_TIME, DEFAULT_MAX_RETRIES)): ZookeeperDTO = {
+  def initialize(template: CuratorFramework, retryPolicy: RetryPolicy=
+    new ExponentialBackoffRetry(DEFAULT_SLEEP_TIME, DEFAULT_MAX_RETRIES)): ZookeeperDTO = {
 
-    val dto= ZookeeperDTO(template, retryPolicy)
+    println("Doing apply")
+    val dto= new ZookeeperDTO(template)
     if (!dto.isStarted())
       dto.start()
     dto

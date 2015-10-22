@@ -31,13 +31,12 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
-		<!--
+
 		<dependency>
 			<groupId>com.stratio.ingestion.api</groupId>
 			<artifactId>model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		-->
 
 		<dependency>
 			<groupId>org.apache.curator</groupId>
