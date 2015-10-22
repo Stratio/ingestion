@@ -37,6 +37,8 @@ object PropertiesToModel {
     val p = new Properties()
     p.load(p.getClass().getResourceAsStream(nameFile))
     val agentName = p.keySet().toArray()(0).asInstanceOf[String].split('.')(0)
+
+
     val idSource = p.getProperty(agentName + "." + sourceName)
     val typeSource = p.getProperty(agentName + "." + sourceName + "." + idSource + "." + typeName)
     val settingsSourceBeforeFilter = getSettings(p, idSource, sourceName)
@@ -44,7 +46,6 @@ object PropertiesToModel {
 
     //TODO Add union in channels and sinks
     //    val union = settingsSourceBeforeFilter.map(att => att._type=="channels")
-
 
     val idChannels = p.getProperty(agentName + "." + channelName).split(" ")
     val typeChannels = idChannels.map(id => (id, p.getProperty(agentName + "." + channelName + "." + id + "." +
@@ -54,26 +55,22 @@ object PropertiesToModel {
       typeName))
 
 
-
     val idSinks = p.getProperty(agentName + "." + sinkName).split(" ")
     val typeSinks = idSinks.map(id => (id, p.getProperty(agentName + "." + sinkName + "." + id + "." + typeName)))
-    val settingsSinksBeforeFilter = typeSinks.map(idSink => (idSink._1,getSettings(p, idSink._1, sinkName)))
+    val settingsSinksBeforeFilter = typeSinks.map(idSink => (idSink._1, getSettings(p, idSink._1, sinkName)))
     val settingsSinks = settingsSinksBeforeFilter.flatMap(setting => setting._2.filter(att => att._type != "channel"
       && att._type != typeName))
 
     //    val union = settingsSinksBeforeFilter.map(x => x.filter(x => x._type== channelName))
 
-
-    import spray.json.DefaultJsonProtocol._
-
     val source = AgentSource(idSource, typeSource, "BuscaEnJSON", Seq(), settingsSource)
 
 
 
-            val channels = typeChannels.indices.foldLeft(Seq.empty[AgentChannel[String]]) {
-              case (channels, i) =>
-                channels :+ AgentChannel(idChannels(i), typeChannels(i)._2,"" , settingsChannel.filter(set =>set.id==idChannels(i)), source)
-            }
+    val channels = typeChannels.indices.foldLeft(Seq.empty[AgentChannel]) {
+      case (channels, i) =>
+        channels :+ AgentChannel(idChannels(i), typeChannels(i)._2, "", settingsChannel.filter(set => set.id == idChannels(i)), source)
+    }
 
     //    val channels: Seq[AgentChannel[String]] =
     //      for {
@@ -83,9 +80,9 @@ object PropertiesToModel {
     //      } yield AgentChannel(id, typeChannel._2, "", setting, source)
 
 
-    val sinks = typeSinks.indices.foldLeft(Seq.empty[AgentSink[String]]) {
+    val sinks = typeSinks.indices.foldLeft(Seq.empty[AgentSink]) {
       case (sinks, i) =>
-        sinks :+ AgentSink[String](idSinks(i), typeSinks(i)._2,"" , settingsSinks.filter(set =>set.id==idSinks(i)),
+        sinks :+ AgentSink(idSinks(i), typeSinks(i)._2, "", settingsSinks.filter(set => set.id == idSinks(i)),
           channels(i))
     }
 
@@ -93,24 +90,27 @@ object PropertiesToModel {
 
   }
 
-  import spray.json.DefaultJsonProtocol._
-
-  def getSettings(p: Properties, id: String, component: String): Seq[Attribute[String]] = {
+  def getSettings(p: Properties, id: String, component: String): Seq[Attribute] = {
     val agentName = p.keySet().toArray()(0).asInstanceOf[String].split('.')(0)
 
     val enuKeys = p.keys()
     var value: Seq[String] = Seq.empty[String]
-    var attribute: Seq[Attribute[String]] = Seq.empty[Attribute[String]]
+    var attribute: Seq[Attribute] = Seq.empty[Attribute]
     while (enuKeys.hasMoreElements) {
       val key = enuKeys.nextElement().toString
       if (key.startsWith(agentName + "." + component + "." + id)) {
         value :+= p.getProperty(key)
         attribute :+= Attribute(id, key.split(agentName + "." + component + "." + id + ".")(1), "", true, p
-          .getProperty
-          (key))
+          .getProperty(key))
       }
     }
     attribute
   }
+
+//  def getRequired(p: Properties, id: String, component: String): Boolean = {
+//    BufferedReader fileReader = new BufferedReader(
+//      new FileReader("src/main/resources/source/spoolDirectory/spoolDirectorySource.json"));
+//
+//  }
 
 }

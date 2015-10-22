@@ -17,17 +17,16 @@ package com.stratio.ingestion.api.model.sink
 
 import com.stratio.ingestion.api.model.channel.AgentChannel
 import com.stratio.ingestion.api.model.commons.{Attribute, Entity}
-import spray.json.JsonFormat
 
 
 /**
  * Created by eruiz on 15/10/15.
  */
-case class AgentSink[T: JsonFormat](
-                                     id: String,
-                                     _type: String,
-                                     name: String,
-                                     settings: Seq[Attribute[T]],
-                                     channels: AgentChannel[T]
-                                     ) extends Entity
+case class AgentSink(
+                      id: String,
+                      _type: String,
+                      name: String,
+                      settings: Seq[Attribute],
+                      channels: AgentChannel
+                      ) extends Entity
 

@@ -32,7 +32,7 @@ object ModelToProperties {
   val unionName = "union"
   val typeName = "type"
 
-  def modelToProperties(agent: Agent[_]): Unit = {
+  def modelToProperties(agent: Agent): Unit = {
 
     val pw = new PrintWriter(new File("src/test/resources/new.properties"))
     writeComponents(agent, pw)
@@ -44,7 +44,7 @@ object ModelToProperties {
     pw.close
   }
 
-  def writeComponents(agent: Agent[_], pw: PrintWriter): Unit = {
+  def writeComponents(agent: Agent, pw: PrintWriter): Unit = {
     pw.write("#Name the components on this agent" + "\n\n")
 
     pw.write(agent.id + "." + sourceName + " = " + agent.source.id + "\n")
@@ -52,7 +52,7 @@ object ModelToProperties {
     pw.write(agent.id + "." + sinkName + " = " + agent.sinks.map(sink => sink.id).reduce(_ + " " + _) + "\n")
   }
 
-  def writeSource(agent: Agent[_], pw: PrintWriter): Unit = {
+  def writeSource(agent: Agent, pw: PrintWriter): Unit = {
     pw.write("\n\n##### " + sourceName.toUpperCase + " #####" + "\n\n")
     pw.write(agent.id + "." + sourceName + "." + agent.source.id + "." + typeName + " = " + agent.source._type + "\n")
     agent.source.settings.foreach(settings => pw.write(agent.id + "." + sourceName + "." + agent.source.id + "." +
@@ -64,7 +64,7 @@ object ModelToProperties {
       interceptor + " = " + interceptor + "\n"))
   }
 
-  def writeChannel(agent: Agent[_], pw: PrintWriter): Unit = {
+  def writeChannel(agent: Agent, pw: PrintWriter): Unit = {
     pw.write("\n\n##### " + channelName.toUpperCase() + " #####" + "\n\n")
 
     agent.channels.foreach(channel => pw.write(agent.id + "." + channelName + "." + channel.id + "." + typeName + " = " +
@@ -75,7 +75,7 @@ object ModelToProperties {
 
   }
 
-  def writeSink(agent: Agent[_], pw: PrintWriter): Unit = {
+  def writeSink(agent: Agent, pw: PrintWriter): Unit = {
 
     pw.write("\n\n##### " + sinkName.toUpperCase + " #####" + "\n\n")
 
@@ -87,7 +87,7 @@ object ModelToProperties {
 
   }
 
-  def writeUnion(agent: Agent[_], pw: PrintWriter): Unit = {
+  def writeUnion(agent: Agent, pw: PrintWriter): Unit = {
 
     pw.write("\n\n##### " + unionName.toUpperCase + " #####" + "\n\n")
 

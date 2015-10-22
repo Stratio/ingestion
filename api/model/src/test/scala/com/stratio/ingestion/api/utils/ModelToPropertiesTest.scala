@@ -36,22 +36,20 @@ with ShouldMatchers {
     it("should parse this model to properties file") {
       Given("an agent")
 
-      import spray.json.DefaultJsonProtocol._
-
-      val attribute1 = Attribute[String]( "spooldDir", "spoolDir","", true, "data/spoolDir")
-      val attribute2 = Attribute[String]( "fileHeader", "spoolDir","", false, "FALSE")
-      val source = AgentSource[String]("src", "spoolDir", "", Seq(), Seq(attribute1, attribute2))
+      val attribute1 = Attribute( "spooldDir", "spoolDir","", true, "data/spoolDir")
+      val attribute2 = Attribute( "fileHeader", "spoolDir","", false, "FALSE")
+      val source = AgentSource("src", "spoolDir", "", Seq(), Seq(attribute1, attribute2))
       //      val source2 = Source("src2", "memory", "", "SourceDescription2", Seq(), Seq())
-      val attributeChannel = Attribute[String]("capacity", "capacity", "", false, "100")
-      val attributeChannel1 = Attribute[String]("capacity", "capacity", "", false, "10000")
-      val channel = AgentChannel[String]("mongoChannel", "memory", "", Seq(attributeChannel), source)
-      val channel2 = AgentChannel[String]("decisionChannel", "file", "", Seq(attributeChannel1), source)
-      val attributeSink = Attribute[String]("mongoUri", "mongoUri", "", true, "mongodb://127.0.0.1:27017/example.example")
-      val attributeSink2 = Attribute[String]("mappingFile", "mappingFile", "", true, "conf/mongo_schema.json")
-      val attributeSink3 = Attribute[String]("dynamic", "dynamic", "", true, "false")
-      val sink = AgentSink[String]("mongoSink", "com.stratio.ingestion.sink.mongodb.MongoSink", "", Seq
+      val attributeChannel = Attribute("capacity", "capacity", "", false, "100")
+      val attributeChannel1 = Attribute("capacity", "capacity", "", false, "10000")
+      val channel = AgentChannel("mongoChannel", "memory", "", Seq(attributeChannel), source)
+      val channel2 = AgentChannel("decisionChannel", "file", "", Seq(attributeChannel1), source)
+      val attributeSink = Attribute("mongoUri", "mongoUri", "", true, "mongodb://127.0.0.1:27017/example.example")
+      val attributeSink2 = Attribute("mappingFile", "mappingFile", "", true, "conf/mongo_schema.json")
+      val attributeSink3 = Attribute("dynamic", "dynamic", "", true, "false")
+      val sink = AgentSink("mongoSink", "com.stratio.ingestion.sink.mongodb.MongoSink", "", Seq
         (attributeSink, attributeSink2, attributeSink3), channel)
-      val agent = Agent[String]("a", source, Seq(channel, channel2), Seq(sink))
+      val agent = Agent("a", source, Seq(channel, channel2), Seq(sink))
 
       ModelToProperties.modelToProperties(agent)
 
