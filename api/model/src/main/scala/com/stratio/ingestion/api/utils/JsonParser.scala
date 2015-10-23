@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,12 +24,16 @@ import com.stratio.ingestion.api.model.channel.AgentChannel
 /**
  * Created by eruiz on 15/10/15.
  */
-object JsonParser extends DefaultJsonProtocol  {
+object JsonParser extends DefaultJsonProtocol {
 
   implicit def attributeJsonFormat = jsonFormat5(Attribute)
-  implicit def sourceJsonFormat= jsonFormat5(AgentSource)
+
+  implicit def sourceJsonFormat = jsonFormat5(AgentSource)
+
   implicit def channelJsonFormat = jsonFormat5(AgentChannel)
-  implicit def sinkJsonFormat= jsonFormat5(AgentSink)
+
+  implicit def sinkJsonFormat = jsonFormat5(AgentSink)
+
   implicit def agentComponentJsonFormat = jsonFormat4(Agent)
 
 }

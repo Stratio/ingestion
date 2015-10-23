@@ -65,7 +65,7 @@ object ModelToProperties {
   }
 
   def writeChannel(agent: Agent, pw: PrintWriter): Unit = {
-    pw.write("\n\n##### " + channelName.toUpperCase() + " #####" + "\n\n")
+    pw.write("\n\n##### " + channelName.toUpperCase + " #####" + "\n\n")
 
     agent.channels.foreach(channel => pw.write(agent.id + "." + channelName + "." + channel.id + "." + typeName + " = " +
       channel._type + "\n"))
@@ -93,10 +93,6 @@ object ModelToProperties {
 
     pw.write(agent.id + "." + sourceName + "." + agent.source.id + "." + channelName + " = " + agent.channels.map
       (chan => chan.id).reduce(_ + " " + _) + "\n")
-
-
-    //    agent.channels.map(channel => channel.sources.map(source => pw.write(agent.id + "." + sourceName + "." +
-    //      source.id + "." + channelName + " = " + channel.id + "\n")))
 
     agent.sinks.foreach(sink => pw.write(agent.id + "." + sinkName + "." + sink.id + "." + "channel" + " = " + sink.channels.id + "\n"))
 

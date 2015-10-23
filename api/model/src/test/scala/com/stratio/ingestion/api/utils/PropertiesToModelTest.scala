@@ -32,7 +32,7 @@ with ShouldMatchers {
     it("should parse this sink from the json") {
       Given("a json sink")
 
-      val v = PropertiesToModel.propertiesToModel("/new.properties")
+      val v = PropertiesToModel.propertiesToModel("/expected.properties")
       println(v)
     }
 

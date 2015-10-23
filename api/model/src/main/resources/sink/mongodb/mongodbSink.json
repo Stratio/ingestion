@@ -2,7 +2,7 @@
   "descriptors": {
     "components": [
       {
-        "id": "mongoDb",
+        "id": "mongodb",
         "component": "sink",
         "type": "mongodb",
         "name": "MongoDB Sink",
