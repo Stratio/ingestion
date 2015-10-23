@@ -2,12 +2,12 @@ NASA Apache Logs Demo
 =====================
 
 To play around with the different components that we have created within Stratio Ingestion we have designed an scenario where we launch one flume agent against an Ubuntu Virtual Machine with the following structure.
-We will have a data source (apache logs from NASA in 1995) which will be read and send to three sinks (Cassandra Database, ElasticSearch and Stratio Streaming) throw three channels. We sill need this components:
+We will have a data source (apache logs from NASA in 1995) which will be read and send to three sinks (Cassandra Database, ElasticSearch and Stratio Decision) throw three channels. We sill need this components:
  
 * Cassandra database
-* Stratio Streaming Engine
-* Zookeeper (for Stratio Streaming)
-* Apache kafka (for Stratio Streaming)
+* Stratio Decision Engine
+* Zookeeper (for Stratio Decision)
+* Apache kafka (for Stratio Decision)
 * ElasticSearch 
 * Kibana (for data visualization)
     
@@ -23,11 +23,11 @@ The full agent configuration is the following (see flume-conf.properties):
   - SpoolDir (we have used a 300 Mb apache log file)
 
 * Channels:
-  - 3 file channels for cassandra, stratio streaming & elastic search
+  - 3 file channels for cassandra, stratio decision & elastic search
 
 * Sinks:
   - Cassandra sink (developed by Stratio: https://github.com/Stratio/flume-ng-cassandra-sink, see also the definition_access_log.json attached)
-  - Stratio sink (developed by Stratio: https://github.com/Stratio/flume-ng-stratiostreaming-sink)
+  - Stratio sink (developed by Stratio: https://github.com/Stratio/flume-ng-decision-sink)
   - Elastic search sink (included in flume core) 
 
 
@@ -35,7 +35,7 @@ The full agent configuration is the following (see flume-conf.properties):
 Preparing the environment
 -------------------------
 
-You can edit the conf/flume-conf.properties for customizing the example. By default, we have activated two sinks: ElasticSearch and Cassandra, but we provide the configuration for Stratio Streaming Sink commented in the same file.
+You can edit the conf/flume-conf.properties for customizing the example. By default, we have activated two sinks: ElasticSearch and Cassandra, but we provide the configuration for Stratio Decision Sink commented in the same file.
 
 
 Running the example
@@ -56,11 +56,11 @@ Since we have activated two sink (ElasticSearch and Cassandra) you can check the
 - ElasticSearch: Enter in Kibana http://IP:5601 in Dashboard Tab You can Load saved dashboard and select "Apache Logs Demo Dashboard". Due to date of logs, you must select a new time filter between July-1995 and Agoust-1995.
 
 
-Conection with Stratio Streaming
----------------------------------
+Conection with Stratio Decision
+-------------------------------
 
-If you want to check the conection with Stratio Streaming uncomment the configuration in con/flume-conf.properties we recommend to use straming vagrant box (vagrant up stratio/streaming) and use this parameters to configure flume (IPs and port for kafka and zookeeper). If you have streaming vagrant box working, then you can run the flume example.
-The example will create the stream necesary for working in streaming, you can enter in streaming shell and type create new querys:
+If you want to check the conection with Stratio Decision uncomment the configuration in con/flume-conf.properties we recommend to use straming vagrant box (vagrant up stratio/decision) and use this parameters to configure flume (IPs and port for kafka and zookeeper). If you have decision vagrant box working, then you can run the flume example.
+The example will create the stream necesary for working in decision, you can enter in decision shell and type create new querys:
 
 Create query "host_requests_per_second":
 

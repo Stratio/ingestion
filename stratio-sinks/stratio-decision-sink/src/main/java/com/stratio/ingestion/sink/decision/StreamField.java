@@ -29,7 +29,7 @@
   * limitations under the License.
   */
 
-package com.stratio.ingestion.sink.stratiostreaming;
+package com.stratio.ingestion.sink.decision;
 
 public class StreamField {
     private String name;

@@ -47,7 +47,7 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 
         <flume.version>1.6.0</flume.version>
-        <streaming.api.version>0.8.0</streaming.api.version>
+        <decision.api.version>0.9.0</decision.api.version>
         <junit.version>4.11</junit.version>
         <mockito.version>1.10.8</mockito.version>
         <jackson.databind.version>2.4.4</jackson.databind.version>
@@ -64,7 +64,7 @@
         <codahale.metrics.version>3.0.2</codahale.metrics.version>
         <!-- Watch Datastax Driver & Kite -->
         <zookeeper.version>3.4.6</zookeeper.version>
-        <!-- Watch Stratio Streaming -->
+        <!-- Watch Stratio Decision -->
         <typesafe.config.version>1.2.1</typesafe.config.version>
         <quartz.version>2.2.1</quartz.version>
         <maxmind.version>0.3.3</maxmind.version>
@@ -77,9 +77,9 @@
         <dependencies>
             <!-- If ingestion version for a flume module is resolved you must add here the module -->
             <dependency>
-                <groupId>com.stratio.streaming</groupId>
-                <artifactId>streaming-api</artifactId>
-                <version>${streaming.api.version}</version>
+                <groupId>com.stratio.decision</groupId>
+                <artifactId>api</artifactId>
+                <version>${decision.api.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.datastax.cassandra</groupId>
@@ -166,7 +166,7 @@
                 <version>2.2.0</version>
             </dependency>
 
-            <!-- Use the same version as Stratio Streaming -->
+            <!-- Use the same version as Stratio Decision -->
             <dependency>
                 <groupId>org.apache.zookeeper</groupId>
                 <artifactId>zookeeper</artifactId>

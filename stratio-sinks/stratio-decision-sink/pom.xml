@@ -25,9 +25,9 @@
 		<version>0.5.1-RC1-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>stratio-stratiostreaming-sink</artifactId>
+	<artifactId>stratio-decision-sink</artifactId>
 	<packaging>jar</packaging>
-	<name>Stratio streaming sink</name>
+	<name>Stratio Decision sink</name>
 
 	<repositories>
 		<repository>
@@ -49,8 +49,8 @@
 			<version>${flume.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.stratio.streaming</groupId>
-			<artifactId>streaming-api</artifactId>
+			<groupId>com.stratio.decision</groupId>
+			<artifactId>api</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.httpcomponents</groupId>
