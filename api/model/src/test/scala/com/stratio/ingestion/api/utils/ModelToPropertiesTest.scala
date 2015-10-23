@@ -36,22 +36,29 @@ with ShouldMatchers {
     it("should parse this model to properties file") {
       Given("an agent")
 
-      val attribute1 = Attribute("spooldDir", "spoolDir", "", true, "data/spoolDir")
-      val attribute2 = Attribute("fileHeader", "spoolDir", "", false, "FALSE")
-      val source = AgentSource("src", "spoolDir", "", Seq(), Seq(attribute1, attribute2))
+    //  val attribute1 = Attribute("spoolDir", "spoolDir", "", true, "data/spoolDir")
+      val attribute2 = Attribute("fileHeader", "Boolean", "", false, "FALSE")
+     // val source = AgentSource("src", "spoolDir", "", Seq(), Seq(attribute1, attribute2))
+      val source = AgentSource("src", "spoolDir", "", Seq(), Seq( attribute2))
       //      val source2 = Source("src2", "memory", "", "SourceDescription2", Seq(), Seq())
-      val attributeChannel = Attribute("capacity", "capacity", "", false, "100")
-      val attributeChannel1 = Attribute("capacity", "capacity", "", false, "10000")
+      val attributeChannel = Attribute("capacity", "Boolean", "", false, "100")
+//      val attributeChannel1 = Attribute("capacity", "file", "", false, "10000")
       val channel = AgentChannel("mongoChannel", "memory", "", Seq(attributeChannel), source)
-      val channel2 = AgentChannel("decisionChannel", "file", "", Seq(attributeChannel1), source)
-      val attributeSink = Attribute("mongoUri", "mongoUri", "", true, "mongodb://127.0.0.1:27017/example.example")
-      val attributeSink2 = Attribute("mappingFile", "mappingFile", "", true, "conf/mongo_schema.json")
-      val attributeSink3 = Attribute("dynamic", "dynamic", "", true, "false")
+//      val channel2 = AgentChannel("decisionChannel", "file", "", Seq(attributeChannel1), source)
+      val attributeSink = Attribute("mongoUri", "String", "", true, "mongodb://127.0.0.1:27017/example.example")
+      val attributeSink2 = Attribute("mappingFile", "String", "", true, "conf/mongo_schema.json")
+      val attributeSink3 = Attribute("dynamic", "Boolean", "", true, "false")
       val sink = AgentSink("mongoSink", "mongodb", "", Seq
         (attributeSink, attributeSink2, attributeSink3), channel)
-      val agent = Agent("a", source, Seq(channel, channel2), Seq(sink))
+//      val agent = Agent("a", source, Seq(channel, channel2), Seq(sink))
+      val agent1 = Agent("a", source, Seq(channel), Seq(sink))
 
-      ModelToProperties.modelToProperties(agent)
+
+
+      val properties=ModelToProperties.modelToProperties(agent1)
+
+
+
 
 
     }

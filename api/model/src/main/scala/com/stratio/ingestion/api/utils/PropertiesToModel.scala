@@ -31,44 +31,42 @@ import scala.util.Try
  * Created by eruiz on 19/10/15.
  */
 object PropertiesToModel {
-  val sourceName = "sources"
-  val channelName = "channels"
-  val sinkName = "sinks"
-  val typeName = "type"
 
   def propertiesToModel(nameFile: String) = {
     val prop = new Properties()
-    prop.load(prop.getClass().getResourceAsStream(nameFile))
+    prop.load(prop.getClass.getResourceAsStream(nameFile))
     val agentName = prop.keySet().toArray()(0).asInstanceOf[String].split('.')(0)
 
 
-    val idSource = prop.getProperty(agentName + "." + sourceName)
-    val typeSource = prop.getProperty(agentName + "." + sourceName + "." + idSource + "." + typeName)
-    val settingsSourceBeforeFilter: Seq[Attribute] = getSettings(prop, idSource, sourceName, typeSource)
-    val settingsSource: Seq[Attribute] = settingsSourceBeforeFilter.filter(att => att._type != channelName && att._type != typeName)
+    val idSource = prop.getProperty(agentName + "." + Constants.sourceName)
+    val typeSource = prop.getProperty(agentName + "." + Constants.sourceName + "." + idSource + "." + Constants.typeName)
+    val settingsSourceBeforeFilter: Seq[Attribute] = getSettings(prop, idSource, Constants.sourceName, typeSource)
+    val settingsSource: Seq[Attribute] = settingsSourceBeforeFilter.filter(att => att._type != Constants.channelName && att._type != Constants.typeName)
 
     //TODO Add union in channels and sinks
     //    val union = settingsSourceBeforeFilter.map(att => att._type=="channels")
 
-    val idChannels = prop.getProperty(agentName + "." + channelName).split(" ")
-    val typeChannels = idChannels.map(id => (id, prop.getProperty(agentName + "." + channelName + "." + id + "." +
-      typeName)))
-    val settingsChannel: Seq[Attribute] = typeChannels.map(idChan => (idChan._1, getSettings(prop, idChan._1, channelName,
+    val idChannels = prop.getProperty(agentName + "." + Constants.channelName).split(" ")
+    val typeChannels = idChannels.map(id => (id, prop.getProperty(agentName + "." + Constants.channelName + "." + id + "." +
+      Constants.typeName)))
+    val settingsChannel: Seq[Attribute] = typeChannels.map(idChan => (idChan._1, getSettings(prop, idChan._1, Constants.channelName,
       idChan._2))).flatMap(setting => setting._2)
 
 
-    val idSinks = prop.getProperty(agentName + "." + sinkName).split(" ")
-    val typeSinks = idSinks.map(id => (id, prop.getProperty(agentName + "." + sinkName + "." + id + "." + typeName)))
-    val settingsSinks: Seq[Attribute] = typeSinks.map(idSink => (idSink._1, getSettings(prop, idSink._1, sinkName, idSink
+    val idSinks = prop.getProperty(agentName + "." + Constants.sinkName).split(" ")
+    val typeSinks = idSinks.map(id => (id, prop.getProperty(agentName + "." + Constants.sinkName + "." + id + "." + Constants.typeName)))
+    val settingsSinks: Seq[Attribute] = typeSinks.map(idSink => (idSink._1, getSettings(prop, idSink._1, Constants.sinkName, idSink
       ._2))).flatMap(setting => setting._2)
 
     //    val union = settingsSinksBeforeFilter.map(x => x.filter(x => x._type== channelName))
 
-    val source = AgentSource(idSource, typeSource, "BuscaEnJSON", Seq(), settingsSource)
+
+    //TODO Find name in json
+    val source = AgentSource(idSource, typeSource, "", Seq(), settingsSource)
     val channels = typeChannels.indices.foldLeft(Seq.empty[AgentChannel]) {
       case (channels, i) =>
-        channels :+ AgentChannel(idChannels(i), typeChannels(i)._2, "", settingsChannel.filter(set => set.id ==
-          idChannels(i)), source);
+//        channels :+ AgentChannel(idChannels(i), typeChannels(i)._2, "", settingsChannel.filter(set => set.id == idChannels(i)), source);
+        channels :+ AgentChannel(idChannels(i), typeChannels(i)._2, "", settingsChannel.toList, source);
 
     }
     //    val channels: Seq[AgentChannel[String]] =
@@ -79,8 +77,8 @@ object PropertiesToModel {
     //      } yield AgentChannel(id, typeChannel._2, "", setting, source)
     val sinks = typeSinks.indices.foldLeft(Seq.empty[AgentSink]) {
       case (sinks, i) =>
-        sinks :+ AgentSink(idSinks(i), typeSinks(i)._2, "", settingsSinks.filter(set => set.id == idSinks(i)),
-          channels(i))
+//        sinks :+ AgentSink(idSinks(i), typeSinks(i)._2, "", settingsSinks.filter(set => set.id == idSinks(i)), channels(i))
+        sinks :+ AgentSink(idSinks(i), typeSinks(i)._2, "", settingsSinks.toList, channels(i))
     }
     Agent(agentName, source, channels, sinks)
   }
@@ -97,8 +95,10 @@ object PropertiesToModel {
       ) {
         val typeNotType = key.split(agentName + "." + component + "." + id + ".")(1)
         if (typeNotType != "type") {
-          attribute :+= Attribute(id, typeNotType, "", getRequired(p, component, _type, typeNotType).getOrElse(false)
-            , p.getProperty(key))
+          //          attribute :+= Attribute(id, typeNotType, "", getRequired(p, component, _type, typeNotType).getOrElse(false)
+          //            , p.getProperty(key))
+          attribute :+= Attribute(typeNotType, "Boolean", "", getRequired(p, component, _type, typeNotType).getOrElse
+            (false), p.getProperty(key))
         }
       }
     }
