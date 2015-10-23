@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.sink.stratiostreaming;
+package com.stratio.ingestion.sink.decision;
 
-public class StratioStreamingSinkException extends RuntimeException {
+public class StratioDecisionSinkException extends RuntimeException {
 
     private static final long serialVersionUID = -5451808239155117379L;
 
-    public StratioStreamingSinkException(String message) {
+    public StratioDecisionSinkException(String message) {
         super(message);
     }
 
-    public StratioStreamingSinkException(Throwable cause) {
+    public StratioDecisionSinkException(Throwable cause) {
         super(cause);
     }
 
-    public StratioStreamingSinkException(String message, Throwable cause) {
+    public StratioDecisionSinkException(String message, Throwable cause) {
         super(message, cause);
     }
 }

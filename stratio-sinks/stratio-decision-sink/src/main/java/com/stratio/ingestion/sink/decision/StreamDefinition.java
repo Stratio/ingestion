@@ -28,7 +28,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package com.stratio.ingestion.sink.stratiostreaming;
+package com.stratio.ingestion.sink.decision;
 
 import java.util.List;
 
