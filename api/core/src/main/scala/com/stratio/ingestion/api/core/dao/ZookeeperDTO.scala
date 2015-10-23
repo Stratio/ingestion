@@ -21,6 +21,8 @@ import org.apache.curator.framework.imps.CuratorFrameworkState
 import org.apache.curator.framework.{CuratorFramework, CuratorFrameworkFactory}
 import org.apache.curator.retry.ExponentialBackoffRetry
 
+import scala.util.Try
+
 /**
  * Created by aitor on 10/16/15.
  */
@@ -33,6 +35,16 @@ case class ZookeeperDTO(template: CuratorFramework) extends LazyLogging {
     true
   }
 
+  def update(path: String, contents: Array[Byte]): Boolean = {
+    curatorZookeeperClient.setData().forPath(path, contents)
+    true
+  }
+
+  def exists(path: String): Boolean = {
+    val stat= curatorZookeeperClient.checkExists().forPath(path)
+    stat != null
+  }
+
   def delete(path: String): Boolean = {
     val stat= curatorZookeeperClient.checkExists().forPath(path)
     if (stat != null)
@@ -40,8 +52,28 @@ case class ZookeeperDTO(template: CuratorFramework) extends LazyLogging {
     true
   }
 
-  def getElementData(path: String): Array[Byte] = {
-    curatorZookeeperClient.getData().forPath(path)
+  def getElementData(path: String): Option[Array[Byte]] = {
+    Try {
+      curatorZookeeperClient.getData().forPath(path)
+    }.toOption
+  }
+
+  def getChildren(path: String): Seq[Array[Byte]] = {
+    var children: Seq[Array[Byte]]= Seq()
+    val stat= curatorZookeeperClient.checkExists().forPath(path)
+    if (stat != null) {
+      val list= curatorZookeeperClient.getChildren.forPath(path).toArray
+
+      list.foreach {
+        id => logger.debug("Element found: " + id)
+          val childStat= curatorZookeeperClient.checkExists().forPath(path + "/" + id)
+          if (childStat != null) {
+            children :+= getElementData(path + "/" + id).get
+            logger.debug("Adding children: " + id)
+          }
+      }
+    }
+    children
   }
 
   def start(): Boolean = {
@@ -77,7 +109,6 @@ object ZookeeperDTO {
   def initialize(template: CuratorFramework, retryPolicy: RetryPolicy=
     new ExponentialBackoffRetry(DEFAULT_SLEEP_TIME, DEFAULT_MAX_RETRIES)): ZookeeperDTO = {
 
-    println("Doing apply")
     val dto= new ZookeeperDTO(template)
     if (!dto.isStarted())
       dto.start()

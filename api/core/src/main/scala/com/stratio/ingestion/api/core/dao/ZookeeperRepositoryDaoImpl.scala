@@ -52,10 +52,19 @@ case class ZookeeperRepositoryDaoImpl(template: CuratorFramework) extends Reposi
     true
   }
 
-  override def getWorkflow(id: String): WorkFlow = {
-    val element= dto.getElementData(Constants.ZOO_WORKFLOWS_PATH + "/" + id)
-    element.unpickle[WorkFlow]
+  override def getWorkflow(id: String): Option[WorkFlow] = {
+    val workflow= dto.getElementData(Constants.ZOO_WORKFLOWS_PATH + "/" + id).getOrElse {return None}
+    Some(workflow.unpickle[WorkFlow])
   }
+
+  override def existsWorkflow(id: String): Boolean = {
+    dto.exists(Constants.ZOO_WORKFLOWS_PATH + "/" + id)
+  }
+
+  override def existsWorkflowElement(workflowId: String, elementId: String): Boolean = {
+    dto.exists(Constants.ZOO_WORKFLOWS_PATH + "/" + workflowId + "/" + elementId)
+  }
+
 
   override def deleteWorkflow(id: String): Boolean = {
     try {
@@ -74,18 +83,97 @@ case class ZookeeperRepositoryDaoImpl(template: CuratorFramework) extends Reposi
     true
   }
 
-  override def listAll(): Boolean = {
+  override def listAll(): Seq[WorkFlow] = {
+    var workflows: Seq[WorkFlow]= Seq()
+    val list= dto.getChildren(Constants.ZOO_WORKFLOWS_PATH )
+    var element: Array[Byte]= Array()
+
+    for (element <- list) {
+      workflows :+= element.unpickle[WorkFlow]
+    }
+    workflows
+  }
+
+  override def addElementToWorkflow(workflowId: String, elementId: String, content: String): Boolean = {
+    try {
+      if (existsWorkflow(workflowId)) {
+        dto.create(Constants.ZOO_WORKFLOWS_PATH + "/" + workflowId + "/" + elementId, content.pickle.value)
+      } else {
+        false
+      }
+      true
+    } catch {
+
+      case ex: IllegalStateException => {
+        logger.error("Unable to connect to repository: " + ex.getMessage)
+        false
+      }
+      case ex: Exception => {
+        logger.error("Undefined Exception: " + ex.getStackTrace)
+        false
+      }
+    }
+
+  }
+
+  override def getWorkflowElements(workflowId: String): Seq[String] = {
+    var elements: Seq[String]= Seq()
+    val list= dto.getChildren(Constants.ZOO_WORKFLOWS_PATH + "/" + workflowId)
+    var element: Array[Byte]= Array()
+
+    for (element <- list) {
+      elements :+= element.unpickle[String]
+    }
+    elements
+  }
+
+  override def getWorkflowElement(workflowId: String, elementId: String): Option[String] = {
+    val element= dto.getElementData(Constants.ZOO_WORKFLOWS_PATH + "/" + workflowId + "/" + elementId).
+      getOrElse {return None}
+    Some(element.unpickle[String])
+
+    //Some(dto.getElementData(Constants.ZOO_WORKFLOWS_PATH + "/" + workflowId + "/" + elementId).unpickle[String])
+  }
+
+  override def updateWorkflowElement(workflowId: String, elementId: String, content: String): Boolean = {
+    try {
+      if (existsWorkflowElement(workflowId, elementId)) {
+        dto.update(Constants.ZOO_WORKFLOWS_PATH + "/" + workflowId + "/" + elementId, content.pickle.value)
+      } else {
+        false
+      }
+      true
+    } catch {
+
+      case ex: IllegalStateException => {
+        logger.error("Unable to connect to repository: " + ex.getMessage)
+        false
+      }
+      case ex: Exception => {
+        logger.error("Undefined Exception: " + ex.getStackTrace)
+        false
+      }
+    }
+
+  }
+
+  override def deleteWorkflowElement(workflowId: String, elementId: String): Boolean = {
+    try {
+      dto.delete(Constants.ZOO_WORKFLOWS_PATH + "/" + workflowId + "/" + elementId)
+      false
+    } catch {
+
+      case ex: IllegalStateException => {
+        logger.error("Unable to connect to repository: " + ex.getMessage)
+        false
+      }
+      case ex: Exception => {
+        logger.error("Undefined Exception: " + ex.getStackTrace)
+        false
+      }
+    }
     true
   }
 
-  override def addElementToWorkflow(): Boolean = ???
 
-
-
-
-  override def getWorkflowElements(): Boolean = ???
-
-  override def deleteElement(): Boolean = ???
-
-  override def updateElement(): Boolean = ???
 }
