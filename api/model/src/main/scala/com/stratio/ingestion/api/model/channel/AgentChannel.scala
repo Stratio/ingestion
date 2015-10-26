@@ -22,9 +22,9 @@ import com.stratio.ingestion.api.model.source.AgentSource
  * Created by eruiz on 15/10/15.
  */
 case class AgentChannel(
-                                        id: String,
-                                        _type: String,
-                                        name: String,
-                                        settings: Seq[Attribute],
-                                        source: AgentSource
-                                        ) extends Entity
+                         id: String,
+                         _type: String,
+                         name: String,
+                         settings: Seq[Attribute],
+                         source: AgentSource
+                         ) extends Entity
