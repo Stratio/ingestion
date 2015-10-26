@@ -55,9 +55,9 @@ with ShouldMatchers {
       channel2 should be(channel2.toJson.convertTo[AgentChannel])
       val agent = Agent("a1",source,Seq(channel),Seq(sink,sink2))
       
-
+      println(agent)
       Given("a json sink")
-
+      println(agent.toJson)
       agent should be (agent.toJson.convertTo[Agent])
 
     }

@@ -95,12 +95,10 @@ object ModelToProperties {
       (chan => chan.id).reduce(_ + " " + _) + "\n")
 
 
-
     //    agent.channels.map(channel => channel.sources.map(source => pw.write(agent.id + "." + sourceName + "." +
     //      source.id + "." + channelName + " = " + channel.id + "\n")))
 
     agent.sinks.foreach(sink => pw.write(agent.id + "." + sinkName + "." + sink.id + "." + "channel" + " = " + sink.channels.id + "\n"))
-
 
   }
 

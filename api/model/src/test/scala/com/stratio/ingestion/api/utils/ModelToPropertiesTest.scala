@@ -53,8 +53,7 @@ with ShouldMatchers {
 
       ModelToProperties.modelToProperties(agent)
 
-
-
+      
     }
   }
 }

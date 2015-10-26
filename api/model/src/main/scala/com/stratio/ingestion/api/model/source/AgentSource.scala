@@ -21,9 +21,9 @@ import com.stratio.ingestion.api.model.commons.{Attribute, Entity}
  * Created by eruiz on 15/10/15.
  */
 case class AgentSource(
-                       id: String, //src
-                       _type: String, //spoolDir
-                       name: String, //UI
-                       interceptors: Seq[String],
-                       settings: Seq[Attribute]
-                       ) extends Entity
+                                       id: String, //src
+                                       _type: String, //spoolDir
+                                       name: String, //UI
+                                       interceptors: Seq[String],
+                                       settings: Seq[Attribute]
+                                       ) extends Entity

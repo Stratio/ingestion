@@ -67,7 +67,6 @@ object PropertiesToModel {
 
 
 
-
     val channels = typeChannels.indices.foldLeft(Seq.empty[AgentChannel]) {
       case (channels, i) =>
         channels :+ AgentChannel(idChannels(i), typeChannels(i)._2, "", settingsChannel.filter(set => set.id == idChannels(i)), source)
@@ -88,7 +87,6 @@ object PropertiesToModel {
     }
 
     Agent(agentName, source, channels, sinks)
-
 
   }
 

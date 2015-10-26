@@ -26,4 +26,3 @@ case class Agent(id: String,
                  source: AgentSource,
                  channels: Seq[AgentChannel],
                  sinks: Seq[AgentSink])
-
