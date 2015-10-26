@@ -43,42 +43,44 @@ object PropertiesToModel {
     val settingsSourceBeforeFilter: Seq[Attribute] = getSettings(prop, idSource, Constants.sourceName, typeSource)
     val settingsSource: Seq[Attribute] = settingsSourceBeforeFilter.filter(att => att._type != Constants.channelName && att._type != Constants.typeName)
 
-    //TODO Add union in channels and sinks
-    //    val union = settingsSourceBeforeFilter.map(att => att._type=="channels")
+    val source = AgentSource(idSource, typeSource, getComponentName(prop,Constants.sourceName,typeSource).getOrElse
+      ("There are not name"), Seq(),
+      settingsSource)
+
+
 
     val idChannels = prop.getProperty(agentName + "." + Constants.channelName).split(" ")
     val typeChannels = idChannels.map(id => (id, prop.getProperty(agentName + "." + Constants.channelName + "." + id + "." +
       Constants.typeName)))
-    val settingsChannel: Seq[Attribute] = typeChannels.map(idChan => (idChan._1, getSettings(prop, idChan._1, Constants.channelName,
-      idChan._2))).flatMap(setting => setting._2)
+    //    val settingsChannel: Seq[Attribute] = typeChannels.map(idChan => (idChan._1, getSettings(prop, idChan._1, Constants.channelName,
+    //      idChan._2))).flatMap(setting => setting._2)
+    val settingsChannel = typeChannels.map(idChan => (idChan._1, getSettings(prop, idChan._1, Constants.channelName, idChan._2)))
+
+
 
 
     val idSinks = prop.getProperty(agentName + "." + Constants.sinkName).split(" ")
     val typeSinks = idSinks.map(id => (id, prop.getProperty(agentName + "." + Constants.sinkName + "." + id + "." + Constants.typeName)))
-    val settingsSinks: Seq[Attribute] = typeSinks.map(idSink => (idSink._1, getSettings(prop, idSink._1, Constants.sinkName, idSink
-      ._2))).flatMap(setting => setting._2)
+    val settingsSinks = typeSinks.map(idSink => (idSink._1, getSettings(prop, idSink._1, Constants.sinkName, idSink
+      ._2)))
+    //    val settingsSinks: Seq[Attribute] = typeSinks.map(idSink => (idSink._1, getSettings(prop, idSink._1, Constants.sinkName, idSink
+    //      ._2))).flatMap(setting => setting._2)
 
-    //    val union = settingsSinksBeforeFilter.map(x => x.filter(x => x._type== channelName))
 
 
-    //TODO Find name in json
-    val source = AgentSource(idSource, typeSource, "", Seq(), settingsSource)
+
     val channels = typeChannels.indices.foldLeft(Seq.empty[AgentChannel]) {
       case (channels, i) =>
-//        channels :+ AgentChannel(idChannels(i), typeChannels(i)._2, "", settingsChannel.filter(set => set.id == idChannels(i)), source);
-        channels :+ AgentChannel(idChannels(i), typeChannels(i)._2, "", settingsChannel.toList, source);
-
+        channels :+ AgentChannel(idChannels(i), typeChannels(i)._2, getComponentName(prop,Constants.channelName,
+          typeChannels(i)._2).getOrElse("There are not name"), settingsChannel.filter(set => set._1 ==
+          idChannels(i)).flatMap(set => set._2).toList, source)
     }
-    //    val channels: Seq[AgentChannel[String]] =
-    //      for {
-    //        id <- idChannels
-    //        typeChannel <- typeChannels
-    //        setting <- settingsChannel
-    //      } yield AgentChannel(id, typeChannel._2, "", setting, source)
     val sinks = typeSinks.indices.foldLeft(Seq.empty[AgentSink]) {
       case (sinks, i) =>
-//        sinks :+ AgentSink(idSinks(i), typeSinks(i)._2, "", settingsSinks.filter(set => set.id == idSinks(i)), channels(i))
-        sinks :+ AgentSink(idSinks(i), typeSinks(i)._2, "", settingsSinks.toList, channels(i))
+        sinks :+ AgentSink(idSinks(i), typeSinks(i)._2, getComponentName(prop,Constants.sinkName,typeSinks(i)._2)
+          .getOrElse("There are not name"),
+          settingsSinks.filter(set => set._1 == idSinks(i)).flatMap
+          (set => set._2).toList, channels(i))
     }
     Agent(agentName, source, channels, sinks)
   }
@@ -90,15 +92,15 @@ object PropertiesToModel {
     while (enuKeys.hasMoreElements) {
       val key = enuKeys.nextElement().toString
       if (key.startsWith(agentName + "." + component + "." + id) &&
-        !key.startsWith(agentName + "." + component + "." + id + "." + _type) &&
+        //      !key.startsWith(agentName + "." + component + "." + id + "." + _type) &&
         !key.startsWith(agentName + "." + component + "." + id + "." + "channel")
       ) {
         val typeNotType = key.split(agentName + "." + component + "." + id + ".")(1)
         if (typeNotType != "type") {
-          //          attribute :+= Attribute(id, typeNotType, "", getRequired(p, component, _type, typeNotType).getOrElse(false)
-          //            , p.getProperty(key))
-          attribute :+= Attribute(typeNotType, "Boolean", "", getRequired(p, component, _type, typeNotType).getOrElse
+          attribute :+= Attribute(typeNotType, getTypeOfValue(p,component,_type,typeNotType).getOrElse("string"), getAttributeName(p,component,
+            _type,typeNotType).getOrElse("There are not name by default"), getRequired(p, component, _type, typeNotType).getOrElse
             (false), p.getProperty(key))
+
         }
       }
     }
@@ -113,4 +115,35 @@ object PropertiesToModel {
       js.read("$.descriptors.components..settings.." + setting + "..required").asInstanceOf[JSONArray].get(0).asInstanceOf[Boolean]
     }.toOption
   }
+
+  def getTypeOfValue(p: Properties, component: String, _type: String, setting: String): Option[String] = {
+    val componentInSingular = component.slice(0, component.length - 1)
+    val file = Source.fromFile("src/main/resources/" + componentInSingular + "/" + _type + "/" + _type + componentInSingular.capitalize + ".json").mkString
+    val js = JsonPath.parse(file)
+    Try {
+      js.read("$.descriptors.components..settings.." + setting + "..type").asInstanceOf[JSONArray].get(0)
+        .asInstanceOf[String]
+    }.toOption
+  }
+
+  def getAttributeName(p: Properties, component: String, _type: String, setting: String): Option[String] = {
+    val componentInSingular = component.slice(0, component.length - 1)
+    val file = Source.fromFile("src/main/resources/" + componentInSingular + "/" + _type + "/" + _type + componentInSingular.capitalize + ".json").mkString
+    val js = JsonPath.parse(file)
+    Try {
+      js.read("$.descriptors.components..settings.." + setting + "..name").asInstanceOf[JSONArray].get(0)
+        .asInstanceOf[String]
+    }.toOption
+  }
+
+  def getComponentName(p: Properties, component: String, _type: String): Option[String] = {
+    val componentInSingular = component.slice(0, component.length - 1)
+    val file = Source.fromFile("src/main/resources/" + componentInSingular + "/" + _type + "/" + _type + componentInSingular.capitalize + ".json").mkString
+    val js = JsonPath.parse(file)
+    Try {
+      js.read("$.descriptors.components..name").asInstanceOf[JSONArray].get(0)
+        .asInstanceOf[String]
+    }.toOption
+  }
+
 }

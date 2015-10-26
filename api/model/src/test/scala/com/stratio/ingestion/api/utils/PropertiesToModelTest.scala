@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,37 +31,39 @@ import org.scalatest.junit.JUnitRunner
 class PropertiesToModelTest extends FunSpec
 with GivenWhenThen
 with ShouldMatchers {
+  val attribute1 = Attribute("fileHeader", "string", "File header", false, "FALSE")
+
+  val attribute2 = Attribute("spoolDir", "string", "Spooling directory", true, "data/spoolDir")
+  // val source = AgentSource("src", "spoolDir", "", Seq(), Seq(attribute1, attribute2))
+  val source1 = AgentSource("src", "spoolDir", "Spooling Directory Source", Seq(), Seq(attribute1))
+  val source2 = AgentSource("src", "spoolDir", "Spooling Directory Source", Seq(), Seq(attribute1,attribute2))
+  val attributeChannel = Attribute("capacity", "integer", "Capacity", false, "100")
+  val attributeChannel1 = Attribute("capacity", "integer", "Capacity", false, "10000")
+  val channel = AgentChannel("mongoChannel", "memory", "Memory Channel", Seq(attributeChannel), source1)
+  val channel1 = AgentChannel("mongoChannel", "memory", "Memory Channel", Seq(attributeChannel), source2)
+  val channel2 = AgentChannel("decisionChannel", "file", "File Channel", Seq(attributeChannel1), source2)
+  val attributeSink = Attribute("mongoUri", "string", "Mongo URI", true, "mongodb://127.0.0.1:27017/example.example")
+  val attributeSink2 = Attribute("dynamic", "boolean", "Dynamic", true, "false")
+  val attributeSink3 = Attribute("mappingFile", "string", "Mapping file", true, "conf/mongo_schema.json")
+
+  val sink = AgentSink("mongoSink", "mongodb", "MongoDB Sink", Seq
+    (attributeSink, attributeSink2, attributeSink3), channel)
+  val sink2 = AgentSink("mongoSink", "mongodb", "MongoDB Sink", Seq
+    (attributeSink, attributeSink2, attributeSink3), channel1)
 
   describe("The Json Parser") {
-    it("should parse this sink from the json") {
-      Given("a json sink")
-
-      //  val attribute1 = Attribute("spoolDir", "spoolDir", "", true, "data/spoolDir")
-      val attribute2 = Attribute("fileHeader", "Boolean", "", false, "FALSE")
-      // val source = AgentSource("src", "spoolDir", "", Seq(), Seq(attribute1, attribute2))
-      val source = AgentSource("src", "spoolDir", "", Seq(), Seq( attribute2))
-      //      val source2 = Source("src2", "memory", "", "SourceDescription2", Seq(), Seq())
-      val attributeChannel = Attribute("capacity", "Boolean", "", false, "100")
-      //      val attributeChannel1 = Attribute("capacity", "file", "", false, "10000")
-      val channel = AgentChannel("mongoChannel", "memory", "", Seq(attributeChannel), source)
-      //      val channel2 = AgentChannel("decisionChannel", "file", "", Seq(attributeChannel1), source)
-      val attributeSink = Attribute("mongoUri", "Boolean", "", true, "mongodb://127.0.0.1:27017/example.example")
-      val attributeSink2 = Attribute("dynamic", "Boolean", "", true, "false")
-      val attributeSink3 = Attribute("mappingFile", "Boolean", "", true, "conf/mongo_schema.json")
-
-      val sink = AgentSink("mongoSink", "mongodb", "", Seq
-        (attributeSink, attributeSink2, attributeSink3), channel)
-      //      val agent = Agent("a", source, Seq(channel, channel2), Seq(sink))
-      val agent1 = Agent("a", source, Seq(channel), Seq(sink))
-
-
-      val agent2 = PropertiesToModel.propertiesToModel("/new.properties")
-      println(agent2)
-      println(agent1)
-      agent2.toString should be(agent1.toString)
-
+    it("should parse this simple agent from the json") {
+      Given("a json agent")
+      val agent1 = Agent("a", source1, Seq(channel), Seq(sink))
+      val agent2 = PropertiesToModel.propertiesToModel("/expected1.properties")
+      agent2 should be(agent1)
     }
-
+    it("should parse this agent with an agent with two channels from the json") {
+      Given("a json agent")
+      val agent1 = Agent("a", source2, Seq(channel1,channel2), Seq(sink2))
+      val agent2 = PropertiesToModel.propertiesToModel("/expected2.properties")
+      agent2 should be(agent1)
+    }
 
   }
 }
