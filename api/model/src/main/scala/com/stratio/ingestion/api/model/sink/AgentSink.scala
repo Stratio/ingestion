@@ -23,10 +23,11 @@ import com.stratio.ingestion.api.model.commons.{Attribute, Entity}
  * Created by eruiz on 15/10/15.
  */
 case class AgentSink(
-                      id: String,
-                      _type: String,
-                      name: String,
-                      settings: Seq[Attribute],
-                      channels: AgentChannel
-                      ) extends Entity
+                    id: String,
+                    _type: String,
+                    name: String,
+                    settings: Seq[Attribute],
+                    channels: AgentChannel
+                    ) extends Entity
+
 

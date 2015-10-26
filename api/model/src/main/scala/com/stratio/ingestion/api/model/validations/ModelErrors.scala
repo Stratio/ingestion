@@ -13,16 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.api.model.commons
+package com.stratio.ingestion.api.model.validations
 
-import com.stratio.ingestion.api.model.channel.AgentChannel
-import com.stratio.ingestion.api.model.sink.AgentSink
+import com.stratio.ingestion.api.model.commons.{Attribute, Agent, Entity}
 import com.stratio.ingestion.api.model.source.AgentSource
 
+import scala.collection.mutable.ListBuffer
+
 /**
- * Created by eruiz on 15/10/15.
+ * Created by miguelsegura on 21/10/15.
  */
-case class Agent(id: String,
-                 source: AgentSource,
-                 channels: Seq[AgentChannel],
-                 sinks: Seq[AgentSink])
+trait ModelErrors{
+  val listMessages = ListBuffer.empty[String]
+
+  def writeErrorMessage(agent: Agent, component: String, listMessages: ListBuffer[String]) :  ListBuffer[String]
+  def writeErrorMessage(entity: Entity, message: String, listMessages: ListBuffer[String]) :  ListBuffer[String]
+  def writeErrorMessage(entity: Entity, setting: Attribute, message: String, listMessages: ListBuffer[String]) :
+  ListBuffer[String]
+
+}
