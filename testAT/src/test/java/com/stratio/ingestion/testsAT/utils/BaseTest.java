@@ -1,8 +1,4 @@
-package com.stratio.explorer.testsAT.utils;
-
-/**
- * Created by mpenate on 26/10/15.
- */
+package com.stratio.ingestion.testsAT.utils;
 
 import com.stratio.tests.utils.BaseGTest;
 import com.stratio.tests.utils.ThreadProperty;
