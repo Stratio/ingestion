@@ -1,9 +1,5 @@
 package com.stratio.ingestion.testsAT.utils;
 
-/**
- * Created by mpenate on 26/10/15.
- */
-
 import com.stratio.tests.utils.BaseGTest;
 import com.stratio.tests.utils.ThreadProperty;
 import org.testng.ITestContext;
