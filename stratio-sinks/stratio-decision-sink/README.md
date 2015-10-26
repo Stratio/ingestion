@@ -1,14 +1,14 @@
-Stratio Streaming Sink
+Stratio Decision Sink
 ==============================
 
-A Flume sink using Stratio Streaming.
+A Flume sink using Stratio Decision.
 
-The StratioStreaming Sink will insert flume events to an specific stream. The configuration is located in the flume config (see sample below.)
+The Stratio Decision Sink will insert flume events to an specific stream. The configuration is located in the flume config (see sample below.)
 
 Available config parameters:
 
-- kafka: Kafka brokers (comma separated list) where the Stratio Streaming/Kafka instance is running
-- zookeeper: Zookeeper quorum where the Stratio Streaming/Zookeeper instance is running
+- kafka: Kafka brokers (comma separated list) where the Stratio Decision/Kafka instance is running
+- zookeeper: Zookeeper quorum where the Stratio Decision/Zookeeper instance is running
 - streamDefinitionFile: stream definition file path (see example below)
 
 This sink will extract the data from the flume event headers and for each field within the headers map it will create a new stream "field" with the content of the specific header. You must provide a mechanism to parse the content of the flume flow to the event headers (we strongly recommend using morphlines).
@@ -17,12 +17,12 @@ This sink will extract the data from the flume event headers and for each field 
 Sample Flume config
 -------------------
 
-The following file describes an example configuration of a flume agent that uses a Spooling directory source, a file channel our StratioStreaming Sink and one morphline interceptor which parses the flume flow content to the events header
+The following file describes an example configuration of a flume agent that uses a Spooling directory source, a file channel our Stratio Decision Sink and one morphline interceptor which parses the flume flow content to the events header
 
 ```properties
 # Name the components on this agent
 agent.sources = r1
-agent.sinks = streamingSink
+agent.sinks = decisionSink
 agent.channels = c1
 
 # Describe/configure the source
@@ -30,10 +30,10 @@ agent.sources.r1.type = spoolDir
 agent.sources.r1.spoolDir = /home/flume/data/files
 
 # Describe the sink
-agent.sinks.streamingSink.type=com.stratio.ingestion.sink.stratiostreaming.StratioStreamingSink
-agent.sinks.streamingSink.kafka=localhost:9092
-agent.sinks.streamingSink.zookeeper=localhost:2181
-agent.sinks.streamingSink.streamDefinitionFile=/path/to/stream/definition/file/stream.conf
+agent.sinks.decisionSink.type=com.stratio.ingestion.sink.decision.StratioDecisionSink
+agent.sinks.decisionSink.kafka=localhost:9092
+agent.sinks.decisionSink.zookeeper=localhost:2181
+agent.sinks.decisionSink.streamDefinitionFile=/path/to/stream/definition/file/stream.conf
 
 # Define the interceptors
 agent.sources.r1.interceptors = morphlineinterceptor
@@ -49,7 +49,7 @@ agent.channels.c1.transactionCapacity=10000
 
 # Bind the source and sink to the channel
 agent.sources.r1.channels = c1
-agent.sinks.streamingSink.channel = c1
+agent.sinks.decisionSink.channel = c1
 
 ```
 
@@ -124,8 +124,8 @@ morphlines : [
 ]
 ```
 
-Building Stratio Streaming Sink
--------------------------------
+Building Stratio Decision Sink
+------------------------------
 
 The sink is built using Maven:
 

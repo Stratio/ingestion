@@ -13,27 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.sink.stratiostreaming;
+package com.stratio.ingestion.sink.decision;
 
-import com.stratio.streaming.api.IStratioStreamingAPI;
-import com.stratio.streaming.api.StratioStreamingAPIFactory;
-import com.stratio.streaming.api.messaging.ColumnNameType;
-import com.stratio.streaming.api.messaging.ColumnNameValue;
-import com.stratio.streaming.commons.constants.ColumnType;
-import com.stratio.streaming.commons.exceptions.StratioEngineConnectionException;
-import com.stratio.streaming.commons.exceptions.StratioStreamingException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.flume.*;
+import org.apache.flume.Channel;
+import org.apache.flume.ChannelException;
+import org.apache.flume.Context;
+import org.apache.flume.Event;
+import org.apache.flume.EventDeliveryException;
+import org.apache.flume.Transaction;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.*;
+import com.stratio.decision.api.IStratioStreamingAPI;
+import com.stratio.decision.api.StratioStreamingAPIFactory;
+import com.stratio.decision.api.messaging.ColumnNameType;
+import com.stratio.decision.api.messaging.ColumnNameValue;
+import com.stratio.decision.commons.constants.ColumnType;
+import com.stratio.decision.commons.exceptions.StratioEngineConnectionException;
+import com.stratio.decision.commons.exceptions.StratioStreamingException;
 
-public class StratioStreamingSink
+public class StratioDecisionSink
         extends AbstractSink
         implements Configurable {
 
@@ -53,7 +62,7 @@ public class StratioStreamingSink
     private String streamName;
     private List<StreamField> streamFields;
 
-    public StratioStreamingSink() {
+    public StratioDecisionSink() {
         super();
     }
 
@@ -63,7 +72,7 @@ public class StratioStreamingSink
         this.zookeeper = context.getString(ZOOKEEPER, DEFAULT_ZOOKEEPER);
         this.kafka = context.getString(KAFKA, DEFAULT_KAFKA);
         String columnDefinitionFile = context.getString(STREAM_DEFINITION_FILE);
-        StreamDefinitionParser parser = new StreamDefinitionParser(readJsonFromFile(new File(columnDefinitionFile)));
+        com.stratio.ingestion.sink.decision.StreamDefinitionParser parser = new StreamDefinitionParser(readJsonFromFile(new File(columnDefinitionFile)));
         StreamDefinition theStreamDefinition = parser.parse();
         this.streamName = theStreamDefinition.getStreamName();
         this.streamFields = theStreamDefinition.getFields();
@@ -73,7 +82,7 @@ public class StratioStreamingSink
                     .withServerConfig(kafka, zookeeper)
                     .init();
         } catch (StratioEngineConnectionException e) {
-            throw new StratioStreamingSinkException(e);
+            throw new StratioDecisionSinkException(e);
         }
     }
 
@@ -131,7 +140,7 @@ public class StratioStreamingSink
             transaction.rollback();
             status = Status.BACKOFF;
             if (t instanceof Error) {
-                throw new StratioStreamingSinkException(t);
+                throw new StratioDecisionSinkException(t);
             }
         } finally {
             transaction.close();
@@ -165,7 +174,7 @@ public class StratioStreamingSink
             inputStream = new FileInputStream(file);
             return IOUtils.toString(inputStream, "UTF-8");
         } catch (Exception e) {
-            throw new StratioStreamingSinkException(e);
+            throw new StratioDecisionSinkException(e);
         }
     }
 

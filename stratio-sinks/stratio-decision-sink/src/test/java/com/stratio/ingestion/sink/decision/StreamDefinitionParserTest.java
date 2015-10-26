@@ -28,18 +28,14 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   */
-package com.stratio.ingestion.sink.stratiostreaming;
+package com.stratio.ingestion.sink.decision;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
-
-import com.stratio.ingestion.sink.stratiostreaming.StreamDefinition;
-import com.stratio.ingestion.sink.stratiostreaming.StreamDefinitionParser;
-import com.stratio.ingestion.sink.stratiostreaming.StreamField;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 
 public class StreamDefinitionParserTest {
     
