@@ -102,9 +102,9 @@ object ModelToProperties {
 
 //    agent.channels.map(channel => channel.sources.map(source => pw.write(agentName + "." + sourceName + "." +
 //      source.name + "." + channelName + " = " + channel.name + "\n")))
-
-    agent.sinks.map(sink => sink.channels.map(channels => pw.write(agentName + "." + sinkName + "." +
-      sink.name + "." + "channel" + " = " + channels.name + "\n")))
+//
+//    agent.sinks.map(sink => sink.channels.map(channels => pw.write(agentName + "." + sinkName + "." +
+//      sink.name + "." + "channel" + " = " + channels.name + "\n")))
 
   }
 

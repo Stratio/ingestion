@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2014 Stratio (http://stratio.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.stratio.ingestion.api.model.validations
 
 import com.stratio.ingestion.api.model.channel.AgentChannel
@@ -13,33 +28,48 @@ class ConnectionErrors extends ModelErrors {
 
   var listMsg = ListBuffer.empty[String]
   var listChannels = List.empty[AgentChannel]
-//var listChannels = Seq.empty[AgentChannel]
+
   def checkSinkIsConnected(agent: Agent) : ListBuffer[String] = {
     agent.sinks
-      .filter(_.channels.isEmpty)
+      .filter(_.channels == None.orNull)
       .foreach(sink => listMsg = writeErrorMessage(sink, "channel", listMessages))
 
     listMessages
   }
 
-  //TODO
-  //Check if a sink is connected with a channel that exists in channel's list of the agent
-  def checkSinkIsConnectedWithChannel(agent: Agent) : ListBuffer[String] = {
-    agent.sinks
-      .filter(!_.channels.isEmpty)
-      .foreach{sink => listChannels = sink.channels.seq.toList;println(listChannels)}
+  def checkSinkIsConnectedWithChannelThatExists(agent: Agent) : ListBuffer[String] = {
+    listChannels = agent.channels.toList
 
+    agent.sinks
+      .filter(_.channels == None.orNull)
+      .foreach {
+      sink =>
+        if (!listChannels.contains(sink.channels))
+          listMsg = writeErrorMessage(sink, "channe that exists", listMessages)
+      }
+    listMessages
+  }
+
+
+  def checkChannelIsConnected(agent: Agent) : ListBuffer[String] = {
+    agent.channels
+      .filter(_.sources.equals(None))
+      .foreach(channel => listMsg = writeErrorMessage(channel, "source", listMessages))
 
     listMessages
   }
 
-//  def checkChannelIsConnected(agent: Agent) : ListBuffer[String] = {
-//    agent.channels
-//      .filter(_.sources.isEmpty)
-//      .foreach(channel => listMsg = writeErrorMessage(channel, "source", listMessages))
-//
-//    listMessages
-//  }
+  def checkChannelIsConnectedWithSourceThatExists(agent: Agent) : ListBuffer[String] = {
+    agent.channels
+      .filter(!_.sources.equals(None))
+      .foreach {
+      channel =>
+        if(!agent.source.equals(channel.sources))
+          listMsg = writeErrorMessage(channel, "source that exists", listMessages)
+    }
+
+    listMessages
+  }
 
   def writeErrorMessage(agent: Agent, component: String, listMessages: ListBuffer[String]) :  ListBuffer[String] = {
     listMessages += "Agent " + agent.id + " doesn't have a " + component
@@ -52,25 +82,28 @@ class ConnectionErrors extends ModelErrors {
   def writeErrorMessage(entity: Entity, setting: Attribute, message: String, listMessages: ListBuffer[String]) :
   ListBuffer[String] = {
     listMessages += "Component " + entity.name + " of type " + entity.typo + " doesn't have " +
-      message + " " + setting
+      message + " " + setting.name
   }
 
 }
 
-object errors {
+object connectionErrors {
 
   val connect = new ConnectionErrors();
-  var listMsg = ListBuffer.empty[String]
-  def sinkNoChannels(agent: Agent) : ListBuffer[String] = {
+  var listMsg = ListBuffer.empty[String
+]
+  def noChannels(agent: Agent) : ListBuffer[String] = {
     val agentFlume : Agent = agent
     listMsg = connect.checkSinkIsConnected(agentFlume);
+    listMsg = connect.checkChannelIsConnected(agentFlume);
 
     listMsg
   }
 
-  def sinkChannelsNotConnected(agent: Agent) : ListBuffer[String] = {
+  def notConnectedThatExists(agent: Agent) : ListBuffer[String] = {
     val agentFlume : Agent = agent
-    listMsg = connect.checkSinkIsConnectedWithChannel(agentFlume);
+    listMsg = connect.checkSinkIsConnectedWithChannelThatExists(agentFlume);
+    listMsg = connect.checkChannelIsConnectedWithSourceThatExists(agentFlume);
 
     listMsg
   }

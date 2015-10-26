@@ -1,7 +1,22 @@
+/**
+ * Copyright (C) 2014 Stratio (http://stratio.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.stratio.ingestion.api.model.validations
 
 import com.stratio.ingestion.api.model.channel.AgentChannel
-import com.stratio.ingestion.api.model.commons.{Attribute, Entity, Agent}
+import com.stratio.ingestion.api.model.commons.{WorkFlow, Attribute, Entity, Agent}
 import com.stratio.ingestion.api.model.sink.AgentSink
 import com.stratio.ingestion.api.model.source.AgentSource
 
@@ -12,16 +27,10 @@ import scala.collection.mutable.ListBuffer
  */
 class CompositionErrors extends ModelErrors {
 
-  /* Pending of workflow implementation*/
-//  def checkWorkflowAgents(workflow : Workflow) : Unit = {
-//    if(workflow.agents.==(None)){
-//      writeErrorMessage(workflow);
-//    }
-//  }
   var listMsg = ListBuffer.empty[String]
 
   def checkAgentSources(agent: Agent) :  ListBuffer[String] = {
-    if(agent.source.==(None)){
+    if(agent.source == None.orNull){
       listMsg = writeErrorMessage(agent, "source", listMessages);
     }
     listMsg
@@ -63,24 +72,24 @@ class CompositionErrors extends ModelErrors {
   }
 
   def checkEntityIdOrType(entity: Entity) :  ListBuffer[String] = {
-    if(entity.id.isEmpty){
+    if(entity.id.isEmpty || entity.id.equals("")){
       listMsg = writeErrorMessage(entity, "Id", listMessages)
     }
-    if(entity.typo.isEmpty){
+    if(entity.typo.isEmpty || entity.id.equals("")){
       listMsg = writeErrorMessage(entity, "typo", listMessages)
     }
     listMsg
   }
 
   def checkSinkChannel(sink: AgentSink) :  ListBuffer[String] = {
-    if(sink.channels.isEmpty){
+    if(sink.channels == None.orNull){
       listMsg = writeErrorMessage(sink, "channel", listMessages)
     }
     listMsg
   }
 
   def checkChannelSource(channel: AgentChannel) :  ListBuffer[String] = {
-    if(channel.sources.isEmpty){
+    if(channel.sources == None.orNull){
       listMsg = writeErrorMessage(channel, "source", listMessages)
     }
     listMsg
@@ -97,6 +106,41 @@ class CompositionErrors extends ModelErrors {
   def writeErrorMessage(entity: Entity, setting: Attribute, message: String, listMessages: ListBuffer[String]) :
   ListBuffer[String] = {
     listMessages += "Component " + entity.name + " of type " + entity.typo + " doesn't have " +
-      message + " " + setting
+      message + " " + setting.name
   }
+}
+
+object compositionErrors {
+
+  val comp = new CompositionErrors();
+  var listMsg = ListBuffer.empty[String]
+
+  def badComponents(agent: Agent) : ListBuffer[String] = {
+    val agentFlume : Agent = agent
+    listMsg = comp.checkAgentSources(agentFlume);
+    listMsg = comp.checkAgentSinks(agentFlume);
+    listMsg = comp.checkAgentChannels(agentFlume);
+
+    listMsg
+  }
+
+  def badSettings(agent: Agent) : ListBuffer[String] = {
+    val agentFlume : Agent = agent
+    listMsg = comp.checkSourceSettings(agentFlume.source);
+    agentFlume.sinks.foreach(sink =>listMsg = comp.checkSinkSettings(sink))
+    agentFlume.channels.foreach(channel =>listMsg = comp.checkChannelSettings(channel))
+
+    listMsg
+  }
+
+  def badEntity(agent: Agent) : ListBuffer[String] = {
+    val agentFlume : Agent = agent
+    listMsg = comp.checkEntityIdOrType(agentFlume.source);
+    agentFlume.sinks.foreach(sink =>listMsg = comp.checkEntityIdOrType(sink))
+    agentFlume.channels.foreach(channel =>listMsg = comp.checkEntityIdOrType(channel))
+
+    listMsg
+  }
+
+
 }

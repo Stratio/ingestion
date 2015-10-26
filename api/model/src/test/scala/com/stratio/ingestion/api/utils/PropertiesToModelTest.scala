@@ -15,6 +15,10 @@
  */
 package com.stratio.ingestion.api.utils
 
+import com.stratio.ingestion.api.model.channel.AgentChannel
+import com.stratio.ingestion.api.model.commons.Agent
+import com.stratio.ingestion.api.model.sink.AgentSink
+import com.stratio.ingestion.api.model.source.AgentSource
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
@@ -32,14 +36,14 @@ with ShouldMatchers {
     it("should parse this sink from the json") {
       Given("a json sink")
 
-      val v = PropertiesToModel.propertiesToModel("/new.properties")
-      println(v)
-      //        val source = AgentSource("ID", "spoolDir", "src", "SourceDescription", Seq(), Seq())
-      //
-      //        val agent = Agent(source,Seq(),Seq())
-      //        val result = ModelToProperties.modelToProperties(agent)
-      //
-      //        result should be (PropertiesToModel.propertiesToModel("/new.properties"))
+//      val v = PropertiesToModel.propertiesToModel("/new.properties")
+//      println(v)
+//              val source = AgentSource("ID", "spoolDir", "src", "SourceDescription", Seq(), Seq())
+
+//              val agent = Agent(source, Seq.empty[AgentChannel], Seq.empty[AgentSink])
+//              val result = ModelToProperties.modelToProperties(agent)
+
+//              result should be (PropertiesToModel.propertiesToModel("/new.properties"))
 
     }
 

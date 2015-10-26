@@ -47,9 +47,9 @@ object PropertiesToModel {
 
 
 
-    val source = AgentSource("idSource", typoSource, nameSource, "description", Seq(), settingsSource)
-    val channels = Seq(AgentChannel("idChan", typoChannels, nameChannels, "description", settingsChannel, Seq(source)))
-    val sinks = Seq(AgentSink("idSink", typoSink, nameSinks, "description", settingsSink, channels))
+//    val source = AgentSource("idSource", typoSource, nameSource, "description", Seq(), settingsSource)
+//    val channels = Seq(AgentChannel("idChan", typoChannels, nameChannels, "description", settingsChannel, Seq(source)))
+//    val sinks = Seq(AgentSink("idSink", typoSink, nameSinks, "description", settingsSink, channels))
 
 
 //    Agent(source, channels, sinks)

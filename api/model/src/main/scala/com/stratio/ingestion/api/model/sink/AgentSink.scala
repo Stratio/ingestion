@@ -27,6 +27,6 @@ case class AgentSink(
                  name: String,
                  description: String,
                  settings: Seq[Attribute],
-                 channels: Seq[AgentChannel]
+                 channels: AgentChannel
                  ) extends Entity
 

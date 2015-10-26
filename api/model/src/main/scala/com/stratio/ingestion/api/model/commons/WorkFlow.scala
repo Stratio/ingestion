@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2014 Stratio (http://stratio.com)
  *
@@ -13,19 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.api.model.channel
-
-import com.stratio.ingestion.api.model.commons.{Entity, Attribute}
-import com.stratio.ingestion.api.model.source.AgentSource
+package com.stratio.ingestion.api.model.commons
 
 /**
- * Created by eruiz on 15/10/15.
+ * Created by eruiz on 20/10/15.
  */
-case class AgentChannel(
-                    id: String,
-                    typo: String,
-                    name: String,
-                    description: String,
-                    settings: Seq[Attribute],
-                    sources: AgentSource
-                    ) extends Entity
+case class WorkFlow(id: String, name:String, description: String, agents: Seq[Agent])
+//TODO Add execution order
