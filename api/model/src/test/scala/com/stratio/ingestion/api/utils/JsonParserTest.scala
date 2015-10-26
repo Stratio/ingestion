@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,8 +39,8 @@ with ShouldMatchers {
     it("should parse this sink from the json") {
 
 
-      val attribute1 = Attribute( "spooldDir", "spoolDir","", true, "data/spoolDir")
-      val attribute2 = Attribute( "fileHeader", "spoolDir","", false, "FALSE")
+      val attribute1 = Attribute("spoolDir", "spoolDir", "", true, "data/spoolDir")
+      val attribute2 = Attribute("fileHeader", "spoolDir", "", false, "FALSE")
       val source = AgentSource("src", "spoolDir", "", Seq(), Seq(attribute1, attribute2))
       val attributeChannel = Attribute("capacity", "capacity", "", false, "100")
       val channel = AgentChannel("mongoChannel", "memory", "", Seq(attributeChannel), source)
@@ -48,17 +48,19 @@ with ShouldMatchers {
       val attributeSink = Attribute("mongoUri", "mongoUri", "", true, "mongodb://127.0.0.1:27017/example.example")
       val attributeSink2 = Attribute("mappingFile", "mappingFile", "", true, "conf/mongo_schema.json")
       val attributeSink3 = Attribute("dynamic", "dynamic", "", true, "false")
-      val sink = AgentSink("mongoSink", "com.stratio.ingestion.sink.mongodb.MongoSink", "", Seq
+      val sink = AgentSink("mongoSink", "mongodb", "", Seq
         (attributeSink, attributeSink2, attributeSink3), channel)
       sink should be(sink.toJson.convertTo[AgentSink])
-      val sink2 = AgentSink("1", "typo", "mongo", Seq.empty[Attribute],channel)
+      val sink2 = AgentSink("1", "typo", "mongo", Seq.empty[Attribute], channel)
       channel2 should be(channel2.toJson.convertTo[AgentChannel])
-      val agent = Agent("a1",source,Seq(channel),Seq(sink,sink2))
-      
+      val agent = Agent("a1", source, Seq(channel), Seq(sink, sink2))
+
       println(agent)
       Given("a json sink")
-      println(agent.toJson)
-      agent should be (agent.toJson.convertTo[Agent])
+
+      println(agent.toJson.prettyPrint)
+      true.toJson
+      agent should be(agent.toJson.convertTo[Agent])
 
     }
 
