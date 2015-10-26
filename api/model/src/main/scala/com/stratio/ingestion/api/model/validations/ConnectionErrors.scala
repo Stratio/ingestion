@@ -53,7 +53,7 @@ class ConnectionErrors extends ModelErrors {
 
   def checkChannelIsConnected(agent: Agent) : ListBuffer[String] = {
     agent.channels
-      .filter(_.sources.equals(None))
+      .filter(_.source.equals(None))
       .foreach(channel => listMsg = writeErrorMessage(channel, "source", listMessages))
 
     listMessages
@@ -61,10 +61,10 @@ class ConnectionErrors extends ModelErrors {
 
   def checkChannelIsConnectedWithSourceThatExists(agent: Agent) : ListBuffer[String] = {
     agent.channels
-      .filter(!_.sources.equals(None))
+      .filter(!_.source.equals(None))
       .foreach {
       channel =>
-        if(!agent.source.equals(channel.sources))
+        if(!agent.source.equals(channel.source))
           listMsg = writeErrorMessage(channel, "source that exists", listMessages)
     }
 
@@ -76,12 +76,12 @@ class ConnectionErrors extends ModelErrors {
   }
 
   def writeErrorMessage(entity: Entity, message: String, listMessages: ListBuffer[String]) : ListBuffer[String] = {
-    listMessages += "Component " + entity.name + " of type " + entity.typo + " doesn't have " + message
+    listMessages += "Component " + entity.name + " of type " + entity._type + " doesn't have " + message
   }
 
   def writeErrorMessage(entity: Entity, setting: Attribute, message: String, listMessages: ListBuffer[String]) :
   ListBuffer[String] = {
-    listMessages += "Component " + entity.name + " of type " + entity.typo + " doesn't have " +
+    listMessages += "Component " + entity.name + " of type " + entity._type + " doesn't have " +
       message + " " + setting.name
   }
 

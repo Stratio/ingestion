@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.stratio.ingestion.api.core.utils
-
-import org.slf4j.LoggerFactory
+package com.stratio.ingestion.api.model.exceptions
 
 /**
- * Created by aitor on 10/20/15.
+ * Created by aitor on 10/21/15.
  */
-trait LoggerComponent {
-  val log = LoggerFactory.getLogger(this.getClass.getName)
+case class ApiException(ex: Exception, message: String) extends RuntimeException(message) {
+
+  override def getMessage(): String = {
+    message + ": " + ex.getMessage()
+  }
 }

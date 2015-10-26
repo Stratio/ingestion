@@ -75,7 +75,7 @@ class CompositionErrors extends ModelErrors {
     if(entity.id.isEmpty || entity.id.equals("")){
       listMsg = writeErrorMessage(entity, "Id", listMessages)
     }
-    if(entity.typo.isEmpty || entity.id.equals("")){
+    if(entity._type.isEmpty || entity.id.equals("")){
       listMsg = writeErrorMessage(entity, "typo", listMessages)
     }
     listMsg
@@ -89,7 +89,7 @@ class CompositionErrors extends ModelErrors {
   }
 
   def checkChannelSource(channel: AgentChannel) :  ListBuffer[String] = {
-    if(channel.sources == None.orNull){
+    if(channel.source == None.orNull){
       listMsg = writeErrorMessage(channel, "source", listMessages)
     }
     listMsg
@@ -100,12 +100,12 @@ class CompositionErrors extends ModelErrors {
   }
 
   def writeErrorMessage(entity: Entity, message: String, listMessages: ListBuffer[String]) :  ListBuffer[String] = {
-    listMessages += "Component " + entity.name + " of type " + entity.typo + " doesn't have " + message
+    listMessages += "Component " + entity.name + " of type " + entity._type + " doesn't have " + message
   }
 
   def writeErrorMessage(entity: Entity, setting: Attribute, message: String, listMessages: ListBuffer[String]) :
   ListBuffer[String] = {
-    listMessages += "Component " + entity.name + " of type " + entity.typo + " doesn't have " +
+    listMessages += "Component " + entity.name + " of type " + entity._type + " doesn't have " +
       message + " " + setting.name
   }
 }

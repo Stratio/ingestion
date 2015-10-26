@@ -18,13 +18,24 @@ package com.stratio.ingestion.api.model.commons
 /**
  * Created by eruiz on 15/10/15.
  */
+
+//trait AttributeValue[T]
+//
+//object AttributeValueImplicits {
+//
+//  implicit object IntLikeAttributeValue extends AttributeValue[Int]
+//
+//  implicit object BooleanLikeAttributeValue extends AttributeValue[Boolean]
+//
+//  implicit object StringLikeAttributeValue extends AttributeValue[String]
+//
+//}
+
 case class Attribute(
-                      id: String,
-                      typo: String,
-                      name: String,
-                      description: String,
-                      required: Boolean,
-                      value: String
-                      //                      valueInteger: Int,
-                      //                      valueBoolean: Boolean
+                      id: String, //fileHeader
+                      _type: String, //Find in json (Int,string,boolean)
+                      name: String, //UI
+                      required: Boolean,//Find in json
+                      value: String//Generic 100
+                    //TODO Convert in a generic type
                       ) extends Entity

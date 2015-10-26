@@ -36,14 +36,9 @@ with ShouldMatchers {
     it("should parse this sink from the json") {
       Given("a json sink")
 
-//      val v = PropertiesToModel.propertiesToModel("/new.properties")
-//      println(v)
-//              val source = AgentSource("ID", "spoolDir", "src", "SourceDescription", Seq(), Seq())
 
-//              val agent = Agent(source, Seq.empty[AgentChannel], Seq.empty[AgentSink])
-//              val result = ModelToProperties.modelToProperties(agent)
-
-//              result should be (PropertiesToModel.propertiesToModel("/new.properties"))
+      val v = PropertiesToModel.propertiesToModel("/new.properties")
+      println(v)
 
     }
 

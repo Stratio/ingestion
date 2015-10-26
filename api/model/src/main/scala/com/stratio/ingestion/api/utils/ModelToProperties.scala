@@ -24,13 +24,13 @@ import com.stratio.ingestion.api.model.commons.Agent
  */
 
 object ModelToProperties {
-  //TODO Sacar estas variables a un fichero de configuracion.
-  val agentName = "a1"
+  //TODO Put this val in a configuration file.
   val sourceName = "sources"
   val interceptorName = "interceptors"
   val channelName = "channels"
   val sinkName = "sinks"
   val unionName = "union"
+  val typeName = "type"
 
   def modelToProperties(agent: Agent): Unit = {
 
@@ -47,31 +47,31 @@ object ModelToProperties {
   def writeComponents(agent: Agent, pw: PrintWriter): Unit = {
     pw.write("#Name the components on this agent" + "\n\n")
 
-    pw.write(agentName + "." + sourceName + " = " + agent.source.name + "\n")
-    pw.write(agentName + "." + channelName + " = " + agent.channels.map(chan => chan.name).reduce(_ + " " + _) + "\n")
-    pw.write(agentName + "." + sinkName + " = " + agent.sinks.map(sink => sink.name).reduce(_ + " " + _) + "\n")
+    pw.write(agent.id + "." + sourceName + " = " + agent.source.id + "\n")
+    pw.write(agent.id + "." + channelName + " = " + agent.channels.map(chan => chan.id).reduce(_ + " " + _) + "\n")
+    pw.write(agent.id + "." + sinkName + " = " + agent.sinks.map(sink => sink.id).reduce(_ + " " + _) + "\n")
   }
 
   def writeSource(agent: Agent, pw: PrintWriter): Unit = {
     pw.write("\n\n##### " + sourceName.toUpperCase + " #####" + "\n\n")
-    pw.write(agentName + "." + sourceName + "." + agent.source.name + "." + "type = " + agent.source.typo + "\n")
-    agent.source.settings.map(settings => pw.write(agentName + "." + sourceName + "." + agent.source.name + "." +
-      settings.name + " = " + settings.value + "\n"))
+    pw.write(agent.id + "." + sourceName + "." + agent.source.id + "." + typeName + " = " + agent.source._type + "\n")
+    agent.source.settings.foreach(settings => pw.write(agent.id + "." + sourceName + "." + agent.source.id + "." +
+      settings.id + " = " + settings.value + "\n"))
     pw.write("\n\n##### " + interceptorName.toUpperCase + " #####" + "\n\n")
-    //TODO Ver la manera en que se define un interceptor, si es como un setting más o si hay que definirse una case class de interceptores
+    //TODO We need define the interceptors behaviour
 
-    agent.source.interceptors.map(interceptor => pw.write(agentName + "." + sourceName + "." + agent.source.name + "." +
+    agent.source.interceptors.foreach(interceptor => pw.write(agent.id + "." + sourceName + "." + agent.source.id + "." +
       interceptor + " = " + interceptor + "\n"))
   }
 
   def writeChannel(agent: Agent, pw: PrintWriter): Unit = {
     pw.write("\n\n##### " + channelName.toUpperCase() + " #####" + "\n\n")
 
-    agent.channels.map(channel => pw.write(agentName + "." + channelName + "." + channel.name + "." + "type = " +
-      channel.typo + "\n"))
+    agent.channels.foreach(channel => pw.write(agent.id + "." + channelName + "." + channel.id + "." + typeName + " = " +
+      channel._type + "\n"))
 
-    agent.channels.map(channel => channel.settings.map(settings => pw.write(agentName + "." + channelName + "." +
-      channel.name + "." + settings.name + " = " + settings.value + "\n")))
+    agent.channels.foreach(channel => channel.settings.foreach(settings => pw.write(agent.id + "." + channelName + "." +
+      channel.id + "." + settings.id + " = " + settings.value + "\n")))
 
   }
 
@@ -79,11 +79,11 @@ object ModelToProperties {
 
     pw.write("\n\n##### " + sinkName.toUpperCase + " #####" + "\n\n")
 
-    agent.sinks.map(sink => pw.write(agentName + "." + sinkName + "." + sink.name + "." + "type = " +
-      sink.typo + "\n"))
+    agent.sinks.foreach(sink => pw.write(agent.id + "." + sinkName + "." + sink.id + "." + typeName + " = " +
+      sink._type + "\n"))
 
-    agent.sinks.map(sink => sink.settings.map(settings => pw.write(agentName + "." + sinkName + "." +
-      sink.name + "." + settings.name + " = " + settings.value + "\n")))
+    agent.sinks.foreach(sink => sink.settings.foreach(settings => pw.write(agent.id + "." + sinkName + "." +
+      sink.id + "." + settings.id + " = " + settings.value + "\n")))
 
   }
 
@@ -91,20 +91,16 @@ object ModelToProperties {
 
     pw.write("\n\n##### " + unionName.toUpperCase + " #####" + "\n\n")
 
-    pw.write(agentName + "." + sourceName + "." + agent.source.name +"." + channelName + " = " + agent.channels.map
-    (chan => chan
-      .name)
-      .reduce
-      (_ +
-      " " + _) +
-      "\n")
+    pw.write(agent.id + "." + sourceName + "." + agent.source.id + "." + channelName + " = " + agent.channels.map
+      (chan => chan.id).reduce(_ + " " + _) + "\n")
 
 
-//    agent.channels.map(channel => channel.sources.map(source => pw.write(agentName + "." + sourceName + "." +
-//      source.name + "." + channelName + " = " + channel.name + "\n")))
-//
-//    agent.sinks.map(sink => sink.channels.map(channels => pw.write(agentName + "." + sinkName + "." +
-//      sink.name + "." + "channel" + " = " + channels.name + "\n")))
+
+    //    agent.channels.map(channel => channel.sources.map(source => pw.write(agent.id + "." + sourceName + "." +
+    //      source.id + "." + channelName + " = " + channel.id + "\n")))
+
+    agent.sinks.foreach(sink => pw.write(agent.id + "." + sinkName + "." + sink.id + "." + "channel" + " = " + sink.channels.id + "\n"))
+
 
   }
 

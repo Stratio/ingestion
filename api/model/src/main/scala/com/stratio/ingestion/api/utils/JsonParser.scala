@@ -24,12 +24,12 @@ import com.stratio.ingestion.api.model.channel.AgentChannel
 /**
  * Created by eruiz on 15/10/15.
  */
-object JsonParser extends DefaultJsonProtocol {
+object JsonParser extends DefaultJsonProtocol  {
 
-  implicit lazy val attributeJsonFormat = jsonFormat6(Attribute)
-  implicit lazy val sourceJsonFormat = jsonFormat6(AgentSource)
-  implicit lazy val channelJsonFormat = jsonFormat6(AgentChannel)
-  implicit lazy val sinkJsonFormat = jsonFormat6(AgentSink)
-//  implicit lazy val agentComponentJsonFormat = jsonFormat3(Agent)
+  implicit def attributeJsonFormat = jsonFormat5(Attribute)
+  implicit def sourceJsonFormat= jsonFormat5(AgentSource)
+  implicit def channelJsonFormat = jsonFormat5(AgentChannel)
+  implicit def sinkJsonFormat= jsonFormat5(AgentSink)
+  implicit def agentComponentJsonFormat = jsonFormat4(Agent)
 
 }

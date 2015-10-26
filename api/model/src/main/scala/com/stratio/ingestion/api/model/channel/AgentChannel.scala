@@ -15,17 +15,17 @@
  */
 package com.stratio.ingestion.api.model.channel
 
-import com.stratio.ingestion.api.model.commons.{Entity, Attribute}
+import com.stratio.ingestion.api.model.commons.{Attribute, Entity}
 import com.stratio.ingestion.api.model.source.AgentSource
 
 /**
  * Created by eruiz on 15/10/15.
  */
 case class AgentChannel(
-                    id: String,
-                    typo: String,
-                    name: String,
-                    description: String,
-                    settings: Seq[Attribute],
-                    sources: AgentSource
-                    ) extends Entity
+                        id: String,
+                        _type: String,
+                        name: String,
+                        settings: Seq[Attribute],
+                        source: AgentSource
+                        ) extends Entity
+

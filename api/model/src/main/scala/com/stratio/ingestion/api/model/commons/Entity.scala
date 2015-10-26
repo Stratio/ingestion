@@ -20,7 +20,6 @@ package com.stratio.ingestion.api.model.commons
  */
 abstract class Entity {
   val id: String
-  val typo: String
+  val _type: String
   val name: String
-  val description: String
 }

@@ -16,17 +16,18 @@
 package com.stratio.ingestion.api.model.sink
 
 import com.stratio.ingestion.api.model.channel.AgentChannel
-import com.stratio.ingestion.api.model.commons.{Entity, Attribute}
+import com.stratio.ingestion.api.model.commons.{Attribute, Entity}
+
 
 /**
  * Created by eruiz on 15/10/15.
  */
 case class AgentSink(
-                 id: String,
-                 typo: String,
-                 name: String,
-                 description: String,
-                 settings: Seq[Attribute],
-                 channels: AgentChannel
-                 ) extends Entity
+                    id: String,
+                    _type: String,
+                    name: String,
+                    settings: Seq[Attribute],
+                    channels: AgentChannel
+                    ) extends Entity
+
 
