@@ -49,7 +49,6 @@ with BeforeAndAfterAll {
       val attribute2 = Attribute("id", "spoolDir", "fileHeader", "Whether to add a header storing the absolute path " +
         "filename.", false, "FALSE")
       val source = AgentSource("ID", "spoolDir", "src", "SourceDescription", Seq(), Seq(attribute1, attribute2))
-      //      val source2 = Source("ID2", "memory", "src2", "SourceDescription2", Seq(), Seq())
       val attributeChannel = Attribute("id", "capacity", "capacity", "The maximum number of events stored in the channel"
         , false, "100")
       val channel = AgentChannel("1", "memory", "mongoChannel", "mongoChannelDescription", Seq(attributeChannel), source)
@@ -63,9 +62,9 @@ with BeforeAndAfterAll {
 
       var listMsg = ListBuffer.empty[String]
       listMsg = validations.connectionErrors.noChannels(agent)
-//      listMsg = validations.connectionErrors.notConnectedThatExists(agent)
+
       assert(listMsg.length > 0)
-//      println(validations.connectionErrors.listMsg)
+
     }
 
     it("check sink has channels that exists") {
@@ -75,7 +74,6 @@ with BeforeAndAfterAll {
       val attribute2 = Attribute("id", "spoolDir", "fileHeader", "Whether to add a header storing the absolute path " +
         "filename.", false, "FALSE")
       val source = AgentSource("ID", "spoolDir", "src", "SourceDescription", Seq(), Seq(attribute1, attribute2))
-      //      val source2 = Source("ID2", "memory", "src2", "SourceDescription2", Seq(), Seq())
       val attributeChannel = Attribute("id", "capacity", "capacity", "The maximum number of events stored in the channel"
         , false, "100")
       val channel = AgentChannel("1", "memory", "mongoChannel", "mongoChannelDescription", Seq(attributeChannel), source)
@@ -94,8 +92,9 @@ with BeforeAndAfterAll {
 
       var listMsg = ListBuffer.empty[String]
       listMsg = validations.connectionErrors.notConnectedThatExists(agent)
+
       assert(listMsg.length > 0)
-      println(validations.connectionErrors.listMsg)
+
     }
 
     it("check a required attribute is empty") {
@@ -105,7 +104,6 @@ with BeforeAndAfterAll {
       val attribute2 = Attribute("id", "spoolDir", "fileHeader", "Whether to add a header storing the absolute path " +
         "filename.", false, "FALSE")
       val source = AgentSource("ID", "spoolDir", "src", "SourceDescription", Seq(), Seq(attribute1, attribute2))
-      //      val source2 = Source("ID2", "memory", "src2", "SourceDescription2", Seq(), Seq())
       val attributeChannel = Attribute("id", "capacity", "capacity", "The maximum number of events stored in the channel"
         , false, "100")
       val channel = AgentChannel("1", "memory", "mongoChannel", "mongoChannelDescription", Seq(attributeChannel), source)
@@ -119,8 +117,9 @@ with BeforeAndAfterAll {
 
       var listMsg = ListBuffer.empty[String]
       listMsg = validations.valueErrors.settingFailure(agent)
+
       assert(listMsg.length > 0)
-      println(validations.valueErrors.listMsg)
+
     }
 
     it("check composition errors") {
@@ -130,7 +129,6 @@ with BeforeAndAfterAll {
       val attribute2 = Attribute("id", "spoolDir", "fileHeader", "Whether to add a header storing the absolute path " +
         "filename.", false, "FALSE")
       val source = AgentSource("", "spoolDir", "src", "SourceDescription", Seq(), Seq(attribute1, attribute2))
-      //      val source2 = Source("ID2", "memory", "src2", "SourceDescription2", Seq(), Seq())
       val attributeChannel = Attribute("id", "", "capacity", "The maximum number of events stored in the channel"
         , false, "100")
       val channel = AgentChannel("", "", "mongoChannel", "mongoChannelDescription", Seq(), source)
@@ -149,9 +147,7 @@ with BeforeAndAfterAll {
       listMsg = validations.compositionErrors.badEntity(agent)
 
       assert(listMsg.length > 0)
-            println(validations.connectionErrors.listMsg)
+
     }
-
-
   }
 }

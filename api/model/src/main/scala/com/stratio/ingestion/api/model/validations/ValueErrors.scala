@@ -61,8 +61,7 @@ class ValueErrors extends ModelErrors {
     listMsg
   }
 
-
-
+  
   def writeErrorMessage(agent: Agent, component: String, listMessages: ListBuffer[String]) :  ListBuffer[String] = {
     listMessages += "Agent " + agent.id + " doesn't have a " + component
   }
@@ -83,7 +82,7 @@ object valueErrors {
   val connect = new ValueErrors();
   var listMsg = ListBuffer.empty[String]
   def settingFailure(agent: Agent) : ListBuffer[String] = {
-//    val agentSink : AgentSink = sink
+
     listMsg = connect.checkSourceRequiredIsFilled(agent.source);
     agent.sinks.foreach(sink =>listMsg = connect.checkSinkRequiredIsFilled(sink))
     agent.channels.foreach(channel =>listMsg = connect.checkChannelRequiredIsFilled(channel))
