@@ -106,7 +106,7 @@ If you want to check the connection with Stratio Decision uncomment the configur
 
 ::
 
-    a.sinks.decisionSink.type=com.stratio.ingestion.sink.stratiodecision.StratiodecisionSink
+    a.sinks.decisionSink.type=com.stratio.ingestion.sink.decision.StratioDecisionSink
     a.sinks.decisionSink.kafkaHost=localhost
     a.sinks.decisionSink.kafkaPort=9092
     a.sinks.decisionSink.zookeeperHost=localhost
