@@ -1,4 +1,4 @@
-package com.stratio.explorer.testsAT.utils;
+package com.stratio.ingestion.testsAT.utils;
 
 /**
  * Created by mpenate on 26/10/15.
