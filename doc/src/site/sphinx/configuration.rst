@@ -1,5 +1,5 @@
-Ingestion Configuration
-***********************
+Configuration
+*************
 
 
 Compile & Package

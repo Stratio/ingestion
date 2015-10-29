@@ -1,5 +1,5 @@
-Ingestion Architecture
-======================
+Architecture Guide
+==================
 
 Each agent consists of three major components:
 

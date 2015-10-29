@@ -1,5 +1,5 @@
-Checklist & Trouble Shooting Guide
-==================================
+Production Checklist & Trouble Shooting Guide
+=============================================
 
 The most important points to pay attention in Ingestion agents configurations are:
 
