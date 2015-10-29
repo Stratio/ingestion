@@ -1,5 +1,5 @@
-Where to go from here?
-======================
+How do I get started?
+=====================
 
 To explore and play with Stratio Ingestion, we recommend to visit the following:
 

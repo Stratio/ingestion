@@ -9,6 +9,8 @@ Contents:
    architecture.rst
    configuration.rst
    how-to-start.rst
+   api.rst
+   quick-reference.rst
    checklist.rst
    faq.rst
    wikipedia-pagecounts-demo.rst
