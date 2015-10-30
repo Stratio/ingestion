@@ -84,7 +84,7 @@ Flume Ingestion FAQ
 
 **Can I use Flume Ingestion for aggregating data (time-based rollups, for example)?**
 
-*This is not a good idea from our experience, we use to combine Flume + Spark Streaming in order to do that (custom development)*
+*This is not a good idea from our experience, but you can use [Stratio Sparkta](https://github.com/Stratio/Sparkta) for real-time aggregation.
 
 **Is Flume Ingestion multipersistence?**
 
