@@ -15,10 +15,11 @@
  */
 package com.stratio.ingestion.source.redis;
 
+import static com.stratio.ingestion.source.redis.RedisConstants.*;
+
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.EventDrivenSource;
@@ -29,7 +30,6 @@ import org.apache.flume.source.AbstractSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import redis.clients.jedis.Jedis;
@@ -37,8 +37,6 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
 import redis.clients.jedis.exceptions.JedisConnectionException;
-
-import static com.stratio.ingestion.source.redis.RedisConstants.*;
 
 /**
  *
@@ -59,11 +57,11 @@ import static com.stratio.ingestion.source.redis.RedisConstants.*;
  *
  */
 public class RedisSource extends AbstractSource implements Configurable, EventDrivenSource {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(RedisSource.class);
 
     private ChannelProcessor channelProcessor;
-	
+
     private JedisPool jedisPool;
     private String host;
     private Integer port;
@@ -96,7 +94,7 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
 
         log.info("Redis Source Configured");
 	}
-	
+
 	@Override
 	public synchronized void start() {
         super.start();
@@ -108,7 +106,7 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
 
         new SubscribeManager().run();
 	}
-	
+
 	@Override
 	public synchronized void stop() {
         super.stop();
