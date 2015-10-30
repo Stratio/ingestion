@@ -59,7 +59,7 @@
         <hadoop.version>2.4.0</hadoop.version>
         <commons.io.version>2.1</commons.io.version>
         <slf4j.version>1.7.7</slf4j.version>
-        <kite.version>0.17.0</kite.version>
+        <kite.version>1.1.0</kite.version>
         <guava.version>17.0</guava.version>
         <codahale.metrics.version>3.0.2</codahale.metrics.version>
         <!-- Watch Datastax Driver & Kite -->
