@@ -2,12 +2,12 @@ NASA Apache Logs Demo
 *********************
 
 To play around with the different components that we have created within Stratio Ingestion we have designed an scenario where we launch one flume agent against an Ubuntu Virtual Machine with the following structure.
-We will have a data source (apache logs from NASA in 1995) which will be read and send to three sinks (Cassandra Database, ElasticSearch and Stratio Streaming) through three channels. We will need this components:
+We will have a data source (apache logs from NASA in 1995) which will be read and send to three sinks (Cassandra Database, ElasticSearch and Stratio Decision) through three channels. We will need this components:
 
 * Cassandra database
-* Stratio Streaming Engine
-* Zookeeper (for Stratio Streaming)
-* Apache kafka (for Stratio Streaming)
+* Stratio Decision Engine
+* Zookeeper (for Stratio Decision)
+* Apache kafka (for Stratio Decision)
 * ElasticSearch
 * Kibana (for data visualization)
 
@@ -25,16 +25,16 @@ The full agent configuration is the following (see /opt/sds/ingestion/examples/a
 
 * Channels:
 
-  - 3 file channels for cassandra, stratio streaming & elastic search
+  - 3 file channels for cassandra, stratio decision & elastic search
 
 * Sinks:
 
   - Cassandra sink (`developed by Stratio`_), see also the definition_access_log.json attached)
-  - Stratio Streaming sink (`also developed by Stratio`_)
+  - Stratio Decision sink (`also developed by Stratio`_)
   - ElasticSearch sink (included in flume core)
 
 .. _developed by Stratio: https://github.com/Stratio/flume-ingestion/tree/master/stratio-sinks/stratio-cassandra-sink
-.. _also developed by Stratio:  https://github.com/Stratio/flume-ingestion/tree/master/stratio-sinks/stratio-stratiostreaming-sink
+.. _also developed by Stratio:  https://github.com/Stratio/flume-ingestion/tree/master/stratio-sinks/stratio-decision-sink
 
 
 
@@ -45,7 +45,7 @@ Manually
 --------
 
 You need an extracted full distribution of Stratio Ingestion at ``/opt/sds/ingestion``. You can use a different path via the
-``INGESTION_HOME`` environment variable. You will also need a running Stratio Streaming if you use the sink (you can use our sandbox for that), ElasticSearch and Cassandra. By default, it will use only
+``INGESTION_HOME`` environment variable. You will also need a running Stratio Decision if you use the sink (you can use our sandbox for that), ElasticSearch and Cassandra. By default, it will use only
 Cassandra and ElasticSearch. See below for different set ups you can use.
 
 
@@ -56,7 +56,7 @@ You can use our Vagrant Box to run the example, just type: ``vagrant init strati
 
 Then you must type ``vagrant up`` to start the machine.
 
-You can edit the /opt/sds/ingestion/examples/apache-logs/conf/flume-conf.properties for customizing the example. By default, we have activated two sinks: ElasticSearch and Cassandra, but we provide the configuration for Stratio Streaming Sink commented in the same file.
+You can edit the /opt/sds/ingestion/examples/apache-logs/conf/flume-conf.properties for customizing the example. By default, we have activated two sinks: ElasticSearch and Cassandra, but we provide the configuration for Stratio Decision Sink commented in the same file.
 
 Due to an issue in virtualbox in Windows 10 computers, sandbox could not install properly the network interfaces. There is an official Virtualbox patch it. Just download and run as administrator:
 https://www.virtualbox.org/attachment/ticket/14040/VBox-Win10-fix-14040.exe
@@ -98,24 +98,24 @@ You should see something like this:
  :align: center
 
 
-Connection with Stratio Streaming
+Connection with Stratio Decision
 ================================
 
-If you want to check the connection with Stratio Streaming uncomment the configuration in (it is recommended to work as root: just type ``sudo su-``) /opt/sds/ingestion/examples/apache-logs/conf/flume-conf.properties:
+If you want to check the connection with Stratio Decision uncomment the configuration in (it is recommended to work as root: just type ``sudo su-``) /opt/sds/ingestion/examples/apache-logs/conf/flume-conf.properties:
 
 
 ::
 
-    a.sinks.streamingSink.type=com.stratio.ingestion.sink.stratiostreaming.StratioStreamingSink
-    a.sinks.streamingSink.kafkaHost=localhost
-    a.sinks.streamingSink.kafkaPort=9092
-    a.sinks.streamingSink.zookeeperHost=localhost
-    a.sinks.streamingSink.zookeeperPort=2181
-    a.sinks.streamingSink.streamDefinitionFile=/opt/flume/conf/stream.conf
-    a.sinks.streamingSink.streamFields=log_id,log_host,log_user,log_date,log_http_method,log_url_path,log_http_version,log_http_code,log_bytes_returned
+    a.sinks.decisionSink.type=com.stratio.ingestion.sink.decision.StratioDecisionSink
+    a.sinks.decisionSink.kafkaHost=localhost
+    a.sinks.decisionSink.kafkaPort=9092
+    a.sinks.decisionSink.zookeeperHost=localhost
+    a.sinks.decisionSink.zookeeperPort=2181
+    a.sinks.decisionSink.streamDefinitionFile=/opt/flume/conf/stream.conf
+    a.sinks.decisionSink.streamFields=log_id,log_host,log_user,log_date,log_http_method,log_url_path,log_http_version,log_http_code,log_bytes_returned
 
-We recommend to use Streaming vagrant box (``vagrant init stratio/streaming`` and ``vagrant up``) and use this parameters to configure flume (IPs and ports for kafka and zookeeper must be replaced by IPs and ports configured in the streaming machine). If you have streaming vagrant box working, then you can run the flume example.
-The example will create the stream necessary for working in streaming, you can run the streaming shell and type create new querys:
+We recommend to use decision vagrant box (``vagrant init stratio/decision`` and ``vagrant up``) and use this parameters to configure flume (IPs and ports for kafka and zookeeper must be replaced by IPs and ports configured in the decision machine). If you have decision vagrant box working, then you can run the flume example.
+The example will create the stream necessary for working in decision, you can run the decision shell and type create new querys:
 
 Create query **host_requests_per_second**:
 

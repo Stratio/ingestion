@@ -16,7 +16,7 @@ Flume Ingestion is a fork of Apache Flume (1.6), where you can find:
 -  SNMP (v1, v2c and 3)
 -  redis, Kafka (0.8.1.1)
 -  MongoDB, Druid, JDBC and Cassandra
--  Stratio Streaming (Complex Event Processing engine)
+-  Stratio Decision (Complex Event Processing engine)
 -  REST client, Flume agents stats
 
 Flume Ingestion components
@@ -36,7 +36,7 @@ Flume Ingestion components
    -  Cassandra
    -  MongoDB
    -  Druid
-   -  `Stratio Streaming`_
+   -  `Stratio Decision`_
    -  JDBC
    -  Kafka
 
@@ -94,7 +94,7 @@ Spark Streaming in order to do that (custom development)*
 *Yes, you can write data to JDBC sources, mongoDB, Apache Cassandra,
 ElasticSearch, Apache Kafka, among others.*
 
-**Can I send data to streaming-cep-engine?**
+**Can I send data to decision-cep-engine?**
 
 *Of course, we have developed a sink in order to send events from Flume
 to an existing stream in our CEP engine. The sink will create the stream
@@ -102,7 +102,7 @@ if it does not exist in the engine.*
 
 .. _Apache Flume: http://flume.apache.org/
 .. _Morphlines: http://kitesdk.org/docs/current/kite-morphlines/index.html
-.. _Stratio Streaming: https://github.com/Stratio/stratio-streaming
+.. _Stratio Decision: https://github.com/Stratio/Decision
 
 
 

@@ -1,0 +1,17 @@
+{
+    "title": "Example Schema Updateable",
+    "type": "object",
+    "bodyType": "object",
+    "bodyField": "",
+    "properties": {
+        "_id": {
+            "type": "string"
+        },
+        "fieldToUpdate": {
+            "type": "string"
+        },
+       "newField": {
+            "type": "string"
+        }
+    }
+}

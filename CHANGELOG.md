@@ -2,7 +2,10 @@
 
 Only listing significant user-visible, not internal code cleanups and minor bug fixes.
 
-## 0.6.0 ()
+## 0.6.0 (October 2015)
+* Streaming Sink renamed to Decision Sink
+* Updated documentation.
+* Bugs fixing
 * Update Kite SDK version to 1.1.0
 
 ## 0.5.0 (October 2015)

@@ -67,11 +67,13 @@ public class MongoSink extends AbstractSink implements Configurable {
     private static final String CONF_DYNAMIC = "dynamic";
     private static final String CONF_DYNAMIC_DB_FIELD = "dynamicDB";
     private static final String CONF_DYNAMIC_COLLECTION_FIELD = "dynamicCollection";
+    private static final String CONF_UPDATE_INSTEAD_REPLACE = "updateInsteadReplace";
     private static final int DEFAULT_BATCH_SIZE = 25;
     private static final boolean DEFAULT_DYNAMIC = false;
     private static final String DEFAULT_DYNAMIC_DB_FIELD = "db";
     private static final String DEFAULT_DYNAMIC_COLLECTION_FIELD = "collection";
-
+    private static final boolean DEFAULT_UPDATE_INSTEAD_REPLACE = false;
+    
     private SinkCounter sinkCounter;
     private int batchSize;
     private MongoClient mongoClient;
@@ -82,6 +84,7 @@ public class MongoSink extends AbstractSink implements Configurable {
     private String dynamicDBField;
     private String dynamicCollectionField;
     private EventParser eventParser;
+    private boolean updateInsteadReplace;
 
     public MongoSink() {
         super();
@@ -123,6 +126,9 @@ public class MongoSink extends AbstractSink implements Configurable {
 
             this.sinkCounter = new SinkCounter(this.getName());
             this.batchSize = context.getInteger(CONF_BATCH_SIZE, DEFAULT_BATCH_SIZE);
+            
+            this.updateInsteadReplace = context.getBoolean(CONF_UPDATE_INSTEAD_REPLACE,DEFAULT_UPDATE_INSTEAD_REPLACE);
+            
         } catch (IOException ex) {
             throw new MongoSinkException(ex);
         }
@@ -149,7 +155,17 @@ public class MongoSink extends AbstractSink implements Configurable {
                 }
                 for (Event event : eventList) {
                     final DBObject document = this.eventParser.parse(event);
-                    getDBCollection(event).save(document);
+                    
+                    if (this.updateInsteadReplace && document.get("_id") != null) // update requires '_id' field to match document
+                    {
+                        BasicDBObject searchQuery = new BasicDBObject().append("_id", document.get("_id")); // update by _id
+                        BasicDBObject updatedDocument = new BasicDBObject().append("$set", document);
+                        getDBCollection(event).update(searchQuery,updatedDocument,true,false);
+                    }
+                    else
+                    {
+                    	getDBCollection(event).save(document);
+                    }
                 }
                 this.sinkCounter.addToEventDrainSuccessCount(eventList.size());
             } else {

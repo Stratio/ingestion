@@ -136,7 +136,7 @@
         </dependency>
         <dependency>
             <groupId>com.stratio.ingestion</groupId>
-            <artifactId>stratio-stratiostreaming-sink</artifactId>
+            <artifactId>stratio-decision-sink</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
