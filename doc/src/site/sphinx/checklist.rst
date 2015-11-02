@@ -12,7 +12,11 @@ The most important points to pay attention in Ingestion agents configurations ar
     { logDebug { format : "Test: {}", args : ["@{}"] } }
 
 
--   Sources, Channels and Sinks are configured properly. Check that sources have associated the required channels, and check also that sinks are associated with channels.
+-   Sources, Channels and Sinks are configured properly. Check that sources have associated the required channels,
+    and check also that sinks are associated with channels. To check that there are validations, such as checking that
+    the components of the workflow are filled.
 
--   Some sinks write data that comes in event headers, other sinks use information of event body. So oi you're sure that are transforming the data properly and you're not seeing results in your datastore, review the sink configuration to check if this Sink require information in headers or body.
+-   Some sinks write data that comes in event headers, other sinks use information of event body. So be
+    sure that you are transforming the data properly and you're not seeing results in your datastore, review the sink
+    configuration to check if this Sink require information in headers or body.
 

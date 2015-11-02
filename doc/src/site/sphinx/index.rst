@@ -7,8 +7,8 @@ Contents:
    introduction.rst
    features.rst
    architecture.rst
-   configuration.rst
    how-to-start.rst
+   configuration.rst
    api.rst
    quick-reference.rst
    checklist.rst
