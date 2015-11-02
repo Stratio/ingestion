@@ -1,3 +1,6 @@
+Getting Started
+***************
+
 How do I get started?
 =====================
 
@@ -11,3 +14,16 @@ To explore and play with Stratio Ingestion, we recommend to visit the following:
 
 -   Configure your first example agent to get data from any source, transform the data and send to your datastore. Also you can take a look at :ref:`apache-logs-demo` as reference. It could be a good starting point to setup your custom agent
 
+
+Compile & Package
+=================
+
+::
+
+    $ git submodule init
+    $ git submodule update
+    $ mvn install
+    $ cd stratio-ingestion-dist
+    $ mvn clean compile package
+
+Distribution will be available at ``stratio-ingestion-dist/target/stratio-ingestion-0.4.0-SNAPSHOT-bin.tar.gz``
