@@ -27,3 +27,15 @@ Compile & Package
     $ mvn clean compile package
 
 Distribution will be available at ``stratio-ingestion-dist/target/stratio-ingestion-0.4.0-SNAPSHOT-bin.tar.gz``
+
+
+System Requirements
+===================
+
+Depending of the topology of your system you can configure Flume configuration files in order to adapt it to your
+project
+
+Stratio Ingestion only needs a Zookeeper instance and a Kafka instance installed to work properly.
+
+As a developer you only need a basic knowledge about Flume's components and how to modify configuration files to
+build it properly.

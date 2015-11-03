@@ -12,6 +12,9 @@ Contents:
    api.rst
    quick-reference.rst
    checklist.rst
+   recommendation.rst
+   stratio_platform.rst
+   benchmarks.rst
    faq.rst
    wikipedia-pagecounts-demo.rst
    apache-logs-demo.rst

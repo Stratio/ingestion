@@ -17,10 +17,8 @@ Each agent consists of three major components:
 **Ingestion components**
 
 -   Sources
-    -  REST (calls to a REST service)
-    -  Redis (data from Redis Pub/Sub system)
-    -  IRC (IRC chat protocol)
-    -  SNMP traps (SNMP asynchronous notifications)
+    -  REST (calls to a REST service), Redis (data from Redis Pub/Sub system), IRC (IRC chat protocol), SNMP traps
+    (SNMP asynchronous notifications)
 
 
 -   Sinks
@@ -33,20 +31,17 @@ Each agent consists of three major components:
 
 
 -   Flume Interceptors
-
-    Timestamp, Host, Static, UUID, Search & Replace, Regex and Morphline Interceptor
+    -   Timestamp, Host, Static, UUID, Search & Replace, Regex and Morphline Interceptor
 
 -   Morphline Interceptor
 
     Created by Cloudera. Lots of command possibilities: addValue, addLocalHost, contains, equals, if, findReplace,
     Java and Grok
 
--   Custom Morphlines
+-   Custom Morphlines - Developed with Apache Kite.
 
-    Developed with Apache Kite.
-
--   Data transporter and collector: `Apache Flume`_
--   Data extractor and transformer: `Morphlines`_
+-   Data transporter and collector: [Apache Flume](http://flume.apache.org/)
+-   Data extractor and transformer: [Morphlines](http://kitesdk.org/docs/current/kite-morphlines/index.html)
 
 
 **Sources, Channels and Sink**
