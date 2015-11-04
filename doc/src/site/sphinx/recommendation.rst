@@ -1,7 +1,7 @@
 Best Practices and Recommendation Configuration
 ===============================================
 
-To explain some tips to configure a correct properties we will use the .properties from previous sections:
+To explain some tips to configure a correct properties we will use the .properties file from previous sections:
 
 ::
 
