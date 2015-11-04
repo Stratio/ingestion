@@ -1,16 +1,6 @@
 Introduction
 ************
 
-What is Apache Flume?
-=====================
-
-Apache Flume is a distributed, reliable, and available system for efficiently collecting, aggregating and moving large amounts of log data from many different sources to a centralized data store.
-
-Its use is not only designed for logs, in fact you can find a myriad of sources, sinks and transformations.
-
-In addition, a sink could be a big data storage but also another real-time system (Apache Kafka, Spark Streaming).
-
-
 What is Stratio Ingestion?
 ==========================
 
