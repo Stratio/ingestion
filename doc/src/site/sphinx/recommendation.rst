@@ -35,6 +35,7 @@ To explain some tips to configure a correct properties we will use the .properti
     a.sources.avroSource.channels=cassandraChan
     a.sinks.cassandraSink.channel=cassandraChan
 
+
 For a correct build of the properties there are few fields required to be filled or the build will fail:
 
     - Names of the components:
