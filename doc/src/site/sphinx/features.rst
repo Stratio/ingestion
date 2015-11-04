@@ -8,29 +8,29 @@ Flume Ingestion is a fork of Apache Flume (1.6), where you can find some additio
 
 -   Sources
 
-    -  REST (calls to a REST service)
+    -  REST:    A Flume source that make a request to a REST service.
 
-    -  Redis (data from Redis Pub/Sub system)
+    -  Redis:   A Flume source that read data from Redis Pub Sub system with connection Pool. Accept patterns.
 
-    -  IRC (IRC chat protocol)
+    -  IRC:     A Stratio Ingestion source to get data from IRC.
 
-    -  SNMP traps (SNMP asynchronous notifications)
+    -  SNMP traps:  A Flume source that listens to snmp traps.
 
 
 
 -   Sinks
 
-    -   Cassandra   com.stratio.ingestion.sink.cassandra.CassandraSink
+    -   Cassandra:  The Cassandra Sink component allows to save Flume-flow events into Cassandra.It tries to find the defined fields in the event's headers. If a "data" field is defined, it will take the body's event instead of a header.
 
-    -   MongoDB com.stratio.ingestion.sink.mongodb.MongoSink
+    -   MongoDB: The MongoDB Sink component allows to save Flume-flow events to MongoDB. It can parse both event body and headers.
 
-    -   Druid   com.stratio.ingestion.sink.druid.DruidSink
+    -   Druid: The Druid Sink component allows to save Flume-flow events to Druid.
 
-    -   JDBC    com.stratio.ingestion.sink.jdbc.JDBCsink
+    -   JDBC: Stratio JDBC Sink saves Flume events to any database with a JDBC driver.It can operate either with automatic headers-to-tables mapping or with custom SQL queries.
 
-    -   Kafka   com.stratio.ingestion.sink.kafka.KafkaSink
+    -   Kafka:  Kafka Sink.  Send events to Kafka.
 
-    -   Stratio Decision (Complex Event Processing engine)
+    -   Stratio Decision (Complex Event Processing engine) :    A Flume sink using Stratio Decision.The Stratio Decision Sink will insert flume events to an specific stream. The configuration is located in the flume config
 
     -   Data transporter and collector: [Apache Flume](http://flume.apache.org/)
 

@@ -17,17 +17,10 @@ You need an extracted full distribution of Stratio Ingestion at
 ElasticSearch, MongoDB or Cassandra. By default, it will use only
 ElasticSearch. See below for different set ups you can use.
 
-Fig and Docker
---------------
+Docker
+------
 
-If you have `Docker`_ 1.3 or higher and `Fig`_ you can quickly get a
-full environment to try this demo. Just execute:
-
-::
-
-    $ fig run ingestiondemo /bin/bash
-
-This command will run 4 docker containers:
+In the Docker repository (http://qa:8080/repositories) you will find 4 docker containers:
 
 -  ElasticSearch
 -  MongoDB
