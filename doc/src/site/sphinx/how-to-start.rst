@@ -6,7 +6,7 @@ How do I get started?
 
 -   Prerequisites
 
-    Stratio Ingestion only needs a Zookeeper instance and a Kafka instance installed to work properly.
+    Stratio Ingestion works in any UNIX server with Java (>= 1.7) installed. If you want to read or store data from remote places, you need also connectivity with those remote services (databases and so on).
 
 -   Download
 
@@ -91,13 +91,12 @@ Prerequisites
 System Requirements
 -------------------
 
-Depending of the topology of your system you can configure Flume configuration files in order to adapt it to your
-project
+Depending of the topology of your system you can configure Ingestion properties files in order to adapt it to your project.
 
 Software/Other module Requirements
 ----------------------------------
 
-Stratio Ingestion only needs a Zookeeper instance and a Kafka instance installed to work properly.
+No needed additional requirements a part of Java and network conectivity yo the remote services.
 
 Skills Needed
 -------------

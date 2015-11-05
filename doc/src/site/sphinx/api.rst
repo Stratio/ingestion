@@ -16,6 +16,21 @@ Timestamp, Host, Static, UUID, Search & Replace, Regex and Morphline Interceptor
 You can find the complete list on:
 https://flume.apache.org/FlumeUserGuide.html#flume-interceptors
 
+Example of timestamp interceptor added to a flume agent properties file
+
+
+::
+
+ a1.sources = r1
+ a1.channels = c1
+ a1.sources.r1.channels =  c1
+ a1.sources.r1.type = seq
+ a1.sources.r1.interceptors = i1
+ a1.sources.r1.interceptors.i1.type = timestamp
+
+
+
+
 Morphline Interceptors
 ======================
 
@@ -27,6 +42,16 @@ http://kitesdk.org/docs/1.1.0/morphlines/morphlines-reference-guide.html
 
 In this link you can find an existing Morphline interceptor using Kite SDK:
 https://github.com/Stratio/Ingestion/blob/master/examples/cassandra-hbase/conf/interceptor.conf
+
+The morphlines interceptors can added to the interceptor.conf properties files (you can define your own interceptor.conf file with a different name. When you configure your source in the Ingestion properties file, you can specify the interceptor file where all those interceptors are defined. Example:
+
+::
+
+ a.sources.avroSource.interceptors = morphlineinterceptor
+ a.sources.avroSource.interceptors.morphlineinterceptor.type = org.apache.flume.sink.solr.morphline.MorphlineInterceptor$Builder
+ a.sources.avroSource.interceptors.morphlineinterceptor.morphlineFile = conf/interceptor.conf
+ a.sources.avroSource.interceptors.morphlineinterceptor.morphlineId = morphline1
+
 
 
 Stratio Custom Interceptors
