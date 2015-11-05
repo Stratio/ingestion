@@ -12,7 +12,7 @@ How do I get started?
 
     Download the code from the Stratio Ingestion repository: https://github.com/Stratio/Ingestion/
 
--   Build and Install 
+-   Build and Install
 
 ::
 
