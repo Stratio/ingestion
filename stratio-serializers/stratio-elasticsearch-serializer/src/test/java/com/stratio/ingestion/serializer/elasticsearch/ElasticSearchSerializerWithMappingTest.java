@@ -71,7 +71,7 @@ public class ElasticSearchSerializerWithMappingTest {
 
 		conf = ConfigFactory.load();
 
-		LOGGER.debug("Connecting to Elastic Search: " + conf.getStringList("elasticsearch.hosts").toString());
+		//LOGGER.debug("Connecting to Elastic Search: " + conf.getStringList("elasticsearch.hosts").toString());
 
 		List<String> elasticSearchHosts = conf.getStringList("elasticsearch.hosts");
 		String elasticSearchClusterName = conf.getString("elasticsearch.clusterName");
