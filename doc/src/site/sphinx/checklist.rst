@@ -12,7 +12,14 @@ The most important points to pay attention in Ingestion agents configurations ar
     { logDebug { format : "Test: {}", args : ["@{}"] } }
 
 
--   Sources, Channels and Sinks are configured properly. Check that sources have associated the required channels, and check also that sinks are associated with channels.
+-   Sources, Channels and Sinks are configured properly. Check that sinks have associated the required channels
+    filling their 'channels' field, and check also that channels are associated with sources filling the 'sources'
+    field. To check this there are validations that will return errors if a field is empty or it's not valid.
+    There are similar validations for all the required fields of each component and if any of the component is empty.
 
--   Some sinks write data that comes in event headers, other sinks use information of event body. So oi you're sure that are transforming the data properly and you're not seeing results in your datastore, review the sink configuration to check if this Sink require information in headers or body.
+-   Some sinks write data that comes in event headers, other sinks use information of event body. So be
+    sure that you are transforming the data properly and you're not seeing results in your datastore, review the sink
+    configuration to check if this Sink require information in headers or body.
 
+-   To ensure the network connectivity be sure to open the necessary ports (check this with netstat command in Linux)
+    Also check that your Zookeeper and Kafka instances are running correctly before run the flume configuration.

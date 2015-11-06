@@ -2,7 +2,7 @@ FLUME-INGESTION
 ===================
 
 
-[![Build Status](https://travis-ci.org/Stratio/flume-ingestion.svg?branch=master)](https://travis-ci.org/Stratio/flume-ingestion)
+[![Build Status](https://github.com/Stratio/Ingestion)](https://github.com/Stratio/Ingestion)
 
 
 Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
@@ -32,18 +32,18 @@ Flume Ingestion components
 
 * Data transporter and collector: [Apache Flume](http://flume.apache.org/)
 * Data extractor and transformer: [Morphlines](http://kitesdk.org/docs/current/kite-morphlines/index.html)
-* Custom sources to read data from:
-    - REST
-    - FlumeStats
-    - SNMPTraps
-    - IRC 
-* Custom sinks to write the data to:
-    - Cassandra
-    - MongoDB
+* Custom sources types to read data from:
+    - REST   com.stratio.ingestion.source.rest.RestSource
+    - Redis FlumeStats   com.stratio.ingestion.source.redis.RedisSource
+    - SNMPTraps   com.stratio.ingestion.source.snmptraps.SNMPSource
+    - IRC   com.stratio.ingestion.source.irc.IRCSource
+* Custom sinks types to write the data to:
+    - Cassandra   com.stratio.ingestion.sink.cassandra.CassandraSink
+    - MongoDB   com.stratio.ingestion.sink.mongodb.MongoSink
     - [Stratio Decision](https://github.com/Stratio/Decision)
-    - JDBC
-    - Kafka
-    - Druid
+    - JDBC   com.stratio.ingestion.sink.jdbc.JDBCsink
+    - Kafka   com.stratio.ingestion.sink.kafka.KafkaSink
+    - Druid   com.stratio.ingestion.sink.druid.DruidSink
 
 
 What is Apache Flume?
@@ -76,7 +76,7 @@ Interesting facts about Flume-Ingestion
  
  * We are extensively using Kite SDK (morphlines) in order to do a better T from ETL, and so we have also developed a bunch of custom transformations.
  
- * Stratio ingestion is fully open source and we work very close to the Flume community.
+ * Stratio ingestion is fully open source and we work very close to the Flume community.
 
 Flume Ingestion FAQ
 -------------------------
