@@ -74,8 +74,8 @@ public class KafkaSinkTestIT {
         ZOOKEEPER_HOSTS= StringUtils.join(conf.getStringList("zookeeper.hosts"), ",");
         KAFKA_HOSTS= StringUtils.join(conf.getStringList("kafka.hosts"), ",");
 
-        LOGGER.debug("Using Zookeeper hosts: " + ZOOKEEPER_HOSTS);
-        LOGGER.debug("Using Zookeeper hosts: " + KAFKA_HOSTS);
+        LOGGER.info("Using Zookeeper hosts: " + ZOOKEEPER_HOSTS);
+        LOGGER.info("Using Zookeeper hosts: " + KAFKA_HOSTS);
 
         String[] connection = KAFKA_HOSTS.split(":");
 
