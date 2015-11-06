@@ -76,7 +76,7 @@ Interesting facts about Flume-Ingestion
  
  * We are extensively using Kite SDK (morphlines) in order to do a better T from ETL, and so we have also developed a bunch of custom transformations.
  
- * Stratio ingestion is fully open source and we work very close to the Flume community.
+ * Stratio ingestion is fully open source and we work very close to the Flume community.
 
 Flume Ingestion FAQ
 -------------------------
