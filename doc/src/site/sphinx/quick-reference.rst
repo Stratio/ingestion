@@ -1,7 +1,9 @@
 Quick Reference
 ***************
 
-Here you can find a quick reference of existing elements, ready to use in your Ingestion deployment:
+Here you can find a quick reference of existing elements, ready to use in your Ingestion deployment.
+For more detail information you can visit official Flume documentation: http://flume.apache.org/FlumeUserGuide.html
+
 
 Sources
 =======
@@ -27,9 +29,9 @@ Sources
 Transformations
 ===============
 
-*   Flume Interceptors
-*   Morphline Interceptors
-*   Stratio Custom Interceptors
+*   Flume Interceptors: https://flume.apache.org/FlumeUserGuide.html#flume-interceptors
+*   Morphline Interceptors: http://www.cloudera.com/content/www/en-us/documentation/archive/search/1-3-0/Cloudera-Search-User-Guide/csug_flume_morphline_interceptor_config_options.html
+*   Stratio Custom Interceptors: https://github.com/Stratio/Morphlines
 
 
 Channels
@@ -66,3 +68,28 @@ Sinks
 *   MongoDB
 *   Stratio Decision
 
+
+
+List of API's
+-------------
+
+-   com.stratio.decision
+    -   API     custom api in Scala for Stratio Decision
+-   com.stratio.decision
+    -   Siddhi  Siddhi CEP is a lightweight, easy-to-use Open Source Complex Event Processing Engine (CEP) under Apache Software License v2.0. Siddhi CEP processes events which are triggered by various event sources and notifies appropriate complex events according to the user specified queries.
+-   com.datastax.cassandra
+    -   cassandra-driver-core   driver of Datastax to connect to Cassandra database
+-   org.apache.kafka
+    -   kafka_2.10  driver of Apache to connect to Kafka
+-   org.mongodb
+    -   mongo-java-driver   driver of MongoDB to connect java with a mongoDB database
+-   org.apache.solr
+    -   solr-solrj  Java client to access solr. It offers a java interface to add, update, and query the solr index.
+-   com.codahale.metrics
+    -   metrics-core    A Go library which provides light-weight instrumentation for your application.
+-   com.ryantenney.metrics
+    -   metrics-spring  The metrics-spring module integrates Dropwizard Metrics library with Spring, and provides XML and Java configuration.
+-   org.mockito
+    -   mockito-all Mockito is a mocking framework for unit tests in Java and has an automated release system
+-   junit
+    -   junit 4.10  JUnit is a simple framework to write repeatable tests. It is an instance of the xUnit architecture for unit testing frameworks.
