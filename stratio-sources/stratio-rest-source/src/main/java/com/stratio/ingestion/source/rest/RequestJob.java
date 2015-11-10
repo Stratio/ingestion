@@ -89,7 +89,7 @@ public class RequestJob implements Job {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error getting Response: " + e.getMessage());
         }
     }
 
