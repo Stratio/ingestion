@@ -1,7 +1,7 @@
 
-Test 2 - REST_Cassandra with custom transformation
+Test 4 - REST_JDBC with custom transformation
 ==================================================
 
 Source - REST
 Transformation - RENAME
-Sink - Cassandra
+Sink - JDBC
