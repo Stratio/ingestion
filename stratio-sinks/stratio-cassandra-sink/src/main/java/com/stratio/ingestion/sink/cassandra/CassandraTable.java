@@ -71,7 +71,7 @@ class CassandraTable {
     for (final Event event : events) {
       final Map<String, Object> parsedEvent = parse(event);
       if (parsedEvent.isEmpty()) {
-        log.warn("Event {} could not be mapped", event);
+        log.warn("Event {} could not be mapped. Suggestion: Cassandra is case sensitive, so maybe you can check field names.", event);
         continue;
       }
       if (!hasPrimaryKey(parsedEvent)) {
