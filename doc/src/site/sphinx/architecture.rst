@@ -30,18 +30,14 @@ Each agent consists of three major components:
     -   Stratio Decision (Complex Event Processing engine)
 
 
--   Flume Interceptors
-    -   Timestamp, Host, Static, UUID, Search & Replace, Regex and Morphline Interceptor
+-   Flume Interceptors: Timestamp, Host, Static, UUID, Search & Replace, Regex and Morphline Interceptor
 
--   Morphline Interceptor
+-   `Stratio Custom Morphlines <http://docs.stratio.com/modules/morphlines/development/index.html>`_ - Developed by Stratio, allowing to use useful transformations
+
+-   `Morphline Interceptor <http://kitesdk.org/docs/current/kite-morphlines/index.html>`_
 
     Created by Cloudera. Lots of command possibilities: addValue, addLocalHost, contains, equals, if, findReplace,
     Java and Grok
-
--   Custom Morphlines - Developed with Apache Kite.
-
--   Data transporter and collector: [Apache Flume](http://flume.apache.org/)
--   Data extractor and transformer: [Morphlines](http://kitesdk.org/docs/current/kite-morphlines/index.html)
 
 
 **Sources, Channels and Sink**
