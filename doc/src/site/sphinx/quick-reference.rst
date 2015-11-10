@@ -31,7 +31,7 @@ Transformations
 
 *   Flume Interceptors: https://flume.apache.org/FlumeUserGuide.html#flume-interceptors
 *   Morphline Interceptors: http://www.cloudera.com/content/www/en-us/documentation/archive/search/1-3-0/Cloudera-Search-User-Guide/csug_flume_morphline_interceptor_config_options.html
-*   Stratio Custom Interceptors: https://github.com/Stratio/Morphlines
+*   Stratio Custom Interceptors: http://docs.stratio.com/modules/morphlines/development/
 
 
 Channels

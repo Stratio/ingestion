@@ -83,7 +83,7 @@ Stratio Ingestion provides some custom interceptors ready to use in your transfo
 -   **LDAP**: Extract RDN's from an LDAP String into separated headers.
 
 You can find more information about how to use those interceptors on Morphlines project page:
-https://github.com/Stratio/Morphlines
+http://docs.stratio.com/modules/morphlines/development/
 
 
 Your own Custom Interceptors
