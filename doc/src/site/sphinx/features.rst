@@ -36,9 +36,9 @@ Stratio Ingestion is a fork of Apache Flume (1.6), where you can find some addit
 
     -   Flume Transformations: [Apache Flume](http://flume.apache.org/)
 
-    -   Stratio Custom Transformations: [Stratio Morphlines](https://github.com/Stratio/Morphlines)
+    -   Stratio Custom Transformations: [Stratio Morphlines](http://docs.stratio.com/modules/morphlines/development/)
 
-    -   Morphlines Transformations using Kite SDK: [Morphlines](http://kitesdk.org/docs/current/kite-morphlines/index.html)
+    -   Morphlines Transformations using Kite SDK: [Morphlines](http://kitesdk.org/docs/current/morphlines/)
 
 
 .. _REST: https://github.com/Stratio/Ingestion/tree/master/stratio-sources/stratio-rest-source
