@@ -1,30 +1,13 @@
 Configuration
 *************
 
-
-Compile & Package
-=================
-
-::
-
-    $ git submodule init
-    $ git submodule update
-    $ mvn install
-    $ cd stratio-ingestion-dist
-    $ mvn clean compile package
-
-Distribution will be available at ``stratio-ingestion-dist/target/stratio-ingestion-0.4.0-SNAPSHOT-bin.tar.gz``
-
-
 Agents Configuration
 ====================
 
 Each Flume-Ingestion uses different files to configure and execute the agent. You can take a look at existing
 examples to see some possible configurations:
 
--   Properties files. Usually in the conf directory you can find the agent configuration files. The file with the
-workflow configuration has a .properties extension and includes the definition, configuration & mapping of different
-Ingestion components (Sources, Transformations, Channels and Sinks).
+-   Properties files. Usually in the conf directory you can find the agent configuration files. The file with the workflow configuration has a .properties extension and includes the definition, configuration & mapping of different Ingestion components (Sources, Transformations, Channels and Sinks).
 
 ::
 
@@ -59,12 +42,10 @@ Ingestion components (Sources, Transformations, Channels and Sinks).
     a.sinks.cassandraSink.channel=cassandraChan
 
 
-Each different component have specific configuration so if you need to configure any flume component you can check
-the flume reference guide (https://flume.apache.org/FlumeUserGuide.html) or if is about any specific Ingestion
-component you can check the README.md file of the proper component in the repository .
 
-To run a specific agent, usually in the bin directory you can find a shell script with name run_flume.sh which start
-the agent. In this shell script you can pass the needed parameters by agent. Example:
+Each different component have specific configuration so if you need to configure any flume component you can check the flume reference guide (https://flume.apache.org/FlumeUserGuide.html) or if is about any specific Ingestion component you can check the README.md file of the proper component in the repository.
+
+To run a specific agent, usually in the bin directory you can find a shell script with name run_flume.sh which start the agent. In this shell script you can pass the needed parameters by agent. Example:
 
 ::
 

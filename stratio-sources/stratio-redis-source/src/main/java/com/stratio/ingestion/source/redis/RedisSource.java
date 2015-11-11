@@ -190,61 +190,61 @@ public class RedisSource extends AbstractSource implements Configurable, EventDr
             JedisPoolConfig poolConfig = new JedisPoolConfig();
             String prop;
 
-            if((prop = poolProps.get(CONF_TESTONBORROW)).equals(null)){
+            if((prop = poolProps.get(CONF_TESTONBORROW)) == null){
                 poolConfig.setTestOnBorrow(DEFAULT_TESTONBORROW);
             } else {
                 log.info("Setting testOnBorrow property to " + prop);
                 poolConfig.setTestOnBorrow(Boolean.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_MAXTOTAL)).equals(null)){
+            if((prop = poolProps.get(CONF_MAXTOTAL)) == null){
                 poolConfig.setMaxTotal(DEFAULT_MAXTOTAL);
             } else {
                 log.info("Setting maxTotal property to " + prop);
                 poolConfig.setMaxTotal(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_MAXIDLE)).equals(null)){
+            if((prop = poolProps.get(CONF_MAXIDLE)) == null){
                 poolConfig.setMaxTotal(DEFAULT_MAXIDLE);
             } else {
                 log.info("Setting maxIdle property to " + prop);
                 poolConfig.setMaxIdle(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_MINIDLE)).equals(null)){
+            if((prop = poolProps.get(CONF_MINIDLE)) == null){
                 poolConfig.setMinIdle(DEFAULT_MINIDLE);
             } else {
                 log.info("Setting minIdle property to " + prop);
                 poolConfig.setMinIdle(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_MAXWAITINMILLIS)).equals(null)){
+            if((prop = poolProps.get(CONF_MAXWAITINMILLIS)) == null){
                 poolConfig.setMaxWaitMillis(DEFAULT_MAXWAITINMILLIS);
             } else {
                 log.info("Setting maxWaitInMillis property to " + prop);
                 poolConfig.setMaxWaitMillis(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_TESTWHILEIDLE)).equals(null)){
+            if((prop = poolProps.get(CONF_TESTWHILEIDLE)) == null){
                 poolConfig.setTestWhileIdle(DEFAULT_TESTWHILEIDLE);
             } else {
                 log.info("Setting testWhileIdle property to " + prop);
                 poolConfig.setTestWhileIdle(Boolean.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_TESTONRETURN)).equals(null)){
+            if((prop = poolProps.get(CONF_TESTONRETURN)) == null){
                 poolConfig.setTestOnReturn(DEFAULT_TESTONRETURN);
             } else {
                 log.info("Setting testOnReturn property to " + prop);
                 poolConfig.setTestOnReturn(Boolean.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_MINEVICTABLEIDLETIMEINMILLIS)).equals(null)){
+            if((prop = poolProps.get(CONF_MINEVICTABLEIDLETIMEINMILLIS)) == null){
                 poolConfig.setMinEvictableIdleTimeMillis(DEFAULT_MINEVICTABLEIDLETIMEINMILLIS);
             } else {
                 log.info("Setting minEvictableIdleTimeInMillis property to " + prop);
                 poolConfig.setMinEvictableIdleTimeMillis(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_TIMEBETWEETNEVICTIONRUNSMILLIS)).equals(null)){
+            if((prop = poolProps.get(CONF_TIMEBETWEETNEVICTIONRUNSMILLIS)) == null){
                 poolConfig.setTimeBetweenEvictionRunsMillis(DEFAULT_TIMEBETWEETNEVICTIONRUNSMILLIS);
             } else {
                 log.info("Setting timeBetweenEvictionRunMillis property to " + prop);
                 poolConfig.setTimeBetweenEvictionRunsMillis(Integer.valueOf(prop));
             }
-            if((prop = poolProps.get(CONF_NUMTESTSPEREVICTIONRUN)).equals(null)){
+            if((prop = poolProps.get(CONF_NUMTESTSPEREVICTIONRUN)) == null){
                 poolConfig.setNumTestsPerEvictionRun(DEFAULT_NUMTESTSPEREVICTIONRUN);
             } else {
                 log.info("Setting numTestsPerEvictionRun property to " + prop);
