@@ -1,44 +1,22 @@
 FLUME-INGESTION
 ***************
 
-Flume Ingestion is a fork of Apache Flume (1.6), where you can find:
-
-**Several bug fixes**
-
--  Some of them really important, such as unicode support
-
-**Several enhancements of Flume’s sources & sinks**
-
--  ElasticSearch mapper, for example
-
-**Custom sources and sinks, developed by Stratio**
-
--  SNMP (v1, v2c and 3)
--  redis, Kafka (0.8.1.1)
--  MongoDB, Druid, JDBC and Cassandra
--  Stratio Decision (Complex Event Processing engine)
--  REST client, Flume agents stats
-
 Flume Ingestion components
 ==========================
-
--  Data transporter and collector: `Apache Flume`_
--  Data extractor and transformer: `Morphlines`_
--  Custom sources to read data from:
-
-   -  REST
-   -  FlumeStats
-   -  SNMPTraps
-   -  IRC
-
--  Custom sinks to write the data to:
-
-   -  Cassandra
-   -  MongoDB
-   -  Druid
-   -  `Stratio Decision`_
-   -  JDBC
-   -  Kafka
+* Data transporter and collector: [Apache Flume](http://flume.apache.org/)
+* Data extractor and transformer: [Morphlines](http://kitesdk.org/docs/current/kite-morphlines/index.html)
+* Custom sources types to read data from:
+    - REST   com.stratio.ingestion.source.rest.RestSource
+    - Redis FlumeStats   com.stratio.ingestion.source.redis.RedisSource
+    - SNMPTraps   com.stratio.ingestion.source.snmptraps.SNMPSource
+    - IRC   com.stratio.ingestion.source.irc.IRCSource
+* Custom sinks types to write the data to:
+    - Cassandra   com.stratio.ingestion.sink.cassandra.CassandraSink
+    - MongoDB   com.stratio.ingestion.sink.mongodb.MongoSink
+    - [Stratio Decision](https://github.com/Stratio/Decision)
+    - JDBC   com.stratio.ingestion.sink.jdbc.JDBCsink
+    - Kafka   com.stratio.ingestion.sink.kafka.KafkaSink
+    - Druid   com.stratio.ingestion.sink.druid.DruidSink
 
 What is Apache Flume?
 =====================

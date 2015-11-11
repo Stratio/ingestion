@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.flume.Channel;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -54,7 +54,8 @@ import kafka.message.MessageAndOffset;
 @RunWith(JUnit4.class)
 public class KafkaSinkTestIT {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(KafkaSink.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaSinkTestIT.class);
+
     private static final String CLIENT_ID = "testClient";
     private static String ZOOKEEPER_HOSTS= "";
     private static String KAFKA_HOSTS= "";
@@ -69,22 +70,12 @@ public class KafkaSinkTestIT {
     public void setUp() {
 
         conf= ConfigFactory.load();
-        List<String> zkHosts= conf.getStringList("zookeeper.hosts");
 
-        for (String host: zkHosts)    {
-            ZOOKEEPER_HOSTS += host + ",";
-        }
-        ZOOKEEPER_HOSTS= ZOOKEEPER_HOSTS.substring(0, ZOOKEEPER_HOSTS.length() - 1);
+        ZOOKEEPER_HOSTS= StringUtils.join(conf.getStringList("zookeeper.hosts"), ",");
+        KAFKA_HOSTS= StringUtils.join(conf.getStringList("kafka.hosts"), ",");
 
-        List<String> kafkaHosts= conf.getStringList("kafka.hosts");
-
-        for (String host: kafkaHosts)    {
-            KAFKA_HOSTS += host + ",";
-        }
-        KAFKA_HOSTS= KAFKA_HOSTS.substring(0, KAFKA_HOSTS.length() -1);
-
-        LOGGER.debug("Using Zookeeper hosts: " + ZOOKEEPER_HOSTS);
-        LOGGER.debug("Using Zookeeper hosts: " + KAFKA_HOSTS);
+        LOGGER.info("Using Zookeeper hosts: " + ZOOKEEPER_HOSTS);
+        LOGGER.info("Using Zookeeper hosts: " + KAFKA_HOSTS);
 
         String[] connection = KAFKA_HOSTS.split(":");
 
