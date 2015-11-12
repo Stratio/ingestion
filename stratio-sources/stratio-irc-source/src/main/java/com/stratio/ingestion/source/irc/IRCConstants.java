@@ -23,7 +23,7 @@ public class IRCConstants {
     public static final String CONF_HOST = "host";
     public static final String CONF_PORT = "port";
     public static final String CONF_NICK = "nick";
-    public static final String CONF_CHANNELS = "channels";
+    public static final String CONF_CHANNELS = "irc-channels";
     public static final String CONF_PASSWORD = "password";
     public static final String CONF_USER = "user";
     public static final String CONF_NAME = "name";
