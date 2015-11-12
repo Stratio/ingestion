@@ -18,18 +18,23 @@ package com.stratio.ingestion.sink.jdbc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 import org.apache.flume.Channel;
-import org.apache.flume.ChannelException;
 import org.apache.flume.Context;
+import org.apache.flume.CounterGroup;
 import org.apache.flume.Event;
 import org.apache.flume.EventDeliveryException;
 import org.apache.flume.Transaction;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
-import org.jooq.*;
+import org.jooq.ConnectionProvider;
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConnectionProvider;
 import org.slf4j.Logger;
@@ -86,8 +91,9 @@ public class JDBCSink extends AbstractSink implements Configurable {
     private Connection connection;
     private DSLContext create;
     private SinkCounter sinkCounter;
-    private int batchsize;
+    private int batchSize;
     private QueryGenerator queryGenerator;
+    private final CounterGroup counterGroup = new CounterGroup();
 
     public JDBCSink() {
         super();
@@ -98,7 +104,7 @@ public class JDBCSink extends AbstractSink implements Configurable {
         final String driver = context.getString(CONF_DRIVER);
         final String connectionString = context.getString(CONF_CONNECTION_STRING);
 
-        this.batchsize = context.getInteger(CONF_BATCH_SIZE, DEFAULT_BATCH_SIZE);
+        this.batchSize = context.getInteger(CONF_BATCH_SIZE, DEFAULT_BATCH_SIZE);
 
         try {
             Class.forName(driver).newInstance();
@@ -117,7 +123,12 @@ public class JDBCSink extends AbstractSink implements Configurable {
             if(Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)){ //Non authorized
                 connection = DriverManager.getConnection(connectionString);
             } else { //Authorized
-                connection = DriverManager.getConnection(connectionString, username, password);
+                //TODO: check all possible connections to remove this if
+                if (CONF_SQL_DIALECT.equals("H2")) {
+                    connection = DriverManager.getConnection(connectionString+";USER="+username+";PASSWORD="+password);
+                } else {
+                    connection = DriverManager.getConnection(connectionString, username, password);
+                }
             }
 
         } catch (SQLException ex) {
@@ -146,15 +157,79 @@ public class JDBCSink extends AbstractSink implements Configurable {
 
     @Override
     public Status process() throws EventDeliveryException {
+
+        log.debug("Executing JDBCSink.process()...");
+        Status status = Status.READY;
+        Channel channel = getChannel();
+        Transaction txn = channel.getTransaction();
+
+        try {
+            txn.begin();
+            int count;
+            List<Event> eventList= new ArrayList<Event>();
+            for (count = 0; count < batchSize; ++count) {
+                Event event = channel.take();
+
+                if (event == null) {
+                    break;
+                }
+                eventList.add(event);
+            }
+
+            if (count <= 0) {
+                sinkCounter.incrementBatchEmptyCount();
+                counterGroup.incrementAndGet("channel.underflow");
+                status = Status.BACKOFF;
+            } else {
+                if (count < batchSize) {
+                    sinkCounter.incrementBatchUnderflowCount();
+                    status = Status.BACKOFF;
+                } else {
+                    sinkCounter.incrementBatchCompleteCount();
+                }
+
+                final boolean success = this.queryGenerator.executeQuery(create, eventList);
+                if (!success) {
+                    throw new JDBCSinkException("Query failed");
+                }
+                connection.commit();
+
+                sinkCounter.addToEventDrainAttemptCount(count);
+            }
+            txn.commit();
+            sinkCounter.addToEventDrainSuccessCount(count);
+            counterGroup.incrementAndGet("transaction.success");
+        } catch (Throwable t) {
+            log.error("Exception during process", t);
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                log.error("Exception on rollback", ex);
+            } finally {
+                txn.rollback();
+                status = Status.BACKOFF;
+                this.sinkCounter.incrementConnectionFailedCount();
+                if (t instanceof Error) {
+                    throw new JDBCSinkException(t);
+                }
+            }
+        } finally {
+            txn.close();
+        }
+        return status;
+    }
+
+
+    public Status BACKUP_process() throws EventDeliveryException {
         Status status = Status.BACKOFF;
         Transaction transaction = this.getChannel().getTransaction();
         try {
             transaction.begin();
             List<Event> eventList = this.takeEventsFromChannel(
-                    this.getChannel(), this.batchsize);
+                    this.getChannel(), this.batchSize);
             status = Status.READY;
             if (!eventList.isEmpty()) {
-                if (eventList.size() == this.batchsize) {
+                if (eventList.size() == this.batchSize) {
                     this.sinkCounter.incrementBatchCompleteCount();
                 } else {
                     this.sinkCounter.incrementBatchUnderflowCount();

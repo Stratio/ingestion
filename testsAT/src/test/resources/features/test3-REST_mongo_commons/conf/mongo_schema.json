@@ -1,0 +1,10 @@
+{
+	"additionalProperties": false,
+	"bodyField": "",
+	"bodyType": "null",
+	"properties": {
+		"quote": { "type": "string" },
+		"author": { "type": "string" },
+		"category": { "type": "string" }
+	}
+}
