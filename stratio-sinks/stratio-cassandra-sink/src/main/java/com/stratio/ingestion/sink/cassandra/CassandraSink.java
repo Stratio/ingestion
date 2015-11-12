@@ -29,6 +29,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Channel;
 import org.apache.flume.Context;
+import org.apache.flume.CounterGroup;
 import org.apache.flume.Event;
 import org.apache.flume.EventDeliveryException;
 import org.apache.flume.Transaction;
@@ -43,7 +44,6 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.TableMetadata;
-import com.datastax.driver.core.exceptions.DriverException;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
@@ -79,6 +79,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
   private String password;
   private String consistency;
   private String bodyColumn;
+  private final CounterGroup counterGroup = new CounterGroup();
 
   public CassandraSink() {
     super();
@@ -172,59 +173,76 @@ public class CassandraSink extends AbstractSink implements Configurable {
     super.stop();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Status process() throws EventDeliveryException {
-    Status status = Status.BACKOFF;
-    Transaction txn = this.getChannel().getTransaction();
+    log.debug("Executing CassandraSink.process()...");
+    Status status = Status.READY;
+    Channel channel = getChannel();
+    Transaction txn = channel.getTransaction();
     try {
       txn.begin();
-      List<Event> eventList = this.takeEventsFromChannel(
-          this.getChannel(), this.batchSize);
-      status = Status.READY;
-      if (!eventList.isEmpty()) {
-        if (eventList.size() == this.batchSize) {
-          this.sinkCounter.incrementBatchCompleteCount();
-        } else {
-          this.sinkCounter.incrementBatchUnderflowCount();
+      int count;
+      List<Event> eventList= new ArrayList<Event>();
+      for (count = 0; count < batchSize; ++count) {
+        Event event = channel.take();
+
+        if (event == null) {
+          break;
         }
+        eventList.add(event);
+      }
+
+      if (count <= 0) {
+        sinkCounter.incrementBatchEmptyCount();
+        counterGroup.incrementAndGet("channel.underflow");
+        status = Status.BACKOFF;
+      } else {
+        if (count < batchSize) {
+          sinkCounter.incrementBatchUnderflowCount();
+          status = Status.BACKOFF;
+        } else {
+          sinkCounter.incrementBatchCompleteCount();
+        }
+
         for (final CassandraTable table : tables) {
           table.save(eventList);
         }
-        this.sinkCounter.addToEventDrainSuccessCount(eventList.size());
-      } else {
-        this.sinkCounter.incrementBatchEmptyCount();
+
+        sinkCounter.addToEventDrainAttemptCount(count);
+        //client.execute();
       }
       txn.commit();
-      status = Status.READY;
-    } catch (Throwable t) {
+      sinkCounter.addToEventDrainSuccessCount(count);
+      counterGroup.incrementAndGet("transaction.success");
+    } catch (Throwable ex) {
       try {
         txn.rollback();
-      } catch (Exception e) {
-        log.error("Exception in rollback. Rollback might not have been successful.", e);
+        counterGroup.incrementAndGet("transaction.rollback");
+      } catch (Exception ex2) {
+        log.error(
+                "Exception in rollback. Rollback might not have been successful.",
+                ex2);
       }
-      log.error("Failed to commit transaction. Rolled back.", t);
-      if (t instanceof DriverException || t instanceof IllegalArgumentException) {
-        throw new EventDeliveryException("Failed to commit transaction. Rolled back.", t);
-      } else { // (t instanceof Error || t instanceof RuntimeException)
-        Throwables.propagate(t);
+
+      if (ex instanceof Error || ex instanceof RuntimeException) {
+        log.error("Failed to commit transaction. Transaction rolled back.",
+                ex);
+        Throwables.propagate(ex);
+      } else {
+        log.error("Failed to commit transaction. Transaction rolled back.",
+                ex);
+        throw new EventDeliveryException(
+                "Failed to commit transaction. Transaction rolled back.", ex);
       }
     } finally {
       txn.close();
     }
     return status;
+
   }
 
-  private List<Event> takeEventsFromChannel(final Channel channel, final int eventsToTake) {
-    final List<Event> events = new ArrayList<Event>();
-    for (int i = 0; i < eventsToTake; i++) {
-      this.sinkCounter.incrementEventDrainAttemptCount();
-      final Event event = channel.take();
-      if (event != null) {
-        this.sinkCounter.incrementEventDrainSuccessCount();
-        events.add(event);
-      }
-    }
-    return events;
-  }
 
 }
