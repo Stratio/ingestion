@@ -44,7 +44,8 @@ public class IRCSourceTest extends TestCase {
         context.put("host", "localhost");
         context.put("port", "6667");
         context.put("nick", "admin");
-        context.put("channels", "memory,jdbc");
+        context.put("irc-channels", "memory,jdbc");
+        context.put("channels", "memory");
         context.put("password", "1234");
         context.put("replyPing", "false");
         context.put("user", "root");
