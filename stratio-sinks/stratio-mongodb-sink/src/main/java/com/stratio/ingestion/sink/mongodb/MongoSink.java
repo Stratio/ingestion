@@ -15,19 +15,33 @@
  */
 package com.stratio.ingestion.sink.mongodb;
 
-import com.mongodb.*;
-import org.apache.flume.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.flume.Channel;
+import org.apache.flume.ChannelException;
+import org.apache.flume.Context;
+import org.apache.flume.CounterGroup;
+import org.apache.flume.Event;
+import org.apache.flume.EventDeliveryException;
+import org.apache.flume.Transaction;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
+import com.mongodb.MongoClientURI;
+import com.mongodb.WriteConcern;
 
 /**
  *
@@ -85,6 +99,7 @@ public class MongoSink extends AbstractSink implements Configurable {
     private String dynamicCollectionField;
     private EventParser eventParser;
     private boolean updateInsteadReplace;
+    private final CounterGroup counterGroup = new CounterGroup();
 
     public MongoSink() {
         super();
@@ -139,57 +154,73 @@ public class MongoSink extends AbstractSink implements Configurable {
      */
     @Override
     public Status process() throws EventDeliveryException {
-        Status status = Status.BACKOFF;
-        Transaction transaction = this.getChannel().getTransaction();
-        log.debug("Executing MongoSink.process");
+        log.debug("Executing MongoSink.process()...");
+        Status status = Status.READY;
+        Channel channel = getChannel();
+        Transaction txn = channel.getTransaction();
+
         try {
-            transaction.begin();
-            List<Event> eventList = this.takeEventsFromChannel(
-                    this.getChannel(), this.batchSize);
-            status = Status.BACKOFF;
-            if (!eventList.isEmpty()) {
-                if (eventList.size() == this.batchSize) {
-                    this.sinkCounter.incrementBatchCompleteCount();
-                } else {
-                    this.sinkCounter.incrementBatchUnderflowCount();
+            txn.begin();
+            int count;
+            List<Event> eventList= new ArrayList<Event>();
+            for (count = 0; count < batchSize; ++count) {
+                Event event = channel.take();
+
+                if (event == null) {
+                    break;
                 }
+                eventList.add(event);
+            }
+
+            if (count <= 0) {
+                sinkCounter.incrementBatchEmptyCount();
+                counterGroup.incrementAndGet("channel.underflow");
+                status = Status.BACKOFF;
+            } else {
+                if (count < batchSize) {
+                    sinkCounter.incrementBatchUnderflowCount();
+                    status = Status.BACKOFF;
+                } else {
+                    sinkCounter.incrementBatchCompleteCount();
+                }
+
                 for (Event event : eventList) {
                     final DBObject document = this.eventParser.parse(event);
-                    
-                    if (this.updateInsteadReplace && document.get("_id") != null) // update requires '_id' field to match document
-                    {
+
+                    if (this.updateInsteadReplace && document.get("_id") != null) {
+                        // update requires '_id' field to match document
                         BasicDBObject searchQuery = new BasicDBObject().append("_id", document.get("_id")); // update by _id
                         BasicDBObject updatedDocument = new BasicDBObject().append("$set", document);
                         getDBCollection(event).update(searchQuery,updatedDocument,true,false);
-                    }
-                    else
-                    {
-                    	getDBCollection(event).save(document);
+                    } else {
+                        getDBCollection(event).save(document);
                     }
                 }
-                this.sinkCounter.addToEventDrainSuccessCount(eventList.size());
-            } else {
-                this.sinkCounter.incrementBatchEmptyCount();
+
+                sinkCounter.addToEventDrainAttemptCount(eventList.size());
             }
-            transaction.commit();
-            status = Status.READY;
+            txn.commit();
+            sinkCounter.addToEventDrainSuccessCount(count);
+            counterGroup.incrementAndGet("transaction.success");
         } catch (ChannelException e) {
             log.error("Unexpected error while executing MongoSink.process", e);
-            transaction.rollback();
+            txn.rollback();
             status = Status.BACKOFF;
             this.sinkCounter.incrementConnectionFailedCount();
         } catch (Throwable t) {
             log.error("Unexpected error while executing MongoSink.process", t);
-            transaction.rollback();
+            txn.rollback();
             status = Status.BACKOFF;
             if (t instanceof Error) {
                 throw new MongoSinkException(t);
             }
         } finally {
-            transaction.close();
+            txn.close();
         }
         return status;
     }
+
+
 
     /**
      * {@inheritDoc}
