@@ -10,15 +10,17 @@ Configuration
 
 The available config parameters are:
 
-- `driver` *(string, required)*: The driver class (e.g. `org.h2.Driver`, `org.postgresql.Driver`). **NOTE: Stratio JDBC Sink does not include any JDBC driver. You must add a JDBC driver to your Flume classpath.**
+- `type` *(string, required)*: You should use: com.stratio.ingestion.sink.jdbc.JDBCsink
+
+- `driver` *(string, required)*: The driver class (e.g. `org.h2.Driver`, `org.postgresql.Driver`). **NOTE: Stratio JDBC Sink only include H2, Mysql, and Derby drivers. You must add another JDBC drivers to your Flume classpath.**
+
+- `sqlDialect` *(string, required)*: The SQL dialect of your database. This should be one of the following: `CUBRID`, `DERBY`, `FIREBIRD`, `H2`, `HSQLDB`, `MARIADB`, `MYSQL`, `POSTGRES`, `SQLITE`. 
 
 - `connectionString` *(string, required)*: A valid connection string to a database. Check the documentation for your JDBC driver for more information.
 
 - `username` *(string)*: A valid database username.
 
 - `password` *(string)*: Password.
-
-- `sqlDialect` *(string, required)*: The SQL dialect of your database. This should be one of the following: `CUBRID`, `DERBY`, `FIREBIRD`, `H2`, `HSQLDB`, `MARIADB`, `MYSQL`, `POSTGRES`, `SQLITE`. 
 
 - `table` *(string)*: A table to store your events. *This is only used for automatic mapping.*
 
@@ -49,7 +51,7 @@ The following file describes an example configuration of an Flume agent that use
     agent.sources.r1.spoolDir = /home/flume/data/files/
 
     # Describe the sink
-    agent.sinks.jdbcSink.type = com.stratio.ingestion.sink.jdbc.JDBCsink
+    agent.sinks.jdbcSink.type = com.stratio.ingestion.sink.jdbc.JDBCSink
     agent.sinks.jdbcSink.connectionString = jdbc:h2:/tmp/jdbcsink_test
     agent.sinks.jdbcSink.table = test
     agent.sinks.jdbcSink.batchSize = 10 

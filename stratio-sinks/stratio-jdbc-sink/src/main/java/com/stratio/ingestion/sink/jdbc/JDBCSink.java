@@ -117,7 +117,12 @@ public class JDBCSink extends AbstractSink implements Configurable {
             if(Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)){ //Non authorized
                 connection = DriverManager.getConnection(connectionString);
             } else { //Authorized
-                connection = DriverManager.getConnection(connectionString, username, password);
+                //TODO: check all possible connections to remove this if
+                if (CONF_SQL_DIALECT.equals("H2")) {
+                    connection = DriverManager.getConnection(connectionString+";USER="+username+";PASSWORD="+password);
+                } else {
+                    connection = DriverManager.getConnection(connectionString, username, password);
+                }
             }
 
         } catch (SQLException ex) {
