@@ -236,4 +236,3 @@ The following file describes an example configuration of an Flume agent that use
     # Bind the source and sink to the channel
     agent.sources.r1.channels = c1
     agent.sinks.mongoSink.channel = c1
-

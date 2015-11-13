@@ -5,10 +5,10 @@ A Stratio Ingestion source to get data from IRC.
 
 Available config parameters:
 
-- hostname (string, required): target URI
+- host (string, required): target URI
 - port (integer): Port. Default: 6667
 - nick(string, required): Nickname
-- channels (string, required): Comma separated channels without hash. Example: ubuntu, trivial
+- irc-channels (string, required): Comma separated irc-channels without hash. Example: ubuntu, trivial
 - user (string): The username. Is used to register the connection
 - name(string): The realname. Is used to register the connection
 - password(string): Password. Required if you are registered
@@ -27,10 +27,10 @@ agent.channels = c1
 
 # Describe the source
 agent.sources.irc.type=com.stratio.ingestion.source.irc.IRCSource
-agent.sources.irc.hostname=irc.freenode.org
+agent.sources.irc.host=irc.freenode.org
 agent.sources.irc.port=6667
 agent.sources.irc.nick=antnavper
-agent.sources.irc.channels=stratiotest
+agent.sources.irc.irc-channels=stratiotest
 agent.sources.irc.user=stratiogms
 agent.sources.irc.name=antnavper
 agent.sources.irc.password=oauth:s362vqqdy4rp4ljblybvjhnq9eg3ev
