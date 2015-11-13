@@ -88,7 +88,7 @@ Distribution will be available at ``stratio-ingestion-dist/target`` folder and y
 
 Each different component have specific configuration so if you need to configure any flume component you can check
 the flume reference guide (https://flume.apache.org/FlumeUserGuide.html) or if is about any specific Ingestion
-component you can check the README.md file of the proper component in the repository .
+component you can check http://docs.stratio.com/modules/ingestion/development/configuration.html .
 
 -   Run Stratio Ingestion
 
