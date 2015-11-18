@@ -29,9 +29,9 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>stratio-stratiostreaming-sink</module>
+		<module>stratio-decision-sink</module>
 		<module>stratio-cassandra-sink</module>
-	        <module>stratio-mongodb-sink</module>
+	    <module>stratio-mongodb-sink</module>
 		<module>stratio-jdbc-sink</module>
 		<module>stratio-kafka-sink</module>
 		<module>stratio-druid-sink</module>
