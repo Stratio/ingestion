@@ -24,7 +24,7 @@
     <parent>
         <groupId>com.stratio.ingestion</groupId>
         <artifactId>stratio-sinks</artifactId>
-        <version>0.6.0-SNAPSHOT</version>
+        <version>0.5.1-RC1-SNAPSHOT</version>
     </parent>
 
     <artifactId>stratio-druid-sink</artifactId>
@@ -41,14 +41,6 @@
                 <exclusion>
                     <groupId>org.hyperic</groupId>
                     <artifactId>sigar</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.mail</groupId>
-                    <artifactId>mail</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

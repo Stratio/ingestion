@@ -22,12 +22,12 @@
 	<parent>
 		<groupId>com.stratio.ingestion</groupId>
 		<artifactId>stratio-sinks</artifactId>
-		<version>0.6.0-SNAPSHOT</version>
+		<version>0.5.1-RC1-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>stratio-decision-sink</artifactId>
+	<artifactId>stratio-stratiostreaming-sink</artifactId>
 	<packaging>jar</packaging>
-	<name>Stratio Decision sink</name>
+	<name>Stratio streaming sink</name>
 
 	<repositories>
 		<repository>
@@ -49,8 +49,8 @@
 			<version>${flume.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.stratio.decision</groupId>
-			<artifactId>api</artifactId>
+			<groupId>com.stratio.streaming</groupId>
+			<artifactId>streaming-api</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.httpcomponents</groupId>

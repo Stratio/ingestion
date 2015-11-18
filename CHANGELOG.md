@@ -9,6 +9,7 @@ Only listing significant user-visible, not internal code cleanups and minor bug 
 * Update Kite SDK version to 1.1.0
 
 ## 0.5.0 (October 2015)
+
 * Added new example "Cassandra-hbase"
 * Updated documentation.
 * Bugs fixing

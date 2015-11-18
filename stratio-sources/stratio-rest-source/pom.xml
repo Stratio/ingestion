@@ -29,7 +29,7 @@
 	<parent>
 		<groupId>com.stratio.ingestion</groupId>
 		<artifactId>stratio-sources</artifactId>
-		<version>0.6.0-SNAPSHOT</version>
+		<version>0.5.1-RC1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>stratio-rest-source</artifactId>
@@ -62,16 +62,6 @@
 			<groupId>org.apache.flume</groupId>
 			<artifactId>flume-ng-core</artifactId>
 			<version>${flume.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
@@ -99,15 +89,5 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.1.2</version>
-			<scope>test</scope>
-		</dependency>
     </dependencies>
 </project>
