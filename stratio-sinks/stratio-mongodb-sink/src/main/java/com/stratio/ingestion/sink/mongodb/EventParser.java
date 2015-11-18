@@ -229,7 +229,7 @@ class EventParser {
             for (Map.Entry<String, FieldDefinition> documentField : documentMapping.entrySet()) {
                 if (DOCUMENT_TYPE.equalsIgnoreCase(documentField.getValue().getType().name())) {
                     dbObject.put(documentField.getKey(), parseValue(documentField.getValue(),
-                            StringUtils.join(Arrays.copyOfRange(documentAsArrray, i, documentAsArrray.length), "#")));
+                            StringUtils.join(Arrays.copyOfRange(documentAsArrray, i, documentAsArrray.length), fd.getDelimiter())));
                     i += ((DocumentFieldDefinition) documentField.getValue()).getDocumentMapping().size();
                 } else {
                     dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), documentAsArrray[i++]));
