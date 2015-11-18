@@ -47,7 +47,7 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 
         <flume.version>1.6.0</flume.version>
-        <streaming.api.version>0.8.0</streaming.api.version>
+        <streaming.api.version>0.9.0</streaming.api.version>
         <junit.version>4.11</junit.version>
         <mockito.version>1.10.8</mockito.version>
         <jackson.databind.version>2.4.4</jackson.databind.version>
@@ -77,8 +77,8 @@
         <dependencies>
             <!-- If ingestion version for a flume module is resolved you must add here the module -->
             <dependency>
-                <groupId>com.stratio.streaming</groupId>
-                <artifactId>streaming-api</artifactId>
+                <groupId>com.stratio.decision</groupId>
+                <artifactId>api</artifactId>
                 <version>${streaming.api.version}</version>
             </dependency>
             <dependency>
