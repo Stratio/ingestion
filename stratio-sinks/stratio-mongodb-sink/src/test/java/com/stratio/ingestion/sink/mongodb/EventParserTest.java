@@ -57,6 +57,30 @@ public class EventParserTest {
     }
 
     @Test
+    public void parseDocumentTypeWithValidRegularExpressionSeparator() {
+        EventParser eventParser = new EventParser();
+        DBObject dbObject = buildExpectedObject();
+        DocumentFieldDefinition fieldDefinition = (DocumentFieldDefinition) definition(MongoDataType.DOCUMENT);
+        fieldDefinition.setDelimiter("(#¬**#)");
+        Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>();
+        documentMapping.put("field1", new SimpleFieldDefinition(MongoDataType.STRING));
+        documentMapping.put("field2", new SimpleFieldDefinition(MongoDataType.ARRAY));
+        DocumentFieldDefinition fieldDefinition2 = (DocumentFieldDefinition) definition(MongoDataType.DOCUMENT);
+        fieldDefinition2.setDelimiter("(#¬**#)");
+        documentMapping.put("field3", fieldDefinition2);
+        documentMapping.put("field6", new SimpleFieldDefinition(MongoDataType.STRING));
+        Map<String, FieldDefinition> documentMapping2 = new LinkedHashMap<String, FieldDefinition>();
+        documentMapping2.put("field4", new SimpleFieldDefinition(MongoDataType.STRING));
+        documentMapping2.put("field5", new SimpleFieldDefinition(MongoDataType.ARRAY));
+        fieldDefinition.setDocumentMapping(documentMapping);
+        fieldDefinition2.setDocumentMapping(documentMapping2);
+
+        assertThat(
+                eventParser.parseValue(fieldDefinition, "Point1(#¬**#)[111.11,222.22](#¬**#)Point2(#¬**#)[111.11,222.22](#¬**#)Point3"))
+                .isEqualTo(dbObject);
+    }
+
+    @Test
     public void parseValue() {
         final EventParser eventParser = new EventParser();
         assertThat(eventParser.parseValue(definition(MongoDataType.STRING), "foo")).isEqualTo("foo");
