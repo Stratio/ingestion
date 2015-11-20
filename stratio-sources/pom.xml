@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>com.stratio.ingestion</groupId>
 		<artifactId>stratio-ingestion-parent</artifactId>
-		<version>0.5.2-RC1-SNAPSHOT</version>
+		<version>0.5.2</version>
 	</parent>
 
 	<artifactId>stratio-sources</artifactId>
