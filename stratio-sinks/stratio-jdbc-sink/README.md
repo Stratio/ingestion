@@ -52,12 +52,12 @@ The following file describes an example configuration of an Flume agent that use
 
     # Describe the sink
     agent.sinks.jdbcSink.type = com.stratio.ingestion.sink.jdbc.JDBCSink
+    agent.sinks.jdbcSink.driver = org.h2.Driver
     agent.sinks.jdbcSink.connectionString = jdbc:h2:/tmp/jdbcsink_test
     agent.sinks.jdbcSink.table = test
     agent.sinks.jdbcSink.batchSize = 10 
 
     # Use a channel which buffers events in file
-    agent.channels = c1
     agent.channels.c1.type = file
     agent.channels.c1.checkpointDir = /home/user/flume/channel/check/
     agent.channels.c1.dataDirs = /home/user/flume/channel/data/
