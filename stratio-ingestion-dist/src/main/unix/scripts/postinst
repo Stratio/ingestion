@@ -4,5 +4,32 @@
 
 set -e
 
-chmod 0755 /opt/sds/ingestion/bin/*
-chmod 0755 /opt/sds/ingestion/examples/*/bin/*
+GROUP='stratio'
+USER='stratio'
+DIR_INSTALL='/opt/sds/ingestion'
+
+case "$1" in
+  configure)
+
+    # Add stratio group if it doesn't already exists
+    if ! getent group $GROUP >/dev/null 2>&1; then
+    groupadd ${GROUP}
+    fi
+
+    # Add stratio user if it doesn't already exists
+    if ! getent passwd $USER >/dev/null 2>&1; then
+    [ -d /opt ] || mkdir /opt
+    useradd -M -d /opt/sds -g ${GROUP} -s /bin/bash ${USER}
+    else
+    usermod -G $GROUP $USER
+    fi
+
+    chown -R ${USER}:${GROUP} $DIR_INSTALL
+
+    chmod 0755 $DIR_INSTALL/bin/*
+    chmod 0755 $DIR_INSTALL/examples/*/bin/*
+
+  ;;
+esac
+
+exit 0
