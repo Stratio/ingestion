@@ -2,13 +2,17 @@
 
 Only listing significant user-visible, not internal code cleanups and minor bug fixes.
 
-## 0.6.0 (October 2015)
+## 0.6.0 (upcoming)
+
+## 0.5.1 (November 2015)
+* Update Kite SDK version to 1.1.0
 * Streaming Sink renamed to Decision Sink
 * Updated documentation.
 * Bugs fixing
-* Update Kite SDK version to 1.1.0
+* Update Hadoop dependencies to 2.6.2
 
 ## 0.5.0 (October 2015)
+
 * Added new example "Cassandra-hbase"
 * Updated documentation.
 * Bugs fixing

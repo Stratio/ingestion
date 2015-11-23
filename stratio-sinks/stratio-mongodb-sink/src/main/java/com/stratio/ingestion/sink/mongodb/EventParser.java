@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flume.Event;
@@ -221,7 +222,7 @@ class EventParser {
         DBObject dbObject = null;
         final String delimiter = fd.getDelimiter();
         if (!StringUtils.isEmpty(delimiter)) {
-            String[] documentAsArrray = document.split(delimiter);
+            String[] documentAsArrray = document.split(Pattern.quote(delimiter));
             dbObject = new BasicDBObject();
             Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>(
                     fd.getDocumentMapping());
@@ -229,7 +230,7 @@ class EventParser {
             for (Map.Entry<String, FieldDefinition> documentField : documentMapping.entrySet()) {
                 if (DOCUMENT_TYPE.equalsIgnoreCase(documentField.getValue().getType().name())) {
                     dbObject.put(documentField.getKey(), parseValue(documentField.getValue(),
-                            StringUtils.join(Arrays.copyOfRange(documentAsArrray, i, documentAsArrray.length), "#")));
+                            StringUtils.join(Arrays.copyOfRange(documentAsArrray, i, documentAsArrray.length), fd.getDelimiter())));
                     i += ((DocumentFieldDefinition) documentField.getValue()).getDocumentMapping().size();
                 } else {
                     dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), documentAsArrray[i++]));
