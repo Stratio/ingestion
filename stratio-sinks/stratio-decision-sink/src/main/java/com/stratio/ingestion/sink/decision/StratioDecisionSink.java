@@ -49,10 +49,13 @@ public class StratioDecisionSink
     private static final int DEFAULT_BATCH_SIZE = 20;
     private static final String DEFAULT_ZOOKEEPER = "localhost:2181";
     private static final String DEFAULT_KAFKA = "localhost:9092";
+    private static final String DEFAULT_TOPIC = "stratio_decision_data";
     private static final String CONF_BATCH_SIZE = "batchSize";
     private static final String ZOOKEEPER = "zookeeper";
     private static final String KAFKA = "kafka";
     private static final String STREAM_DEFINITION_FILE = "streamDefinitionFile";
+    private static final String TOPIC = "topic";
+    private static final String TOPIC_EVENT_HEADER = "_topic";
 
     private SinkCounter sinkCounter;
     private int batchsize;
@@ -60,6 +63,7 @@ public class StratioDecisionSink
     private String zookeeper;
     private String kafka;
     private String streamName;
+    private String topic;
     private List<StreamField> streamFields;
 
     public StratioDecisionSink() {
@@ -71,6 +75,12 @@ public class StratioDecisionSink
         this.sinkCounter = new SinkCounter(this.getName());
         this.zookeeper = context.getString(ZOOKEEPER, DEFAULT_ZOOKEEPER);
         this.kafka = context.getString(KAFKA, DEFAULT_KAFKA);
+
+        if (context.getString(TOPIC) != null)
+            this.topic= DEFAULT_TOPIC + "_" + context.getString(TOPIC);
+        else
+            this.topic= DEFAULT_TOPIC;
+
         String columnDefinitionFile = context.getString(STREAM_DEFINITION_FILE);
         com.stratio.ingestion.sink.decision.StreamDefinitionParser parser = new StreamDefinitionParser(readJsonFromFile(new File(columnDefinitionFile)));
         StreamDefinition theStreamDefinition = parser.parse();
@@ -122,7 +132,12 @@ public class StratioDecisionSink
                 }
                 for (Event event : eventList) {
                     List<ColumnNameValue> columnNameValueList = getColumnNameValueListFromEvent(event);
-                    stratioStreamingAPI.insertData(this.streamName, columnNameValueList);
+                    if (event.getHeaders().containsKey(TOPIC_EVENT_HEADER)) {
+                        stratioStreamingAPI.insertData(this.streamName, columnNameValueList,
+                                getEventDefinedTopicName(event.getHeaders().get(TOPIC_EVENT_HEADER)), false);
+                    }   else    {
+                        stratioStreamingAPI.insertData(this.streamName, columnNameValueList, this.topic, false);
+                    }
                 }
                 this.sinkCounter.addToEventDrainSuccessCount(eventList.size());
             } else {
@@ -146,6 +161,10 @@ public class StratioDecisionSink
             transaction.close();
         }
         return status;
+    }
+
+    private String getEventDefinedTopicName(String eventTopicName)  {
+        return DEFAULT_TOPIC + "_" + eventTopicName;
     }
 
     private List<ColumnNameValue> getColumnNameValueListFromEvent(Event event) {
