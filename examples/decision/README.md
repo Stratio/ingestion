@@ -19,6 +19,11 @@ Channel is connected to Catalunya Decision Sink. This Sink will send the events 
 sink will check if the event includes de "_topic" header, it has will send the data to this topic, in other case will
  send the data to the spain specific topic: "stratio_decision_data_spain"
 
+After to execute this agent you should be the following data in the kafka topics:
+* stratio_decision_data - 0 messages
+* stratio_decision_data_catalunya - 3 messages (2 of barcelona city and one of girona)
+* stratio_decision_data_madrid - 3 messsages
+* stratio_decision_data_spain - 4 messages
 
 To run the agents you need to execute the bin/run_flume.sh script.
 
