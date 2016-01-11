@@ -2,7 +2,8 @@
 
 Only listing significant user-visible, not internal code cleanups and minor bug fixes.
 
-## 0.6.0 (upcoming)
+## 0.6.0 (January 2016)
+* Modified Decision Sink to add sharding support
 
 ## 0.5.1 (November 2015)
 * Update Kite SDK version to 1.1.0

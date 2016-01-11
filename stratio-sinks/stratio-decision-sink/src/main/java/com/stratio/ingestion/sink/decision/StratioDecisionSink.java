@@ -33,6 +33,8 @@ import org.apache.flume.Transaction;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.stratio.decision.api.IStratioStreamingAPI;
 import com.stratio.decision.api.StratioStreamingAPIFactory;
@@ -46,13 +48,17 @@ public class StratioDecisionSink
         extends AbstractSink
         implements Configurable {
 
+    private static final Logger log = LoggerFactory.getLogger(StratioDecisionSink.class);
     private static final int DEFAULT_BATCH_SIZE = 20;
     private static final String DEFAULT_ZOOKEEPER = "localhost:2181";
     private static final String DEFAULT_KAFKA = "localhost:9092";
+    private static final String DEFAULT_TOPIC = "stratio_decision_data";
     private static final String CONF_BATCH_SIZE = "batchSize";
     private static final String ZOOKEEPER = "zookeeper";
     private static final String KAFKA = "kafka";
     private static final String STREAM_DEFINITION_FILE = "streamDefinitionFile";
+    private static final String TOPIC = "topic";
+    private static final String TOPIC_EVENT_HEADER = "_topic";
 
     private SinkCounter sinkCounter;
     private int batchsize;
@@ -60,6 +66,7 @@ public class StratioDecisionSink
     private String zookeeper;
     private String kafka;
     private String streamName;
+    private String topic= "";
     private List<StreamField> streamFields;
 
     public StratioDecisionSink() {
@@ -71,6 +78,17 @@ public class StratioDecisionSink
         this.sinkCounter = new SinkCounter(this.getName());
         this.zookeeper = context.getString(ZOOKEEPER, DEFAULT_ZOOKEEPER);
         this.kafka = context.getString(KAFKA, DEFAULT_KAFKA);
+
+        //if (context.getString(TOPIC) != null)
+        //    this.topic= context.getString(TOPIC);
+        this.topic = context.getString(TOPIC, "");
+
+        log.info("Configuring Stratio Decision Sink: {zookeeper= " + this.zookeeper + ", kafka= "
+                + this.kafka + ", topic= " + this.topic
+                + ", batchSize= " + this.batchsize + ", sinkCounter= " + this.sinkCounter + "}");
+        //else
+        //this.topic= "";
+
         String columnDefinitionFile = context.getString(STREAM_DEFINITION_FILE);
         com.stratio.ingestion.sink.decision.StreamDefinitionParser parser = new StreamDefinitionParser(readJsonFromFile(new File(columnDefinitionFile)));
         StreamDefinition theStreamDefinition = parser.parse();
@@ -122,7 +140,19 @@ public class StratioDecisionSink
                 }
                 for (Event event : eventList) {
                     List<ColumnNameValue> columnNameValueList = getColumnNameValueListFromEvent(event);
-                    stratioStreamingAPI.insertData(this.streamName, columnNameValueList);
+
+                    if (event.getHeaders().containsKey(TOPIC_EVENT_HEADER)) {
+                        // If we've defined the _topic header using in the event, we send the data to this topic
+                        stratioStreamingAPI.insertData(this.streamName, columnNameValueList,
+                                getEventDefinedTopicName(event.getHeaders().get(TOPIC_EVENT_HEADER)), false);
+
+                    } else if (!this.topic.isEmpty())   {
+                        // If we've specified a topic in the properties file we send the data to that topic
+                        stratioStreamingAPI.insertData(this.streamName, columnNameValueList, this.topic, false);
+                    }   else    {
+                        // In other case we send the data to default topic, don't specifying any topic name
+                        stratioStreamingAPI.insertData(this.streamName, columnNameValueList);
+                    }
                 }
                 this.sinkCounter.addToEventDrainSuccessCount(eventList.size());
             } else {
@@ -146,6 +176,11 @@ public class StratioDecisionSink
             transaction.close();
         }
         return status;
+    }
+
+    private String getEventDefinedTopicName(String eventTopicName)  {
+//        return DEFAULT_TOPIC + "_" + eventTopicName;
+        return eventTopicName;
     }
 
     private List<ColumnNameValue> getColumnNameValueListFromEvent(Event event) {
