@@ -29,13 +29,13 @@ import static com.stratio.ingestion.source.irc.IRCConstants.IRC_CHANNEL_PREFIX;
 import static com.stratio.ingestion.source.irc.IRCConstants.NAME_PREFIX;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.apache.commons.codec.Charsets;
 import org.apache.flume.Context;
 import org.apache.flume.EventDrivenSource;
 import org.apache.flume.channel.ChannelProcessor;
@@ -357,7 +357,7 @@ public class IRCSource extends AbstractSource implements Configurable, EventDriv
             sourceCounter.addToEventReceivedCount(1);
             sourceCounter.incrementAppendBatchReceivedCount();
             channelProcessor.processEvent(EventBuilder.withBody(message,
-                    Charsets.UTF_8, headers));
+                    Charset.forName("UTF-8"), headers));
             sourceCounter.addToEventAcceptedCount(1);
             sourceCounter.incrementAppendBatchAcceptedCount();
             headers.clear();
