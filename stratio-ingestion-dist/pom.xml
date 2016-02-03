@@ -260,6 +260,15 @@
                                         <group>stratio</group>
                                     </fileAttributes>
                                 </copyDirectory>
+                                <copyFile>
+                                     <path>src/main/unix/files_and_dirs/etc/default/ingestion</path>
+                                     <toFile>/etc/default/ingestion</toFile>
+                                     <attributes>
+                                         <user>root</user>
+                                         <group>root</group>
+                                         <mode>755</mode>
+                                     </attributes>
+                                 </copyFile>
                             </assembly>
                             <defaults>
                                 <directoryAttributes>

@@ -1,0 +1,237 @@
+#!/bin/bash
+#
+#   /etc/rc.d/init.d/ingestion-skeleton
+#
+#   Flume skeleton service
+#   
+# chkconfig: 2345 55 25
+### BEGIN INIT INFO
+# Provides:          ingestion-skeleton
+# Required-Start:    $network $remote_fs $named
+# Required-Stop:     $network $remote_fs $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts ingestion
+# Description:       Starts ingestion
+### END INIT INFO
+
+# Source function library.
+. /etc/init.d/functions
+
+# Service variables
+DIR="/opt/sds/ingestion"
+CONF="$DIR/conf"
+FLUME_NAME=$(basename $0 | cut -d '-' -f2)
+NAME="ingestion-$FLUME_NAME"
+DESC="Ingestion ($FLUME_NAME)"
+LOCKFILE="/var/lock/subsys/$NAME"
+SERVICE_CONF="/etc/sds/ingestion/ingestion.conf"
+source $SERVICE_CONF
+CONF_FILE="$CONF/${CONF_FILES[$FLUME_NAME]}"
+DEPENDENCIES="${PORTS_DEPS[$FLUME_NAME]}"
+PIDFILE="/var/run/sds/flume-${FLUME_NAME}.pid"
+DAEMON_OPTS="-c $CONF -f $CONF_FILE -n $FLUME_NAME -p $PIDFILE"
+DAEMON="$DIR/bin/ingestion.sh"
+USER="stratio"
+#USER="root"
+
+MAX_TRIES=20
+SLEEP_TIME=3
+
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Function that validates the service
+function validateService(){
+    :
+}
+
+# Function that validates the service is able to start
+function validateStart(){
+    if [ ! -e "$CONF_FILE" ]; then
+        echo "Will NOT start: config file $CONF_FILE not found!"
+        exit 1
+    fi
+    checkDependencies solve_dependencies exit_on_fail || exit 1
+}
+
+# Function that validates the service is able to restart
+function validateRestart(){
+    :
+}
+
+# Function that validates the service is able to stop
+function validateStop(){
+    :
+}
+
+# Check wether this ports are up or not
+function checkPort(){
+    local port=$1
+    if ! (echo > /dev/tcp/0.0.0.0/$port) >/dev/null 2>&1; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# Source check functions & validate service configuration
+validateService
+
+function start() {
+    validateStart
+    if [ -n "$INDENT_LEVEL" ]; then
+        echo -n "${SPACES}      > Starting $NAME: "
+    else
+        echo -n "Starting $NAME: "
+    fi
+    if getStatus > /dev/null 2>&1; then
+        echo -n "already running"
+    fi
+    daemon --user $USER --pidfile $PIDFILE "$DAEMON $DAEMON_OPTS"
+    echo
+    touch $LOCKFILE
+}   
+
+function stop() {
+    validateStop
+    echo -n "Shutting down $NAME: "
+    killproc -p $PIDFILE $NAME
+    local exit_status=$?
+    echo
+    rm -f $LOCKFILE
+    return $exit_status
+}
+
+function restart(){
+    validateRestart
+    stop
+    sleep 1
+    start
+}
+
+function getStatus(){
+    status -p $PIDFILE $NAME -l $LOCKFILE
+}
+
+function solveDependency(){
+    local port="$1"
+    local count=0
+    #echo "${SPACES}      > Starting ingestion-${PORTS_CONFIG[$port]}"
+    # Start service dependency or die trying
+    service ingestion-${PORTS_CONFIG[$port]} start BLANK_SPACE=$[ $INDENT_LEVEL + 1 ] || \
+        ( echo "ERROR! Check service logs" ; exit 1 ; )
+}
+
+# Check the status of the services on which this one depends
+function checkDependencies(){
+    local failed
+    local port
+    local count=0
+    local exit_on_fail=""
+    local solve_dependencies=""
+    
+    # ARGS processing
+    while [ $# -gt 0 ]; do
+        case $1 in
+            exit_on_fail)       exit_on_fail="$1" ; shift ;;
+            solve_dependencies) solve_dependencies="$1" ; shift ;;
+            *)                  shift ;;
+        esac
+    done
+
+    if [ -n "$INDENT_LEVEL" ]; then
+        echo -n "${SPACES}      > Checking dependencies: "
+    else
+        echo -n "Checking service dependencies: "
+    fi
+    if [ "${#DEPENDENCIES}" -eq 0 ]; then
+        echo "none found"
+        return 0
+    fi
+    echo
+    for dep in $DEPENDENCIES; do
+    	local port=${CONFIG_PORTS[$dep]}
+        if [ -n "$INDENT_LEVEL" ]; then
+            echo -n "${SPACES}      - ingestion-$dep"
+        else
+            echo -n "   - ingestion-$dep"
+        fi
+        # Only check dependencies
+        if [ ! "$solve_dependencies" ]; then
+            if  ! checkPort "$port"; then
+                echo " not available"
+                failed="yes"
+                if [ "$exit_on_fail" ]; then
+                    return 2
+                fi
+            else
+                echo_success
+                echo
+            fi
+        # Check & solve dependencies
+        else
+            if ! checkPort "$port"; then
+                echo " not available, starting up..."
+                solveDependency "$port"
+                echo -n "${SPACES}         > Checking ingestion-$dep"
+                while ! checkPort "$port"; do
+                    sleep $SLEEP_TIME
+                    echo -n "."
+                    let count=count+1
+                    if [ $count -gt $MAX_TRIES ]; then
+                        break="yes"
+                        break
+                    fi
+                done
+                if [ "$break" ]; then
+                    echo_failure
+                    echo " FAILED! Maximum retries reached!"
+                    return 1
+                else
+                    echo_success
+                    echo
+                fi
+            else
+                echo_success
+                echo
+            fi
+        fi
+        count=0
+    done
+    if [ "$failed" ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+function usage(){
+    echo "Usage: $NAME {start|stop|status|restart|reload|force-reload|condrestart}"
+    exit 1
+}
+# Tweak for pretty print stdout
+if [[ "$2" =~ BLANK_SPACE ]]; then
+    INDENT_LEVEL="$(echo $2 | cut -d '=' -f2)"
+    ARG=$INDENT_LEVEL
+    SPACES=""
+    while [ $ARG -gt 0 ]; do
+        SPACES="$SPACES   "
+        let ARG=ARG-1
+    done
+    unset ARG
+fi
+
+# MAIN EXECUTION
+case "$1" in
+    start)                          start ;;
+    stop)                           stop ;;
+    status)                         getStatus ;;
+    restart|reload|force-reload)    restart ;;
+    check)                          checkDependencies;;
+    *)                              usage ;;
+esac
+exit $?
