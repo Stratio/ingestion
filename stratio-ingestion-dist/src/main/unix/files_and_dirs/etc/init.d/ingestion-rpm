@@ -1,0 +1,115 @@
+#!/bin/bash
+#
+#   /etc/rc.d/init.d/ingestion
+#   Ingestion service
+#
+# chkconfig: 2345 55 25
+### BEGIN INIT INFO
+# Provides:          ingestion
+# Required-Start:    $network $remote_fs $named
+# Required-Stop:     $network $remote_fs $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts ingestion
+# Description:       Starts ingestion
+### END INIT INFO
+
+# Only configuration needed here
+FLUME_NAME=$(basename $0 | cut -d '-' -f2)
+NAME="ingestion-$FLUME_NAME"
+DESC="Ingestion ($FLUME_NAME)"
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+VARIABLES="/etc/default/ingestion-variables"
+FUNCTIONS="/etc/default/ingestion-functions"
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source default configuration
+if [ -r $VARIABLES ]; then
+    . $VARIABLES
+fi
+
+# Load service configuration
+source $SERVICE_CONF
+
+# Get ingestion configuration for $FLUME_NAME instance
+CONF_FILE="$CONF/${CONF_FILES[$FLUME_NAME]}"
+DEPENDENCIES="${PORTS_DEPS[$FLUME_NAME]}"
+
+# Source check functions & validate service configuration
+. $FUNCTIONS && validateService
+
+# Variables USER, GROUP, PID_FILE, DAEMON and DAEMON_OPTS are stored in $VARIABLES
+function start() {
+    validateStart
+    if [ -n "$INDENT_LEVEL" ]; then
+        echo -n "${SPACES}      > Starting $NAME: "
+    else
+        echo -n "Starting $NAME: "
+    fi
+    if getStatus > /dev/null 2>&1; then
+        echo -n "already running"
+    fi
+    daemon --user $USER --pidfile $PIDFILE "$DAEMON $DAEMON_OPTS"
+    echo
+}
+
+function stop() {
+    validateStop
+    echo -n "Shutting down $NAME: "
+    killproc -p $PIDFILE $NAME
+    local exit_status=$?
+    echo
+    return $exit_status
+}
+
+function restart(){
+    validateRestart
+    stop
+    # Need to delete LOCKFILE so start doesn't get stuck
+    rm -f "$LOCKFILE"
+    sleep 1
+    start
+}
+
+condrestart(){
+    restart || { echo "won't restart: $NAME is stopped" ; exit 1 ; }
+}
+
+function usage(){
+    echo "Usage: $NAME {start|stop|status|restart|reload|force-reload|condrestart|check}"
+    exit 1
+}
+
+# Remove global temp files upon exit
+function cleanup(){
+    if [ "$CREATED_LOCKFILE" ]; then rm -f "$LOCKFILE" ; fi
+}
+trap cleanup 0 # that's why there's no local temp files ;)
+
+
+# Tweak for pretty print stdout
+if [[ "$2" =~ BLANK_SPACE ]]; then
+    INDENT_LEVEL="$(echo $2 | cut -d '=' -f2)"
+    ARG=$INDENT_LEVEL
+    SPACES=""
+    while [ $ARG -gt 0 ]; do
+        SPACES="$SPACES   "
+        let ARG=ARG-1
+    done
+    unset ARG
+fi
+
+# MAIN EXECUTION
+case "$1" in
+    start)                          start ;;
+    stop)                           stop ;;
+    status)                         status -p $PID_FILE $NAME ;;
+    restart|reload|force-reload)    restart ;;
+    condrestart)                    condrestart ;;
+    check)                          checkDependencies;;
+    *)                              usage ;;
+esac
+exit $?
