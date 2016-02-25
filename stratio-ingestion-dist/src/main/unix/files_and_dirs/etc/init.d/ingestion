@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/bash 
 #
 #   /etc/rc.d/init.d/ingestion-skeleton
 #
-#   Flume skeleton service
+#   Ingestion skeleton service
 #   
 # chkconfig: 2345 55 25
 ### BEGIN INIT INFO
@@ -15,24 +15,37 @@
 # Description:       Starts ingestion
 ### END INIT INFO
 
-# Source function library.
-. /etc/init.d/functions
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+INIT_HOME=`cd "${DIR}/.." >/dev/null; pwd`
+
+DEFAULT="/etc/default/ingestion"
+VARIABLES="/etc/default/ingestion-variables"
+FUNCTIONS="/etc/default/ingestion-functions"
+
+# Read default configuration variable file if it is present
+[ -r $DEFAULT ] && . $DEFAULT
+
+# Source default configuration
+if [ -r $VARIABLES ]; then
+    . $VARIABLES
+fi
+
 
 # Service variables
-DIR="/opt/sds/ingestion"
-CONF="$DIR/conf"
+DIR=$INGESTION_HOME
+CONF=$INGESTION_CONF
 FLUME_NAME=$(basename $0 | cut -d '-' -f2)
 NAME="ingestion-$FLUME_NAME"
 DESC="Ingestion ($FLUME_NAME)"
 LOCKFILE="/var/lock/subsys/$NAME"
-SERVICE_CONF="/etc/sds/ingestion/ingestion.conf"
+SERVICE_CONF="$CONF/ingestion.conf"
 source $SERVICE_CONF
 CONF_FILE="$CONF/${CONF_FILES[$FLUME_NAME]}"
+
 DEPENDENCIES="${PORTS_DEPS[$FLUME_NAME]}"
-PIDFILE="/var/run/sds/flume-${FLUME_NAME}.pid"
+PIDFILE="/var/run/sds/ingestion-${FLUME_NAME}.pid"
 DAEMON_OPTS="-c $CONF -f $CONF_FILE -n $FLUME_NAME -p $PIDFILE"
 DAEMON="$DIR/bin/ingestion.sh"
-USER="stratio"
 #USER="root"
 
 MAX_TRIES=20
@@ -43,6 +56,8 @@ PATH=/bin:/usr/bin:/sbin:/usr/sbin
 
 # Source function library.
 . /etc/rc.d/init.d/functions
+
+
 
 # Function that validates the service
 function validateService(){

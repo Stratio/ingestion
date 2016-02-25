@@ -5,7 +5,7 @@
 set -e
 
 GROUP='stratio'
-USER='stratio'
+USER='ingestion'
 DIR_INSTALL='/opt/sds/ingestion'
 DIR_CONF='/etc/sds/ingestion'
 DIR_LOG='/var/log/sds/ingestion'
@@ -39,7 +39,7 @@ chown -R ${USER}:${GROUP} $DIR_RUN
 
 chmod 0755 $DIR_INSTALL/bin/*
 chmod 0755 $DIR_INSTALL/examples/*/bin/*
-chmod +x /etc/default/ingestion
+chmod +x /etc/default/ingestion*
 
 
 /sbin/chkconfig --add ingestion

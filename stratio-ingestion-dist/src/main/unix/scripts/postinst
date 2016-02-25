@@ -5,7 +5,7 @@
 set -e
 
 GROUP='stratio'
-USER='stratio'
+USER='ingestion'
 DIR_INSTALL='/opt/sds/ingestion'
 DIR_CONF='/etc/sds/ingestion'
 DIR_LOG='/var/log/sds/ingestion'
@@ -13,7 +13,7 @@ DIR_LOG='/var/log/sds/ingestion'
 
 chmod 755 /opt/sds/ingestion/bin
 #chmod +x /opt/sds/ingestion/bin/run
-chmod +x /etc/default/ingestion
+chmod +x /etc/default/ingestion*
 
 case "$1" in
   configure)
@@ -35,9 +35,9 @@ case "$1" in
     mkdir $DIR_LOG
     fi
 
-    ln -sf $DIR_INSTALL/bin/ingestion-init /etc/init.d/ingestion
-    chown root:root /etc/init.d/ingestion
-    chmod 755 /etc/init.d/ingestion
+    #ln -sf $DIR_INSTALL/bin/ingestion-init /etc/init.d/ingestion
+    #chown root:root /etc/init.d/ingestion
+    #chmod 755 /etc/init.d/ingestion
 
     #ln -sf $DIR_INSTALL/conf $DIR_CONF
 

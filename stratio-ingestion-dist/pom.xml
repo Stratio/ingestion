@@ -235,14 +235,14 @@
                                 <mkdirs>
                                     <path>/var/log/sds/ingestion</path>
                                     <attributes>
-                                        <user>stratio</user>
+                                        <user>ingestion</user>
                                         <group>stratio</group>
                                     </attributes>
                                 </mkdirs>
                                 <mkdirs>
                                     <path>/opt/sds/ingestion</path>
                                     <attributes>
-                                        <user>stratio</user>
+                                        <user>ingestion</user>
                                         <group>stratio</group>
                                     </attributes>
                                 </mkdirs>
@@ -252,17 +252,17 @@
                                     </from>
                                     <to>/opt/sds/ingestion</to>
                                     <directoryAttributes>
-                                        <user>stratio</user>
+                                        <user>ingestion</user>
                                         <group>stratio</group>
                                     </directoryAttributes>
                                     <fileAttributes>
-                                        <user>stratio</user>
+                                        <user>ingestion</user>
                                         <group>stratio</group>
                                     </fileAttributes>
                                 </copyDirectory>
                                 <copyFile>
-                                     <path>src/main/unix/files_and_dirs/etc/default/ingestion</path>
-                                     <toFile>/etc/default/ingestion</toFile>
+                                     <path>src/main/unix/files_and_dirs/etc/default/ingestion-variables</path>
+                                     <toFile>/etc/default/ingestion-variables</toFile>
                                      <attributes>
                                          <user>root</user>
                                          <group>root</group>
@@ -272,9 +272,13 @@
                             </assembly>
                             <defaults>
                                 <directoryAttributes>
-                                    <mode>0755</mode>
+                                    <user>ingestion</user>
+                                    <group>stratio</group>
+                                    <mode>0750</mode>
                                 </directoryAttributes>
                                 <fileAttributes>
+                                    <user>ingestion</user>
+                                    <group>stratio</group>
                                     <mode>0644</mode>
                                 </fileAttributes>
                             </defaults>
@@ -301,13 +305,6 @@
                                     <architecture>noarch</architecture>
                                 </configuration>
                             </execution>
-                            <!--<execution>-->
-                            <!--<id>zip</id>-->
-                            <!--<phase>package</phase>-->
-                            <!--<goals>-->
-                            <!--<goal>package-zip</goal>-->
-                            <!--</goals>-->
-                            <!--</execution>-->
                         </executions>
 
                     </plugin>
