@@ -28,6 +28,9 @@ The available config parameters are:
 
 - `batchSize` *(integer)*: Number of events that will be grouped in the same query and transaction. Defaults to 20.
 
+You can find an example of JDBC sink working with Mysql and Postgres in the [JDBC sink Example](https://github
+.com/Stratio/Ingestion/tree/master/examples/jdbc/).
+
 Automatic mapping
 =================
 

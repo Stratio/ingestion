@@ -15,20 +15,7 @@
  */
 package com.stratio.ingestion.sink.jdbc;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.flume.Channel;
-import org.apache.flume.Context;
-import org.apache.flume.Event;
-import org.apache.flume.Transaction;
-import org.apache.flume.channel.MemoryChannel;
-import org.apache.flume.conf.Configurables;
-import org.apache.flume.event.EventBuilder;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.io.File;
 import java.sql.Connection;
@@ -39,7 +26,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.fest.assertions.Assertions.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.flume.Channel;
+import org.apache.flume.Context;
+import org.apache.flume.Event;
+import org.apache.flume.Transaction;
+import org.apache.flume.channel.MemoryChannel;
+import org.apache.flume.conf.Configurables;
+import org.apache.flume.event.EventBuilder;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class JDBCSinkTest {
@@ -260,5 +258,90 @@ public class JDBCSinkTest {
         conn.close();
 
     }
+
+    /**
+     * Sample code to validate postgresql integration with JDBC sink
+     * Ignored until we get a Docker Postgresql and move to integration test
+     * @throws Exception
+     */
+    @Test
+    @Ignore
+    public void templateWithPostgres() throws Exception {
+
+        Class.forName("org.postgresql.Driver").newInstance();
+
+
+        Connection connTruncate = DriverManager.getConnection("jdbc:postgresql://10.200.0.126:5432/test_erige?user=postgres&password=");
+        connTruncate.prepareStatement("TRUNCATE tc40;").execute();
+        //conn.prepareStatement("CREATE TABLE tc40 (myInteger INTEGER, myString VARCHAR, myId BIGINT AUTO_INCREMENT "
+        //        + "PRIMARY KEY);").execute();
+        //connTruncate.commit();
+        connTruncate.close();
+
+
+        Context ctx = new Context();
+        ctx.put("driver", "org.postgresql.Driver");
+        ctx.put("connectionString", "jdbc:postgresql://10.200.0.126:5432/test_erige?user=postgres&password=");
+        ctx.put("sqlDialect", "POSTGRES");
+        ctx.put("table", "tc40");
+        ctx.put("username", "postgres");
+        ctx.put("batchSize", "1");
+        ctx.put("sql", "INSERT INTO \"tc40\" (\"arn\", \"account_number\") VALUES "
+                + "(${header.arn:varchar}, ${header.account_number:varchar})");
+
+        JDBCSink jdbcSink = new JDBCSink();
+
+        Configurables.configure(jdbcSink, ctx);
+
+        Context channelContext = new Context();
+        channelContext.put("capacity", "10000");
+        channelContext.put("transactionCapacity", "200");
+
+        Channel channel = new MemoryChannel();
+        channel.setName("junitChannel");
+        Configurables.configure(channel, channelContext);
+
+        jdbcSink.setChannel(channel);
+
+        channel.start();
+        jdbcSink.start();
+
+        Transaction tx = channel.getTransaction();
+        tx.begin();
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("arn", "bar"); // Overwrites the value defined in JSON body
+        headers.put("account_number", "account number");
+        headers.put("dsadas", "dsadasdas");
+
+        Event event = EventBuilder.withBody(new byte[0], headers);
+        channel.put(event);
+
+        tx.commit();
+        tx.close();
+
+        jdbcSink.process();
+
+        jdbcSink.stop();
+        channel.stop();
+
+        //Connection conn = DriverManager.getConnection("jdbc:h2:/tmp/jdbcsink_test");
+        Connection conn = DriverManager.getConnection("jdbc:postgresql://10.200.0"
+                + ".126:5432/test_erige?user=postgres&password=");
+
+        ResultSet rs = conn.prepareStatement("SELECT count(*) AS count FROM tc40").executeQuery();
+        rs.next();
+        assertThat(rs.getInt("count")).isEqualTo(1);
+
+        rs = conn.prepareStatement("SELECT * FROM tc40").executeQuery();
+        rs.next();
+        //        for (int i = 1; i <= 3; i++) {
+        //            System.out.println(rs.getString(i));
+        //        }
+        assertThat(rs.getString("arn")).isEqualTo("bar");
+        conn.close();
+
+    }
+
 
 }
