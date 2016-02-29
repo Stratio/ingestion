@@ -5,8 +5,15 @@
 set -e
 
 GROUP='stratio'
-USER='stratio'
+USER='ingestion'
 DIR_INSTALL='/opt/sds/ingestion'
+DIR_CONF='/etc/sds/ingestion'
+DIR_LOG='/var/log/sds/ingestion'
+
+
+chmod 755 /opt/sds/ingestion/bin
+#chmod +x /opt/sds/ingestion/bin/run
+chmod +x /etc/default/ingestion*
 
 case "$1" in
   configure)
@@ -24,10 +31,27 @@ case "$1" in
     usermod -G $GROUP $USER
     fi
 
+    if [ ! -d "$DIR_LOG" ]; then
+    mkdir $DIR_LOG
+    fi
+
+    #ln -sf $DIR_INSTALL/bin/ingestion-init /etc/init.d/ingestion
+    #chown root:root /etc/init.d/ingestion
+    #chmod 755 /etc/init.d/ingestion
+
+    #ln -sf $DIR_INSTALL/conf $DIR_CONF
+
+    chown -R ${USER}:${GROUP} $DIR_CONF
+    chown -R ${USER}:${GROUP} $DIR_LOG
+    chmod -R 775 $DIR_INSTALL
+    chmod 775 $DIR_LOG
+
     chown -R ${USER}:${GROUP} $DIR_INSTALL
 
     chmod 0755 $DIR_INSTALL/bin/*
     chmod 0755 $DIR_INSTALL/examples/*/bin/*
+
+    update-rc.d ingestion defaults
 
   ;;
 esac

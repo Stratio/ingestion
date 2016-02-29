@@ -5,8 +5,11 @@
 set -e
 
 GROUP='stratio'
-USER='stratio'
+USER='ingestion'
 DIR_INSTALL='/opt/sds/ingestion'
+DIR_CONF='/etc/sds/ingestion'
+DIR_LOG='/var/log/sds/ingestion'
+DIR_RUN='/var/run/sds'
 
 # Add stratio group if it doesn't already exists
 if ! getent group $GROUP >/dev/null 2>&1; then
@@ -21,7 +24,23 @@ else
 usermod -G $GROUP $USER
 fi
 
+if [ ! -d "$DIR_LOG" ]; then
+mkdir $DIR_LOG
+fi
+
 chown -R ${USER}:${GROUP} $DIR_INSTALL
+
+chown -R ${USER}:${GROUP} $DIR_CONF
+chown -R ${USER}:${GROUP} $DIR_LOG
+chmod -R 775 $DIR_INSTALL
+chmod 775 $DIR_LOG
+
+chown -R ${USER}:${GROUP} $DIR_RUN
 
 chmod 0755 $DIR_INSTALL/bin/*
 chmod 0755 $DIR_INSTALL/examples/*/bin/*
+chmod +x /etc/default/ingestion*
+
+
+/sbin/chkconfig --add ingestion
+
