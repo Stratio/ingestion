@@ -1,14 +1,4 @@
-<<<<<<< HEAD
-#!/bin/bash 
-#
-#   /etc/rc.d/init.d/ingestion-skeleton
-#
-#   Ingestion skeleton service
-#   
-# chkconfig: 2345 55 25
-=======
 #!/bin/bash
->>>>>>> d83d831... Added DEB init script and modified
 ### BEGIN INIT INFO
 # Provides:          ingestion
 # Required-Start:    $network $remote_fs $syslog
@@ -19,85 +9,28 @@
 # Description:       Starts ingestion
 ### END INIT INFO
 
-<<<<<<< HEAD
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-INIT_HOME=`cd "${DIR}/.." >/dev/null; pwd`
 
-DEFAULT="/etc/default/ingestion"
-VARIABLES="/etc/default/ingestion-variables"
-FUNCTIONS="/etc/default/ingestion-functions"
-
-# Read default configuration variable file if it is present
-[ -r $DEFAULT ] && . $DEFAULT
-
-# Source default configuration
-if [ -r $VARIABLES ]; then
-    . $VARIABLES
-fi
-
-
-# Service variables
-DIR=$INGESTION_HOME
-CONF=$INGESTION_CONF
-FLUME_NAME=$(basename $0 | cut -d '-' -f2)
-NAME="ingestion-$FLUME_NAME"
-DESC="Ingestion ($FLUME_NAME)"
-LOCKFILE="/var/lock/subsys/$NAME"
-SERVICE_CONF="$CONF/ingestion.conf"
-source $SERVICE_CONF
-CONF_FILE="$CONF/${CONF_FILES[$FLUME_NAME]}"
-
-DEPENDENCIES="${PORTS_DEPS[$FLUME_NAME]}"
-PIDFILE="/var/run/sds/ingestion-${FLUME_NAME}.pid"
-DAEMON_OPTS="-c $CONF -f $CONF_FILE -n $FLUME_NAME -p $PIDFILE"
-DAEMON="$DIR/bin/ingestion.sh"
-#USER="root"
-
-MAX_TRIES=20
-SLEEP_TIME=3
-=======
 # Only configuration needed here
-FLUME_NAME=$(basename $0 | cut -d '-' -f2)
+FLUME_NAME=$(basename "$0" | cut -d '-' -f2)
 NAME="ingestion-$FLUME_NAME"
 DESC="Ingestion ($FLUME_NAME)"
->>>>>>> d83d831... Added DEB init script and modified
 
-# PATH should only include /usr/* if it runs after the mountnfs.sh script
-PATH=/sbin:/usr/sbin:/bin:/usr/bin
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
 VARIABLES="/etc/default/ingestion-variables"
 FUNCTIONS="/etc/default/ingestion-functions"
-
-# Read default configuration variable file if it is present
-[ -r $DEFAULT ] && . $DEFAULT
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
 
-<<<<<<< HEAD
-
-
-# Function that validates the service
-function validateService(){
-    :
-}
-=======
 # Define LSB log_* functions.
 # Depend on lsb-base (>= 3.2-14) to ensure that this file is present
 # and status_of_proc is working.
 . /lib/lsb/init-functions
->>>>>>> d83d831... Added DEB init script and modified
 
 # Source service configuration
 if [ -r $VARIABLES ]; then
     . $VARIABLES
 fi
-
-# Load service configuration
-source $SERVICE_CONF
-
-# Get ingestion configuration for $FLUME_NAME instance
-CONF_FILE="$CONF/${CONF_FILES[$FLUME_NAME]}"
-DEPENDENCIES="${PORTS_DEPS[$FLUME_NAME]}"
 
 # Source check functions & validate service configuration
 . $FUNCTIONS && validateService
@@ -111,8 +44,8 @@ do_start(){
     #   0 if daemon has been started
     #   1 if daemon was already running
     #   2 if daemon could not be started
-    start-stop-daemon --start --user $USER -c $USER --pidfile $PIDFILE --exec $DAEMON --test > /dev/null || return 1
-    start-stop-daemon --start -b --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_OPTS || return 2
+    start-stop-daemon --start --user "$USER" -c "$USER" --pidfile "$PIDFILE" --exec "$DAEMON" --test > /dev/null || return 1
+    start-stop-daemon --start -b --quiet --pidfile "$PIDFILE" --exec "$DAEMON" -- "$DAEMON_OPTS" || return 2
     # Add code here, if necessary, that waits for the process to be ready
     # to handle requests from services started subsequently which depend
     # on this one.  As a last resort, sleep for some time.
@@ -135,7 +68,7 @@ do_stop(){
         if [ "$RETVAL" -eq 1 ]; then
                 log_progress_msg "$DESC is not running but pid file exists, cleaning up"
         elif [ "$RETVAL" -eq 3 ]; then
-                PID="$(cat $PIDFILE)"
+                PID="$(cat "$PIDFILE")"
                 log_failure_msg "Failed to stop $DESC (pid $PID)"
                 exit 1
         fi
@@ -179,10 +112,10 @@ trap cleanup 0 # that's why there's no local temp files ;)
 
 # Tweak for pretty print stdout
 if [[ "$2" =~ BLANK_SPACE ]]; then
-    INDENT_LEVEL="$(echo $2 | cut -d '=' -f2)"
+    INDENT_LEVEL="$(echo "$2" | cut -d '=' -f2)"
     ARG=$INDENT_LEVEL
     SPACES=""
-    while [ $ARG -gt 0 ]; do
+    while [ "$ARG" -gt 0 ]; do
         SPACES="$SPACES   "
         let ARG=ARG-1
     done

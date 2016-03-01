@@ -15,7 +15,7 @@
 ### END INIT INFO
 
 # Only configuration needed here
-FLUME_NAME=$(basename $0 | cut -d '-' -f2)
+FLUME_NAME=$(basename "$0" | cut -d '-' -f2)
 NAME="ingestion-$FLUME_NAME"
 DESC="Ingestion ($FLUME_NAME)"
 
@@ -31,17 +31,10 @@ if [ -r $VARIABLES ]; then
     . $VARIABLES
 fi
 
-# Load service configuration
-source $SERVICE_CONF
-
-# Get ingestion configuration for $FLUME_NAME instance
-CONF_FILE="$CONF/${CONF_FILES[$FLUME_NAME]}"
-DEPENDENCIES="${PORTS_DEPS[$FLUME_NAME]}"
-
 # Source check functions & validate service configuration
 . $FUNCTIONS && validateService
 
-# Variables USER, GROUP, PID_FILE, DAEMON and DAEMON_OPTS are stored in $VARIABLES
+# Variables USER, PID_FILE, DAEMON and DAEMON_OPTS are stored in $VARIABLES
 function start() {
     validateStart
     if [ -n "$INDENT_LEVEL" ]; then
@@ -49,17 +42,17 @@ function start() {
     else
         echo -n "Starting $NAME: "
     fi
-    if status -p $PID_FILE $NAME > /dev/null 2>&1; then
+    if status -p "$PID_FILE" "$NAME" > /dev/null 2>&1; then
         echo -n "already running"
     fi
-    daemon --user $USER --pidfile $PIDFILE "$DAEMON $DAEMON_OPTS"
+    daemon --user "$USER" --pidfile "$PIDFILE" "$DAEMON $DAEMON_OPTS"
     echo
 }
 
 function stop() {
     validateStop
     echo -n "Shutting down $NAME: "
-    killproc -p $PIDFILE $NAME
+    killproc -p "$PIDFILE" "$NAME"
     local exit_status=$?
     echo
     return $exit_status
@@ -88,10 +81,10 @@ trap cleanup 0 # that's why there's no local temp files ;)
 
 # Tweak for pretty print stdout
 if [[ "$2" =~ BLANK_SPACE ]]; then
-    INDENT_LEVEL="$(echo $2 | cut -d '=' -f2)"
+    INDENT_LEVEL="$(echo "$2" | cut -d '=' -f2)"
     ARG=$INDENT_LEVEL
     SPACES=""
-    while [ $ARG -gt 0 ]; do
+    while [ "$ARG" -gt 0 ]; do
         SPACES="$SPACES   "
         let ARG=ARG-1
     done
@@ -102,7 +95,7 @@ fi
 case "$1" in
     start)                          start ;;
     stop)                           stop ;;
-    status)                         status -p $PID_FILE $NAME ;;
+    status)                         status -p "$PID_FILE" "$NAME" ;;
     restart|reload|force-reload)    restart ;;
     check)                          checkDependencies;;
     *)                              usage ;;
