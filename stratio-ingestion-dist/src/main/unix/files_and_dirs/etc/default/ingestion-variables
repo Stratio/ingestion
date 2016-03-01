@@ -1,6 +1,31 @@
+############################################ AGENT SERVICE VARIABLES ############################################
 export INGESTION_CONF="/etc/sds/ingestion"
 export INGESTION_HOME="/opt/sds/ingestion"
 export INGESTION_LOGS="/var/logs/sds/ingestion"
+export INGESTION_GC_OPTS="-XX:+UseG1GC -XX:MaxGCPauseMillis=30 -XX:GCPauseIntervalMillis=100 -XX:ParallelGCThreads=2 -XX:ConcGCThreads=1"
+export INGESTION_MEM_OPTS="-Xmx1G -Xms1G"
+export FLUME_JAVA_OPTS="$INGESTION_MEM_OPTS $INGESTION_GC_OPTS"
 
-export USER=ingestion
-export GROUP=stratio
+############################################### SERVICE VARIABLES ###############################################
+SCRIPTNAME="/etc/init.d/$NAME"
+USER=ingestion
+GROUP=stratio
+PIDFILE="/var/run/sds/${NAME}.pid"
+PID_FILE=$PIDFILE
+LOGFILE="$INGESTION_LOGS/$NAME.log"
+LOCKDIR="/var/lock"
+if [ -d $LOCKDIR/subsys ]; then # It's most likely a CentOS
+    LOCKDIR="$LOCKDIR/subsys"
+fi
+LOCKFILE="$LOCKDIR/$NAME"
+SERVICE_CONF="$INGESTION_CONF/ingestion.conf"
+# Load service configuration
+source $SERVICE_CONF
+# Get ingestion configuration for $FLUME_NAME instance
+CONF_FILE="$INGESTION_CONF/${CONF_FILES[$FLUME_NAME]}"
+DEPENDENCIES="${PORTS_DEPS[$FLUME_NAME]}"
+
+DAEMON="$INGESTION_HOME/bin/ingestion.sh"
+DAEMON_OPTS="-c $INGESTION_CONF -f $CONF_FILE -n $FLUME_NAME -p $PIDFILE"
+MAX_TRIES=20
+SLEEP_TIME=3
