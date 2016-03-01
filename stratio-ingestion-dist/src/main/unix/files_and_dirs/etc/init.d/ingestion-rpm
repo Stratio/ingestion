@@ -31,17 +31,10 @@ if [ -r $VARIABLES ]; then
     . $VARIABLES
 fi
 
-# Load service configuration
-source $SERVICE_CONF
-
-# Get ingestion configuration for $FLUME_NAME instance
-CONF_FILE="$CONF/${CONF_FILES[$FLUME_NAME]}"
-DEPENDENCIES="${PORTS_DEPS[$FLUME_NAME]}"
-
 # Source check functions & validate service configuration
 . $FUNCTIONS && validateService
 
-# Variables USER, GROUP, PID_FILE, DAEMON and DAEMON_OPTS are stored in $VARIABLES
+# Variables USER, PID_FILE, DAEMON and DAEMON_OPTS are stored in $VARIABLES
 function start() {
     validateStart
     if [ -n "$INDENT_LEVEL" ]; then
