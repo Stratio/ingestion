@@ -5,29 +5,62 @@ This file can be used as reference to configure multiple Ingestion agents that w
 configure agents which depends of other agents. In order to start & stop Ingestion agents working in this way, this file
 is a small guide to use the provided init scripts.
 
-# First of all we want to add the following ingestion agents as a service
+1. create /etc/sds/ingestion/ingestion.conf following the next example:
+    # Ingestion conf files are stored in /opt/sds/ingestion/conf
+    <code>
+        declare -A CONF_FILES=(
+            ["agent1"]='agent1.conf'
+            ["agent2"]='agent2.conf'
+            ["agent3"]='agent3.conf'
+            ["agent4"]='agent4.conf'
+            ["agent5"]='agent5.conf'
+            ["agent6"]='agent6.conf'
+            ["agent7"]='agent7.conf'
+            ["agent8"]='agent8.conf'
+        )
 
-for i in agent1 agent2 agent3 agent4 ; do
-    ln -sf /opt/sds/ingestion/bin/ingestion-init /etc/init.d/ingestion-$i
-    chkconfig --add ingestion-$i
-    chkconfig ingestion-$i off
-done
-chkconfig ingestion-agent1 on
+        declare -A CONFIG_PORTS=(
+            ["agent1"]='11111'
+            ["agent2"]='11112'
+            ["agent3"]='11113'
+            ["agent4"]='11114'
+            ["agent5"]='11115'
+            ["agent6"]='11116'
+            ["agent8"]='11117'
+        )
 
-# Check kill links on /etc/rc.d/rc*.d
-[root@mmdevapp ~]# find /etc/ -iname K\*ingestion-\* | cut -d '/' -f1-4 | sort -u
-/etc/rc.d/rc0.d
-/etc/rc.d/rc1.d
-/etc/rc.d/rc2.d
-/etc/rc.d/rc3.d
-/etc/rc.d/rc4.d
-/etc/rc.d/rc5.d
-/etc/rc.d/rc6.d
+        # Create inversed hash
+        declare -A PORTS_CONFIG
+        for i in "${!CONFIG_PORTS[@]}"; do
+            PORTS_CONFIG[${CONFIG_PORTS[$i]}]=$i
+        done
 
-# Check start links on /etc/rc.d/rc*.d
+        # Define service dependencies
+        declare -A PORTS_DEPS=(
+            ["agent1"]='agent6'
+            ["agent2"]='agent5'
+            ["agent3"]='agent4'
+            ["agent7"]='agent1 agent2 agent3'
+            ["agent8"]='agent2'
+        )
+    </code>
 
-[root@mmdevapp ~]# find /etc/ -iname S\*ingestion-\* | cut -d '/' -f1-4 | sort -u
-/etc/rc.d/rc2.d
-/etc/rc.d/rc3.d
-/etc/rc.d/rc4.d
-/etc/rc.d/rc5.d
+    This config file defines 7 agents that have the following dependencies:
+        - agent7 -+-> agent1
+                  |   `-> agent6
+                  +-> agent2
+                  |   `-> agent5
+                  `-> agent3
+                      `-> agent4
+        - agent8 ---> agent2
+                      `-> agent5
+
+2. Create initscripts by linking them to /opt/ingestion/bin/ingestion-init and set to off by default.
+    for agent in agent{1..8}; do
+        ln -sf /opt/ingestion/bin/ingestion-init /etc/init.d/ingestion-$agent
+        chkconfig --add ingestion-$agent
+        chkconfig ingestion-$agent off
+    done
+3. Enable just the main ones so that they control their own dependencies:
+    chkconfig ingestion-agent7 on
+    chkconfig ingestion-agent8 on
