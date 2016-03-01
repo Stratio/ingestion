@@ -49,7 +49,7 @@ function start() {
     else
         echo -n "Starting $NAME: "
     fi
-    if getStatus > /dev/null 2>&1; then
+    if status -p $PID_FILE $NAME > /dev/null 2>&1; then
         echo -n "already running"
     fi
     daemon --user $USER --pidfile $PIDFILE "$DAEMON $DAEMON_OPTS"
@@ -74,12 +74,8 @@ function restart(){
     start
 }
 
-condrestart(){
-    restart || { echo "won't restart: $NAME is stopped" ; exit 1 ; }
-}
-
 function usage(){
-    echo "Usage: $NAME {start|stop|status|restart|reload|force-reload|condrestart|check}"
+    echo "Usage: $SCRIPTNAME {start|stop|status|restart|reload|force-reload|check}"
     exit 1
 }
 
@@ -108,7 +104,6 @@ case "$1" in
     stop)                           stop ;;
     status)                         status -p $PID_FILE $NAME ;;
     restart|reload|force-reload)    restart ;;
-    condrestart)                    condrestart ;;
     check)                          checkDependencies;;
     *)                              usage ;;
 esac
