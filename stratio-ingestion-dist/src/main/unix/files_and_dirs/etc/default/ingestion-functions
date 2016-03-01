@@ -117,7 +117,6 @@ function checkDependencies(){
 
 function solveDependency(){
     local port="$1"
-    local count=0
     #echo "${SPACES}      > Starting ingestion-${PORTS_CONFIG[$port]}"
     # Start service dependency or die trying
     service ingestion-${PORTS_CONFIG[$port]} start BLANK_SPACE=$[ $INDENT_LEVEL + 1 ] || \
