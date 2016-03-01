@@ -1,6 +1,8 @@
 export INGESTION_CONF="/etc/sds/ingestion"
 export INGESTION_HOME="/opt/sds/ingestion"
 export INGESTION_LOGS="/var/logs/sds/ingestion"
+export INGESTION_GC_OPTS="-XX:+UseG1GC -XX:MaxGCPauseMillis=30 -XX:GCPauseIntervalMillis=100 -XX:ParallelGCThreads=2 -XX:ConcGCThreads=1"
+export INGESTION_MEM_OPTS="-Xmx1G -Xms1G"
 
 export USER=ingestion
 export GROUP=stratio

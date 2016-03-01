@@ -1,0 +1,152 @@
+############################################## CHECK FUNCTIONS ##############################################
+# Check wether this ports are up or not
+function checkPort(){
+    local port=$1
+    if ! (echo > /dev/tcp/0.0.0.0/$port) >/dev/null 2>&1; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# check lockfile and touch if not exist
+function checkLockFile() {
+        if [ -e "$LOCKFILE" ]; then
+                echo "service is being managed, please wait..."
+                exit
+        fi
+        touch "$LOCKFILE"
+        CREATED_LOCKFILE="yes"
+}
+
+isStopped(){
+   if ! type status_of_proc 2>&1 > /dev/null; then
+      if ! status -p $PIDFILE "$NAME" 2>&1 > /dev/null; then
+         return 0
+      else
+         return 1
+      fi
+   elif ! status_of_proc -p "$PIDFILE" "$DAEMON" "$NAME" 2>&1 > /dev/null; then
+      return 0
+   fi
+   exit 1
+}
+
+# Check the status of the services on which this one depends
+function checkDependencies(){
+    local failed
+    local port
+    local count=0
+    local exit_on_fail=""
+    local solve_dependencies=""
+
+    # ARGS processing
+    while [ $# -gt 0 ]; do
+        case $1 in
+            exit_on_fail)       exit_on_fail="$1" ; shift ;;
+            solve_dependencies) solve_dependencies="$1" ; shift ;;
+            *)                  shift ;;
+        esac
+    done
+
+    if [ -n "$INDENT_LEVEL" ]; then
+        echo -n "${SPACES}      > Checking dependencies: "
+    else
+        echo -n "Checking service dependencies: "
+    fi
+    if [ "${#DEPENDENCIES}" -eq 0 ]; then
+        echo "none found"
+        return 0
+    fi
+    echo
+    for dep in $DEPENDENCIES; do
+        local port=${CONFIG_PORTS[$dep]}
+        if [ -n "$INDENT_LEVEL" ]; then
+            echo -n "${SPACES}      - ingestion-$dep"
+        else
+            echo -n "   - ingestion-$dep"
+        fi
+        # Only check dependencies
+        if [ ! "$solve_dependencies" ]; then
+            if  ! checkPort "$port"; then
+                echo " not available"
+                failed="yes"
+                if [ "$exit_on_fail" ]; then
+                    return 2
+                fi
+            else
+                echo_success
+                echo
+            fi
+        # Check & solve dependencies
+        else
+            if ! checkPort "$port"; then
+                echo " not available, starting up..."
+                solveDependency "$port"
+                echo -n "${SPACES}         > Checking ingestion-$dep"
+                while ! checkPort "$port"; do
+                    sleep $SLEEP_TIME
+                    echo -n "."
+                    let count=count+1
+                    if [ $count -gt $MAX_TRIES ]; then
+                        break="yes"
+                        break
+                    fi
+                done
+                if [ "$break" ]; then
+                    echo_failure
+                    echo " FAILED! Maximum retries reached!"
+                    return 1
+                else
+                    echo_success
+                    echo
+                fi
+            else
+                echo_success
+                echo
+            fi
+        fi
+        count=0
+    done
+    if [ "$failed" ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+function solveDependency(){
+    local port="$1"
+    local count=0
+    #echo "${SPACES}      > Starting ingestion-${PORTS_CONFIG[$port]}"
+    # Start service dependency or die trying
+    service ingestion-${PORTS_CONFIG[$port]} start BLANK_SPACE=$[ $INDENT_LEVEL + 1 ] || \
+        ( echo "ERROR! Check service logs" ; exit 1 ; )
+}
+
+############################################### MAIN FUNCTIONS ###############################################
+# Function that validates the service
+function validateService(){
+    :
+}
+
+# Function that validates the service is able to start
+function validateStart(){
+    isStopped
+    checkLockFile
+    if [ ! -e "$CONF_FILE" ]; then
+        echo "Will NOT start: config file $CONF_FILE not found!"
+        exit 1
+    fi
+    checkDependencies solve_dependencies exit_on_fail || exit 1
+}
+
+# Function that validates the service is able to restart
+function validateRestart(){
+    :
+}
+
+# Function that validates the service is able to stop
+function validateStop(){
+    checkLockFile
+}
