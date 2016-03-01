@@ -20,13 +20,13 @@ function checkLockFile() {
 }
 
 isStopped(){
-   if ! type status_of_proc 2>&1 > /dev/null; then
-      if ! status -p $PIDFILE "$NAME" 2>&1 > /dev/null; then
+   if ! type status_of_proc > /dev/null 2>&1; then
+      if ! status -p $PIDFILE "$NAME" > /dev/null 2>&1; then
          return 0
       else
          return 1
       fi
-   elif ! status_of_proc -p "$PIDFILE" "$DAEMON" "$NAME" 2>&1 > /dev/null; then
+   elif ! status_of_proc -p "$PIDFILE" "$DAEMON" "$NAME" > /dev/null 2>&1; then
       return 0
    fi
    exit 1
