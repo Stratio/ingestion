@@ -214,16 +214,12 @@
                         <groupId>com.stratio.mojo.unix</groupId>
                         <artifactId>unix-maven-plugin</artifactId>
                         <version>1.1.6</version>
-                        <inherited>false</inherited>
                         <extensions>true</extensions>
+                        <inherited>false</inherited>
+
                         <configuration>
                             <outputFileName>stratio-ingestion</outputFileName>
-                            <excludeDirectoryAttributes>
-                                <dir>/opt</dir>
-                                <dir>/var</dir>
-                            </excludeDirectoryAttributes>
-                            <contact>Stratio</contact>
-                            <contactEmail>ingestion@stratio.com</contactEmail>
+
                             <deb>
                                 <section>devel</section>
                             </deb>
@@ -231,6 +227,33 @@
                                 <group>stratio</group>
                                 <requires>bash</requires>
                             </rpm>
+
+                            <contact>Stratio</contact>
+                            <contactEmail>ingestion@stratio.com</contactEmail>
+
+                            <excludeDirectoryAttributes>
+                                <dir>/etc</dir>
+                                <dir>/etc/default</dir>
+                                <dir>/etc/init.d</dir>
+                                <dir>/var</dir>
+                                <dir>/var/run</dir>
+                                <dir>/var/log</dir>
+                                <dir>/opt</dir>
+                            </excludeDirectoryAttributes>
+
+                            <defaults>
+                                <directoryAttributes>
+                                    <user>ingestion</user>
+                                    <group>stratio</group>
+                                    <mode>0750</mode>
+                                </directoryAttributes>
+                                <fileAttributes>
+                                    <user>ingestion</user>
+                                    <group>stratio</group>
+                                    <mode>0644</mode>
+                                </fileAttributes>
+                            </defaults>
+
                             <assembly>
                                 <mkdirs>
                                     <path>/var/log/sds/ingestion</path>
@@ -260,28 +283,9 @@
                                         <group>stratio</group>
                                     </fileAttributes>
                                 </copyDirectory>
-                                <copyFile>
-                                     <path>src/main/unix/files_and_dirs/etc/default/ingestion-variables</path>
-                                     <toFile>/etc/default/ingestion-variables</toFile>
-                                     <attributes>
-                                         <user>root</user>
-                                         <group>root</group>
-                                         <mode>755</mode>
-                                     </attributes>
-                                 </copyFile>
+
                             </assembly>
-                            <defaults>
-                                <directoryAttributes>
-                                    <user>ingestion</user>
-                                    <group>stratio</group>
-                                    <mode>0750</mode>
-                                </directoryAttributes>
-                                <fileAttributes>
-                                    <user>ingestion</user>
-                                    <group>stratio</group>
-                                    <mode>0644</mode>
-                                </fileAttributes>
-                            </defaults>
+
                         </configuration>
 
                         <executions>
@@ -293,6 +297,37 @@
                                 </goals>
                                 <configuration>
                                     <architecture>all</architecture>
+
+                                    <assembly>
+                                        <copyFile>
+                                            <path>src/main/unix/files_and_dirs/etc/init.d/ingestion-deb</path>
+                                            <toFile>/opt/sds/ingestion/bin/ingestion-init</toFile>
+                                            <attributes>
+                                                <user>root</user>
+                                                <group>root</group>
+                                                <mode>755</mode>
+                                            </attributes>
+                                        </copyFile>
+                                        <copyFile>
+                                            <path>src/main/unix/files_and_dirs/etc/default/ingestion-variables</path>
+                                            <toFile>/etc/default/ingestion-variables</toFile>
+                                            <attributes>
+                                                <user>root</user>
+                                                <group>root</group>
+                                                <mode>755</mode>
+                                            </attributes>
+                                        </copyFile>
+                                        <copyFile>
+                                            <path>src/main/unix/files_and_dirs/etc/default/ingestion-functions</path>
+                                            <toFile>/etc/default/ingestion-functions</toFile>
+                                            <attributes>
+                                                <user>root</user>
+                                                <group>root</group>
+                                                <mode>755</mode>
+                                            </attributes>
+                                        </copyFile>
+
+                                    </assembly>
                                 </configuration>
                             </execution>
                             <execution>
@@ -303,6 +338,35 @@
                                 </goals>
                                 <configuration>
                                     <architecture>noarch</architecture>
+                                    <assembly>
+                                        <copyFile>
+                                            <path>src/main/unix/files_and_dirs/etc/init.d/ingestion-rpm</path>
+                                            <toFile>/opt/sds/ingestion/bin/ingestion-init</toFile>
+                                            <attributes>
+                                                <user>root</user>
+                                                <group>root</group>
+                                                <mode>755</mode>
+                                            </attributes>
+                                        </copyFile>
+                                        <copyFile>
+                                            <path>src/main/unix/files_and_dirs/etc/default/ingestion-variables</path>
+                                            <toFile>/etc/default/ingestion-variables</toFile>
+                                            <attributes>
+                                                <user>root</user>
+                                                <group>root</group>
+                                                <mode>755</mode>
+                                            </attributes>
+                                        </copyFile>
+                                        <copyFile>
+                                            <path>src/main/unix/files_and_dirs/etc/default/ingestion-functions</path>
+                                            <toFile>/etc/default/ingestion-functions</toFile>
+                                            <attributes>
+                                                <user>root</user>
+                                                <group>root</group>
+                                                <mode>755</mode>
+                                            </attributes>
+                                        </copyFile>
+                                    </assembly>
                                 </configuration>
                             </execution>
                         </executions>

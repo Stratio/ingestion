@@ -339,7 +339,9 @@
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
                 <module>stratio-ingestion-dist</module>
+<!--
                 <module>doc</module>
+-->
             </modules>
         </profile>
     </profiles>
