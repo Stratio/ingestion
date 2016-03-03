@@ -37,6 +37,7 @@ chmod 775 $DIR_LOG
 
 chown -R ${USER}:${GROUP} $DIR_RUN
 
+chmod 0775 $DIR_RUN
 chmod 0755 $DIR_INSTALL/bin/*
 chmod 0755 $DIR_INSTALL/examples/*/bin/*
 chmod +x /etc/default/ingestion*
