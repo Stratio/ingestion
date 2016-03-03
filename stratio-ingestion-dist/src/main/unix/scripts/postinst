@@ -9,6 +9,7 @@ USER='ingestion'
 DIR_INSTALL='/opt/sds/ingestion'
 DIR_CONF='/etc/sds/ingestion'
 DIR_LOG='/var/log/sds/ingestion'
+DIR_RUN='/var/run/sds'
 
 
 chmod 755 /opt/sds/ingestion/bin
@@ -41,6 +42,7 @@ case "$1" in
 
     #ln -sf $DIR_INSTALL/conf $DIR_CONF
 
+    chmod 0775 $DIR_RUN
     chown -R ${USER}:${GROUP} $DIR_CONF
     chown -R ${USER}:${GROUP} $DIR_LOG
     chmod -R 775 $DIR_INSTALL
