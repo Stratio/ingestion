@@ -46,6 +46,10 @@ case "$1" in
     mkdir $DIR_RUN
     fi
 
+    if [ ! -d "$DIR_CONF" ]; then
+    mkdir $DIR_CONF
+    fi
+
     chmod 0775 $DIR_RUN
     chown -R ${USER}:${GROUP} $DIR_CONF
     chown -R ${USER}:${GROUP} $DIR_LOG
