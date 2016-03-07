@@ -2,7 +2,7 @@
 
 set -e
 
-USER=stratio
+USER=ingestion
 GROUP=stratio
 DIR_INSTALL=/opt/sds/ingestion
 DIR_CONF=$DIR_INSTALL/conf
