@@ -17,13 +17,34 @@ package com.stratio.ingestion.provider
 
 object Provider extends ZkProviderComponent {
 
-  def importFiles(workflowId: String, path: String, repository: String = "zookeeper") =
-    repository match {
-      case "zookeeper" => zkProvider.importFiles(workflowId, path)
+  val providerConfigName = "provider"
+  val repositoryField = "repository"
+  val pathField = "path"
+  val overwriteField = "overwrite"
+  val defaultRepositoryType = "zookeeper"
+  val defaultPath = "/tmp/workflow"
+  val defaultOverwrite = "false"
+
+  def downloadFiles(workflowId: String) =
+    repositoryType match {
+      case "zookeeper" => zkProvider.downloadFiles(workflowId, path, overwrite.toBoolean)
       case repo => println(s"Repository $repo not supported")
     }
 
-  def exportFiles(workflowId: String, path: String, repository: String = "zookeeper") =
-    println("Export files is not supported yet")
+  def uploadFiles(workflowId: String) =
+    println("Upload files is not supported yet")
+
+  private def repositoryType =
+    getFromProviderConfig(repositoryField, defaultRepositoryType)
+  
+  private def path =
+    getFromProviderConfig(pathField, defaultPath)
+
+  private def overwrite =
+    getFromProviderConfig(overwriteField, defaultOverwrite)
+
+  private def getFromProviderConfig(field: String, default: String): String =
+    config.getConfig(providerConfigName).flatMap(_.getString(field))
+      .getOrElse(default)
 
 }

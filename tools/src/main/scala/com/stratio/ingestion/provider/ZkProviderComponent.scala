@@ -31,25 +31,28 @@ trait ZkProviderComponent extends ZookeeperRepositoryComponent
 
     val parentPath: String = "stratio/workflow/workflows/"
 
-    def importFiles(workflowId: String, path: String) = {
+    def downloadFiles(workflowId: String, path: String, overwrite: Boolean) =
       for {
         filename <- repository.getNodes(parentPath + workflowId)
         element <- repository.get(parentPath + workflowId, filename)
       } yield {
+
         val folder = new File(s"$path/$workflowId")
         folder.mkdirs()
         val f = new File(s"$path/$workflowId/$filename")
-        f.createNewFile()
 
-        val fos = new FileOutputStream(s"$path/$workflowId/$filename")
-        fos.write(element)
-        fos.close()
+        if (overwrite || !f.exists()) {
 
-        println(s"File $filename stored.")
+          f.createNewFile()
+          val fos = new FileOutputStream(s"$path/$workflowId/$filename")
+          fos.write(element)
+          fos.close()
+
+          println(s"File $filename stored.")
+        }
       }
-    }
 
-    def exportFiles(workflowId: String, path: String) =
-      println("Export files is not supported yet")
+    def uploadFiles(workflowId: String, path: String) =
+      println("Upload files is not supported yet")
   }
 }

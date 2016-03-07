@@ -19,25 +19,22 @@ import Provider._
 
 object Main {
 
-  def main(args: Array[String]): Unit = {
-
+  def main(args: Array[String]): Unit =
     args match {
-      case Array("export", workflowId, path) =>
-        exportFiles(workflowId, path, "zookeeper")
+      case Array("download", workflowId) =>
+        downloadFiles(workflowId)
 
-      case Array("export", workflowId, path, repository) =>
-        exportFiles(workflowId, path, repository)
+      case Array("download", workflowId) =>
+        downloadFiles(workflowId)
 
-      case Array("import", workflowId, path) =>
-        importFiles(workflowId, path, "zookeeper")
+      case Array("upload", workflowId) =>
+        uploadFiles(workflowId)
 
-      case Array("import", workflowId, path, repository) =>
-        importFiles(workflowId, path, repository)
+      case Array("upload", workflowId) =>
+        uploadFiles(workflowId)
 
       case _ =>
-        println("usage: export|import [workflowId] [path] [repository]")
+        println("usage: download|upload [workflowId]")
     }
-
-  }
 
 }
