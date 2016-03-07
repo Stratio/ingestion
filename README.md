@@ -23,7 +23,7 @@ Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
  - Stratio Decision (Complex Event Processing engine)
  - REST client, Flume agents stats
  
- You can find more documentation about us [here](http://docs.stratio.com/modules/flume-ingestion/development/)
+ You can find more documentation about us [here](https://stratio.atlassian.net/wiki/)
 
 
 Flume Ingestion components
