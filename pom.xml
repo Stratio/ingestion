@@ -334,6 +334,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
+                <module>tools</module>
                 <module>stratio-sources</module>
                 <module>stratio-sinks</module>
                 <module>stratio-serializers</module>
