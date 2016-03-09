@@ -1,0 +1,1080 @@
+08 Mar 2016 10:06:10,875 DEBUG [main] (org.apache.flume.lifecycle.LifecycleSupervisor.supervise:137)  - Supervising service:{ file:./conf/flume-conf.properties counterGroup:{ name:null counters:{} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a } policy:org.apache.flume.lifecycle.LifecycleSupervisor$SupervisorPolicy$AlwaysRestartPolicy@646007f4 desiredState:START
+08 Mar 2016 10:06:10,881 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:214)  - checking process:{ file:./conf/flume-conf.properties counterGroup:{ name:null counters:{} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a } supervisoree:{ status:{ lastSeen:null lastSeenState:null desiredState:START firstSeen:null failures:0 discard:false error:false } policy:org.apache.flume.lifecycle.LifecycleSupervisor$SupervisorPolicy$AlwaysRestartPolicy@646007f4 }
+08 Mar 2016 10:06:10,881 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:221)  - first time seeing { file:./conf/flume-conf.properties counterGroup:{ name:null counters:{} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a }
+08 Mar 2016 10:06:10,884 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:243)  - Want to transition { file:./conf/flume-conf.properties counterGroup:{ name:null counters:{} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a } from IDLE to START (failures:0)
+08 Mar 2016 10:06:10,885 INFO  [lifecycleSupervisor-1-0] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.start:61)  - Configuration provider starting
+08 Mar 2016 10:06:10,887 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.start:78)  - Configuration provider started
+08 Mar 2016 10:06:10,887 DEBUG [conf-file-poller-0] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider$FileWatcherRunnable.run:126)  - Checking file:./conf/flume-conf.properties for changes
+08 Mar 2016 10:06:10,887 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:307)  - Status check complete
+08 Mar 2016 10:06:10,888 INFO  [conf-file-poller-0] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider$FileWatcherRunnable.run:133)  - Reloading configuration file:./conf/flume-conf.properties
+08 Mar 2016 10:06:10,893 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:spainSink
+08 Mar 2016 10:06:10,893 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1021)  - Created context for spainSink: zookeeper
+08 Mar 2016 10:06:10,894 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:spainSink
+08 Mar 2016 10:06:10,894 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:madSink
+08 Mar 2016 10:06:10,894 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1021)  - Created context for madSink: channel
+08 Mar 2016 10:06:10,894 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:catSink
+08 Mar 2016 10:06:10,894 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1021)  - Created context for catSink: zookeeper
+08 Mar 2016 10:06:10,895 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:spainSink
+08 Mar 2016 10:06:10,896 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:catSink
+08 Mar 2016 10:06:10,896 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:catSink
+08 Mar 2016 10:06:10,896 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:catSink
+08 Mar 2016 10:06:10,896 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:madSink
+08 Mar 2016 10:06:10,896 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:madSink
+08 Mar 2016 10:06:10,896 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:madSink
+08 Mar 2016 10:06:10,896 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:madSink
+08 Mar 2016 10:06:10,896 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:madSink
+08 Mar 2016 10:06:10,897 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:spainSink
+08 Mar 2016 10:06:10,897 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:931)  - Added sinks: madSink catSink spainSink Agent: a
+08 Mar 2016 10:06:10,897 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:spainSink
+08 Mar 2016 10:06:10,897 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:catSink
+08 Mar 2016 10:06:10,897 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:spainSink
+08 Mar 2016 10:06:10,897 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty:1017)  - Processing:catSink
+08 Mar 2016 10:06:10,897 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.isValid:314)  - Starting validation of configuration for agent: a, initial-configuration: AgentConfiguration[a]
+SOURCES: {src={ parameters:{interceptors.morphlineinterceptor.morphlineFile=conf/interceptor.conf, interceptors.morphlineinterceptor.morphlineId=morphline1, spoolDir=data/spooldir, selector.type=multiplexing, deserializer=LINE, selector.mapping.barcelona=catChan, fileHeader=true, type=spoolDir, selector.header=City, deserializer.decodeErrorPolicy=REPLACE, channels=madChan catChan spainChan, interceptors.morphlineinterceptor.type=org.apache.flume.sink.solr.morphline.MorphlineInterceptor$Builder, selector.default=spainChan, batchSize=5, selector.mapping.madrid=madChan, interceptors=morphlineinterceptor} }}
+CHANNELS: {spainChan={ parameters:{type=memory, transactionCapacity=100, capacity=1000} }, catChan={ parameters:{type=memory, transactionCapacity=100, capacity=1000} }, madChan={ parameters:{type=memory, transactionCapacity=100, capacity=1000} }}
+SINKS: {catSink={ parameters:{zookeeper=localhost:2181, kafka=localhost:9092, channel=catChan, topic=catalunya, streamDefinitionFile=conf/stream.conf, type=com.stratio.ingestion.sink.decision.StratioDecisionSink} }, madSink={ parameters:{zookeeper=localhost:2181, kafka=localhost:9092, channel=madChan, topic=madrid, streamDefinitionFile=conf/stream.conf, type=com.stratio.ingestion.sink.decision.StratioDecisionSink} }, spainSink={ parameters:{zookeeper=localhost:2181, kafka=localhost:9092, channel=spainChan, topic=spain, streamDefinitionFile=conf/stream.conf, type=com.stratio.ingestion.sink.decision.StratioDecisionSink} }}
+
+08 Mar 2016 10:06:10,902 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.validateChannels:469)  - Created channel spainChan
+08 Mar 2016 10:06:10,903 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.validateChannels:469)  - Created channel catChan
+08 Mar 2016 10:06:10,904 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.validateChannels:469)  - Created channel madChan
+08 Mar 2016 10:06:10,917 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.validateSinks:675)  - Creating sink: catSink using OTHER
+08 Mar 2016 10:06:10,919 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.validateSinks:675)  - Creating sink: madSink using OTHER
+08 Mar 2016 10:06:10,919 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.validateSinks:675)  - Creating sink: spainSink using OTHER
+08 Mar 2016 10:06:10,919 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.isValid:372)  - Post validation configuration for a
+AgentConfiguration created without Configuration stubs for which only basic syntactical validation was performed[a]
+SOURCES: {src={ parameters:{interceptors.morphlineinterceptor.morphlineFile=conf/interceptor.conf, interceptors.morphlineinterceptor.morphlineId=morphline1, spoolDir=data/spooldir, selector.type=multiplexing, deserializer=LINE, selector.mapping.barcelona=catChan, fileHeader=true, type=spoolDir, selector.header=City, deserializer.decodeErrorPolicy=REPLACE, channels=spainChan catChan madChan, interceptors.morphlineinterceptor.type=org.apache.flume.sink.solr.morphline.MorphlineInterceptor$Builder, selector.default=spainChan, batchSize=5, selector.mapping.madrid=madChan, interceptors=morphlineinterceptor} }}
+CHANNELS: {spainChan={ parameters:{type=memory, transactionCapacity=100, capacity=1000} }, catChan={ parameters:{type=memory, transactionCapacity=100, capacity=1000} }, madChan={ parameters:{type=memory, transactionCapacity=100, capacity=1000} }}
+SINKS: {catSink={ parameters:{zookeeper=localhost:2181, kafka=localhost:9092, channel=catChan, topic=catalunya, streamDefinitionFile=conf/stream.conf, type=com.stratio.ingestion.sink.decision.StratioDecisionSink} }, madSink={ parameters:{zookeeper=localhost:2181, kafka=localhost:9092, channel=madChan, topic=madrid, streamDefinitionFile=conf/stream.conf, type=com.stratio.ingestion.sink.decision.StratioDecisionSink} }, spainSink={ parameters:{zookeeper=localhost:2181, kafka=localhost:9092, channel=spainChan, topic=spain, streamDefinitionFile=conf/stream.conf, type=com.stratio.ingestion.sink.decision.StratioDecisionSink} }}
+
+08 Mar 2016 10:06:10,920 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration.validateConfiguration:136)  - Channels:spainChan catChan madChan
+
+08 Mar 2016 10:06:10,920 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration.validateConfiguration:137)  - Sinks catSink madSink spainSink
+
+08 Mar 2016 10:06:10,920 DEBUG [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration.validateConfiguration:138)  - Sources src
+
+08 Mar 2016 10:06:10,920 INFO  [conf-file-poller-0] (org.apache.flume.conf.FlumeConfiguration.validateConfiguration:141)  - Post-validation flume configuration contains configuration for agents: [a]
+08 Mar 2016 10:06:10,920 INFO  [conf-file-poller-0] (org.apache.flume.node.AbstractConfigurationProvider.loadChannels:145)  - Creating channels
+08 Mar 2016 10:06:10,926 INFO  [conf-file-poller-0] (org.apache.flume.channel.DefaultChannelFactory.create:42)  - Creating instance of channel spainChan type memory
+08 Mar 2016 10:06:10,930 INFO  [conf-file-poller-0] (org.apache.flume.node.AbstractConfigurationProvider.loadChannels:200)  - Created channel spainChan
+08 Mar 2016 10:06:10,931 INFO  [conf-file-poller-0] (org.apache.flume.channel.DefaultChannelFactory.create:42)  - Creating instance of channel catChan type memory
+08 Mar 2016 10:06:10,931 INFO  [conf-file-poller-0] (org.apache.flume.node.AbstractConfigurationProvider.loadChannels:200)  - Created channel catChan
+08 Mar 2016 10:06:10,931 INFO  [conf-file-poller-0] (org.apache.flume.channel.DefaultChannelFactory.create:42)  - Creating instance of channel madChan type memory
+08 Mar 2016 10:06:10,931 INFO  [conf-file-poller-0] (org.apache.flume.node.AbstractConfigurationProvider.loadChannels:200)  - Created channel madChan
+08 Mar 2016 10:06:10,932 INFO  [conf-file-poller-0] (org.apache.flume.source.DefaultSourceFactory.create:41)  - Creating instance of source src, type spoolDir
+08 Mar 2016 10:06:11,017 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:87)  - Importing commands from Java classpath: /home/aitor/Projects/Ingestion/examples/decision/conf:/opt/sds/ingestion/lib/commons-collections-3.2.1.jar:/opt/sds/ingestion/lib/wikipediacleaner-0.1.0.jar:/opt/sds/ingestion/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/opt/sds/ingestion/lib/dom4j-1.6.1.jar:/opt/sds/ingestion/lib/kite-morphlines-json-1.1.0.jar:/opt/sds/ingestion/lib/stratio-elasticsearch-serializer-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/jetty-proxy-9.2.5.v20141112.jar:/opt/sds/ingestion/lib/util-app_2.10-6.23.0.jar:/opt/sds/ingestion/lib/twitter4j-stream-3.0.3.jar:/opt/sds/ingestion/lib/jets3t-0.9.1.jar:/opt/sds/ingestion/lib/commons-configuration-1.10.jar:/opt/sds/ingestion/lib/commons-math3-3.1.1.jar:/opt/sds/ingestion/lib/snakeyaml-1.14.jar:/opt/sds/ingestion/lib/isoparser-1.0-RC-1.jar:/opt/sds/ingestion/lib/commons-pool-1.5.4.jar:/opt/sds/ingestion/lib/zkclient-0.3.jar:/opt/sds/ingestion/lib/nlp-0.1.0.jar:/opt/sds/ingestion/lib/druid-server-0.7.0.jar:/opt/sds/ingestion/lib/kite-morphlines-tika-core-1.1.0.jar:/opt/sds/ingestion/lib/jedis-2.6.0.jar:/opt/sds/ingestion/lib/slf4j-log4j12-1.6.1.jar:/opt/sds/ingestion/lib/libthrift-0.9.0.jar:/opt/sds/ingestion/lib/stratio-mongodb-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/flume-file-channel-1.6.0.jar:/opt/sds/ingestion/lib/lucene-suggest-4.10.4.jar:/opt/sds/ingestion/lib/flume-jms-source-1.6.0.jar:/opt/sds/ingestion/lib/derbyclient-10.11.1.1.jar:/opt/sds/ingestion/lib/tika-core-1.5.jar:/opt/sds/ingestion/lib/opencsv-2.3.jar:/opt/sds/ingestion/lib/asm-debug-all-4.1.jar:/opt/sds/ingestion/lib/maven-repository-metadata-3.1.1.jar:/opt/sds/ingestion/lib/lucene-core-4.10.4.jar:/opt/sds/ingestion/lib/compress-lzf-1.0.3.jar:/opt/sds/ingestion/lib/util-collection_2.10-6.23.0.jar:/opt/sds/ingestion/lib/geoip-0.1.0.jar:/opt/sds/ingestion/lib/asm-3.1.jar:/opt/sds/ingestion/lib/activation-1.1.1.jar:/opt/sds/ingestion/lib/java-util-0.26.14.jar:/opt/sds/ingestion/lib/kite-morphlines-maxmind-1.1.0.jar:/opt/sds/ingestion/lib/jsr305-2.0.1.jar:/opt/sds/ingestion/lib/cassandra-driver-core-2.1.9.jar:/opt/sds/ingestion/lib/xmlbeans-xpath-2.6.0.jar:/opt/sds/ingestion/lib/poi-ooxml-3.10.1.jar:/opt/sds/ingestion/lib/commons-pool2-2.0.jar:/opt/sds/ingestion/lib/flume-dataset-sink-1.6.0.jar:/opt/sds/ingestion/lib/maxmind-db-0.3.3.jar:/opt/sds/ingestion/lib/refererparser-0.1.0.jar:/opt/sds/ingestion/lib/jackson-module-jaxb-annotations-2.4.4.jar:/opt/sds/ingestion/lib/servlet-api-2.5-20110124.jar:/opt/sds/ingestion/lib/aspectjrt-1.6.11.jar:/opt/sds/ingestion/lib/metadata-extractor-2.6.2.jar:/opt/sds/ingestion/lib/lucene-spatial-4.10.4.jar:/opt/sds/ingestion/lib/flume-ng-kafka-sink-1.6.0.jar:/opt/sds/ingestion/lib/xpp3-1.1.4c.jar:/opt/sds/ingestion/lib/netcdf-4.2-min.jar:/opt/sds/ingestion/lib/tesla-aether-0.0.5.jar:/opt/sds/ingestion/lib/time_2.10-0.6-mmx3.jar:/opt/sds/ingestion/lib/geoip2-0.4.0.jar:/opt/sds/ingestion/lib/jackson-annotations-2.4.0.jar:/opt/sds/ingestion/lib/parquet-common-1.6.0.jar:/opt/sds/ingestion/lib/flume-twitter-source-1.6.0.jar:/opt/sds/ingestion/lib/jackson-core-asl-1.9.13.jar:/opt/sds/ingestion/lib/google-http-client-1.15.0-rc.jar:/opt/sds/ingestion/lib/parquet-column-1.6.0.jar:/opt/sds/ingestion/lib/icu4j-4.8.1.jar:/opt/sds/ingestion/lib/flume-ng-elasticsearch-sink-1.6.0.jar:/opt/sds/ingestion/lib/lucene-analyzers-kuromoji-4.10.3.jar:/opt/sds/ingestion/lib/jdom-1.0.jar:/opt/sds/ingestion/lib/api-util-1.0.0-M20.jar:/opt/sds/ingestion/lib/stratio-xmlxpath-deserializer-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/elasticsearch-1.7.1.jar:/opt/sds/ingestion/lib/loglady_2.10-1.1.0.jar:/opt/sds/ingestion/lib/commons-lang-2.6.jar:/opt/sds/ingestion/lib/aether-spi-0.9.0.M2.jar:/opt/sds/ingestion/lib/extendedset-1.3.8.jar:/opt/sds/ingestion/lib/lucene-grouping-4.10.4.jar:/opt/sds/ingestion/lib/servlet-api-2.5.jar:/opt/sds/ingestion/lib/kite-morphlines-tika-decompress-1.1.0.jar:/opt/sds/ingestion/lib/javax.inject-1.jar:/opt/sds/ingestion/lib/boilerpipe-1.1.0.jar:/opt/sds/ingestion/lib/jersey-client-1.18.3.jar:/opt/sds/ingestion/lib/h2-1.3.158.jar:/opt/sds/ingestion/lib/commons-io-2.1.jar:/opt/sds/ingestion/lib/spark-streaming-flume-sink_2.10-1.1.0.jar:/opt/sds/ingestion/lib/util-codec_2.10-6.23.0.jar:/opt/sds/ingestion/lib/kite-data-core-1.0.0.jar:/opt/sds/ingestion/lib/snappy-java-1.1.0.jar:/opt/sds/ingestion/lib/lucene-sandbox-4.10.4.jar:/opt/sds/ingestion/lib/lucene-misc-4.10.4.jar:/opt/sds/ingestion/lib/antlr-runtime-3.5.jar:/opt/sds/ingestion/lib/tika-xmp-1.5.jar:/opt/sds/ingestion/lib/aether-api-0.9.0.M2.jar:/opt/sds/ingestion/lib/jempbox-1.8.4.jar:/opt/sds/ingestion/lib/jetty-jmx-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/kite-morphlines-hadoop-parquet-avro-1.1.0.jar:/opt/sds/ingestion/lib/jetty-webapp-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/curator-test-1.3.3.jar:/opt/sds/ingestion/lib/parquet-encoding-1.6.0.jar:/opt/sds/ingestion/lib/spymemcached-2.11.4.jar:/opt/sds/ingestion/lib/druid-aws-common-0.7.0.jar:/opt/sds/ingestion/lib/jetty-client-9.2.5.v20141112.jar:/opt/sds/ingestion/lib/kite-morphlines-solr-cell-1.1.0.jar:/opt/sds/ingestion/lib/flume-spillable-memory-channel-1.6.0.jar:/opt/sds/ingestion/lib/scala-util_2.10-1.9.2.jar:/opt/sds/ingestion/lib/slf4j-api-1.7.7.jar:/opt/sds/ingestion/lib/commons-0.1.0.jar:/opt/sds/ingestion/lib/java-xmlbuilder-1.0.jar:/opt/sds/ingestion/lib/util-jvm_2.10-6.23.0.jar:/opt/sds/ingestion/lib/base64-2.3.8.jar:/opt/sds/ingestion/lib/scala-logging-api_2.10-2.1.2.jar:/opt/sds/ingestion/lib/druid-indexing-service-0.7.0.jar:/opt/sds/ingestion/lib/twitter4j-media-support-3.0.3.jar:/opt/sds/ingestion/lib/util-stats_2.10-6.23.0.jar:/opt/sds/ingestion/lib/metrics-core-3.0.2.jar:/opt/sds/ingestion/lib/airline-0.5.jar:/opt/sds/ingestion/lib/jetty-servlet-8.1.14.v20131031.jar:/opt/sds/ingestion/lib/snmp4j-agent-2.2.0.jar:/opt/sds/ingestion/lib/jhighlight-1.0.jar:/opt/sds/ingestion/lib/commons-csv-1.1.jar:/opt/sds/ingestion/lib/stratio-irc-source-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/solr-solrj-4.10.3.jar:/opt/sds/ingestion/lib/solr-cell-4.10.3.jar:/opt/sds/ingestion/lib/jsp-api-2.1.jar:/opt/sds/ingestion/lib/kite-morphlines-hadoop-core-1.1.0.jar:/opt/sds/ingestion/lib/metrics-core-2.2.0.jar:/opt/sds/ingestion/lib/parquet-generator-1.6.0.jar:/opt/sds/ingestion/lib/okhttp-1.0.2.jar:/opt/sds/ingestion/lib/noggit-0.5.jar:/opt/sds/ingestion/lib/stratio-jdbc-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/scala-logging-slf4j_2.10-2.1.2.jar:/opt/sds/ingestion/lib/finagle-http_2.10-6.24.0.jar:/opt/sds/ingestion/lib/paranamer-2.3.jar:/opt/sds/ingestion/lib/parquet-format-2.2.0-rc1.jar:/opt/sds/ingestion/lib/jackson-jaxrs-json-provider-2.4.4.jar:/opt/sds/ingestion/lib/druid-common-0.7.0.jar:/opt/sds/ingestion/lib/poi-3.10.1.jar:/opt/sds/ingestion/lib/hadoop-hdfs-2.6.2.jar:/opt/sds/ingestion/lib/xalan-2.7.2.jar:/opt/sds/ingestion/lib/flume-ng-morphline-solr-sink-1.6.0.jar:/opt/sds/ingestion/lib/xz-1.0.jar:/opt/sds/ingestion/lib/flume-ng-sdk-1.6.0.jar:/opt/sds/ingestion/lib/xercesImpl-2.9.1.jar:/opt/sds/ingestion/lib/protobuf-java-2.5.0.jar:/opt/sds/ingestion/lib/metrics-servlets-3.0.2.jar:/opt/sds/ingestion/lib/lucene-memory-4.10.4.jar:/opt/sds/ingestion/lib/jersey-server-1.9.jar:/opt/sds/ingestion/lib/jline-0.9.94.jar:/opt/sds/ingestion/lib/flume-hdfs-sink-1.6.0.jar:/opt/sds/ingestion/lib/httpmime-4.3.1.jar:/opt/sds/ingestion/lib/bytebuffer-collections-0.1.5.jar:/opt/sds/ingestion/lib/lucene-analyzers-common-4.10.4.jar:/opt/sds/ingestion/lib/kite-morphlines-metrics-servlets-1.1.0.jar:/opt/sds/ingestion/lib/util-hashing_2.10-6.23.0.jar:/opt/sds/ingestion/lib/netty-buffer-4.0.27.Final.jar:/opt/sds/ingestion/lib/ua-parser-1.3.0.jar:/opt/sds/ingestion/lib/solr-core-4.10.3.jar:/opt/sds/ingestion/lib/guice-servlet-4.0-beta.jar:/opt/sds/ingestion/lib/juniversalchardet-1.0.3.jar:/opt/sds/ingestion/lib/parquet-avro-1.6.0.jar:/opt/sds/ingestion/lib/kafka_2.10-0.8.1.1.jar:/opt/sds/ingestion/lib/metrics-json-3.0.2.jar:/opt/sds/ingestion/lib/classmate-1.0.0.jar:/opt/sds/ingestion/lib/metrics-healthchecks-3.0.2.jar:/opt/sds/ingestion/lib/config-magic-0.9.jar:/opt/sds/ingestion/lib/curator-client-2.6.0.jar:/opt/sds/ingestion/lib/jcl-over-slf4j-1.6.1.jar:/opt/sds/ingestion/lib/htrace-core-3.0.4.jar:/opt/sds/ingestion/lib/antlr4-runtime-4.0.jar:/opt/sds/ingestion/lib/scala-library-2.10.4.jar:/opt/sds/ingestion/lib/irc-api-1.0-0011.jar:/opt/sds/ingestion/lib/kite-morphlines-twitter-1.1.0.jar:/opt/sds/ingestion/lib/avro-ipc-1.7.4.jar:/opt/sds/ingestion/lib/kite-data-hive-1.0.0.jar:/opt/sds/ingestion/lib/tika-parsers-1.5.jar:/opt/sds/ingestion/lib/commons-math-2.2.jar:/opt/sds/ingestion/lib/maven-model-builder-3.1.1.jar:/opt/sds/ingestion/lib/wagon-provider-api-2.4.jar:/opt/sds/ingestion/lib/apache-mime4j-dom-0.7.2.jar:/opt/sds/ingestion/lib/parquet-hive-bundle-1.4.1.jar:/opt/sds/ingestion/lib/flume-scribe-source-1.6.0.jar:/opt/sds/ingestion/lib/stratio-cassandra-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/apache-log4j-extras-1.1.jar:/opt/sds/ingestion/lib/kite-morphlines-hadoop-sequencefile-1.1.0.jar:/opt/sds/ingestion/lib/parquet-jackson-1.6.0.jar:/opt/sds/ingestion/lib/stratio-kafka-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/maxminddb-0.2.0.jar:/opt/sds/ingestion/lib/plexus-utils-3.0.15.jar:/opt/sds/ingestion/lib/flume-ng-auth-1.6.0.jar:/opt/sds/ingestion/lib/vorbis-java-tika-0.1.jar:/opt/sds/ingestion/lib/maven-settings-builder-3.1.1.jar:/opt/sds/ingestion/lib/rome-0.9.jar:/opt/sds/ingestion/lib/kite-hadoop-compatibility-1.1.0.jar:/opt/sds/ingestion/lib/javassist-3.15.0-GA.jar:/opt/sds/ingestion/lib/c3p0-0.9.1.1.jar:/opt/sds/ingestion/lib/flume-ng-log4jappender-1.6.0.jar:/opt/sds/ingestion/lib/flume-avro-source-1.6.0.jar:/opt/sds/ingestion/lib/flume-kafka-channel-1.6.0.jar:/opt/sds/ingestion/lib/spatial4j-0.4.1.jar:/opt/sds/ingestion/lib/ldap-0.1.0.jar:/opt/sds/ingestion/lib/netty-common-4.0.27.Final.jar:/opt/sds/ingestion/lib/curator-framework-2.6.0.jar:/opt/sds/ingestion/lib/bliki-core-3.0.19.jar:/opt/sds/ingestion/lib/commons-httpclient-3.1.jar:/opt/sds/ingestion/lib/jetty-util-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/netty-transport-4.0.27.Final.jar:/opt/sds/ingestion/lib/jackson-mapper-asl-1.9.13.jar:/opt/sds/ingestion/lib/xmlbeans-2.6.0.jar:/opt/sds/ingestion/lib/jackson-jaxrs-base-2.4.4.jar:/opt/sds/ingestion/lib/vorbis-java-core-0.1.jar:/opt/sds/ingestion/lib/json-20090211_1.jar:/opt/sds/ingestion/lib/google-http-client-jackson2-1.15.0-rc.jar:/opt/sds/ingestion/lib/jetty-6.1.26.jar:/opt/sds/ingestion/lib/aws-java-sdk-core-1.8.11.jar:/opt/sds/ingestion/lib/joda-time-2.6.jar:/opt/sds/ingestion/lib/httpcore-4.2.4.jar:/opt/sds/ingestion/lib/stratio-redis-source-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/mina-core-2.0.4.jar:/opt/sds/ingestion/lib/irclib-1.10.jar:/opt/sds/ingestion/lib/Saxon-HE-9.5.1-5.jar:/opt/sds/ingestion/lib/commons-0.10.0.jar:/opt/sds/ingestion/lib/druid-api-0.3.4.jar:/opt/sds/ingestion/lib/poi-ooxml-schemas-3.10.1.jar:/opt/sds/ingestion/lib/aether-connector-okhttp-0.0.9.jar:/opt/sds/ingestion/lib/apache-mime4j-core-0.7.2.jar:/opt/sds/ingestion/lib/apacheds-i18n-2.0.0-M15.jar:/opt/sds/ingestion/lib/jetty-continuation-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/lucene-codecs-4.10.3.jar:/opt/sds/ingestion/lib/xmpcore-5.1.2.jar:/opt/sds/ingestion/lib/lucene-analyzers-phonetic-4.10.3.jar:/opt/sds/ingestion/lib/jackson-jaxrs-smile-provider-2.4.4.jar:/opt/sds/ingestion/lib/flume-irc-sink-1.6.0.jar:/opt/sds/ingestion/lib/jdbi-2.27.jar:/opt/sds/ingestion/lib/commons-lang3-3.3.2.jar:/opt/sds/ingestion/lib/sigar-1.6.4.jar:/opt/sds/ingestion/lib/commons-fileupload-1.2.1.jar:/opt/sds/ingestion/lib/aopalliance-1.0.jar:/opt/sds/ingestion/lib/org.abego.treelayout.core-1.0.1.jar:/opt/sds/ingestion/lib/jetty-server-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/maven-settings-3.1.1.jar:/opt/sds/ingestion/lib/commons-dbcp-1.4.jar:/opt/sds/ingestion/lib/jersey-servlet-1.17.1.jar:/opt/sds/ingestion/lib/flume-thrift-source-1.6.0.jar:/opt/sds/ingestion/lib/hibernate-validator-5.1.3.Final.jar:/opt/sds/ingestion/lib/curator-recipes-2.6.0.jar:/opt/sds/ingestion/lib/jboss-logging-3.1.3.GA.jar:/opt/sds/ingestion/lib/druid-indexing-hadoop-0.7.0.jar:/opt/sds/ingestion/lib/lucene-highlighter-4.10.4.jar:/opt/sds/ingestion/lib/jetty-xml-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/org.restlet.ext.servlet-2.1.1.jar:/opt/sds/ingestion/lib/jetty-io-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/commons-jexl-2.1.1.jar:/opt/sds/ingestion/lib/mongo-java-driver-2.13.2.jar:/opt/sds/ingestion/lib/javax.servlet-3.0.0.v201112011016.jar:/opt/sds/ingestion/lib/stratio-snmptraps-source-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/kite-morphlines-hadoop-rcfile-1.1.0.jar:/opt/sds/ingestion/lib/util-core_2.10-6.23.0.jar:/opt/sds/ingestion/lib/velocity-1.7.jar:/opt/sds/ingestion/lib/netty-codec-4.0.27.Final.jar:/opt/sds/ingestion/lib/jasper-runtime-5.5.23.jar:/opt/sds/ingestion/lib/maven-model-3.1.1.jar:/opt/sds/ingestion/lib/lucene-queryparser-4.10.4.jar:/opt/sds/ingestion/lib/javax.el-3.0.0.jar:/opt/sds/ingestion/lib/jooq-3.3.2.jar:/opt/sds/ingestion/lib/flume-tools-1.6.0.jar:/opt/sds/ingestion/lib/flume-hive-sink-1.6.0.jar:/opt/sds/ingestion/lib/derbynet-10.11.1.1.jar:/opt/sds/ingestion/lib/metrics-jvm-3.0.2.jar:/opt/sds/ingestion/lib/curator-x-discovery-2.6.0.jar:/opt/sds/ingestion/lib/flume-jdbc-channel-1.6.0.jar:/opt/sds/ingestion/lib/checkpointfilter-0.1.0.jar:/opt/sds/ingestion/lib/scala-reflect-2.10.4.jar:/opt/sds/ingestion/lib/commons-logging-1.1.3.jar:/opt/sds/ingestion/lib/asm-4.1.jar:/opt/sds/ingestion/lib/kite-morphlines-core-1.1.0.jar:/opt/sds/ingestion/lib/kite-morphlines-avro-1.1.0.jar:/opt/sds/ingestion/lib/api-asn1-api-1.0.0-M20.jar:/opt/sds/ingestion/lib/flume-ng-configuration-1.6.0.jar:/opt/sds/ingestion/lib/asm-commons-4.1.jar:/opt/sds/ingestion/lib/zookeeper-3.4.6.jar:/opt/sds/ingestion/lib/wstx-asl-3.2.7.jar:/opt/sds/ingestion/lib/druid-processing-0.7.0.jar:/opt/sds/ingestion/lib/stratio-decision-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/xml-apis-1.3.04.jar:/opt/sds/ingestion/lib/jersey-guice-1.17.1.jar:/opt/sds/ingestion/lib/aether-util-0.9.0.M2.jar:/opt/sds/ingestion/lib/quartz-2.2.1.jar:/opt/sds/ingestion/lib/hadoop-annotations-2.6.2.jar:/opt/sds/ingestion/lib/jackson-datatype-joda-2.4.4.jar:/opt/sds/ingestion/lib/guice-multibindings-4.0-beta.jar:/opt/sds/ingestion/lib/rhino-1.7R4.jar:/opt/sds/ingestion/lib/hadoop-auth-2.6.2.jar:/opt/sds/ingestion/lib/RoaringBitmap-0.4.5.jar:/opt/sds/ingestion/lib/kite-morphlines-solr-core-1.1.0.jar:/opt/sds/ingestion/lib/xmlenc-0.52.jar:/opt/sds/ingestion/lib/stratio-rest-source-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/lz4-1.3.0.jar:/opt/sds/ingestion/lib/netty-handler-4.0.27.Final.jar:/opt/sds/ingestion/lib/jetty-security-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/kite-data-hbase-1.0.0.jar:/opt/sds/ingestion/lib/fontbox-1.8.4.jar:/opt/sds/ingestion/lib/jersey-core-1.9.jar:/opt/sds/ingestion/lib/asynchbase-1.5.0.jar:/opt/sds/ingestion/lib/plexus-interpolation-1.19.jar:/opt/sds/ingestion/lib/tagsoup-1.2.1.jar:/opt/sds/ingestion/lib/api-0.10.0.jar:/opt/sds/ingestion/lib/jetty-servlets-9.2.5.v20141112.jar:/opt/sds/ingestion/lib/joda-convert-1.6.jar:/opt/sds/ingestion/lib/maven-aether-provider-3.1.1.jar:/opt/sds/ingestion/lib/jetty-util-6.1.26.jar:/opt/sds/ingestion/lib/lucene-queries-4.10.4.jar:/opt/sds/ingestion/lib/bcprov-jdk15-1.45.jar:/opt/sds/ingestion/lib/snmp4j-2.3.0.jar:/opt/sds/ingestion/lib/gson-2.2.2.jar:/opt/sds/ingestion/lib/commons-cli-1.2.jar:/opt/sds/ingestion/lib/commons-compress-1.4.1.jar:/opt/sds/ingestion/lib/javax.el-api-3.0.0.jar:/opt/sds/ingestion/lib/flume-ng-core-1.6.0.jar:/opt/sds/ingestion/lib/flume-ng-hbase-sink-1.6.0.jar:/opt/sds/ingestion/lib/derby-10.8.2.2.jar:/opt/sds/ingestion/lib/server-metrics-0.0.10.jar:/opt/sds/ingestion/lib/finagle-core_2.10-6.24.0.jar:/opt/sds/ingestion/lib/guice-4.0-beta.jar:/opt/sds/ingestion/lib/commons-daemon-1.0.13.jar:/opt/sds/ingestion/lib/geolocateairport-0.1.0.jar:/opt/sds/ingestion/lib/mapdb-0.9.9.jar:/opt/sds/ingestion/lib/httpclient-4.2.5.jar:/opt/sds/ingestion/lib/commons-dbcp2-2.0.1.jar:/opt/sds/ingestion/lib/lucene-join-4.10.4.jar:/opt/sds/ingestion/lib/config-1.2.1.jar:/opt/sds/ingestion/lib/avro-1.7.4.jar:/opt/sds/ingestion/lib/parquet-hadoop-1.6.0.jar:/opt/sds/ingestion/lib/stratio-druid-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/kite-morphlines-saxon-1.1.0.jar:/opt/sds/ingestion/lib/mx4j-3.0.2.jar:/opt/sds/ingestion/lib/aether-impl-0.9.0.M2.jar:/opt/sds/ingestion/lib/jackson-module-scala_2.10-2.4.4.jar:/opt/sds/ingestion/lib/bcmail-jdk15-1.45.jar:/opt/sds/ingestion/lib/jopt-simple-3.2.jar:/opt/sds/ingestion/lib/jackson-databind-2.4.4.jar:/opt/sds/ingestion/lib/hppc-0.5.2.jar:/opt/sds/ingestion/lib/util-logging_2.10-6.23.0.jar:/opt/sds/ingestion/lib/commons-codec-1.4.jar:/opt/sds/ingestion/lib/log4j-1.2.17.jar:/opt/sds/ingestion/lib/netty-3.6.2.Final.jar:/opt/sds/ingestion/lib/aws-java-sdk-1.8.11.jar:/opt/sds/ingestion/lib/flume-ng-embedded-agent-1.6.0.jar:/opt/sds/ingestion/lib/flume-ng-node-1.6.0.jar:/opt/sds/ingestion/lib/guava-17.0.jar:/opt/sds/ingestion/lib/jsoup-1.7.3.jar:/opt/sds/ingestion/lib/jackson-dataformat-smile-2.4.4.jar:/opt/sds/ingestion/lib/org.restlet-2.1.1.jar:/opt/sds/ingestion/lib/async-1.4.0.jar:/opt/sds/ingestion/lib/concurrentlinkedhashmap-lru-1.2.jar:/opt/sds/ingestion/lib/http-client-1.0.0.jar:/opt/sds/ingestion/lib/lucene-expressions-4.10.3.jar:/opt/sds/ingestion/lib/jetty-http-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/jackson-core-2.4.4.jar:/opt/sds/ingestion/lib/flume-kafka-source-1.6.0.jar:/opt/sds/ingestion/lib/commons-el-1.0.jar:/opt/sds/ingestion/lib/validation-api-1.1.0.Final.jar:/opt/sds/ingestion/lib/tranquility_2.10-0.4.2.jar:/opt/sds/ingestion/lib/kite-morphlines-useragent-1.1.0.jar:/opt/sds/ingestion/lib/twitter4j-core-3.0.3.jar:/opt/sds/ingestion/lib/jackson-datatype-guava-2.4.4.jar:/opt/sds/ingestion/lib/emitter-0.3.0.jar:/opt/sds/ingestion/lib/pdfbox-1.8.4.jar:/opt/sds/ingestion/lib/hadoop-common-2.6.2.jar:/opt/sds/ingestion/lib/jackson-datatype-json-org-2.4.3.jar:/opt/sds/ingestion/lib/aether-connector-file-0.9.0.M2.jar:/opt/sds/ingestion/lib/serializer-2.7.2.jar:/opt/sds/ingestion/lib/jetty-deploy-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/poi-scratchpad-3.10.1.jar
+08 Mar 2016 10:06:11,656 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: extractAvroPaths from class: org.kitesdk.morphline.avro.ExtractAvroPathsBuilder
+08 Mar 2016 10:06:11,656 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: extractAvroTree from class: org.kitesdk.morphline.avro.ExtractAvroTreeBuilder
+08 Mar 2016 10:06:11,657 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readAvro from class: org.kitesdk.morphline.avro.ReadAvroBuilder
+08 Mar 2016 10:06:11,657 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readAvroContainer from class: org.kitesdk.morphline.avro.ReadAvroContainerBuilder
+08 Mar 2016 10:06:11,657 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: toAvro from class: org.kitesdk.morphline.avro.ToAvroBuilder
+08 Mar 2016 10:06:11,657 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: toAvroMap from class: org.kitesdk.morphline.avro.ToAvroMapBuilder
+08 Mar 2016 10:06:11,658 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: writeAvroToByteArray from class: org.kitesdk.morphline.avro.WriteAvroToByteArrayBuilder
+08 Mar 2016 10:06:11,658 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: downloadHdfsFile from class: org.kitesdk.morphline.hadoop.core.DownloadHdfsFileBuilder
+08 Mar 2016 10:06:11,658 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: openHdfsFile from class: org.kitesdk.morphline.hadoop.core.OpenHdfsFileBuilder
+08 Mar 2016 10:06:11,658 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readAvroParquetFile from class: org.kitesdk.morphline.hadoop.parquet.avro.ReadAvroParquetFileBuilder
+08 Mar 2016 10:06:11,659 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readRCFile from class: org.kitesdk.morphline.hadoop.rcfile.ReadRCFileBuilder
+08 Mar 2016 10:06:11,659 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readSequenceFile from class: org.kitesdk.morphline.hadoop.sequencefile.ReadSequenceFileBuilder
+08 Mar 2016 10:06:11,659 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: extractJsonPaths from class: org.kitesdk.morphline.json.ExtractJsonPathsBuilder
+08 Mar 2016 10:06:11,659 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readJson from class: org.kitesdk.morphline.json.ReadJsonBuilder
+08 Mar 2016 10:06:11,659 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: geoIP from class: org.kitesdk.morphline.maxmind.GeoIPBuilder
+08 Mar 2016 10:06:11,660 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: registerJVMMetrics from class: org.kitesdk.morphline.metrics.servlets.RegisterJVMMetricsBuilder
+08 Mar 2016 10:06:11,660 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: startReportingMetricsToHTTP from class: org.kitesdk.morphline.metrics.servlets.StartReportingMetricsToHTTPBuilder
+08 Mar 2016 10:06:11,660 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: convertHTML from class: org.kitesdk.morphline.saxon.ConvertHTMLBuilder
+08 Mar 2016 10:06:11,660 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: xquery from class: org.kitesdk.morphline.saxon.XQueryBuilder
+08 Mar 2016 10:06:11,660 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: xslt from class: org.kitesdk.morphline.saxon.XSLTBuilder
+08 Mar 2016 10:06:11,661 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: generateSolrSequenceKey from class: org.kitesdk.morphline.solr.GenerateSolrSequenceKeyBuilder
+08 Mar 2016 10:06:11,661 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: sanitizeUniqueSolrKey from class: org.kitesdk.morphline.solr.GenerateSolrSequenceKeyBuilder
+08 Mar 2016 10:06:11,661 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: loadSolr from class: org.kitesdk.morphline.solr.LoadSolrBuilder
+08 Mar 2016 10:06:11,661 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: sanitizeUnknownSolrFields from class: org.kitesdk.morphline.solr.SanitizeUnknownSolrFieldsBuilder
+08 Mar 2016 10:06:11,661 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: tokenizeText from class: org.kitesdk.morphline.solr.TokenizeTextBuilder
+08 Mar 2016 10:06:11,662 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: solrCell from class: org.kitesdk.morphline.solrcell.SolrCellBuilder
+08 Mar 2016 10:06:11,662 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readBlob from class: org.kitesdk.morphline.stdio.ReadBlobBuilder
+08 Mar 2016 10:06:11,662 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readCSV from class: org.kitesdk.morphline.stdio.ReadCSVBuilder
+08 Mar 2016 10:06:11,662 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readClob from class: org.kitesdk.morphline.stdio.ReadClobBuilder
+08 Mar 2016 10:06:11,662 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readLine from class: org.kitesdk.morphline.stdio.ReadLineBuilder
+08 Mar 2016 10:06:11,663 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readMultiLine from class: org.kitesdk.morphline.stdio.ReadMultiLineBuilder
+08 Mar 2016 10:06:11,663 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: addCurrentTime from class: org.kitesdk.morphline.stdlib.AddCurrentTimeBuilder
+08 Mar 2016 10:06:11,663 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: addLocalHost from class: org.kitesdk.morphline.stdlib.AddLocalHostBuilder
+08 Mar 2016 10:06:11,663 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: addValues from class: org.kitesdk.morphline.stdlib.AddValuesBuilder
+08 Mar 2016 10:06:11,663 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: addValuesIfAbsent from class: org.kitesdk.morphline.stdlib.AddValuesIfAbsentBuilder
+08 Mar 2016 10:06:11,664 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: callParentPipe from class: org.kitesdk.morphline.stdlib.CallParentPipeBuilder
+08 Mar 2016 10:06:11,664 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: contains from class: org.kitesdk.morphline.stdlib.ContainsBuilder
+08 Mar 2016 10:06:11,664 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: convertTimestamp from class: org.kitesdk.morphline.stdlib.ConvertTimestampBuilder
+08 Mar 2016 10:06:11,664 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: decodeBase64 from class: org.kitesdk.morphline.stdlib.DecodeBase64Builder
+08 Mar 2016 10:06:11,664 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: dropRecord from class: org.kitesdk.morphline.stdlib.DropRecordBuilder
+08 Mar 2016 10:06:11,665 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: equals from class: org.kitesdk.morphline.stdlib.EqualsBuilder
+08 Mar 2016 10:06:11,665 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: extractURIComponent from class: org.kitesdk.morphline.stdlib.ExtractURIComponentBuilder
+08 Mar 2016 10:06:11,665 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: extractURIComponents from class: org.kitesdk.morphline.stdlib.ExtractURIComponentsBuilder
+08 Mar 2016 10:06:11,665 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: extractURIQueryParameters from class: org.kitesdk.morphline.stdlib.ExtractURIQueryParametersBuilder
+08 Mar 2016 10:06:11,665 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: findReplace from class: org.kitesdk.morphline.stdlib.FindReplaceBuilder
+08 Mar 2016 10:06:11,666 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: generateUUID from class: org.kitesdk.morphline.stdlib.GenerateUUIDBuilder
+08 Mar 2016 10:06:11,666 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: grok from class: org.kitesdk.morphline.stdlib.GrokBuilder
+08 Mar 2016 10:06:11,666 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: head from class: org.kitesdk.morphline.stdlib.HeadBuilder
+08 Mar 2016 10:06:11,666 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: if from class: org.kitesdk.morphline.stdlib.IfThenElseBuilder
+08 Mar 2016 10:06:11,666 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: java from class: org.kitesdk.morphline.stdlib.JavaBuilder
+08 Mar 2016 10:06:11,667 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: logDebug from class: org.kitesdk.morphline.stdlib.LogDebugBuilder
+08 Mar 2016 10:06:11,667 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: logError from class: org.kitesdk.morphline.stdlib.LogErrorBuilder
+08 Mar 2016 10:06:11,667 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: logInfo from class: org.kitesdk.morphline.stdlib.LogInfoBuilder
+08 Mar 2016 10:06:11,667 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: logTrace from class: org.kitesdk.morphline.stdlib.LogTraceBuilder
+08 Mar 2016 10:06:11,667 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: logWarn from class: org.kitesdk.morphline.stdlib.LogWarnBuilder
+08 Mar 2016 10:06:11,668 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: not from class: org.kitesdk.morphline.stdlib.NotBuilder
+08 Mar 2016 10:06:11,668 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: pipe from class: org.kitesdk.morphline.stdlib.PipeBuilder
+08 Mar 2016 10:06:11,668 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: removeFields from class: org.kitesdk.morphline.stdlib.RemoveFieldsBuilder
+08 Mar 2016 10:06:11,668 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: removeValues from class: org.kitesdk.morphline.stdlib.RemoveValuesBuilder
+08 Mar 2016 10:06:11,668 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: replaceValues from class: org.kitesdk.morphline.stdlib.ReplaceValuesBuilder
+08 Mar 2016 10:06:11,669 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: sample from class: org.kitesdk.morphline.stdlib.SampleBuilder
+08 Mar 2016 10:06:11,669 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: separateAttachments from class: org.kitesdk.morphline.stdlib.SeparateAttachmentsBuilder
+08 Mar 2016 10:06:11,669 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: setValues from class: org.kitesdk.morphline.stdlib.SetValuesBuilder
+08 Mar 2016 10:06:11,669 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: split from class: org.kitesdk.morphline.stdlib.SplitBuilder
+08 Mar 2016 10:06:11,669 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: splitKeyValue from class: org.kitesdk.morphline.stdlib.SplitKeyValueBuilder
+08 Mar 2016 10:06:11,670 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: startReportingMetricsToCSV from class: org.kitesdk.morphline.stdlib.StartReportingMetricsToCSVBuilder
+08 Mar 2016 10:06:11,670 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: startReportingMetricsToJMX from class: org.kitesdk.morphline.stdlib.StartReportingMetricsToJMXBuilder
+08 Mar 2016 10:06:11,670 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: startReportingMetricsToSLF4J from class: org.kitesdk.morphline.stdlib.StartReportingMetricsToSLF4JBuilder
+08 Mar 2016 10:06:11,670 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: toByteArray from class: org.kitesdk.morphline.stdlib.ToByteArrayBuilder
+08 Mar 2016 10:06:11,670 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: toString from class: org.kitesdk.morphline.stdlib.ToStringBuilder
+08 Mar 2016 10:06:11,671 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: translate from class: org.kitesdk.morphline.stdlib.TranslateBuilder
+08 Mar 2016 10:06:11,671 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: tryRules from class: org.kitesdk.morphline.stdlib.TryRulesBuilder
+08 Mar 2016 10:06:11,671 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: detectMimeType from class: org.kitesdk.morphline.tika.DetectMimeTypeBuilder
+08 Mar 2016 10:06:11,671 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: decompress from class: org.kitesdk.morphline.tika.decompress.DecompressBuilder
+08 Mar 2016 10:06:11,671 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: unpack from class: org.kitesdk.morphline.tika.decompress.UnpackBuilder
+08 Mar 2016 10:06:11,672 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readJsonTestTweets from class: org.kitesdk.morphline.twitter.ReadJsonTestTweetsBuilder
+08 Mar 2016 10:06:11,672 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: userAgent from class: org.kitesdk.morphline.useragent.UserAgentBuilder
+08 Mar 2016 10:06:11,672 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: checkpointFilter from class: com.stratio.morphlines.checkpointfilter.builder.CheckpointFilterBuilder
+08 Mar 2016 10:06:11,673 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: calculator from class: com.stratio.morphlines.commons.CalculatorBuilder
+08 Mar 2016 10:06:11,673 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: containsAnyOf from class: com.stratio.morphlines.commons.ContainsAnyOfBuilder
+08 Mar 2016 10:06:11,673 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: fieldFilter from class: com.stratio.morphlines.commons.FieldFilterBuilder
+08 Mar 2016 10:06:11,673 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: headersToBody from class: com.stratio.morphlines.commons.HeadersToBodyBuilder
+08 Mar 2016 10:06:11,673 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: readXml from class: com.stratio.morphlines.commons.ReadXmlBuilder
+08 Mar 2016 10:06:11,673 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: relationalFilter from class: com.stratio.morphlines.commons.RelationalFilterBuilder
+08 Mar 2016 10:06:11,674 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: rename from class: com.stratio.morphlines.commons.RenameBuilder
+08 Mar 2016 10:06:11,674 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: timeFilter from class: com.stratio.morphlines.commons.TimeFilterBuilder
+08 Mar 2016 10:06:11,674 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: sgeoIP from class: com.stratio.morphlines.geoip.SGeoIPBuilder
+08 Mar 2016 10:06:11,777 DEBUG [conf-file-poller-0] (com.stratio.morphlines.geolocateairports.AirportLatLonBuilder.<clinit>:73)  - Loaded [5879] airports coordinates.
+08 Mar 2016 10:06:11,777 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: geolocateAirportCode from class: com.stratio.morphlines.geolocateairports.AirportLatLonBuilder
+08 Mar 2016 10:06:11,777 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: parseLDAP from class: com.stratio.morphlines.ldap.LDAPBuilder
+08 Mar 2016 10:06:11,777 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: languageExtractor from class: com.stratio.morphlines.nlp.LanguageExtractorBuilder
+08 Mar 2016 10:06:11,778 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: topWords from class: com.stratio.morphlines.nlp.TopWordsBuilder
+08 Mar 2016 10:06:11,778 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: refererParser from class: com.stratio.morphlines.refererparser.RefererParserBuilder
+08 Mar 2016 10:06:11,778 DEBUG [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:96)  - Importing command: wikipediaCleaner from class: com.stratio.morphlines.wikipediacleaner.WikipediaCleanerBuilder
+08 Mar 2016 10:06:11,778 INFO  [conf-file-poller-0] (org.kitesdk.morphline.api.MorphlineContext.importCommandBuilders:106)  - Done importing commands
+08 Mar 2016 10:06:11,791 INFO  [conf-file-poller-0] (org.apache.flume.sink.DefaultSinkFactory.create:42)  - Creating instance of sink: catSink, type: com.stratio.ingestion.sink.decision.StratioDecisionSink
+08 Mar 2016 10:06:11,791 DEBUG [conf-file-poller-0] (org.apache.flume.sink.DefaultSinkFactory.getClass:63)  - Sink type com.stratio.ingestion.sink.decision.StratioDecisionSink is a custom type
+08 Mar 2016 10:06:11,796 INFO  [conf-file-poller-0] (com.stratio.ingestion.sink.decision.StratioDecisionSink.configure:86)  - Configuring Stratio Decision Sink: {zookeeper= localhost:2181, kafka= localhost:9092, topic= catalunya, batchSize= 20, sinkCounter= SINK:catSink{sink.batch.underflow=0, sink.connection.failed.count=0, sink.connection.closed.count=0, sink.event.drain.attempt=0, sink.batch.complete=0, sink.event.drain.sucess=0, sink.connection.creation.count=0, sink.batch.empty=0}}
+08 Mar 2016 10:06:12,056 INFO  [conf-file-poller-0] (com.stratio.decision.api.StratioStreamingAPI.init:286)  - Establishing connection with the engine...
+08 Mar 2016 10:06:12,134 INFO  [conf-file-poller-0] (org.apache.curator.framework.imps.CuratorFrameworkImpl.start:230)  - Starting
+08 Mar 2016 10:06:12,138 DEBUG [conf-file-poller-0] (org.apache.curator.CuratorZookeeperClient.start:181)  - Starting
+08 Mar 2016 10:06:12,138 DEBUG [conf-file-poller-0] (org.apache.curator.ConnectionState.start:101)  - Starting
+08 Mar 2016 10:06:12,138 DEBUG [conf-file-poller-0] (org.apache.curator.ConnectionState.reset:212)  - reset
+08 Mar 2016 10:06:12,143 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:zookeeper.version=3.4.6-1569965, built on 02/20/2014 09:09 GMT
+08 Mar 2016 10:06:12,144 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:host.name=muddy
+08 Mar 2016 10:06:12,144 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:java.version=1.8.0_66-internal
+08 Mar 2016 10:06:12,144 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:java.vendor=Oracle Corporation
+08 Mar 2016 10:06:12,144 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:java.home=/usr/lib/jvm/java-8-openjdk-amd64/jre
+08 Mar 2016 10:06:12,144 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:java.class.path=/home/aitor/Projects/Ingestion/examples/decision/conf:/opt/sds/ingestion/lib/commons-collections-3.2.1.jar:/opt/sds/ingestion/lib/wikipediacleaner-0.1.0.jar:/opt/sds/ingestion/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/opt/sds/ingestion/lib/dom4j-1.6.1.jar:/opt/sds/ingestion/lib/kite-morphlines-json-1.1.0.jar:/opt/sds/ingestion/lib/stratio-elasticsearch-serializer-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/jetty-proxy-9.2.5.v20141112.jar:/opt/sds/ingestion/lib/util-app_2.10-6.23.0.jar:/opt/sds/ingestion/lib/twitter4j-stream-3.0.3.jar:/opt/sds/ingestion/lib/jets3t-0.9.1.jar:/opt/sds/ingestion/lib/commons-configuration-1.10.jar:/opt/sds/ingestion/lib/commons-math3-3.1.1.jar:/opt/sds/ingestion/lib/snakeyaml-1.14.jar:/opt/sds/ingestion/lib/isoparser-1.0-RC-1.jar:/opt/sds/ingestion/lib/commons-pool-1.5.4.jar:/opt/sds/ingestion/lib/zkclient-0.3.jar:/opt/sds/ingestion/lib/nlp-0.1.0.jar:/opt/sds/ingestion/lib/druid-server-0.7.0.jar:/opt/sds/ingestion/lib/kite-morphlines-tika-core-1.1.0.jar:/opt/sds/ingestion/lib/jedis-2.6.0.jar:/opt/sds/ingestion/lib/slf4j-log4j12-1.6.1.jar:/opt/sds/ingestion/lib/libthrift-0.9.0.jar:/opt/sds/ingestion/lib/stratio-mongodb-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/flume-file-channel-1.6.0.jar:/opt/sds/ingestion/lib/lucene-suggest-4.10.4.jar:/opt/sds/ingestion/lib/flume-jms-source-1.6.0.jar:/opt/sds/ingestion/lib/derbyclient-10.11.1.1.jar:/opt/sds/ingestion/lib/tika-core-1.5.jar:/opt/sds/ingestion/lib/opencsv-2.3.jar:/opt/sds/ingestion/lib/asm-debug-all-4.1.jar:/opt/sds/ingestion/lib/maven-repository-metadata-3.1.1.jar:/opt/sds/ingestion/lib/lucene-core-4.10.4.jar:/opt/sds/ingestion/lib/compress-lzf-1.0.3.jar:/opt/sds/ingestion/lib/util-collection_2.10-6.23.0.jar:/opt/sds/ingestion/lib/geoip-0.1.0.jar:/opt/sds/ingestion/lib/asm-3.1.jar:/opt/sds/ingestion/lib/activation-1.1.1.jar:/opt/sds/ingestion/lib/java-util-0.26.14.jar:/opt/sds/ingestion/lib/kite-morphlines-maxmind-1.1.0.jar:/opt/sds/ingestion/lib/jsr305-2.0.1.jar:/opt/sds/ingestion/lib/cassandra-driver-core-2.1.9.jar:/opt/sds/ingestion/lib/xmlbeans-xpath-2.6.0.jar:/opt/sds/ingestion/lib/poi-ooxml-3.10.1.jar:/opt/sds/ingestion/lib/commons-pool2-2.0.jar:/opt/sds/ingestion/lib/flume-dataset-sink-1.6.0.jar:/opt/sds/ingestion/lib/maxmind-db-0.3.3.jar:/opt/sds/ingestion/lib/refererparser-0.1.0.jar:/opt/sds/ingestion/lib/jackson-module-jaxb-annotations-2.4.4.jar:/opt/sds/ingestion/lib/servlet-api-2.5-20110124.jar:/opt/sds/ingestion/lib/aspectjrt-1.6.11.jar:/opt/sds/ingestion/lib/metadata-extractor-2.6.2.jar:/opt/sds/ingestion/lib/lucene-spatial-4.10.4.jar:/opt/sds/ingestion/lib/flume-ng-kafka-sink-1.6.0.jar:/opt/sds/ingestion/lib/xpp3-1.1.4c.jar:/opt/sds/ingestion/lib/netcdf-4.2-min.jar:/opt/sds/ingestion/lib/tesla-aether-0.0.5.jar:/opt/sds/ingestion/lib/time_2.10-0.6-mmx3.jar:/opt/sds/ingestion/lib/geoip2-0.4.0.jar:/opt/sds/ingestion/lib/jackson-annotations-2.4.0.jar:/opt/sds/ingestion/lib/parquet-common-1.6.0.jar:/opt/sds/ingestion/lib/flume-twitter-source-1.6.0.jar:/opt/sds/ingestion/lib/jackson-core-asl-1.9.13.jar:/opt/sds/ingestion/lib/google-http-client-1.15.0-rc.jar:/opt/sds/ingestion/lib/parquet-column-1.6.0.jar:/opt/sds/ingestion/lib/icu4j-4.8.1.jar:/opt/sds/ingestion/lib/flume-ng-elasticsearch-sink-1.6.0.jar:/opt/sds/ingestion/lib/lucene-analyzers-kuromoji-4.10.3.jar:/opt/sds/ingestion/lib/jdom-1.0.jar:/opt/sds/ingestion/lib/api-util-1.0.0-M20.jar:/opt/sds/ingestion/lib/stratio-xmlxpath-deserializer-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/elasticsearch-1.7.1.jar:/opt/sds/ingestion/lib/loglady_2.10-1.1.0.jar:/opt/sds/ingestion/lib/commons-lang-2.6.jar:/opt/sds/ingestion/lib/aether-spi-0.9.0.M2.jar:/opt/sds/ingestion/lib/extendedset-1.3.8.jar:/opt/sds/ingestion/lib/lucene-grouping-4.10.4.jar:/opt/sds/ingestion/lib/servlet-api-2.5.jar:/opt/sds/ingestion/lib/kite-morphlines-tika-decompress-1.1.0.jar:/opt/sds/ingestion/lib/javax.inject-1.jar:/opt/sds/ingestion/lib/boilerpipe-1.1.0.jar:/opt/sds/ingestion/lib/jersey-client-1.18.3.jar:/opt/sds/ingestion/lib/h2-1.3.158.jar:/opt/sds/ingestion/lib/commons-io-2.1.jar:/opt/sds/ingestion/lib/spark-streaming-flume-sink_2.10-1.1.0.jar:/opt/sds/ingestion/lib/util-codec_2.10-6.23.0.jar:/opt/sds/ingestion/lib/kite-data-core-1.0.0.jar:/opt/sds/ingestion/lib/snappy-java-1.1.0.jar:/opt/sds/ingestion/lib/lucene-sandbox-4.10.4.jar:/opt/sds/ingestion/lib/lucene-misc-4.10.4.jar:/opt/sds/ingestion/lib/antlr-runtime-3.5.jar:/opt/sds/ingestion/lib/tika-xmp-1.5.jar:/opt/sds/ingestion/lib/aether-api-0.9.0.M2.jar:/opt/sds/ingestion/lib/jempbox-1.8.4.jar:/opt/sds/ingestion/lib/jetty-jmx-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/kite-morphlines-hadoop-parquet-avro-1.1.0.jar:/opt/sds/ingestion/lib/jetty-webapp-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/curator-test-1.3.3.jar:/opt/sds/ingestion/lib/parquet-encoding-1.6.0.jar:/opt/sds/ingestion/lib/spymemcached-2.11.4.jar:/opt/sds/ingestion/lib/druid-aws-common-0.7.0.jar:/opt/sds/ingestion/lib/jetty-client-9.2.5.v20141112.jar:/opt/sds/ingestion/lib/kite-morphlines-solr-cell-1.1.0.jar:/opt/sds/ingestion/lib/flume-spillable-memory-channel-1.6.0.jar:/opt/sds/ingestion/lib/scala-util_2.10-1.9.2.jar:/opt/sds/ingestion/lib/slf4j-api-1.7.7.jar:/opt/sds/ingestion/lib/commons-0.1.0.jar:/opt/sds/ingestion/lib/java-xmlbuilder-1.0.jar:/opt/sds/ingestion/lib/util-jvm_2.10-6.23.0.jar:/opt/sds/ingestion/lib/base64-2.3.8.jar:/opt/sds/ingestion/lib/scala-logging-api_2.10-2.1.2.jar:/opt/sds/ingestion/lib/druid-indexing-service-0.7.0.jar:/opt/sds/ingestion/lib/twitter4j-media-support-3.0.3.jar:/opt/sds/ingestion/lib/util-stats_2.10-6.23.0.jar:/opt/sds/ingestion/lib/metrics-core-3.0.2.jar:/opt/sds/ingestion/lib/airline-0.5.jar:/opt/sds/ingestion/lib/jetty-servlet-8.1.14.v20131031.jar:/opt/sds/ingestion/lib/snmp4j-agent-2.2.0.jar:/opt/sds/ingestion/lib/jhighlight-1.0.jar:/opt/sds/ingestion/lib/commons-csv-1.1.jar:/opt/sds/ingestion/lib/stratio-irc-source-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/solr-solrj-4.10.3.jar:/opt/sds/ingestion/lib/solr-cell-4.10.3.jar:/opt/sds/ingestion/lib/jsp-api-2.1.jar:/opt/sds/ingestion/lib/kite-morphlines-hadoop-core-1.1.0.jar:/opt/sds/ingestion/lib/metrics-core-2.2.0.jar:/opt/sds/ingestion/lib/parquet-generator-1.6.0.jar:/opt/sds/ingestion/lib/okhttp-1.0.2.jar:/opt/sds/ingestion/lib/noggit-0.5.jar:/opt/sds/ingestion/lib/stratio-jdbc-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/scala-logging-slf4j_2.10-2.1.2.jar:/opt/sds/ingestion/lib/finagle-http_2.10-6.24.0.jar:/opt/sds/ingestion/lib/paranamer-2.3.jar:/opt/sds/ingestion/lib/parquet-format-2.2.0-rc1.jar:/opt/sds/ingestion/lib/jackson-jaxrs-json-provider-2.4.4.jar:/opt/sds/ingestion/lib/druid-common-0.7.0.jar:/opt/sds/ingestion/lib/poi-3.10.1.jar:/opt/sds/ingestion/lib/hadoop-hdfs-2.6.2.jar:/opt/sds/ingestion/lib/xalan-2.7.2.jar:/opt/sds/ingestion/lib/flume-ng-morphline-solr-sink-1.6.0.jar:/opt/sds/ingestion/lib/xz-1.0.jar:/opt/sds/ingestion/lib/flume-ng-sdk-1.6.0.jar:/opt/sds/ingestion/lib/xercesImpl-2.9.1.jar:/opt/sds/ingestion/lib/protobuf-java-2.5.0.jar:/opt/sds/ingestion/lib/metrics-servlets-3.0.2.jar:/opt/sds/ingestion/lib/lucene-memory-4.10.4.jar:/opt/sds/ingestion/lib/jersey-server-1.9.jar:/opt/sds/ingestion/lib/jline-0.9.94.jar:/opt/sds/ingestion/lib/flume-hdfs-sink-1.6.0.jar:/opt/sds/ingestion/lib/httpmime-4.3.1.jar:/opt/sds/ingestion/lib/bytebuffer-collections-0.1.5.jar:/opt/sds/ingestion/lib/lucene-analyzers-common-4.10.4.jar:/opt/sds/ingestion/lib/kite-morphlines-metrics-servlets-1.1.0.jar:/opt/sds/ingestion/lib/util-hashing_2.10-6.23.0.jar:/opt/sds/ingestion/lib/netty-buffer-4.0.27.Final.jar:/opt/sds/ingestion/lib/ua-parser-1.3.0.jar:/opt/sds/ingestion/lib/solr-core-4.10.3.jar:/opt/sds/ingestion/lib/guice-servlet-4.0-beta.jar:/opt/sds/ingestion/lib/juniversalchardet-1.0.3.jar:/opt/sds/ingestion/lib/parquet-avro-1.6.0.jar:/opt/sds/ingestion/lib/kafka_2.10-0.8.1.1.jar:/opt/sds/ingestion/lib/metrics-json-3.0.2.jar:/opt/sds/ingestion/lib/classmate-1.0.0.jar:/opt/sds/ingestion/lib/metrics-healthchecks-3.0.2.jar:/opt/sds/ingestion/lib/config-magic-0.9.jar:/opt/sds/ingestion/lib/curator-client-2.6.0.jar:/opt/sds/ingestion/lib/jcl-over-slf4j-1.6.1.jar:/opt/sds/ingestion/lib/htrace-core-3.0.4.jar:/opt/sds/ingestion/lib/antlr4-runtime-4.0.jar:/opt/sds/ingestion/lib/scala-library-2.10.4.jar:/opt/sds/ingestion/lib/irc-api-1.0-0011.jar:/opt/sds/ingestion/lib/kite-morphlines-twitter-1.1.0.jar:/opt/sds/ingestion/lib/avro-ipc-1.7.4.jar:/opt/sds/ingestion/lib/kite-data-hive-1.0.0.jar:/opt/sds/ingestion/lib/tika-parsers-1.5.jar:/opt/sds/ingestion/lib/commons-math-2.2.jar:/opt/sds/ingestion/lib/maven-model-builder-3.1.1.jar:/opt/sds/ingestion/lib/wagon-provider-api-2.4.jar:/opt/sds/ingestion/lib/apache-mime4j-dom-0.7.2.jar:/opt/sds/ingestion/lib/parquet-hive-bundle-1.4.1.jar:/opt/sds/ingestion/lib/flume-scribe-source-1.6.0.jar:/opt/sds/ingestion/lib/stratio-cassandra-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/apache-log4j-extras-1.1.jar:/opt/sds/ingestion/lib/kite-morphlines-hadoop-sequencefile-1.1.0.jar:/opt/sds/ingestion/lib/parquet-jackson-1.6.0.jar:/opt/sds/ingestion/lib/stratio-kafka-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/maxminddb-0.2.0.jar:/opt/sds/ingestion/lib/plexus-utils-3.0.15.jar:/opt/sds/ingestion/lib/flume-ng-auth-1.6.0.jar:/opt/sds/ingestion/lib/vorbis-java-tika-0.1.jar:/opt/sds/ingestion/lib/maven-settings-builder-3.1.1.jar:/opt/sds/ingestion/lib/rome-0.9.jar:/opt/sds/ingestion/lib/kite-hadoop-compatibility-1.1.0.jar:/opt/sds/ingestion/lib/javassist-3.15.0-GA.jar:/opt/sds/ingestion/lib/c3p0-0.9.1.1.jar:/opt/sds/ingestion/lib/flume-ng-log4jappender-1.6.0.jar:/opt/sds/ingestion/lib/flume-avro-source-1.6.0.jar:/opt/sds/ingestion/lib/flume-kafka-channel-1.6.0.jar:/opt/sds/ingestion/lib/spatial4j-0.4.1.jar:/opt/sds/ingestion/lib/ldap-0.1.0.jar:/opt/sds/ingestion/lib/netty-common-4.0.27.Final.jar:/opt/sds/ingestion/lib/curator-framework-2.6.0.jar:/opt/sds/ingestion/lib/bliki-core-3.0.19.jar:/opt/sds/ingestion/lib/commons-httpclient-3.1.jar:/opt/sds/ingestion/lib/jetty-util-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/netty-transport-4.0.27.Final.jar:/opt/sds/ingestion/lib/jackson-mapper-asl-1.9.13.jar:/opt/sds/ingestion/lib/xmlbeans-2.6.0.jar:/opt/sds/ingestion/lib/jackson-jaxrs-base-2.4.4.jar:/opt/sds/ingestion/lib/vorbis-java-core-0.1.jar:/opt/sds/ingestion/lib/json-20090211_1.jar:/opt/sds/ingestion/lib/google-http-client-jackson2-1.15.0-rc.jar:/opt/sds/ingestion/lib/jetty-6.1.26.jar:/opt/sds/ingestion/lib/aws-java-sdk-core-1.8.11.jar:/opt/sds/ingestion/lib/joda-time-2.6.jar:/opt/sds/ingestion/lib/httpcore-4.2.4.jar:/opt/sds/ingestion/lib/stratio-redis-source-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/mina-core-2.0.4.jar:/opt/sds/ingestion/lib/irclib-1.10.jar:/opt/sds/ingestion/lib/Saxon-HE-9.5.1-5.jar:/opt/sds/ingestion/lib/commons-0.10.0.jar:/opt/sds/ingestion/lib/druid-api-0.3.4.jar:/opt/sds/ingestion/lib/poi-ooxml-schemas-3.10.1.jar:/opt/sds/ingestion/lib/aether-connector-okhttp-0.0.9.jar:/opt/sds/ingestion/lib/apache-mime4j-core-0.7.2.jar:/opt/sds/ingestion/lib/apacheds-i18n-2.0.0-M15.jar:/opt/sds/ingestion/lib/jetty-continuation-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/lucene-codecs-4.10.3.jar:/opt/sds/ingestion/lib/xmpcore-5.1.2.jar:/opt/sds/ingestion/lib/lucene-analyzers-phonetic-4.10.3.jar:/opt/sds/ingestion/lib/jackson-jaxrs-smile-provider-2.4.4.jar:/opt/sds/ingestion/lib/flume-irc-sink-1.6.0.jar:/opt/sds/ingestion/lib/jdbi-2.27.jar:/opt/sds/ingestion/lib/commons-lang3-3.3.2.jar:/opt/sds/ingestion/lib/sigar-1.6.4.jar:/opt/sds/ingestion/lib/commons-fileupload-1.2.1.jar:/opt/sds/ingestion/lib/aopalliance-1.0.jar:/opt/sds/ingestion/lib/org.abego.treelayout.core-1.0.1.jar:/opt/sds/ingestion/lib/jetty-server-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/maven-settings-3.1.1.jar:/opt/sds/ingestion/lib/commons-dbcp-1.4.jar:/opt/sds/ingestion/lib/jersey-servlet-1.17.1.jar:/opt/sds/ingestion/lib/flume-thrift-source-1.6.0.jar:/opt/sds/ingestion/lib/hibernate-validator-5.1.3.Final.jar:/opt/sds/ingestion/lib/curator-recipes-2.6.0.jar:/opt/sds/ingestion/lib/jboss-logging-3.1.3.GA.jar:/opt/sds/ingestion/lib/druid-indexing-hadoop-0.7.0.jar:/opt/sds/ingestion/lib/lucene-highlighter-4.10.4.jar:/opt/sds/ingestion/lib/jetty-xml-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/org.restlet.ext.servlet-2.1.1.jar:/opt/sds/ingestion/lib/jetty-io-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/commons-jexl-2.1.1.jar:/opt/sds/ingestion/lib/mongo-java-driver-2.13.2.jar:/opt/sds/ingestion/lib/javax.servlet-3.0.0.v201112011016.jar:/opt/sds/ingestion/lib/stratio-snmptraps-source-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/kite-morphlines-hadoop-rcfile-1.1.0.jar:/opt/sds/ingestion/lib/util-core_2.10-6.23.0.jar:/opt/sds/ingestion/lib/velocity-1.7.jar:/opt/sds/ingestion/lib/netty-codec-4.0.27.Final.jar:/opt/sds/ingestion/lib/jasper-runtime-5.5.23.jar:/opt/sds/ingestion/lib/maven-model-3.1.1.jar:/opt/sds/ingestion/lib/lucene-queryparser-4.10.4.jar:/opt/sds/ingestion/lib/javax.el-3.0.0.jar:/opt/sds/ingestion/lib/jooq-3.3.2.jar:/opt/sds/ingestion/lib/flume-tools-1.6.0.jar:/opt/sds/ingestion/lib/flume-hive-sink-1.6.0.jar:/opt/sds/ingestion/lib/derbynet-10.11.1.1.jar:/opt/sds/ingestion/lib/metrics-jvm-3.0.2.jar:/opt/sds/ingestion/lib/curator-x-discovery-2.6.0.jar:/opt/sds/ingestion/lib/flume-jdbc-channel-1.6.0.jar:/opt/sds/ingestion/lib/checkpointfilter-0.1.0.jar:/opt/sds/ingestion/lib/scala-reflect-2.10.4.jar:/opt/sds/ingestion/lib/commons-logging-1.1.3.jar:/opt/sds/ingestion/lib/asm-4.1.jar:/opt/sds/ingestion/lib/kite-morphlines-core-1.1.0.jar:/opt/sds/ingestion/lib/kite-morphlines-avro-1.1.0.jar:/opt/sds/ingestion/lib/api-asn1-api-1.0.0-M20.jar:/opt/sds/ingestion/lib/flume-ng-configuration-1.6.0.jar:/opt/sds/ingestion/lib/asm-commons-4.1.jar:/opt/sds/ingestion/lib/zookeeper-3.4.6.jar:/opt/sds/ingestion/lib/wstx-asl-3.2.7.jar:/opt/sds/ingestion/lib/druid-processing-0.7.0.jar:/opt/sds/ingestion/lib/stratio-decision-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/xml-apis-1.3.04.jar:/opt/sds/ingestion/lib/jersey-guice-1.17.1.jar:/opt/sds/ingestion/lib/aether-util-0.9.0.M2.jar:/opt/sds/ingestion/lib/quartz-2.2.1.jar:/opt/sds/ingestion/lib/hadoop-annotations-2.6.2.jar:/opt/sds/ingestion/lib/jackson-datatype-joda-2.4.4.jar:/opt/sds/ingestion/lib/guice-multibindings-4.0-beta.jar:/opt/sds/ingestion/lib/rhino-1.7R4.jar:/opt/sds/ingestion/lib/hadoop-auth-2.6.2.jar:/opt/sds/ingestion/lib/RoaringBitmap-0.4.5.jar:/opt/sds/ingestion/lib/kite-morphlines-solr-core-1.1.0.jar:/opt/sds/ingestion/lib/xmlenc-0.52.jar:/opt/sds/ingestion/lib/stratio-rest-source-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/lz4-1.3.0.jar:/opt/sds/ingestion/lib/netty-handler-4.0.27.Final.jar:/opt/sds/ingestion/lib/jetty-security-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/kite-data-hbase-1.0.0.jar:/opt/sds/ingestion/lib/fontbox-1.8.4.jar:/opt/sds/ingestion/lib/jersey-core-1.9.jar:/opt/sds/ingestion/lib/asynchbase-1.5.0.jar:/opt/sds/ingestion/lib/plexus-interpolation-1.19.jar:/opt/sds/ingestion/lib/tagsoup-1.2.1.jar:/opt/sds/ingestion/lib/api-0.10.0.jar:/opt/sds/ingestion/lib/jetty-servlets-9.2.5.v20141112.jar:/opt/sds/ingestion/lib/joda-convert-1.6.jar:/opt/sds/ingestion/lib/maven-aether-provider-3.1.1.jar:/opt/sds/ingestion/lib/jetty-util-6.1.26.jar:/opt/sds/ingestion/lib/lucene-queries-4.10.4.jar:/opt/sds/ingestion/lib/bcprov-jdk15-1.45.jar:/opt/sds/ingestion/lib/snmp4j-2.3.0.jar:/opt/sds/ingestion/lib/gson-2.2.2.jar:/opt/sds/ingestion/lib/commons-cli-1.2.jar:/opt/sds/ingestion/lib/commons-compress-1.4.1.jar:/opt/sds/ingestion/lib/javax.el-api-3.0.0.jar:/opt/sds/ingestion/lib/flume-ng-core-1.6.0.jar:/opt/sds/ingestion/lib/flume-ng-hbase-sink-1.6.0.jar:/opt/sds/ingestion/lib/derby-10.8.2.2.jar:/opt/sds/ingestion/lib/server-metrics-0.0.10.jar:/opt/sds/ingestion/lib/finagle-core_2.10-6.24.0.jar:/opt/sds/ingestion/lib/guice-4.0-beta.jar:/opt/sds/ingestion/lib/commons-daemon-1.0.13.jar:/opt/sds/ingestion/lib/geolocateairport-0.1.0.jar:/opt/sds/ingestion/lib/mapdb-0.9.9.jar:/opt/sds/ingestion/lib/httpclient-4.2.5.jar:/opt/sds/ingestion/lib/commons-dbcp2-2.0.1.jar:/opt/sds/ingestion/lib/lucene-join-4.10.4.jar:/opt/sds/ingestion/lib/config-1.2.1.jar:/opt/sds/ingestion/lib/avro-1.7.4.jar:/opt/sds/ingestion/lib/parquet-hadoop-1.6.0.jar:/opt/sds/ingestion/lib/stratio-druid-sink-0.6.0-SNAPSHOT.jar:/opt/sds/ingestion/lib/kite-morphlines-saxon-1.1.0.jar:/opt/sds/ingestion/lib/mx4j-3.0.2.jar:/opt/sds/ingestion/lib/aether-impl-0.9.0.M2.jar:/opt/sds/ingestion/lib/jackson-module-scala_2.10-2.4.4.jar:/opt/sds/ingestion/lib/bcmail-jdk15-1.45.jar:/opt/sds/ingestion/lib/jopt-simple-3.2.jar:/opt/sds/ingestion/lib/jackson-databind-2.4.4.jar:/opt/sds/ingestion/lib/hppc-0.5.2.jar:/opt/sds/ingestion/lib/util-logging_2.10-6.23.0.jar:/opt/sds/ingestion/lib/commons-codec-1.4.jar:/opt/sds/ingestion/lib/log4j-1.2.17.jar:/opt/sds/ingestion/lib/netty-3.6.2.Final.jar:/opt/sds/ingestion/lib/aws-java-sdk-1.8.11.jar:/opt/sds/ingestion/lib/flume-ng-embedded-agent-1.6.0.jar:/opt/sds/ingestion/lib/flume-ng-node-1.6.0.jar:/opt/sds/ingestion/lib/guava-17.0.jar:/opt/sds/ingestion/lib/jsoup-1.7.3.jar:/opt/sds/ingestion/lib/jackson-dataformat-smile-2.4.4.jar:/opt/sds/ingestion/lib/org.restlet-2.1.1.jar:/opt/sds/ingestion/lib/async-1.4.0.jar:/opt/sds/ingestion/lib/concurrentlinkedhashmap-lru-1.2.jar:/opt/sds/ingestion/lib/http-client-1.0.0.jar:/opt/sds/ingestion/lib/lucene-expressions-4.10.3.jar:/opt/sds/ingestion/lib/jetty-http-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/jackson-core-2.4.4.jar:/opt/sds/ingestion/lib/flume-kafka-source-1.6.0.jar:/opt/sds/ingestion/lib/commons-el-1.0.jar:/opt/sds/ingestion/lib/validation-api-1.1.0.Final.jar:/opt/sds/ingestion/lib/tranquility_2.10-0.4.2.jar:/opt/sds/ingestion/lib/kite-morphlines-useragent-1.1.0.jar:/opt/sds/ingestion/lib/twitter4j-core-3.0.3.jar:/opt/sds/ingestion/lib/jackson-datatype-guava-2.4.4.jar:/opt/sds/ingestion/lib/emitter-0.3.0.jar:/opt/sds/ingestion/lib/pdfbox-1.8.4.jar:/opt/sds/ingestion/lib/hadoop-common-2.6.2.jar:/opt/sds/ingestion/lib/jackson-datatype-json-org-2.4.3.jar:/opt/sds/ingestion/lib/aether-connector-file-0.9.0.M2.jar:/opt/sds/ingestion/lib/serializer-2.7.2.jar:/opt/sds/ingestion/lib/jetty-deploy-8.1.10.v20130312.jar:/opt/sds/ingestion/lib/poi-scratchpad-3.10.1.jar
+08 Mar 2016 10:06:12,144 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:java.library.path=
+08 Mar 2016 10:06:12,145 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:java.io.tmpdir=/tmp
+08 Mar 2016 10:06:12,145 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:java.compiler=<NA>
+08 Mar 2016 10:06:12,145 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:os.name=Linux
+08 Mar 2016 10:06:12,145 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:os.arch=amd64
+08 Mar 2016 10:06:12,145 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:os.version=4.2.0-18-generic
+08 Mar 2016 10:06:12,145 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:user.name=aitor
+08 Mar 2016 10:06:12,145 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:user.home=/home/aitor
+08 Mar 2016 10:06:12,145 INFO  [conf-file-poller-0] (org.apache.zookeeper.Environment.logEnv:100)  - Client environment:user.dir=/home/aitor/Projects/Ingestion/examples/decision
+08 Mar 2016 10:06:12,146 INFO  [conf-file-poller-0] (org.apache.zookeeper.ZooKeeper.<init>:438)  - Initiating client connection, connectString=localhost:2181 sessionTimeout=60000 watcher=org.apache.curator.ConnectionState@4d7076e2
+08 Mar 2016 10:06:12,149 DEBUG [conf-file-poller-0] (org.apache.zookeeper.ClientCnxn.<clinit>:102)  - zookeeper.disableAutoWatchReset is false
+08 Mar 2016 10:06:12,176 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:12,218 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:12,219 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:12,219 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:13,321 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:13,322 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:13,322 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:13,322 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:13,889 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:214)  - checking process:{ file:./conf/flume-conf.properties counterGroup:{ name:null counters:{file.checks=1, file.loads=1} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a } supervisoree:{ status:{ lastSeen:1457427970881 lastSeenState:IDLE desiredState:START firstSeen:1457427970881 failures:0 discard:false error:false } policy:org.apache.flume.lifecycle.LifecycleSupervisor$SupervisorPolicy$AlwaysRestartPolicy@646007f4 }
+08 Mar 2016 10:06:13,889 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:307)  - Status check complete
+08 Mar 2016 10:06:14,423 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:14,423 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:14,424 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:14,424 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:15,524 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:15,525 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:15,525 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:15,525 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:16,626 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:16,626 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:16,627 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:16,627 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:16,889 DEBUG [lifecycleSupervisor-1-1] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:214)  - checking process:{ file:./conf/flume-conf.properties counterGroup:{ name:null counters:{file.checks=1, file.loads=1} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a } supervisoree:{ status:{ lastSeen:1457427973889 lastSeenState:START desiredState:START firstSeen:1457427970881 failures:0 discard:false error:false } policy:org.apache.flume.lifecycle.LifecycleSupervisor$SupervisorPolicy$AlwaysRestartPolicy@646007f4 }
+08 Mar 2016 10:06:16,890 DEBUG [lifecycleSupervisor-1-1] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:307)  - Status check complete
+08 Mar 2016 10:06:17,728 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:17,728 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:17,729 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:17,729 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:18,830 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:18,830 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:18,830 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:18,831 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:19,890 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:214)  - checking process:{ file:./conf/flume-conf.properties counterGroup:{ name:null counters:{file.checks=1, file.loads=1} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a } supervisoree:{ status:{ lastSeen:1457427976890 lastSeenState:START desiredState:START firstSeen:1457427970881 failures:0 discard:false error:false } policy:org.apache.flume.lifecycle.LifecycleSupervisor$SupervisorPolicy$AlwaysRestartPolicy@646007f4 }
+08 Mar 2016 10:06:19,890 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:307)  - Status check complete
+08 Mar 2016 10:06:19,931 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:19,932 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:19,932 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:19,932 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:21,033 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:21,033 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:21,034 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:21,034 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:22,135 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:22,135 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:22,135 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:22,136 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:22,891 DEBUG [lifecycleSupervisor-1-2] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:214)  - checking process:{ file:./conf/flume-conf.properties counterGroup:{ name:null counters:{file.checks=1, file.loads=1} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a } supervisoree:{ status:{ lastSeen:1457427979890 lastSeenState:START desiredState:START firstSeen:1457427970881 failures:0 discard:false error:false } policy:org.apache.flume.lifecycle.LifecycleSupervisor$SupervisorPolicy$AlwaysRestartPolicy@646007f4 }
+08 Mar 2016 10:06:22,891 DEBUG [lifecycleSupervisor-1-2] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:307)  - Status check complete
+08 Mar 2016 10:06:23,237 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:23,238 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:23,239 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:23,240 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:24,341 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:24,341 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:24,342 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:24,342 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:25,442 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:25,443 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:25,443 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:25,443 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:25,891 DEBUG [lifecycleSupervisor-1-1] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:214)  - checking process:{ file:./conf/flume-conf.properties counterGroup:{ name:null counters:{file.checks=1, file.loads=1} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a } supervisoree:{ status:{ lastSeen:1457427982891 lastSeenState:START desiredState:START firstSeen:1457427970881 failures:0 discard:false error:false } policy:org.apache.flume.lifecycle.LifecycleSupervisor$SupervisorPolicy$AlwaysRestartPolicy@646007f4 }
+08 Mar 2016 10:06:25,891 DEBUG [lifecycleSupervisor-1-1] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:307)  - Status check complete
+08 Mar 2016 10:06:26,544 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:26,545 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:26,545 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:26,545 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:27,187 ERROR [conf-file-poller-0] (org.apache.curator.ConnectionState.checkTimeouts:201)  - Connection timed out for connection string (localhost:2181) and timeout (15000) / elapsed (15044)
+org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+	at org.apache.curator.ConnectionState.checkTimeouts(ConnectionState.java:198)
+	at org.apache.curator.ConnectionState.getZooKeeper(ConnectionState.java:88)
+	at org.apache.curator.CuratorZookeeperClient.getZooKeeper(CuratorZookeeperClient.java:115)
+	at org.apache.curator.framework.imps.CuratorFrameworkImpl.getZooKeeper(CuratorFrameworkImpl.java:474)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl$2.call(ExistsBuilderImpl.java:172)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl$2.call(ExistsBuilderImpl.java:161)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.pathInForeground(ExistsBuilderImpl.java:157)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:148)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:36)
+	at com.stratio.decision.api.zookeeper.ZookeeperConsumer.checkZNode(ZookeeperConsumer.scala:56)
+	at com.stratio.decision.api.zookeeper.ZookeeperConsumer.zNodeExists(ZookeeperConsumer.scala:49)
+	at com.stratio.decision.api.StratioStreamingAPI.checkEphemeralNode(StratioStreamingAPI.scala:397)
+	at com.stratio.decision.api.StratioStreamingAPI.init(StratioStreamingAPI.scala:287)
+	at com.stratio.ingestion.sink.decision.StratioDecisionSink.configure(StratioDecisionSink.java:101)
+	at org.apache.flume.conf.Configurables.configure(Configurables.java:41)
+	at org.apache.flume.node.AbstractConfigurationProvider.loadSinks(AbstractConfigurationProvider.java:413)
+	at org.apache.flume.node.AbstractConfigurationProvider.getConfiguration(AbstractConfigurationProvider.java:98)
+	at org.apache.flume.node.PollingPropertiesFileConfigurationProvider$FileWatcherRunnable.run(PollingPropertiesFileConfigurationProvider.java:140)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+08 Mar 2016 10:06:27,187 DEBUG [conf-file-poller-0] (org.apache.curator.RetryLoop.takeException:185)  - Retry-able exception received
+org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+	at org.apache.curator.ConnectionState.checkTimeouts(ConnectionState.java:198)
+	at org.apache.curator.ConnectionState.getZooKeeper(ConnectionState.java:88)
+	at org.apache.curator.CuratorZookeeperClient.getZooKeeper(CuratorZookeeperClient.java:115)
+	at org.apache.curator.framework.imps.CuratorFrameworkImpl.getZooKeeper(CuratorFrameworkImpl.java:474)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl$2.call(ExistsBuilderImpl.java:172)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl$2.call(ExistsBuilderImpl.java:161)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.pathInForeground(ExistsBuilderImpl.java:157)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:148)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:36)
+	at com.stratio.decision.api.zookeeper.ZookeeperConsumer.checkZNode(ZookeeperConsumer.scala:56)
+	at com.stratio.decision.api.zookeeper.ZookeeperConsumer.zNodeExists(ZookeeperConsumer.scala:49)
+	at com.stratio.decision.api.StratioStreamingAPI.checkEphemeralNode(StratioStreamingAPI.scala:397)
+	at com.stratio.decision.api.StratioStreamingAPI.init(StratioStreamingAPI.scala:287)
+	at com.stratio.ingestion.sink.decision.StratioDecisionSink.configure(StratioDecisionSink.java:101)
+	at org.apache.flume.conf.Configurables.configure(Configurables.java:41)
+	at org.apache.flume.node.AbstractConfigurationProvider.loadSinks(AbstractConfigurationProvider.java:413)
+	at org.apache.flume.node.AbstractConfigurationProvider.getConfiguration(AbstractConfigurationProvider.java:98)
+	at org.apache.flume.node.PollingPropertiesFileConfigurationProvider$FileWatcherRunnable.run(PollingPropertiesFileConfigurationProvider.java:140)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+08 Mar 2016 10:06:27,646 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:27,646 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:27,647 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:27,647 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:27,688 DEBUG [conf-file-poller-0] (org.apache.curator.RetryLoop.takeException:193)  - Retrying operation
+08 Mar 2016 10:06:28,747 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:28,748 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:28,748 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:28,748 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:28,892 DEBUG [lifecycleSupervisor-1-3] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:214)  - checking process:{ file:./conf/flume-conf.properties counterGroup:{ name:null counters:{file.checks=1, file.loads=1} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a } supervisoree:{ status:{ lastSeen:1457427985891 lastSeenState:START desiredState:START firstSeen:1457427970881 failures:0 discard:false error:false } policy:org.apache.flume.lifecycle.LifecycleSupervisor$SupervisorPolicy$AlwaysRestartPolicy@646007f4 }
+08 Mar 2016 10:06:28,892 DEBUG [lifecycleSupervisor-1-3] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:307)  - Status check complete
+08 Mar 2016 10:06:29,849 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:29,850 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:29,850 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:29,850 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:30,951 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:30,951 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:30,952 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:30,952 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:31,893 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:214)  - checking process:{ file:./conf/flume-conf.properties counterGroup:{ name:null counters:{file.checks=1, file.loads=1} }  provider:org.apache.flume.node.PollingPropertiesFileConfigurationProvider agentName:a } supervisoree:{ status:{ lastSeen:1457427988892 lastSeenState:START desiredState:START firstSeen:1457427970881 failures:0 discard:false error:false } policy:org.apache.flume.lifecycle.LifecycleSupervisor$SupervisorPolicy$AlwaysRestartPolicy@646007f4 }
+08 Mar 2016 10:06:31,893 DEBUG [lifecycleSupervisor-1-0] (org.apache.flume.lifecycle.LifecycleSupervisor$MonitorRunnable.run:307)  - Status check complete
+08 Mar 2016 10:06:32,053 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:32,054 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:32,055 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:32,055 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:32,727 INFO  [agent-shutdown-hook] (org.apache.flume.lifecycle.LifecycleSupervisor.stop:79)  - Stopping lifecycle supervisor 12
+08 Mar 2016 10:06:32,729 INFO  [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:83)  - Configuration provider stopping
+08 Mar 2016 10:06:33,156 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:33,157 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:33,157 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:33,157 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:33,229 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:33,729 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:34,230 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:34,257 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:34,258 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:34,258 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:34,258 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:34,730 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:35,230 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:35,359 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:35,359 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:35,359 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:35,360 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:35,731 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:36,231 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:36,460 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:36,461 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:36,461 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:36,461 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:36,731 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:37,232 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:37,562 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:37,562 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:37,563 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:37,563 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:37,732 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:38,233 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:38,663 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:38,664 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:38,664 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:38,664 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:38,733 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:39,233 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:39,734 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:39,765 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:39,765 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:39,765 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:39,766 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:40,234 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:40,734 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:40,866 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:40,867 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:40,867 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:40,867 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:41,235 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:41,735 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:41,967 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:41,968 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:41,968 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:41,968 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:42,236 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:42,690 ERROR [conf-file-poller-0] (org.apache.curator.ConnectionState.checkTimeouts:201)  - Connection timed out for connection string (localhost:2181) and timeout (15000) / elapsed (30552)
+org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+	at org.apache.curator.ConnectionState.checkTimeouts(ConnectionState.java:198)
+	at org.apache.curator.ConnectionState.getZooKeeper(ConnectionState.java:88)
+	at org.apache.curator.CuratorZookeeperClient.getZooKeeper(CuratorZookeeperClient.java:115)
+	at org.apache.curator.framework.imps.CuratorFrameworkImpl.getZooKeeper(CuratorFrameworkImpl.java:474)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl$2.call(ExistsBuilderImpl.java:172)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl$2.call(ExistsBuilderImpl.java:161)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.pathInForeground(ExistsBuilderImpl.java:157)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:148)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:36)
+	at com.stratio.decision.api.zookeeper.ZookeeperConsumer.checkZNode(ZookeeperConsumer.scala:56)
+	at com.stratio.decision.api.zookeeper.ZookeeperConsumer.zNodeExists(ZookeeperConsumer.scala:49)
+	at com.stratio.decision.api.StratioStreamingAPI.checkEphemeralNode(StratioStreamingAPI.scala:397)
+	at com.stratio.decision.api.StratioStreamingAPI.init(StratioStreamingAPI.scala:287)
+	at com.stratio.ingestion.sink.decision.StratioDecisionSink.configure(StratioDecisionSink.java:101)
+	at org.apache.flume.conf.Configurables.configure(Configurables.java:41)
+	at org.apache.flume.node.AbstractConfigurationProvider.loadSinks(AbstractConfigurationProvider.java:413)
+	at org.apache.flume.node.AbstractConfigurationProvider.getConfiguration(AbstractConfigurationProvider.java:98)
+	at org.apache.flume.node.PollingPropertiesFileConfigurationProvider$FileWatcherRunnable.run(PollingPropertiesFileConfigurationProvider.java:140)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+08 Mar 2016 10:06:42,691 DEBUG [conf-file-poller-0] (org.apache.curator.RetryLoop.takeException:185)  - Retry-able exception received
+org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+	at org.apache.curator.ConnectionState.checkTimeouts(ConnectionState.java:198)
+	at org.apache.curator.ConnectionState.getZooKeeper(ConnectionState.java:88)
+	at org.apache.curator.CuratorZookeeperClient.getZooKeeper(CuratorZookeeperClient.java:115)
+	at org.apache.curator.framework.imps.CuratorFrameworkImpl.getZooKeeper(CuratorFrameworkImpl.java:474)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl$2.call(ExistsBuilderImpl.java:172)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl$2.call(ExistsBuilderImpl.java:161)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.pathInForeground(ExistsBuilderImpl.java:157)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:148)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:36)
+	at com.stratio.decision.api.zookeeper.ZookeeperConsumer.checkZNode(ZookeeperConsumer.scala:56)
+	at com.stratio.decision.api.zookeeper.ZookeeperConsumer.zNodeExists(ZookeeperConsumer.scala:49)
+	at com.stratio.decision.api.StratioStreamingAPI.checkEphemeralNode(StratioStreamingAPI.scala:397)
+	at com.stratio.decision.api.StratioStreamingAPI.init(StratioStreamingAPI.scala:287)
+	at com.stratio.ingestion.sink.decision.StratioDecisionSink.configure(StratioDecisionSink.java:101)
+	at org.apache.flume.conf.Configurables.configure(Configurables.java:41)
+	at org.apache.flume.node.AbstractConfigurationProvider.loadSinks(AbstractConfigurationProvider.java:413)
+	at org.apache.flume.node.AbstractConfigurationProvider.getConfiguration(AbstractConfigurationProvider.java:98)
+	at org.apache.flume.node.PollingPropertiesFileConfigurationProvider$FileWatcherRunnable.run(PollingPropertiesFileConfigurationProvider.java:140)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+08 Mar 2016 10:06:42,691 DEBUG [conf-file-poller-0] (org.apache.curator.RetryLoop.takeException:202)  - Retry policy not allowing retry
+08 Mar 2016 10:06:42,695 ERROR [conf-file-poller-0] (org.apache.flume.node.AbstractConfigurationProvider.loadSinks:427)  - Sink catSink has been removed due to an error during configuration
+com.stratio.ingestion.sink.decision.StratioDecisionSinkException: com.stratio.decision.commons.exceptions.StratioEngineConnectionException: Unable to connect to Stratio Decision. KeeperErrorCode = ConnectionLoss
+	at com.stratio.ingestion.sink.decision.StratioDecisionSink.configure(StratioDecisionSink.java:103)
+	at org.apache.flume.conf.Configurables.configure(Configurables.java:41)
+	at org.apache.flume.node.AbstractConfigurationProvider.loadSinks(AbstractConfigurationProvider.java:413)
+	at org.apache.flume.node.AbstractConfigurationProvider.getConfiguration(AbstractConfigurationProvider.java:98)
+	at org.apache.flume.node.PollingPropertiesFileConfigurationProvider$FileWatcherRunnable.run(PollingPropertiesFileConfigurationProvider.java:140)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: com.stratio.decision.commons.exceptions.StratioEngineConnectionException: Unable to connect to Stratio Decision. KeeperErrorCode = ConnectionLoss
+	at com.stratio.decision.api.StratioStreamingAPI.init(StratioStreamingAPI.scala:293)
+	at com.stratio.ingestion.sink.decision.StratioDecisionSink.configure(StratioDecisionSink.java:101)
+	... 11 more
+08 Mar 2016 10:06:42,696 INFO  [conf-file-poller-0] (org.apache.flume.sink.DefaultSinkFactory.create:42)  - Creating instance of sink: madSink, type: com.stratio.ingestion.sink.decision.StratioDecisionSink
+08 Mar 2016 10:06:42,696 DEBUG [conf-file-poller-0] (org.apache.flume.sink.DefaultSinkFactory.getClass:63)  - Sink type com.stratio.ingestion.sink.decision.StratioDecisionSink is a custom type
+08 Mar 2016 10:06:42,696 INFO  [conf-file-poller-0] (com.stratio.ingestion.sink.decision.StratioDecisionSink.configure:86)  - Configuring Stratio Decision Sink: {zookeeper= localhost:2181, kafka= localhost:9092, topic= madrid, batchSize= 20, sinkCounter= SINK:madSink{sink.batch.underflow=0, sink.connection.failed.count=0, sink.connection.closed.count=0, sink.event.drain.attempt=0, sink.batch.complete=0, sink.event.drain.sucess=0, sink.connection.creation.count=0, sink.batch.empty=0}}
+08 Mar 2016 10:06:42,701 INFO  [conf-file-poller-0] (com.stratio.decision.api.StratioStreamingAPI.init:286)  - Establishing connection with the engine...
+08 Mar 2016 10:06:42,701 INFO  [conf-file-poller-0] (org.apache.curator.framework.imps.CuratorFrameworkImpl.start:230)  - Starting
+08 Mar 2016 10:06:42,702 DEBUG [conf-file-poller-0] (org.apache.curator.CuratorZookeeperClient.start:181)  - Starting
+08 Mar 2016 10:06:42,702 DEBUG [conf-file-poller-0] (org.apache.curator.ConnectionState.start:101)  - Starting
+08 Mar 2016 10:06:42,702 DEBUG [conf-file-poller-0] (org.apache.curator.ConnectionState.reset:212)  - reset
+08 Mar 2016 10:06:42,702 INFO  [conf-file-poller-0] (org.apache.zookeeper.ZooKeeper.<init>:438)  - Initiating client connection, connectString=localhost:2181 sessionTimeout=60000 watcher=org.apache.curator.ConnectionState@7ed9f342
+08 Mar 2016 10:06:42,703 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:42,703 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:42,703 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:42,704 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:42,736 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:43,069 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:43,070 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:43,071 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:43,071 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:43,237 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:43,738 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:43,804 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:43,805 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:43,805 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:43,805 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:44,172 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:44,173 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:44,174 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:44,174 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:44,238 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:44,739 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:44,906 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:44,906 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:44,906 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:44,907 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:45,239 DEBUG [agent-shutdown-hook] (org.apache.flume.node.PollingPropertiesFileConfigurationProvider.stop:88)  - Waiting for file watcher to terminate
+08 Mar 2016 10:06:45,274 INFO  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.logStartConnect:975)  - Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+08 Mar 2016 10:06:45,275 WARN  [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxn$SendThread.run:1102)  - Session 0x0 for server null, unexpected error, closing socket connection and attempting reconnect
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:361)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1081)
+08 Mar 2016 10:06:45,275 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:203)  - Ignoring exception during shutdown input
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownInput(SocketChannelImpl.java:780)
+	at sun.nio.ch.SocketAdaptor.shutdownInput(SocketAdaptor.java:399)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:200)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
+08 Mar 2016 10:06:45,275 DEBUG [conf-file-poller-0-SendThread(localhost:2181)] (org.apache.zookeeper.ClientCnxnSocketNIO.cleanup:210)  - Ignoring exception during shutdown output
+java.nio.channels.ClosedChannelException
+	at sun.nio.ch.SocketChannelImpl.shutdownOutput(SocketChannelImpl.java:797)
+	at sun.nio.ch.SocketAdaptor.shutdownOutput(SocketAdaptor.java:407)
+	at org.apache.zookeeper.ClientCnxnSocketNIO.cleanup(ClientCnxnSocketNIO.java:207)
+	at org.apache.zookeeper.ClientCnxn$SendThread.cleanup(ClientCnxn.java:1185)
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1110)
