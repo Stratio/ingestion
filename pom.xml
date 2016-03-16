@@ -339,6 +339,7 @@
                 <module>stratio-sinks</module>
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
+                <module>stratio-interceptors</module>
                 <module>stratio-ingestion-dist</module>
 <!--
                 <module>doc</module>

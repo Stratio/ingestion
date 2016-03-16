@@ -1,10 +1,12 @@
-
-
-Stratio JsonPath Deserializer
+Stratio Json Interceptor
 ==============================
 
-Deserializer that take Json files, apply an JPath expression to it and emit events according the NodeList result of 
-this.
+Interceptor that looking a header or body content of Events, parse a JSON content and applying a JsonPath 
+expression, generate multiple events (once by element found after apply the JsonPath query) setting the 
+sub-element values as headers.
+
+Use as JsonPath expression reference the following documentation:
+https://github.com/jayway/JsonPath
 
 Sample Flume config
 =================================
@@ -21,11 +23,13 @@ Sample Flume config
 	agent.sources.spoolSource.type=spooldir
 	agent.sources.spoolSource.spoolDir=/home/stratio/spool/
 	agent.sources.spoolSource.batchSize=100
-	agent.sources.spoolSource.deserializer=com.stratio.ingestion.deserializer.jsonpath.JsonpathDeserializer$Builder
-	agent.sources.spoolSource.deserializer.expression=$.bookstore.books[*]
-	agent.sources.spoolSource.deserializer.outputBody=true
-	agent.sources.spoolSource.deserializer.rootElementsExpression=$.bookstore
-	
+	          
+    agent.sources.avroSource.interceptors = jsonInterceptor	          
+	agent.sources.spoolSource.interceptors.jsonInterceptor.type = com.stratio.ingestion.interceptor.json.JsonInterceptor$Builder
+    agent.sources.spoolSource.interceptors.jsonInterceptor.jsonHeader=books
+    agent.sources.spoolSource.interceptors.jsonInterceptor.expression=$.bookstore.books[*]
+    agent.sources.spoolSource.interceptors.jsonInterceptor.overwriteBody=true
+    
 	# Describe the sink
 	agent.sinks.logSink.type = logger
 
@@ -37,7 +41,7 @@ Sample Flume config
 	agent.sinks.logSink.channel = c1
 ``` 
 
-Using this configuration, and reading a JSON file with this format:
+Using this configuration, and reading a JSON string from a header or body with this format:
 ```
 {
   "bookstore": {
@@ -64,21 +68,19 @@ Using this configuration, and reading a JSON file with this format:
 We will generate from one event two events with the following format:
 ```
 Event #1 - Headers:
-  "numberOfTitles": 159,
-  "city": "Barcelona",
   "title":"Everyday Italian",
   "author": "Giada De Laurentiis",
   "year": "2005",
   "price": "30.00"
 
 Event #2 - Headers:
-  "numberOfTitles": 159,
-  "city": "Barcelona",
   "title":"Harry Potter",
   "author": "J K. Rowling",
   "year": "2005",
   "price": "29.99"
 
 ```
+
+If the Event had headers previously those headers will be mantained.
 
 *You can find an example of bookstore json in src/test/resources/ folder*
