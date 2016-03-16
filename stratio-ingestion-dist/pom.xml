@@ -171,6 +171,11 @@
             <artifactId>stratio-xmlxpath-deserializer</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-jsonpath-interceptor</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- Dependency needed in HDFS sink -->
         <dependency>

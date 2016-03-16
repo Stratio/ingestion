@@ -38,18 +38,15 @@ import com.jayway.jsonpath.JsonPath;
 
 //@formatter:off
 /**
-* <p>JsonPath Deserializer. Read InputStream as Json compile a JsonPathExpression and create event for each element
-* result of apply that expression to the json in headers. Maintain whole json in body.</p>.
+* <p>JsonPath Interceptor. Read headers or body event as Json and compile a JsonPathExpression to create one
+ * event for each element result of apply that expression to the json in headers or body.
+ * Maintain whole json in body is optional.</p>.
 * <ul>
-* <li><em>outputField</em>: Output Field in header where put events. Default: element.</li>
+* <li><em>jsonHeader</em>: Header used to read the JSON content. Optinal, if not specified we will use the body.</li>
 * <li><em>expression</em>: Jsonpath expression. </li>
-* <li><em>rootElements</em>: Add to elements to root elements. This create a plain list of headers with a JSON. Default: empty
+* <li><em>overwriteBody</em>: Overwrite event body with a json representation of headers
+ * Default: empty
 * </ul>
-* 
-* <p>A special option is the chance to evaluate xpath expression for each event and add result in a header. For example:</p>
-* <code>
-* <li>headers.author= <JsonPathExpression> will put result of expression in author field of header.</li>
-* </code>
 */
 //@formatter:on
 public class JsonInterceptor implements Interceptor {

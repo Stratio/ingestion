@@ -29,7 +29,7 @@
     <artifactId>stratio-interceptors</artifactId>
     <packaging>pom</packaging>
     <modules>
-    <module>stratio-jsonpath-interceptor</module>
+        <module>stratio-jsonpath-interceptor</module>
     </modules>
     <dependencies>
         <dependency>
