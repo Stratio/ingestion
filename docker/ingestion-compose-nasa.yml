@@ -64,11 +64,16 @@ waitelastic:
 ingestion:
   image: qa.stratio.com:5000/stratio/ingestion:latest
   container_name: ingestion
+  ports:
+    - "34545:34545"
   links:
+    - zookeeper
+    - kafka
+    - waitkafka
     - elasticsearch
     - waitelastic
-    - waitcassandra  
-    - cassandra-lucene-index 
+    - cassandra-lucene-index
+    - waitcassandra
 
 decision:
   image: qa.stratio.com:5000/stratio/decision:latest
@@ -79,9 +84,8 @@ decision:
     - waitkafka
     - elasticsearch
     - waitelastic
-    - waitcassandra  
-    - cassandra-lucene-index 
-    - ingestion
+    - cassandra-lucene-index
+    - waitcassandra
   environment:
     KAFKA_HOSTS: kafka:9092
     ZOOKEEPER_HOSTS: zookeeper:2181

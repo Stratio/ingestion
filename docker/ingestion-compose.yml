@@ -47,6 +47,8 @@ waitelastic:
 ingestion:
   image: qa.stratio.com:5000/stratio/ingestion:latest
   container_name: ingestion
+  ports:
+    - "34545:34545"
   links:
     - cassandra-lucene-index
     - waitcassandra
