@@ -50,7 +50,7 @@
         <decision.api.version>0.10.0</decision.api.version>
         <junit.version>4.11</junit.version>
         <mockito.version>1.10.8</mockito.version>
-        <jackson.databind.version>2.4.4</jackson.databind.version>
+        <jackson.databind.version>2.6.3</jackson.databind.version>
         <datastax.version>2.1.9</datastax.version>
         <mongodb.version>2.13.2</mongodb.version>
         <tika.version>1.5</tika.version>
@@ -339,6 +339,7 @@
                 <module>stratio-sinks</module>
                 <module>stratio-serializers</module>
                 <module>stratio-deserializers</module>
+                <module>stratio-interceptors</module>
                 <module>stratio-ingestion-dist</module>
 <!--
                 <module>doc</module>
