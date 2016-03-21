@@ -19,6 +19,9 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 /**
  * Helper functions for Cassandra integration testing.
  */
@@ -35,13 +38,18 @@ public abstract class CassandraTestHelper {
    * @return @{link java.net.InetSocketAddress} for a Cassandra cluster.
    */
   public static InetSocketAddress getCassandraContactPoint() {
-    String cassandraIp = System.getProperty("cassandra.hosts.0").split(":")[0];
+    Config conf= ConfigFactory.load();
+    //String cassandraIp = System.getProperty("cassandra.hosts.0").split(":")[0];
+    String cassandraHost= conf.getStringList("cassandra.hosts").get(0);
+    String cassandraIp= cassandraHost.split(":")[0];
+
+
     if (cassandraIp == null) {
       cassandraIp = "127.0.0.1";
     }
     String cassandraPort = "9042";
-    if(System.getProperty("cassandra.hosts.0").length() > 1) {
-      cassandraPort = System.getProperty("cassandra.hosts.0").split(":")[1];
+    if(cassandraHost.length() > 1) {
+      cassandraPort = cassandraHost.split(":")[1];
 //      if (cassandraPort == null) {
 //        cassandraPort = "9042";
 //      }
