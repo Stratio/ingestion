@@ -19,15 +19,14 @@ The full agent1 configuration is the following (see flume-agent1.properties):
   - Avro
 
 * Channels:
-  - 6 memory channels for avro, cassandra, elastic, file, hdfs and stratio decision
+  - 4 memory channels for avro, cassandra, stratio decision, logger
 
 * Sinks:
   - Cassandra sink (developed by Stratio: https://github.com/Stratio/Ingestion/tree/master/stratio-sinks/stratio-cassandra-sink, see also the definition_access_log.json attached)
   - Avro sink
-  - Elastic sink
   - File roll sink
-  - HDFS sink
   - Stratio sink (developed by Stratio: https://github.com/Stratio/Ingestion/tree/master/stratio-sinks/stratio-decision-sink)
+  - Logger sink
 
   
 The full agent2 configuration is the following (see flume-agent2.properties):
@@ -36,12 +35,13 @@ The full agent2 configuration is the following (see flume-agent2.properties):
   - Avro
 
 * Channels:
-  - 2 memory channels for cassandra and stratio streaming
+  - 3 memory channels for cassandra, stratio decision and logger
 
 * Sinks:
-  - Cassandra sink (developed by Stratio: https://github.com/Stratio/flume-ng-cassandra-sink, see also the definition_access_log.json attached)  
-  - Stratio sink (developed by Stratio: https://github
+  - Cassandra sink (developed by Stratio: https://github.com/Stratio/Ingestion/tree/master/stratio-sinks/stratio-cassandra-sink , see also the definition_access_log.json attached)  
+  - Stratio Decision sink (developed by Stratio: https://github
   .com/Stratio/Ingestion/tree/master/stratio-sinks/stratio-decision-sink)
+  - Logger Sink
 
   
 
@@ -57,6 +57,7 @@ Running the example
 To run the agents just type:
 
 ```
+ bin/run_flume-2.sh
  bin/run_flume.sh
 ```
 

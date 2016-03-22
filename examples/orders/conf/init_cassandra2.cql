@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS lines (
   product text,
   family text,
   price double,
-  quantitiy int,
+  quantity int,
   lucene text,
   PRIMARY KEY (line_id));
 
@@ -51,7 +51,7 @@ USING 'com.stratio.cassandra.lucene.Index' WITH OPTIONS = {
    product:{type:"string"},
    family:{type:"string"},
    price:{type:"double"},
-   quantitiy:{type:"integer"}
+   quantity:{type:"integer"}
   }
 }'};
 
