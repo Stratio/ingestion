@@ -39,6 +39,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.stratio.decision</groupId>
+			<artifactId>commons</artifactId>
+			<version>${decision.api.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
