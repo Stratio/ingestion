@@ -40,6 +40,7 @@ import org.junit.runners.JUnit4;
 public class JsonInterceptorTest {
 
     private static final String JSON_FILE= "books.json";
+    private static final String JSON_FILE_ORDERS= "orders.json";
 
     private static final String TITLE="Everyday Italian";
     private static final String YEAR= "2005";
@@ -63,6 +64,40 @@ public class JsonInterceptorTest {
 
     private String getTestInputStream(final String path) throws Exception {
         return readFile("src/test/resources/" + path);
+    }
+
+    @Test
+    public void testReadOrders() throws Exception {
+        Context context = new Context();
+        context.put("jsonHeader", "");
+        context.put("expression", "$.lines[*]");
+        context.put("overwriteBody", "true");
+
+        JsonInterceptor.Builder builder= new JsonInterceptor.Builder();
+        builder.configure(context);
+        JsonInterceptor interceptor= (JsonInterceptor) builder.build();
+
+        HashMap<String, String> orderHeaders= new HashMap<>();
+        orderHeaders.put("timestamp", "2016-03-17 17:51:25");
+        orderHeaders.put("payment_method", "cash");
+        orderHeaders.put("credit_card", "4079962470600654");
+        orderHeaders.put("shopping_center", "Valencia");
+        orderHeaders.put("employee", "57");
+
+        List<Event> inputEvents= new ArrayList<>();
+        Event testEvent1= EventBuilder.withBody(getTestInputStream(JSON_FILE_ORDERS),
+                StandardCharsets.UTF_8, orderHeaders);
+        inputEvents.add(testEvent1);
+
+        List<Event> events= interceptor.intercept(inputEvents);
+        assertEquals("Number of expected elements in JSON file", 4, events.size());
+        assertEquals("Number of expected elements in Event", 9, events.get(0).getHeaders().size());
+        assertEquals("cash", events.get(0).getHeaders().get("payment_method"));
+        assertEquals("Valencia", events.get(0).getHeaders().get("shopping_center"));
+        assertEquals("electronic", events.get(0).getHeaders().get("family"));
+        //assertEquals(NUMBER_OF_TITLES, events.get(0).getHeaders().get("numberOfTitles"));
+        assertTrue(new String(events.get(0).getBody()).contains("electronic"));
+
     }
 
     @Test

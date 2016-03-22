@@ -1,0 +1,33 @@
+{
+  "order_id": "47b5abec-6793-4b87-abfb-c3942ff7022b",
+  "timestamp": "2016-03-17 17:51:25",
+  "client_id": 736,
+  "latitude": 33.5533,
+  "longitude": -7.66139,
+  "payment_method": "cash",
+  "credit_card": "4079962470600654",
+  "shopping_center": "Valencia",
+  "employee": 57,
+  "total_amount": 337.6,
+  "lines": [{
+    "product": "usb stick",
+    "family": "electronic",
+    "quantity": 4,
+    "price": 15.0
+  }, {
+    "product": "olives",
+    "family": "feeding",
+    "quantity": 27,
+    "price": 1.6
+  }, {
+    "product": "strips",
+    "family": "drugs",
+    "quantity": 24,
+    "price": 8.5
+  }, {
+    "product": "olives",
+    "family": "feeding",
+    "quantity": 19,
+    "price": 1.6
+  }]
+}

@@ -121,7 +121,7 @@ public class JsonInterceptor implements Interceptor {
                 }
 
                 if (overwriteBody) {
-                    body = createJsonFromHeaders(headers);
+                    body = createJsonFromHeaders(copyOfHeaders);
                     LOGGER.debug("#Body Events: " + body);
                 }
                 events.add(EventBuilder.withBody(body, StandardCharsets.UTF_8, copyOfHeaders));
