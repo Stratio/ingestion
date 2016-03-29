@@ -34,8 +34,10 @@ chown -R ${USER}:${GROUP} $DIR_INSTALL
 chmod -R 775 $DIR_INSTALL
 
 if [ ! -d "$DIR_CONF" ]; then
-mkdir $DIR_CONF
+mkdir -p $DIR_CONF
 fi
+
+cp -rf $DIR_INSTALL/conf/* $DIR_CONF/
 chown -R ${USER}:${GROUP} $DIR_CONF
 
 if [ ! -d "$DIR_RUN" ]; then

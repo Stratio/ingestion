@@ -270,7 +270,7 @@
                                     </attributes>
                                 </mkdirs>
                                 <mkdirs>
-                                    <path>/etc/sds/ingestion</path>
+                                    <path>/var/sds/ingestion</path>
                                     <attributes>
                                         <user>ingestion</user>
                                         <group>stratio</group>
