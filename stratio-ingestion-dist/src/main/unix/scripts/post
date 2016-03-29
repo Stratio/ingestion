@@ -33,10 +33,11 @@ chmod 775 $DIR_LOG
 chown -R ${USER}:${GROUP} $DIR_INSTALL
 chmod -R 775 $DIR_INSTALL
 
-rm -f $DIR_CONF && ln -sf $DIR_INSTALL/conf $DIR_CONF
-#if [ ! -d "$DIR_CONF" ]; then
-#mkdir $DIR_CONF
-#fi
+if [ ! -d "$DIR_CONF" ]; then
+mkdir -p $DIR_CONF
+fi
+
+cp -rf $DIR_INSTALL/conf/* $DIR_CONF/
 chown -R ${USER}:${GROUP} $DIR_CONF
 
 if [ ! -d "$DIR_RUN" ]; then
