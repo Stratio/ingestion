@@ -40,7 +40,7 @@ case "$1" in
     #chown root:root /etc/init.d/ingestion
     #chmod 755 /etc/init.d/ingestion
 
-    #ln -sf $DIR_INSTALL/conf $DIR_CONF
+    rm -f $DIR_CONF && ln -sf $DIR_INSTALL/conf $DIR_CONF
 
     if [ ! -d "$DIR_RUN" ]; then
     mkdir $DIR_RUN
