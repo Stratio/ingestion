@@ -269,13 +269,13 @@
                                         <group>stratio</group>
                                     </attributes>
                                 </mkdirs>
-<!--                                <mkdirs>
-                                    <path>/etc/sds/ingestion</path>
+                                <mkdirs>
+                                    <path>/var/sds/ingestion</path>
                                     <attributes>
                                         <user>ingestion</user>
                                         <group>stratio</group>
                                     </attributes>
-                                </mkdirs>-->
+                                </mkdirs>
                                 <copyDirectory>
                                     <from>
                                         target/stratio-ingestion-${project.version}-bin/stratio-ingestion-${project.version}
