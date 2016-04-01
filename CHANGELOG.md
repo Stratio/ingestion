@@ -4,6 +4,7 @@ Only listing significant user-visible, not internal code cleanups and minor bug 
 
 ## 0.6.0 (March 2016)
 * Modified Decision Sink to add sharding support
+* Decision 1.0.1 integration
 * Added different Ingestion examples
 * Added support scripts to run agents as services
 * Cassandra driver updated to v2.1.9
