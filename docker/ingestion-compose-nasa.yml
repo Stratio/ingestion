@@ -2,7 +2,7 @@
 # curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 # chmod +x /usr/local/bin/docker-compose
 zookeeper:
-  image: qa.stratio.com:5000/stratio/zookeeper:3.4.6
+  image: stratio/zookeeper:3.4.6
   container_name: zookeeper
   ports:
     - "2181:2181"
@@ -14,7 +14,7 @@ waitzk:
     - zookeeper
 
 kafka:
-  image: qa.stratio.com:5000/kafka:0.8.1.1
+  image: stratio/kafka:0.8.1.1
   container_name: kafka
   ports:
     - "9092:9092"
@@ -31,7 +31,7 @@ waitkafka:
     - kafka
 
 cassandra-lucene-index:
-  image: qa.stratio.com:5000/stratio/cassandra-lucene-index:2.2.4.0
+  image: stratio/cassandra-lucene-index:2.2.5.2
   container_name: cassandra
   ports: 
     - "9042:9042"
@@ -48,7 +48,7 @@ waitcassandra:
     - cassandra-lucene-index
 
 elasticsearch:
-  image: qa.stratio.com:5000/stratio/elasticsearch:1.7.1
+  image: stratio/elasticsearch:1.7.1
   container_name: elasticsearch
   ports: 
     - "9300:9300"
@@ -62,12 +62,13 @@ waitelastic:
 
 
 ingestion:
-  image: qa.stratio.com:5000/stratio/ingestion:latest
+  image: stratio/ingestion:latest
   container_name: ingestion
   ports:
     - "34545:34545"
   links:
     - zookeeper
+    - waitzk
     - kafka
     - waitkafka
     - elasticsearch
@@ -76,16 +77,18 @@ ingestion:
     - waitcassandra
 
 decision:
-  image: qa.stratio.com:5000/stratio/decision:latest
+  image: stratio/decision:latest
   container_name: decision
   links:
     - zookeeper
+    - waitzk
     - kafka
     - waitkafka
     - elasticsearch
     - waitelastic
     - cassandra-lucene-index
     - waitcassandra
+    - ingestion
   environment:
     KAFKA_HOSTS: kafka:9092
     ZOOKEEPER_HOSTS: zookeeper:2181
@@ -95,7 +98,7 @@ decision:
     FAILOVER_ENABLED: "true"
 
 decision-shell:
-  image: qa.stratio.com:5000/stratio/decision-shell:latest
+  image: decision-shell:latest
   container_name: shell
   links:
     - zookeeper
