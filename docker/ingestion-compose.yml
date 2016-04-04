@@ -3,7 +3,7 @@
 # chmod +x /usr/local/bin/docker-compose
 
 cassandra-lucene-index:
-  image: qa.stratio.com:5000/stratio/cassandra-lucene-index:2.2.4.0
+  image: stratio/cassandra-lucene-index:2.2.5.2
   container_name: cassandra
   ports: 
     - "9042:9042"
@@ -20,7 +20,7 @@ waitcassandra:
     - cassandra-lucene-index
 
 mongo:
-  image: qa.stratio.com:5000/stratio/mongo:3.0.4
+  image: stratio/mongo:3.0.4
   container_name: mongo
   ports: 
     - "27017:27017"
@@ -32,7 +32,7 @@ waitmongo:
     - mongo
 
 elasticsearch:
-  image: qa.stratio.com:5000/stratio/elasticsearch:1.7.1
+  image: stratio/elasticsearch:1.7.1
   container_name: elasticsearch
   ports: 
     - "9300:9300"
@@ -45,7 +45,7 @@ waitelastic:
     - elasticsearch
 
 ingestion:
-  image: qa.stratio.com:5000/stratio/ingestion:latest
+  image: stratio/ingestion:latest
   container_name: ingestion
   ports:
     - "34545:34545"
