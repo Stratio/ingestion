@@ -50,6 +50,7 @@ chmod 0755 $DIR_INSTALL/bin/*
 chmod 0755 $DIR_INSTALL/examples/*/bin/*
 chmod +x /etc/default/ingestion*
 
+chmod 644 /etc/default/ingestion-*
 
 #/sbin/chkconfig --add ingestion
 
