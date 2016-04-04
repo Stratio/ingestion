@@ -64,6 +64,7 @@ case "$1" in
     chmod 0755 $DIR_INSTALL/bin/*
     chmod 0755 $DIR_INSTALL/examples/*/bin/*
 
+    chmod 644 /etc/default/ingestion-*
     #update-rc.d ingestion defaults
 
   ;;
