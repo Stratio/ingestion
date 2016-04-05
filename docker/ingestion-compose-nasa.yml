@@ -98,7 +98,7 @@ decision:
     FAILOVER_ENABLED: "true"
 
 decision-shell:
-  image: decision-shell:latest
+  image: stratio/decision-shell:latest
   container_name: shell
   links:
     - zookeeper
