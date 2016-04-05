@@ -1,19 +1,20 @@
-FLUME-INGESTION
-===================
+Stratio Ingestion
+=================
+
+Contents
+--------
+
+* Introduction
+* Stratio Ingestion components
+* Details about Stratio Ingestion
+* Compile & Package
+* FAQ
 
 
-[![Build Status](https://github.com/Stratio/Ingestion)](https://github.com/Stratio/Ingestion)
+Introduction
+------------
 
-
-Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
-
-**Several bug fixes**
-
- - Some of them really important, such as unicode support
-
-**Several enhancements of Flume's sources & sinks**
-
- - ElasticSearch mapper, for example
+Stratio Ingestion started as a fork of Apache Flume (1.6), where you can find:
 
 **Custom sources and sinks, developed by Stratio**
 
@@ -23,12 +24,19 @@ Flume Ingestion started as a fork of Apache Flume (1.6), where you can find:
  - Stratio Decision (Complex Event Processing engine)
  - REST client, Flume agents stats
  
- You can find more documentation about us [here](https://stratio.atlassian.net/wiki/)
+**Several bug fixes**
+
+ - Some of them really important, such as unicode support
+
+**Several enhancements of Flume's sources & sinks**
+
+ - ElasticSearch mapper, for example
+
+You can find more documentation about us [here](https://stratio.atlassian.net/wiki/display/PLATFORM/STRATIO+INGESTION)
 
 
-Flume Ingestion components
+Stratio Ingestion components
 ----------------------------
-
 
 * Data transporter and collector: [Apache Flume](http://flume.apache.org/)
 * Data extractor and transformer: [Morphlines](http://kitesdk.org/docs/current/kite-morphlines/index.html)
@@ -45,9 +53,12 @@ Flume Ingestion components
     - Kafka   com.stratio.ingestion.sink.kafka.KafkaSink
     - Druid   com.stratio.ingestion.sink.druid.DruidSink
 
+Details about Stratio Ingestion
+-------------------------------
 
-What is Apache Flume?
---------------------------
+Stratio Ingestion is based on Apache Flume so the first question is:
+
+**What is Apache Flume?**
 
 Apache Flume is a distributed, reliable, and available system for efficiently collecting, aggregating and moving large amounts of log data from many different sources to a centralized data store.
 
@@ -55,22 +66,8 @@ Its use is not only designed for logs, in fact you can find a myriad of sources,
 
 In addition, a sink could be a big data storage but also another real-time system (Apache Kafka, Spark Streaming).
 
-Compile & Package
---------------------------
 
-```
-$ git submodule init
-$ git submodule update
-$ mvn install
-$ cd stratio-ingestion-dist
-$ mvn clean compile package -Ppackage
-```
-
-Distribution will be available at stratio-ingestion-dist/target/stratio-ingestion-0.6.0-SNAPSHOT-bin.tar.gz
-
-
-Interesting facts about Flume-Ingestion
------------------------------------------------
+**Interesting facts about Stratio Ingestion**
 
  * Flume Ingestion is Apache Flume "on steroids" :)
  
@@ -78,11 +75,23 @@ Interesting facts about Flume-Ingestion
  
  * Stratio ingestion is fully open source and we work very close to the Flume community.
 
-Flume Ingestion FAQ
--------------------------
+
+Compile & Package
+-----------------
+
+```
+$ mvn clean compile package -Ppackage
+```
+
+Distribution will be available at stratio-ingestion-dist/target/ folder. You will find .deb, .rpm and .tar.gz packages ready to use depending your environment.
+If you take a look at [documentation](https://stratio.atlassian.net/wiki/display/PLATFORM/STRATIO+INGESTION) you will find more details about how to install the product, and some useful examples to get a better understanding about Stratio Ingestion. 
 
 
-**Can I use Flume Ingestion for aggregating data (time-based rollups, for example)?**
+FAQ
+---
+
+
+**Can I use Stratio Ingestion for aggregating data (time-based rollups, for example)?**
 
 *This is not a good idea from our experience, but you can use [Stratio Sparkta](https://github.com/Stratio/Sparkta) for real-time aggregation.
 
@@ -94,6 +103,11 @@ Flume Ingestion FAQ
 **Can I send data to decision-cep-engine?**
 
 *Of course, we have developed a sink in order to send events from Flume to an existing stream in our CEP engine.  The sink will create the stream if it does not exist in the engine.* 
+
+**Where can I find more details about Stratio Ingestion?**
+
+*You can take a look at our Documentation on [Confluence](https://stratio.atlassian.net/wiki/display/PLATFORM/STRATIO+INGESTION)
+
 
 Changelog
 ---------
