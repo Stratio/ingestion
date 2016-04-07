@@ -40,17 +40,24 @@ fi
 cp -rf $DIR_INSTALL/conf/* $DIR_CONF/
 chown -R ${USER}:${GROUP} $DIR_CONF
 
+chmod 0644 $DIR_CONF
+
 if [ ! -d "$DIR_RUN" ]; then
 mkdir $DIR_RUN
 fi
 chown -R ${USER}:${GROUP} $DIR_RUN
 chmod 0775 $DIR_RUN
 
+find $DIR_INSTALL -maxdepth 1 -type f -exec chmod 644 {} \;
+find $DIR_INSTALL -maxdepth 1 -type d -exec chmod 755 {} \;
+
+chmod 0755 $DIR_INSTALL/bin
 chmod 0755 $DIR_INSTALL/bin/*
 chmod 0755 $DIR_INSTALL/examples/*/bin/*
 chmod +x /etc/default/ingestion*
 
 chmod 644 /etc/default/ingestion-*
+
 
 #/sbin/chkconfig --add ingestion
 
