@@ -2,6 +2,9 @@
 
 Only listing significant user-visible, not internal code cleanups and minor bug fixes.
 
+## 0.6.1 (April 2016)
+* Bugfixing
+
 ## 0.6.0 (March 2016)
 * Modified Decision Sink to add sharding support
 * Decision 1.0.1 integration

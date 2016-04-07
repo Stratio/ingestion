@@ -51,6 +51,7 @@ case "$1" in
     mkdir $DIR_RUN
     fi
 
+    chmod 0644 $DIR_CONF
     chmod 0775 $DIR_RUN
     chown -R ${USER}:${GROUP} $DIR_CONF
     chown -R ${USER}:${GROUP} $DIR_LOG
@@ -61,8 +62,13 @@ case "$1" in
 
     chown -R ${USER}:${GROUP} $DIR_INSTALL
 
+    find $DIR_INSTALL -maxdepth 1 -type f -exec chmod 644 {} \;
+    find $DIR_INSTALL -maxdepth 1 -type d -exec chmod 755 {} \;
+
     chmod 0755 $DIR_INSTALL/bin/*
     chmod 0755 $DIR_INSTALL/examples/*/bin/*
+
+    chmod 644 /etc/default/ingestion-*
 
     #update-rc.d ingestion defaults
 

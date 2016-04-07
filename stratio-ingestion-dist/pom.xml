@@ -76,6 +76,12 @@
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-hdfs</artifactId>
             <version>${hadoop.version}</version>
+            <exclusions>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-all</artifactId>
+                    </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -239,6 +245,8 @@
                                 <dir>/var/run</dir>
                                 <dir>/var/log</dir>
                                 <dir>/opt</dir>
+                                <dir>/usr</dir>
+                                <dir>/bin</dir>
                             </excludeDirectoryAttributes>
 
                             <defaults>
@@ -256,10 +264,43 @@
 
                             <assembly>
                                 <mkdirs>
+                                    <path>/etc/sds</path>
+                                    <attributes>
+                                        <user>root</user>
+                                        <group>stratio</group>
+                                        <mode>0775</mode>
+                                    </attributes>
+                                </mkdirs>
+                                <mkdirs>
+                                    <path>/opt/sds</path>
+                                    <attributes>
+                                        <user>root</user>
+                                        <group>stratio</group>
+                                        <mode>0775</mode>
+                                    </attributes>
+                                </mkdirs>
+                                <mkdirs>
+                                    <path>/var/sds</path>
+                                    <attributes>
+                                        <user>root</user>
+                                        <group>stratio</group>
+                                        <mode>0775</mode>
+                                    </attributes>
+                                </mkdirs>
+                                <mkdirs>
+                                    <path>/var/log/sds</path>
+                                    <attributes>
+                                        <user>root</user>
+                                        <group>stratio</group>
+                                        <mode>0775</mode>
+                                    </attributes>
+                                </mkdirs>
+                                <mkdirs>
                                     <path>/var/log/sds/ingestion</path>
                                     <attributes>
                                         <user>ingestion</user>
                                         <group>stratio</group>
+                                        <mode>0755</mode>
                                     </attributes>
                                 </mkdirs>
                                 <mkdirs>
@@ -267,6 +308,7 @@
                                     <attributes>
                                         <user>ingestion</user>
                                         <group>stratio</group>
+                                        <mode>0755</mode>
                                     </attributes>
                                 </mkdirs>
                                 <mkdirs>
@@ -312,7 +354,6 @@
                                             <attributes>
                                                 <user>root</user>
                                                 <group>root</group>
-                                                <mode>755</mode>
                                             </attributes>
                                         </copyFile>
                                         <copyFile>
@@ -321,7 +362,7 @@
                                             <attributes>
                                                 <user>root</user>
                                                 <group>root</group>
-                                                <mode>755</mode>
+                                                <mode>644</mode>
                                             </attributes>
                                         </copyFile>
                                         <copyFile>
@@ -330,7 +371,7 @@
                                             <attributes>
                                                 <user>root</user>
                                                 <group>root</group>
-                                                <mode>755</mode>
+                                                <mode>644</mode>
                                             </attributes>
                                         </copyFile>
 
@@ -352,7 +393,6 @@
                                             <attributes>
                                                 <user>root</user>
                                                 <group>root</group>
-                                                <mode>755</mode>
                                             </attributes>
                                         </copyFile>
                                         <copyFile>
@@ -361,7 +401,7 @@
                                             <attributes>
                                                 <user>root</user>
                                                 <group>root</group>
-                                                <mode>755</mode>
+                                                <mode>644</mode>
                                             </attributes>
                                         </copyFile>
                                         <copyFile>
@@ -370,7 +410,7 @@
                                             <attributes>
                                                 <user>root</user>
                                                 <group>root</group>
-                                                <mode>755</mode>
+                                                <mode>644</mode>
                                             </attributes>
                                         </copyFile>
                                     </assembly>
