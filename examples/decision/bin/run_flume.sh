@@ -6,8 +6,8 @@ echo -e "Ingestion Home = $INGESTION_HOME"
 
 cd "$(dirname $0)/../"
 
-rm -rf data/spooldir/*
-rm -rf data/spooldir/.f*
+rm -rf data/spooldir/
+mkdir -p data/spooldir/
 cp -rf data/backup/* data/spooldir/
 
 exec "${INGESTION_HOME}/bin/flume-ng" agent --conf ./conf --conf-file ./conf/flume-conf.properties --name a -Dflume.monitoring.type=http -Dflume.monitoring.port=34545 -Xmx1024m
