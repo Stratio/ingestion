@@ -69,6 +69,14 @@
             <fileMode>0755</fileMode>
         </fileSet>
         <fileSet>
+            <directory>../tools/target/workflow-tools</directory>
+            <outputDirectory>/workflow-tools</outputDirectory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <fileMode>0755</fileMode>
+        </fileSet>
+        <fileSet>
             <directory>src/main/resources/bin</directory>
             <includes>
                 <include>**</include>
