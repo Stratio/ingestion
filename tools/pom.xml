@@ -110,7 +110,7 @@
                     <configurationDirectory>conf</configurationDirectory>
                     <copyConfigurationDirectory>true</copyConfigurationDirectory>
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
-                    <assembleDirectory>target/appassembler</assembleDirectory>
+                    <assembleDirectory>target/workflow-tools</assembleDirectory>
                     <extraJvmArguments>$TOOLS_OPTS -Xms256m -Xmx256m</extraJvmArguments>
                     <programs>
                         <program>
