@@ -33,6 +33,34 @@ case "$1" in
     usermod -G $GROUP $USER
     fi
 
+
+    if [ ! -d /etc/sds ]; then
+        mkdir /etc/sds
+        chown root:${GROUP} /etc/sds
+        chmod 775 /etc/sds
+    fi
+    if [ ! -d /var/log/sds ]; then
+        mkdir /var/log/sds
+        chown root:${GROUP} /var/log/sds
+        chmod 775 /var/log/sds
+    fi
+    if [ ! -d /var/run/sds ]; then
+        mkdir /var/run/sds
+        chown root:${GROUP} /var/run/sds
+        chmod 775 /var/run/sds
+    fi
+    if [ ! -d /opt/sds ]; then
+        mkdir /opt/sds
+        chown root:${GROUP} /opt/sds
+        chmod 775 /opt/sds
+    fi
+    if [ ! -d /var/sds ]; then
+        mkdir /var/sds
+        chown root:${GROUP} /var/sds
+        chmod 775 /var/sds
+    fi
+
+
     if [ ! -d "$DIR_LOG" ]; then
     mkdir $DIR_LOG
     fi
