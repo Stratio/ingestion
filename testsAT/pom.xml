@@ -27,7 +27,7 @@
 
     <groupId>com.stratio.ingestion</groupId>
     <artifactId>ingestion-test</artifactId>
-    <version>0.6.2</version>
+    <version>0.6.3-RC1-SNAPSHOT</version>
     <name>ingestion-test</name>
 
     <build>
