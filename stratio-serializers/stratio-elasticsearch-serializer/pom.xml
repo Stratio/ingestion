@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>com.stratio.ingestion</groupId>
 		<artifactId>stratio-serializers</artifactId>
-		<version>0.6.2-RC2-SNAPSHOT</version>
+		<version>0.6.2</version>
 	</parent>
 
 	<artifactId>stratio-elasticsearch-serializer</artifactId>
