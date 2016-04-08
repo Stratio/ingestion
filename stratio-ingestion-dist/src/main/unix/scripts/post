@@ -9,7 +9,6 @@ USER='ingestion'
 DIR_INSTALL='/opt/sds/ingestion'
 DIR_CONF='/etc/sds/ingestion'
 DIR_LOG='/var/log/sds/ingestion'
-DIR_RUN='/var/run/sds'
 
 # Add stratio group if it doesn't already exists
 if ! getent group $GROUP >/dev/null 2>&1; then
@@ -42,11 +41,6 @@ chown -R ${USER}:${GROUP} $DIR_CONF
 
 chmod 0644 $DIR_CONF
 
-if [ ! -d "$DIR_RUN" ]; then
-mkdir $DIR_RUN
-fi
-chown -R ${USER}:${GROUP} $DIR_RUN
-chmod 0775 $DIR_RUN
 
 find $DIR_INSTALL -maxdepth 1 -type f -exec chmod 644 {} \;
 find $DIR_INSTALL -maxdepth 1 -type d -exec chmod 755 {} \;
