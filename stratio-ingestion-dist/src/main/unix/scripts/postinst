@@ -10,7 +10,6 @@ DIR_INSTALL='/opt/sds/ingestion'
 DIR_CONF='/etc/sds/ingestion'
 DIR_LOG='/var/log/sds/ingestion'
 DIR_RUN='/var/run/sds'
-DIR_DATA='/var/sds/ingestion'
 
 
 chmod 755 /opt/sds/ingestion/bin
@@ -70,11 +69,10 @@ case "$1" in
     chmod 0644 $DIR_CONF
     chown -R ${USER}:${GROUP} $DIR_CONF
     chown -R ${USER}:${GROUP} $DIR_LOG
-    chown -R ${USER}:${GROUP} $DIR_DATA
-    chmod -R 775 $DIR_INSTALL
-    chmod 775 $DIR_LOG
-
     chown -R ${USER}:${GROUP} $DIR_INSTALL
+    chmod -R 775 $DIR_INSTALL
+    chmod 755 $DIR_LOG
+
 
     find $DIR_INSTALL -maxdepth 1 -type f -exec chmod 644 {} \;
     find $DIR_INSTALL -maxdepth 1 -type d -exec chmod 755 {} \;
