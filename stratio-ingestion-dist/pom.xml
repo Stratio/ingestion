@@ -253,7 +253,7 @@
                                 <directoryAttributes>
                                     <user>ingestion</user>
                                     <group>stratio</group>
-                                    <mode>0750</mode>
+                                    <mode>0755</mode>
                                 </directoryAttributes>
                                 <fileAttributes>
                                     <user>ingestion</user>
@@ -273,14 +273,6 @@
                                 </mkdirs>
                                 <mkdirs>
                                     <path>/opt/sds</path>
-                                    <attributes>
-                                        <user>root</user>
-                                        <group>stratio</group>
-                                        <mode>0775</mode>
-                                    </attributes>
-                                </mkdirs>
-                                <mkdirs>
-                                    <path>/var/sds</path>
                                     <attributes>
                                         <user>root</user>
                                         <group>stratio</group>
@@ -309,13 +301,6 @@
                                         <user>ingestion</user>
                                         <group>stratio</group>
                                         <mode>0755</mode>
-                                    </attributes>
-                                </mkdirs>
-                                <mkdirs>
-                                    <path>/var/sds/ingestion</path>
-                                    <attributes>
-                                        <user>ingestion</user>
-                                        <group>stratio</group>
                                     </attributes>
                                 </mkdirs>
                                 <copyDirectory>
