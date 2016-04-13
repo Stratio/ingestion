@@ -31,7 +31,7 @@ waitkafka:
     - kafka
 
 cassandra-lucene-index:
-  image: stratio/cassandra-lucene-index:2.2.5.2
+  image: stratio/cassandra-lucene-index:2.2.5.3
   container_name: cassandra
   ports: 
     - "9042:9042"
@@ -39,7 +39,6 @@ cassandra-lucene-index:
    CLUSTER_NAME: DemoCluster
    MAX_HEAP: 256M
    MAX_NEW: 64M
-   SEEDS: 127.0.0.1
 
 waitcassandra:
   image: aanand/wait
