@@ -53,11 +53,13 @@ public class StratioDecisionSink
     private static final String DEFAULT_ZOOKEEPER = "localhost:2181";
     private static final String DEFAULT_KAFKA = "localhost:9092";
     private static final String DEFAULT_TOPIC = "stratio_decision_data";
+    private static final String DEFAULT_ZKPATH = "";
     private static final String CONF_BATCH_SIZE = "batchSize";
     private static final String ZOOKEEPER = "zookeeper";
     private static final String KAFKA = "kafka";
     private static final String STREAM_DEFINITION_FILE = "streamDefinitionFile";
     private static final String TOPIC = "topic";
+    private static final String ZOOKEEPER_PATH = "zkPath";
     private static final String TOPIC_EVENT_HEADER = "_topic";
 
     private SinkCounter sinkCounter;
@@ -67,6 +69,7 @@ public class StratioDecisionSink
     private String kafka;
     private String streamName;
     private String topic= "";
+    private String zkPath= "";
     private List<StreamField> streamFields;
 
     public StratioDecisionSink() {
@@ -78,7 +81,7 @@ public class StratioDecisionSink
         this.sinkCounter = new SinkCounter(this.getName());
         this.zookeeper = context.getString(ZOOKEEPER, DEFAULT_ZOOKEEPER);
         this.kafka = context.getString(KAFKA, DEFAULT_KAFKA);
-
+        this.zkPath = context.getString(ZOOKEEPER_PATH,DEFAULT_ZKPATH);
         //if (context.getString(TOPIC) != null)
         //    this.topic= context.getString(TOPIC);
         this.topic = context.getString(TOPIC, "");
@@ -97,7 +100,7 @@ public class StratioDecisionSink
 
         try {
             this.stratioStreamingAPI = StratioStreamingAPIFactory.create()
-                    .withServerConfig(kafka, zookeeper)
+                    .withQuorumConfig(kafka, zookeeper,zkPath)
                     .init();
         } catch (StratioEngineConnectionException e) {
             throw new StratioDecisionSinkException(e);

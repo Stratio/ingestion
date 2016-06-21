@@ -33,6 +33,7 @@ agent.sources.r1.spoolDir = /home/flume/data/files
 agent.sinks.decisionSink.type=com.stratio.ingestion.sink.decision.StratioDecisionSink
 agent.sinks.decisionSink.kafka=localhost:9092
 agent.sinks.decisionSink.zookeeper=localhost:2181
+agent.sinks.decisionSink.zkpath=
 agent.sinks.decisionSink.streamDefinitionFile=/path/to/stream/definition/file/stream.conf
 
 # Define the interceptors
