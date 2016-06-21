@@ -15,6 +15,9 @@
  */
 package com.stratio.ingestion.sink.cassandra;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
@@ -23,6 +26,8 @@ import java.net.UnknownHostException;
  * Helper functions for Cassandra integration testing.
  */
 public abstract class CassandraTestHelper {
+
+  private static final Logger log = LoggerFactory.getLogger(CassandraTestHelper.class);
 
   private CassandraTestHelper() {
   }
@@ -35,16 +40,20 @@ public abstract class CassandraTestHelper {
    * @return @{link java.net.InetSocketAddress} for a Cassandra cluster.
    */
   public static InetSocketAddress getCassandraContactPoint() {
-    String cassandraIp = System.getProperty("cassandra.hosts.0").split(":")[0];
-    if (cassandraIp == null) {
-      cassandraIp = "127.0.0.1";
+
+    String cassandraIp = "127.0.0.1";
+    try {
+      cassandraIp = System.getProperty("cassandra.hosts.0").split(":")[0];
+    } catch (NullPointerException ex) {
+      log.warn(ex.getLocalizedMessage());
     }
     String cassandraPort = "9042";
-    if(System.getProperty("cassandra.hosts.0").length() > 1) {
-      cassandraPort = System.getProperty("cassandra.hosts.0").split(":")[1];
-//      if (cassandraPort == null) {
-//        cassandraPort = "9042";
-//      }
+    try {
+      if(System.getProperty("cassandra.hosts.0").length() > 1) {
+        cassandraPort = System.getProperty("cassandra.hosts.0").split(":")[1];
+      }
+    }  catch (NullPointerException ex) {
+      log.warn(ex.getLocalizedMessage());
     }
     try {
       return new InetSocketAddress(InetAddress.getByName(cassandraIp), Integer.parseInt(cassandraPort));
