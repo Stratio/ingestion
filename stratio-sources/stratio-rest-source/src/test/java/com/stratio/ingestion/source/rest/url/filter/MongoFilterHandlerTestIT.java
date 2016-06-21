@@ -43,8 +43,12 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.stratio.ingestion.source.rest.url.filter.exception.MongoFilterException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MongoFilterHandlerTestIT {
+
+    private static final Logger log = LoggerFactory.getLogger(MongoFilterHandlerTestIT.class);
 
     public static final String DB_TEST = "test_MongoCheckpointFilterHandlerIT";
     public static final String DATE_FORMAT_YYYY_MM_DD_T_HH_MM_SS_XXX = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
@@ -56,13 +60,20 @@ public class MongoFilterHandlerTestIT {
     private MongoClient mongoClient;
 
     public static String getMongoHost() {
-        String mongoIp = System.getProperty("mongo.hosts.0").split(":")[0];
-        if (mongoIp == null) {
-            mongoIp = "127.0.0.1";
+        String mongoIp = "127.0.0.1";
+        try {
+            mongoIp = System.getProperty("mongo.hosts.0").split(":")[0];
+        } catch (NullPointerException ex) {
+            log.warn(ex.getLocalizedMessage());
         }
+
         String mongoPort = "27017";
-        if(System.getProperty("mongo.hosts.0").length() > 1) {
-            mongoPort = System.getProperty("mongo.hosts.0").split(":")[1];
+        try {
+            if (System.getProperty("mongo.hosts.0").length() > 1) {
+                mongoPort = System.getProperty("mongo.hosts.0").split(":")[1];
+            }
+        } catch (NullPointerException ex) {
+            log.warn(ex.getLocalizedMessage());
         }
 
         return mongoIp + ":" + mongoPort;

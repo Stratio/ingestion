@@ -18,8 +18,7 @@ package com.stratio.ingestion.sink.kafka;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.flume.Channel;
@@ -58,7 +57,7 @@ public class KafkaSinkTestIT {
 
     private static final String CLIENT_ID = "testClient";
     private static String ZOOKEEPER_HOSTS= "";
-    private static String KAFKA_HOSTS= "";
+    private static List<String> KAFKA_HOSTS = new ArrayList<>();
 
     private Channel channel;
     private KafkaSink kafkaSink;
@@ -71,13 +70,13 @@ public class KafkaSinkTestIT {
 
         conf= ConfigFactory.load();
 
-        ZOOKEEPER_HOSTS= StringUtils.join(conf.getStringList("zookeeper.hosts"), ",");
-        KAFKA_HOSTS= StringUtils.join(conf.getStringList("kafka.hosts"), ",");
+        ZOOKEEPER_HOSTS = StringUtils.join(conf.getStringList("zookeeper.hosts"), ",");
+        KAFKA_HOSTS = conf.getStringList("kafka.hosts");
 
         LOGGER.info("Using Zookeeper hosts: " + ZOOKEEPER_HOSTS);
         LOGGER.info("Using Zookeeper hosts: " + KAFKA_HOSTS);
 
-        String[] connection = KAFKA_HOSTS.split(":");
+        String[] connection = KAFKA_HOSTS.get(0).split(":");
 
         simpleConsumer = new SimpleConsumer(connection[0], Integer.parseInt(connection[1]), 60000, 1024, CLIENT_ID);
 
@@ -86,7 +85,7 @@ public class KafkaSinkTestIT {
         Context kafkaContext = new Context();
         kafkaContext.put("topic", "test");
         kafkaContext.put("writeBody", "false");
-        kafkaContext.put("kafka.metadata.broker.list", KAFKA_HOSTS);
+        kafkaContext.put("kafka.metadata.broker.list", StringUtils.join(KAFKA_HOSTS, ","));
         kafkaContext.put("kafka.serializer.class", "kafka.serializer.StringEncoder");
 
         Configurables.configure(kafkaSink, kafkaContext);
