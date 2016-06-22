@@ -19,8 +19,10 @@ import static com.stratio.ingestion.sink.cassandra.CassandraUtils.parseValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.flume.Event;
 import org.slf4j.Logger;
@@ -48,11 +50,23 @@ class CassandraTable {
   private final int totalColumns;
   private final List<String> primaryKeys;
 
+  private final boolean ignoreCase;
+
   public CassandraTable(
       final Session session,
       final TableMetadata table,
       final ConsistencyLevel consistencyLevel,
       final String bodyColumn) {
+    this(session, table, consistencyLevel, bodyColumn, false);
+
+  }
+
+  public CassandraTable(
+      final Session session,
+      final TableMetadata table,
+      final ConsistencyLevel consistencyLevel,
+      final String bodyColumn,
+      final boolean ignoreCase) {
     this.session = session;
     this.table = table;
     this.consistencyLevel = consistencyLevel;
@@ -64,6 +78,8 @@ class CassandraTable {
     for (final ColumnMetadata column : table.getPrimaryKey()) {
       primaryKeys.add(column.getName());
     }
+
+    this.ignoreCase = ignoreCase;
   }
 
   public void save(final List<Event> events) {
@@ -94,7 +110,7 @@ class CassandraTable {
     session.execute(batch);
   }
 
-  private boolean hasPrimaryKey(final Map<String,Object> parsedEvent) {
+  private boolean hasPrimaryKey(final Map<String, Object> parsedEvent) {
     for (final String primaryKey : primaryKeys) {
       if (!parsedEvent.containsKey(primaryKey)) {
         log.info("Event {} misses primary key ({}), skipping", parsedEvent, primaryKey);
@@ -105,12 +121,15 @@ class CassandraTable {
   }
 
   public Map<String, Object> parse(final Event event) {
-    final Map<String, String> headers = event.getHeaders();
+    // translate to lowercase for ignorecase option
+    final Map<String, String> headers = ignoreCase ? processHeadersIgnoreCase(event.getHeaders())
+        : event.getHeaders();
     final int maxValues = Math.min(headers.size(), totalColumns);
     final Map<String, Object> result = new HashMap<String, Object>(maxValues);
 
     for (final ColumnMetadata column : columns) {
-      final String columnName = column.getName();
+      final String columnName = ignoreCase ? column.getName().toLowerCase() : column.getName();
+
       if (headers.containsKey(columnName) && !columnName.equals(bodyColumn)) {
         result.put(columnName, parseValue(column.getType(), headers.get(columnName)));
       } else if (columnName.equals(bodyColumn)) {
@@ -119,6 +138,23 @@ class CassandraTable {
     }
 
     return result;
+  }
+
+  private Map<String, String> processHeadersIgnoreCase(Map<String, String> headers) {
+
+    Map<String, String> headersLowerCase = new HashMap<>(headers.size());
+
+    Iterator<Entry<String, String>> iter = headers.entrySet().iterator();
+    Entry<String, String> entry;
+    String keyInLowerCase;
+    while (iter.hasNext()) {
+      entry = iter.next();
+      keyInLowerCase = entry.getKey().toLowerCase();
+      headersLowerCase.put(keyInLowerCase, entry.getValue());
+    }
+
+    return headersLowerCase;
+
   }
 
 }
