@@ -27,6 +27,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.FileNotFoundException;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.flume.Channel;
 import org.apache.flume.Context;
@@ -43,7 +45,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.ColumnMetadata;
+import com.datastax.driver.core.ConsistencyLevel;
+import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.exceptions.DriverException;
 import com.datastax.driver.core.exceptions.DriverInternalError;
 import com.google.common.collect.ImmutableList;
@@ -321,6 +327,60 @@ public class TestCassandraSink {
     verify(cluster).isClosed();
     verify(cluster).close();
     verifyNoMoreInteractions(cluster);
+  }
+
+  @Test
+  public void thatParseWorksOnIgnoreCase() throws EventDeliveryException {
+    final CassandraSink sink = new CassandraSink();
+    final Channel channel = mock(Channel.class);
+    final Transaction tx = mock(Transaction.class);
+    final Session session = mock(Session.class);
+    final ConsistencyLevel consistencyLevel = ConsistencyLevel.QUORUM;
+    String bodyColumn = null;
+    TableMetadata tableMetadata = mock(TableMetadata.class);
+
+    // we want to test the method CassandraTable.parse so...we don't mock it
+    final CassandraTable tableWithoutIgnoreCase = new CassandraTable(session, tableMetadata, consistencyLevel,
+        bodyColumn);
+
+    // create a context without ignore case
+    final Context ctx = new Context();
+    ctx.put("tables", "keyspace.table");
+    sink.configure(ctx);
+    sink.tables = Collections.singletonList(tableWithoutIgnoreCase);
+    sink.setChannel(channel);
+    when(channel.getTransaction()).thenReturn(tx);
+
+    // mock table metadata
+    mockTableMetadataWithIdAndNameColumns(tableMetadata);
+
+    // put event names in upper case
+    final Event event = EventBuilder.withBody(new byte[0], ImmutableMap.of("ID", "1", "NAME", "text"));
+
+    // parsed result should be empty
+    final Map<String, Object> parsedResult = tableWithoutIgnoreCase.parse(event);
+    assertThat(parsedResult).isEmpty();
+
+    // now with ignore case --> should be some results
+    final CassandraTable tableWitIgnoreCase = new CassandraTable(session, tableMetadata, consistencyLevel,
+        bodyColumn, true);
+    ctx.put("ignoreCase", "true");
+    final Map<String, Object> parsedResultIgnoreCase = tableWitIgnoreCase.parse(event);
+    assertThat(parsedResultIgnoreCase).isNotEmpty();
+    assertThat(parsedResultIgnoreCase.get("id")).isNotNull();
+
+  }
+
+  private void mockTableMetadataWithIdAndNameColumns(TableMetadata tableMetadata) {
+    ColumnMetadata colId = mock(ColumnMetadata.class);
+    when(colId.getName()).thenReturn("id");
+    when(colId.getType()).thenReturn(DataType.text());
+    ColumnMetadata colName = mock(ColumnMetadata.class);
+    when(colName.getName()).thenReturn("name");
+    when(colName.getType()).thenReturn(DataType.text());
+
+    List<ColumnMetadata> listOfColumns = ImmutableList.of(colId, colName);
+    when(tableMetadata.getColumns()).thenReturn(listOfColumns);
   }
 
   static class CauseMatcher extends BaseMatcher<Throwable> {

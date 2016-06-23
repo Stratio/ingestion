@@ -23,6 +23,8 @@ The available config parameters are:
 
 - cqlFile: Path to a CQL file with initialization statements such as keyspace and table creation. (Optional)
 
+- ignoreCase (true|false): match the event columns and table columns ignoring case. It has worst performance so it's recommended to use lower case in event headers if possible (Cassandra returns column names in lower case). (Default: false). 
+
 Sample Complete-flow Flume config
 =================================
 

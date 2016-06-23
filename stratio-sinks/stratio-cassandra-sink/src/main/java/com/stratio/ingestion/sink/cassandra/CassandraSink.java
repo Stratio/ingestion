@@ -58,6 +58,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
   private static final int DEFAULT_BATCH_SIZE = 100;
   private static final String DEFAULT_CONSISTENCY_LEVEL = ConsistencyLevel.QUORUM.name();
   private static final String DEFAULT_BODY_COLUMN = null;
+  private static final boolean DEFAULT_IGNORE_CASE_OPTION = false;
 
   private static final String CONF_TABLES = "tables";
   private static final String CONF_HOSTS = "hosts";
@@ -67,6 +68,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
   private static final String CONF_CQL_FILE = "cqlFile";
   private static final String CONF_CONSISTENCY_LEVEL = "consistency";
   private static final String CONF_BODY_COLUMN = "bodyColumn";
+  private static final String CONF_IGNORE_CASE = "ignoreCase";
   Cluster cluster;
   Session session;
   List<CassandraTable> tables;
@@ -80,6 +82,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
   private String consistency;
   private String bodyColumn;
   private final CounterGroup counterGroup = new CounterGroup();
+  private boolean ignoreCase;
 
   public CassandraSink() {
     super();
@@ -102,6 +105,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
     this.password = context.getString(CONF_PASSWORD);
     this.consistency = context.getString(CONF_CONSISTENCY_LEVEL, DEFAULT_CONSISTENCY_LEVEL);
     this.bodyColumn = context.getString(CONF_BODY_COLUMN, DEFAULT_BODY_COLUMN);
+    this.ignoreCase = context.getBoolean(CONF_IGNORE_CASE, DEFAULT_IGNORE_CASE_OPTION);
 
     final String tablesString = StringUtils.trimToNull(context.getString(CONF_TABLES));
     if (tablesString == null) {
@@ -146,7 +150,7 @@ public class CassandraSink extends AbstractSink implements Configurable {
       final String keyspace = fields[0];
       final String table = fields[1];
       final TableMetadata tableMetadata = getTableMetadata(session, keyspace, table);
-      tables.add(new CassandraTable(session, tableMetadata, ConsistencyLevel.valueOf(consistency), bodyColumn));
+      tables.add(new CassandraTable(session, tableMetadata, ConsistencyLevel.valueOf(consistency), bodyColumn, ignoreCase));
     }
 
     this.sinkCounter.start();
