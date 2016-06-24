@@ -30,6 +30,7 @@
 
 	<modules>
 		<module>stratio-decision-sink</module>
+		<module>stratio-elasticsearch-sink</module>
 		<module>stratio-cassandra-sink</module>
 		<module>stratio-mongodb-sink</module>
 		<module>stratio-jdbc-sink</module>
