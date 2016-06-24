@@ -229,6 +229,16 @@ public class RestSource extends AbstractSource implements Configurable, Pollable
         return status;
     }
 
+    @Override
+    public long getBackOffSleepIncrement() {
+        return 0;
+    }
+
+    @Override
+    public long getMaxBackOffSleepInterval() {
+        return 0;
+    }
+
     /**
      * {@inheritDoc}
      */
