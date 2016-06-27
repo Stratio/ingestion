@@ -98,6 +98,12 @@
             <groupId>org.apache.flume</groupId>
             <artifactId>flume-ng-dist</artifactId>
             <version>${flume.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.flume.flume-ng-sinks</groupId>
+                    <artifactId>flume-ng-elasticsearch-sink</artifactId>
+                </exclusion>
+            </exclusions>
             <type>pom</type>
         </dependency>
         <dependency>
