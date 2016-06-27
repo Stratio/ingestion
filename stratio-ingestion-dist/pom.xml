@@ -139,6 +139,11 @@
         </dependency>
         <dependency>
             <groupId>com.stratio.ingestion</groupId>
+            <artifactId>stratio-elasticsearch-sink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.stratio.ingestion</groupId>
             <artifactId>stratio-elasticsearch-serializer</artifactId>
             <version>${project.version}</version>
         </dependency>
