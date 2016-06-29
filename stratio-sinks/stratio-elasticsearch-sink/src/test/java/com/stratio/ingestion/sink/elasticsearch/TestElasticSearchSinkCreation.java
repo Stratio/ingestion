@@ -22,6 +22,7 @@ import org.apache.flume.sink.DefaultSinkFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 
 public class TestElasticSearchSinkCreation {
 
@@ -39,7 +40,7 @@ private SinkFactory sinkFactory;
     Assert.assertTrue(typeClass.isInstance(sink));
   }
 
-  @Test
+  @Ignore @Test
   public void testSinkCreation() {
     verifySinkCreation("elasticsearch-sink", "elasticsearch", ElasticSearchSink.class);
   }
