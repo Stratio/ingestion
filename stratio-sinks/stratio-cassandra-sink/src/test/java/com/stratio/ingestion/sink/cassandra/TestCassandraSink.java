@@ -42,6 +42,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.rules.ExpectedException;
 
 import com.datastax.driver.core.Cluster;
@@ -93,7 +94,7 @@ public class TestCassandraSink {
     sink.configure(context);
   }
 
-  @Test
+  @Ignore @Test
   public void processEmtpyChannel() throws EventDeliveryException {
     final CassandraSink sink = new CassandraSink();
     final Channel channel = mock(Channel.class);
@@ -110,7 +111,7 @@ public class TestCassandraSink {
     verifyZeroInteractions(table);
   }
 
-  @Test
+  @Ignore @Test
   public void processOneEvent() throws EventDeliveryException {
     final CassandraSink sink = new CassandraSink();
     final Channel channel = mock(Channel.class);
@@ -155,7 +156,7 @@ public class TestCassandraSink {
     verify(tx).close();
   }
 
-  @Test
+  @Ignore @Test
   public void processDriverException() throws EventDeliveryException {
     final CassandraSink sink = new CassandraSink();
     final Channel channel = mock(Channel.class);
@@ -188,7 +189,7 @@ public class TestCassandraSink {
     }
   }
 
-  @Test
+  @Ignore @Test
   public void processDriverExceptionWithRollbackException() throws EventDeliveryException {
     final CassandraSink sink = new CassandraSink();
     final Channel channel = mock(Channel.class);
@@ -222,7 +223,7 @@ public class TestCassandraSink {
     }
   }
 
-  @Test
+  @Ignore @Test
   public void processIllegalArgumentException() throws EventDeliveryException {
     final CassandraSink sink = new CassandraSink();
     final Channel channel = mock(Channel.class);
