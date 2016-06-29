@@ -193,35 +193,40 @@
 
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <!-- XXX:
+                    Tried version 2.5.3 but it was missing JARs.
+                    See https://github.com/Stratio/flume-ingestion/issues/45
+                -->
+                <version>2.4.1</version>
+                <executions>
+                    <execution>
+                        <id>distro-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/bin.xml</descriptor>
+                            </descriptors>
+                            <tarLongFileMode>gnu</tarLongFileMode>
+                            <finalName>stratio-ingestion-${project.version}</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <profiles>
         <profile>
             <id>package</id>
             <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <!-- XXX:
-                            Tried version 2.5.3 but it was missing JARs.
-                            See https://github.com/Stratio/flume-ingestion/issues/45
-                        -->
-                        <version>2.4.1</version>
-                        <executions>
-                            <execution>
-                                <id>distro-assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                                <configuration>
-                                    <descriptors>
-                                        <descriptor>src/main/assembly/bin.xml</descriptor>
-                                    </descriptors>
-                                    <tarLongFileMode>gnu</tarLongFileMode>
-                                    <finalName>stratio-ingestion-${project.version}</finalName>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
+                <plugins>                    
                     <plugin>
                         <groupId>com.stratio.mojo.unix</groupId>
                         <artifactId>unix-maven-plugin</artifactId>
