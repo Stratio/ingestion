@@ -2,7 +2,7 @@
 
 Only listing significant user-visible, not internal code cleanups and minor bug fixes.
 
-## 0.7.0 (upcoming)
+## 0.7.0 (July 05, 2016)
 
 * Pending changelog
 
