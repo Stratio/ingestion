@@ -29,7 +29,7 @@
 	<parent>
 		<groupId>com.stratio.ingestion</groupId>
 		<artifactId>stratio-sources</artifactId>
-		<version>0.7.0-SNAPSHOT</version>
+		<version>0.7.0-RC1</version>
 	</parent>
 
 	<artifactId>stratio-rest-source</artifactId>
