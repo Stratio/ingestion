@@ -6,6 +6,10 @@ Only listing significant user-visible, not internal code cleanups and minor bug 
 
 * TBD
 
+## 0.7.0 (July 05, 2016)
+* Update elasticsearch sink
+* Generate and upload .tar.gz artifact
+
 ## 0.6.2 (April 2016)
 * Permission bugs fixed 
 
