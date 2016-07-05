@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>com.stratio.ingestion</groupId>
 		<artifactId>stratio-ingestion-parent</artifactId>
-		<version>0.7.0-SNAPSHOT</version>
+		<version>0.8.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>stratio-serializers</artifactId>

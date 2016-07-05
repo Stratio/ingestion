@@ -2,6 +2,10 @@
 
 Only listing significant user-visible, not internal code cleanups and minor bug fixes.
 
+## 0.8.0 (upcoming)
+
+* TBD
+
 ## 0.6.2 (April 2016)
 * Permission bugs fixed 
 
