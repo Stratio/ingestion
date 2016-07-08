@@ -2,9 +2,14 @@
 
 Only listing significant user-visible, not internal code cleanups and minor bug fixes.
 
+
 ## 0.8.0 (upcoming)
 
 * TBD
+
+## 0.7.1 (upcoming)
+
+* coveralls badge
 
 ## 0.7.0 (July 05, 2016)
 * Update elasticsearch sink
