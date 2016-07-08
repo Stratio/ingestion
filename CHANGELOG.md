@@ -2,6 +2,10 @@
 
 Only listing significant user-visible, not internal code cleanups and minor bug fixes.
 
+## 0.7.1 (upcoming)
+
+* TBD
+
 ## 0.7.0 (July 05, 2016)
 
 * Update elasticsearch sink
