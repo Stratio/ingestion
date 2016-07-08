@@ -19,7 +19,7 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
     <id>bin</id>
-    <formats>
+    <formats>        
         <format>dir</format>
         <format>tar.gz</format>
     </formats>
@@ -27,7 +27,7 @@
     <moduleSets>
         <moduleSet>
             <includes>
-                <include>com.stratio.ingestion:*</include>
+                <include>*:*</include>
             </includes>
             <binaries>
                 <outputDirectory>/lib</outputDirectory>
