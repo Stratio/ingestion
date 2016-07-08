@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/Stratio/Ingestion/badge.svg?branch=branch-0.7)](https://coveralls.io/github/Stratio/Ingestion?branch=branch-0.7)
+
 Stratio Ingestion
 =================
 

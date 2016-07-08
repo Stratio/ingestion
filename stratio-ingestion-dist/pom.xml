@@ -25,7 +25,7 @@
     <parent>
         <artifactId>stratio-ingestion-parent</artifactId>
         <groupId>com.stratio.ingestion</groupId>
-        <version>0.7.0</version>
+        <version>0.7.1-RC1-SNAPSHOT</version>
     </parent>
 
     <!-- Required here for unix-maven-plugin -->
@@ -201,7 +201,7 @@
                     Tried version 2.5.3 but it was missing JARs.
                     See https://github.com/Stratio/flume-ingestion/issues/45
                 -->
-                <version>2.4.1</version>
+                <version>2.6</version>
                 <executions>
                     <execution>
                         <id>distro-assembly</id>
