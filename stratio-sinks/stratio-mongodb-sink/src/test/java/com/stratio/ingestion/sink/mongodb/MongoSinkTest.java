@@ -44,6 +44,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.stratio.ingestion.sink.mongodb.exception.MongoSinkException;
 
 @RunWith(JUnit4.class)
 public class MongoSinkTest {
@@ -137,7 +138,7 @@ public class MongoSinkTest {
 
         DBObject result = fongo.getDB("test").getCollection("test").findOne();
 
-//        System.out.println(result.toString());
+        System.out.println(result.toString());
 
         assertThat(result).isNotNull();
         assertThat(result.get("myString")).isEqualTo("bar");

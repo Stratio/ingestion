@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Closeables;
+import com.stratio.ingestion.sink.mongodb.exception.MongoSinkException;
 
 class MappingDefinition implements Serializable {
 
@@ -59,6 +60,11 @@ class MappingDefinition implements Serializable {
     private static final String DEFAULT_BODY_ENCODING = "UTF-8"; // For BINARY it defaults to "raw".
     private static final String DEFAULT_BODY_FIELD = "data";
     private static final String DOCUMENT_MAPPING = "documentMapping";
+    private static final String WRITE_NULL_VALUES = "writeNullValues";
+    private static final String WRITE_EMPTY_VALUES = "writeEmptyValues";
+    private static final String WRITE_NULL_VALUES_AS_NULL_STRINGS = "writeNullValuesAsNullStrings";
+
+    
     private static final String DELIMITER_CHAR = "delimiter";
 
     private final boolean additionalProperties;
@@ -136,6 +142,9 @@ class MappingDefinition implements Serializable {
         if (fieldDefinition.getType().equals(MongoDataType.DOCUMENT) && entry.getValue().has(DOCUMENT_MAPPING)) {
             if (entry.getValue().has(DELIMITER_CHAR)) {
                 fieldDefinition.setDelimiter(entry.getValue().get(DELIMITER_CHAR).asText());
+                fieldDefinition.setWriteNullValues(entry.getValue().get(WRITE_NULL_VALUES).asBoolean());
+                fieldDefinition.setWriteEmptyValues(entry.getValue().get(WRITE_EMPTY_VALUES).asBoolean());
+                fieldDefinition.setWriteNullValuesAsNullStrings(entry.getValue().get(WRITE_NULL_VALUES_AS_NULL_STRINGS).asBoolean());
                 JsonNode documentMapping = entry.getValue().get(DOCUMENT_MAPPING);
                 Map<String, FieldDefinition> documentFieldDefinitionMap = new LinkedHashMap<String, FieldDefinition>();
                 Iterator<Map.Entry<String, JsonNode>> entryIterator = documentMapping.fields();
