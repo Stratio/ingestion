@@ -24,11 +24,39 @@ class DocumentFieldDefinition extends FieldDefinition {
     private Map<String, FieldDefinition> documentMapping;
 
     private String delimiter;
+    private Boolean writeNullValues;
+    private Boolean writeEmptyValues;
+    private Boolean writeNullValuesAsNullStrings;
+    
+    
+	public Boolean getWriteNullValuesAsNullStrings() {
+		return writeNullValuesAsNullStrings;
+	}
 
-    public DocumentFieldDefinition() {
+	public void setWriteNullValuesAsNullStrings(Boolean writeNullValuesAsNullStrings) {
+		this.writeNullValuesAsNullStrings = writeNullValuesAsNullStrings;
+	}
+
+	public Boolean getWriteNullValues() {
+		return writeNullValues;
+	}
+
+	public void setWriteNullValues(Boolean writeNullValues) {
+		this.writeNullValues = writeNullValues;
+	}
+
+	public Boolean getWriteEmptyValues() {
+		return writeEmptyValues;
+	}
+
+	public void setWriteEmptyValues(Boolean writeEmptyValues) {
+		this.writeEmptyValues = writeEmptyValues;
+	}
+
+	public DocumentFieldDefinition() {
         super(MongoDataType.DOCUMENT);
     }
-
+	
     public DocumentFieldDefinition(String fieldName) {
         super(fieldName, MongoDataType.DOCUMENT);
     }
@@ -60,6 +88,8 @@ class DocumentFieldDefinition extends FieldDefinition {
 
         return result;
     }
+    
+    
 
     @Override
     public boolean equals(Object obj) {

@@ -1,0 +1,19 @@
+----------------------------------------------------------------
+Mon Oct 10 12:32:59 CEST 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0157-ae27-16a1-00000c300678 
+on database directory /home/ennio/IdeaProject/Ingestion/stratio-sinks/stratio-jdbc-sink/test_derby_db with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
+Loaded from file:/home/ennio/.m2/repository/org/apache/derby/derby/10.10.2.0/derby-10.10.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_91-8u91-b14-3ubuntu1~16.04.1-b14
+user.dir=/home/ennio/IdeaProject/Ingestion/stratio-sinks/stratio-jdbc-sink
+os.name=Linux
+os.arch=amd64
+os.version=4.4.0-38-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Mon Oct 10 12:33:07 CEST 2016: Shutting down Derby engine
+----------------------------------------------------------------
+Mon Oct 10 12:33:08 CEST 2016:
+Shutting down instance a816c00e-0157-ae27-16a1-00000c300678 on database directory /home/ennio/IdeaProject/Ingestion/stratio-sinks/stratio-jdbc-sink/test_derby_db with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
+----------------------------------------------------------------

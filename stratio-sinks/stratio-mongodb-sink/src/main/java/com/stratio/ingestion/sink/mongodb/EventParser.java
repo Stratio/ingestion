@@ -42,204 +42,244 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 import com.mongodb.util.JSONParseException;
+import com.stratio.ingestion.sink.mongodb.exception.EventParseSinkException;
+import com.stratio.ingestion.sink.mongodb.exception.MongoSinkException;
+import com.stratio.ingestion.sink.mongodb.utils.PrimitiveTypeChecker;
 
 class EventParser {
 
-    private static final Logger log = LoggerFactory.getLogger(EventParser.class);
+	private static final String NULL_STR_VALUE = "null";
 
-    private static final String DEFAULT_BINARY_ENCODING = "base64";
-    private static final String DOCUMENT_TYPE = "document";
+	private static final Logger log = LoggerFactory.getLogger(EventParser.class);
 
-    private final MappingDefinition definition;
+	private static final String DEFAULT_BINARY_ENCODING = "base64";
+	private static final String DOCUMENT_TYPE = "document";
 
-    public EventParser() {
-        this(new MappingDefinition());
-    }
+	private final MappingDefinition definition;
 
-    public EventParser(final MappingDefinition mappingDefinition) {
-        this.definition = mappingDefinition;
-    }
+	public EventParser() {
+		this(new MappingDefinition());
+	}
 
-    public Object parseValue(final FieldDefinition fd, final String stringValue) {
-        if (fd == null || fd.getType() == null) {
-            try {
-                return JSON.parse(stringValue);
-            } catch (JSONParseException ex) {
-                // XXX: Default to String
-                log.trace("Could not parse as JSON, defaulting to String: {}", stringValue);
-                return stringValue;
-            }
-        }
-        switch (fd.getType()) {
-        case DOUBLE:
-            return Double.parseDouble(stringValue);
-        case STRING:
-            return stringValue;
-        case OBJECT:
-        case ARRAY:
-            // TODO: should we use customizable array representation?
-            // TODO: should we check that the result is indeed an array or object?
-            return JSON.parse(stringValue);
-        case BINARY:
-            SimpleFieldDefinition sfd = (SimpleFieldDefinition) fd;
-            final String encoding = (sfd.getEncoding() == null) ? DEFAULT_BINARY_ENCODING : sfd.getEncoding()
-                    .toLowerCase(Locale.ENGLISH);
-            if ("base64".equals(encoding)) {
-                return BaseEncoding.base64().decode(stringValue);
-            } else {
-                throw new UnsupportedOperationException("Unsupported encoding for binary type: " + encoding);
-            }
-            // TODO: case "UNDEFINED":
-        case OBJECTID:
-            return new ObjectId(stringValue);
-        case BOOLEAN:
-            return Boolean.parseBoolean(stringValue);
-        case DATE:
-            DateFormat dateFormat = ((DateFieldDefinition) fd).getDateFormat();
-            if (dateFormat == null) {
-                if (StringUtils.isNumeric(stringValue)) {
-                    return new Date(Long.parseLong(stringValue));
-                } else {
-                    return ISODateTimeFormat.dateOptionalTimeParser().parseDateTime(stringValue).toDate();
-                }
-            } else {
-                try {
-                    return dateFormat.parse(stringValue);
-                } catch (ParseException ex) {
-                    // XXX: Default to string
-                    log.warn("Could not parse date, defaulting to String: {}", stringValue);
-                    return stringValue;
-                }
-            }
-        case NULL:
-            // TODO: Check if this is valid
-            return null;
-            // TODO: case "REGEX":
-            // TODO: case "JAVASCRIPT":
-            // TODO: case "SYMBOL":
-            // TODO: case "JAVASCRIPT_SCOPE":
-        case INT32:
-            return Integer.parseInt(stringValue);
-        case INT64:
-            return Long.parseLong(stringValue);
-        case DOCUMENT:
-            return populateDocument((DocumentFieldDefinition) fd, stringValue);
-        default:
-            throw new UnsupportedOperationException("Unsupported type: " + fd.getType().name());
-        }
-    }
+	public EventParser(final MappingDefinition mappingDefinition) {
+		this.definition = mappingDefinition;
+	}
 
-    public DBObject parse(Event event) {
+	public Object parseValue(final FieldDefinition fd, final String stringValue) {
+		if (fd == null || fd.getType() == null) {
+			try {
+				return JSON.parse(stringValue);
+			} catch (JSONParseException ex) {
+				// XXX: Default to String
+				log.trace("Could not parse as JSON, defaulting to String: {}", stringValue);
+				return stringValue;
+			}
+		}
 
-        DBObject dbObject = new BasicDBObject();
-        if (definition.getBodyType() != MongoDataType.NULL) {
-            Object obj = null;
-            if (definition.getBodyType() == MongoDataType.BINARY && definition.getBodyEncoding().equals("raw")) {
-                obj = event.getBody();
-            } else if (definition.getBodyType() == MongoDataType.STRING) {
-                Charset charset = Charset.forName(definition.getBodyEncoding());
-                obj = new String(event.getBody(), charset);
-            } else {
-                SimpleFieldDefinition fd = new SimpleFieldDefinition();
-                fd.setType(definition.getBodyType());
-                fd.setEncoding(definition.getBodyEncoding());
-                obj = parseValue(fd, new String(event.getBody(), Charsets.UTF_8));
-            }
+		if (StringUtils.isEmpty(stringValue)) {
+			return null;
+		}
 
-            if (!"".equals(definition.getBodyField())) {
-                dbObject.put(definition.getBodyField(), obj);
-            } else if (obj instanceof DBObject) {
-                dbObject = (DBObject) obj;
-            } else {
-                log.warn("Could not map body to JSON document: {}", obj);
-            }
-        }
+		switch (fd.getType()) {
+		case DOUBLE:
+			return Double.parseDouble(stringValue);
+		case STRING:
+			return stringValue;
+		case OBJECT:
+		case ARRAY:
+			// TODO: should we use customizable array representation?
+			// TODO: should we check that the result is indeed an array or
+			// object?
+			return JSON.parse(stringValue);
+		case BINARY:
+			SimpleFieldDefinition sfd = (SimpleFieldDefinition) fd;
+			final String encoding = (sfd.getEncoding() == null) ? DEFAULT_BINARY_ENCODING
+					: sfd.getEncoding().toLowerCase(Locale.ENGLISH);
+			if ("base64".equals(encoding)) {
+				return BaseEncoding.base64().decode(stringValue);
+			} else {
+				throw new UnsupportedOperationException("Unsupported encoding for binary type: " + encoding);
+			}
+			// TODO: case "UNDEFINED":
+		case OBJECTID:
+			return new ObjectId(stringValue);
+		case BOOLEAN:
+			return Boolean.parseBoolean(stringValue);
+		case DATE:
+			DateFormat dateFormat = ((DateFieldDefinition) fd).getDateFormat();
+			if (dateFormat == null) {
+				if (StringUtils.isNumeric(stringValue)) {
+					return new Date(Long.parseLong(stringValue));
+				} else {
+					return ISODateTimeFormat.dateOptionalTimeParser().parseDateTime(stringValue).toDate();
+				}
+			} else {
+				try {
+					return dateFormat.parse(stringValue);
+				} catch (ParseException ex) {
+					// XXX: Default to string
+					log.warn("Could not parse date, defaulting to String: {}", stringValue);
+					return stringValue;
+				}
+			}
+		case NULL:
+			// TODO: Check if this is valid
+			return null;
+		// TODO: case "REGEX":
+		// TODO: case "JAVASCRIPT":
+		// TODO: case "SYMBOL":
+		// TODO: case "JAVASCRIPT_SCOPE":
+		case INT32:
+			return Integer.parseInt(stringValue);
+		case INT64:
+			return Long.parseLong(stringValue);
+		case DOCUMENT:
+			return populateDocument((DocumentFieldDefinition) fd, stringValue);
+		default:
+			throw new UnsupportedOperationException("Unsupported type: " + fd.getType().name());
+		}
+	}
 
-        final Map<String, String> eventHeaders = event.getHeaders();
-        if (definition.allowsAdditionalProperties()) {
-            for (final Map.Entry<String, String> headerEntry : eventHeaders.entrySet()) {
-                final String fieldName = headerEntry.getKey();
-                final String fieldValue = headerEntry.getValue();
-                FieldDefinition def = definition.getFieldDefinitionByName(fieldName);
-                if (def == null) {
-                    dbObject.put(fieldName, parseValue(null, fieldValue));
-                } else {
-                    final String mappedName = (def.getMappedName() == null) ? def.getFieldName() : def.getMappedName();
-                    if (eventHeaders.containsKey(fieldName)) {
-                        dbObject.put(mappedName, parseValue(def, fieldValue));
-                    }
-                }
-            }
-        } else {
-            for (FieldDefinition def : definition.getFields()) {
-                final String fieldName = def.getFieldName();
-                final String mappedName = (def.getMappedName() == null) ? def.getFieldName() : def.getMappedName();
-                if (containsKey(eventHeaders, fieldName)) {
-                    dbObject.put(mappedName, parseValue(def, getFieldName(eventHeaders, fieldName)));
-                }
-            }
-        }
+	public DBObject parse(Event event) {
+		DBObject dbObject = new BasicDBObject();
+		if (definition.getBodyType() != MongoDataType.NULL) {
+			Object obj = null;
+			if (definition.getBodyType() == MongoDataType.BINARY && definition.getBodyEncoding().equals("raw")) {
+				obj = event.getBody();
+			} else if (definition.getBodyType() == MongoDataType.STRING) {
+				Charset charset = Charset.forName(definition.getBodyEncoding());
+				obj = new String(event.getBody(), charset);
+			} else {
+				SimpleFieldDefinition fd = new SimpleFieldDefinition();
+				fd.setType(definition.getBodyType());
+				fd.setEncoding(definition.getBodyEncoding());
+				obj = parseValue(fd, new String(event.getBody(), Charsets.UTF_8));
+			}
 
-        return dbObject;
-    }
+			if (!"".equals(definition.getBodyField())) {
+				dbObject.put(definition.getBodyField(), obj);
+			} else if (obj instanceof DBObject) {
+				dbObject = (DBObject) obj;
+			} else {
+				log.warn("Could not map body to JSON document: {}", obj);
+			}
+		}
 
-    private String getFieldName(Map<String, String> eventHeaders, String fieldName) {
-        String value = null;
-        if (fieldName.contains(".")) {
-            ObjectMapper mapper = new ObjectMapper();
-            final String[] fieldNameSplitted = fieldName.split("\\.");
-            try {
-                final String objectName = fieldNameSplitted[0];
-                JsonNode jsonNode = mapper.readTree(eventHeaders.get(objectName));
-                value = jsonNode.findValue(fieldNameSplitted[fieldNameSplitted.length - 1]).getTextValue();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            value = eventHeaders.get(fieldName);
-        }
-        return value;
-    }
+		final Map<String, String> eventHeaders = event.getHeaders();
+		if (definition.allowsAdditionalProperties()) {
+			for (final Map.Entry<String, String> headerEntry : eventHeaders.entrySet()) {
+				final String fieldName = headerEntry.getKey();
+				final String fieldValue = headerEntry.getValue();
+				FieldDefinition def = definition.getFieldDefinitionByName(fieldName);
+				if (def == null) {
+					dbObject.put(fieldName, parseValue(null, fieldValue));
+				} else {
+					final String mappedName = (def.getMappedName() == null) ? def.getFieldName() : def.getMappedName();
+					if (eventHeaders.containsKey(fieldName)) {
+						dbObject.put(mappedName, parseValue(def, fieldValue));
+					}
+				}
+			}
+		} else {
+			for (FieldDefinition def : definition.getFields()) {
+				final String fieldName = def.getFieldName();
+				final String mappedName = (def.getMappedName() == null) ? def.getFieldName() : def.getMappedName();
+				if (containsKey(eventHeaders, fieldName)) {
+					dbObject.put(mappedName, parseValue(def, getFieldName(eventHeaders, fieldName)));
+				}
+			}
+		}
 
-    private boolean containsKey(Map<String, String> eventHeaders, String fieldName) {
-        if (StringUtils.isNotBlank(fieldName) && fieldName.contains(".")) {
-            final String[] fieldNameSplitted = fieldName.split("\\.");
-            return eventHeaders.containsKey(fieldNameSplitted[0]);
-        } else {
-            return eventHeaders.containsKey(fieldName);
-        }
-    }
-    
-    public List<DBObject> parse(List<Event> events) {
-        List<DBObject> rows = new ArrayList<DBObject>(events.size());
-        for (Event event : events) {
-            rows.add(this.parse(event));
-        }
-        return rows;
-    }
+		return dbObject;
+	}
 
-    private DBObject populateDocument(DocumentFieldDefinition fd, String document) {
-        DBObject dbObject = null;
-        final String delimiter = fd.getDelimiter();
-        if (!StringUtils.isEmpty(delimiter)) {
-            String[] documentAsArrray = document.split(Pattern.quote(delimiter));
-            dbObject = new BasicDBObject();
-            Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>(
-                    fd.getDocumentMapping());
-            int i = 0;
-            for (Map.Entry<String, FieldDefinition> documentField : documentMapping.entrySet()) {
-                if (DOCUMENT_TYPE.equalsIgnoreCase(documentField.getValue().getType().name())) {
-                    dbObject.put(documentField.getKey(), parseValue(documentField.getValue(),
-                            StringUtils.join(Arrays.copyOfRange(documentAsArrray, i, documentAsArrray.length), fd.getDelimiter())));
-                    i += ((DocumentFieldDefinition) documentField.getValue()).getDocumentMapping().size();
-                } else {
-                    dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), documentAsArrray[i++]));
-                }
-            }
-        } else {
-            throw new MongoSinkException("Delimiter char must be set");
-        }
+	private String getFieldName(Map<String, String> eventHeaders, String fieldName) {
+		String value = null;
+		if (fieldName.contains(".")) {
+			ObjectMapper mapper = new ObjectMapper();
+			final String[] fieldNameSplitted = fieldName.split("\\.");
+			try {
+				final String objectName = fieldNameSplitted[0];
+				JsonNode jsonNode = mapper.readTree(eventHeaders.get(objectName));
+				value = jsonNode.findValue(fieldNameSplitted[fieldNameSplitted.length - 1]).getTextValue();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			value = eventHeaders.get(fieldName);
+		}
+		return value;
+	}
 
-        return dbObject;
-    }
+	private boolean containsKey(Map<String, String> eventHeaders, String fieldName) {
+		if (StringUtils.isNotBlank(fieldName) && fieldName.contains(".")) {
+			final String[] fieldNameSplitted = fieldName.split("\\.");
+			return eventHeaders.containsKey(fieldNameSplitted[0]);
+		} else {
+			return eventHeaders.containsKey(fieldName);
+		}
+	}
+
+	public List<DBObject> parse(List<Event> events) {
+		List<DBObject> rows = new ArrayList<DBObject>(events.size());
+		for (Event event : events) {
+			rows.add(this.parse(event));
+		}
+		return rows;
+	}
+
+	private DBObject populateDocument(DocumentFieldDefinition fd, String document) {
+		DBObject dbObject = null;
+		final String delimiter = fd.getDelimiter();
+		if (!StringUtils.isEmpty(delimiter)) {
+			Map<String, FieldDefinition> documentMapping = new LinkedHashMap<String, FieldDefinition>(
+					fd.getDocumentMapping());
+			
+			Pattern p = Pattern.compile(delimiter, Pattern.LITERAL);
+			String[] documentAsArray = p.split(document, StringUtils.countMatches(document, delimiter) + 1);
+
+			dbObject = new BasicDBObject();
+			int i = 0;
+
+			Boolean writeNullValues = (fd.getWriteNullValues() != null) ? fd.getWriteNullValues() : true; // default:
+																											// true
+			Boolean writeEmptyValues = (fd.getWriteEmptyValues() != null) ? fd.getWriteEmptyValues() : true; // default:
+																												// true
+			Boolean writeNullValuesAsNullStrings = (fd.getWriteNullValuesAsNullStrings() != null)
+					? fd.getWriteNullValuesAsNullStrings() : false; // default:
+																	// false
+
+			String elementValue;
+			for (Map.Entry<String, FieldDefinition> documentField : documentMapping.entrySet()) {
+				if (DOCUMENT_TYPE.equalsIgnoreCase(documentField.getValue().getType().name())) {
+					dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), StringUtils
+							.join(Arrays.copyOfRange(documentAsArray, i, documentAsArray.length), fd.getDelimiter())));
+					i += ((DocumentFieldDefinition) documentField.getValue()).getDocumentMapping().size();
+				} else {
+					try {
+						elementValue = documentAsArray[i++];
+						if ((elementValue.equals(NULL_STR_VALUE) && writeNullValues)
+								|| (!elementValue.equals(NULL_STR_VALUE) && !elementValue.isEmpty())
+								|| (elementValue.isEmpty() && writeEmptyValues)) {
+
+							if (elementValue.equals(NULL_STR_VALUE) && writeNullValues && (!writeNullValuesAsNullStrings
+									&& !PrimitiveTypeChecker.isPrimitiveType(documentField.getValue().getClass()))) {
+								dbObject.put(documentField.getKey(), parseValue(documentField.getValue(), null));
+							} else {
+								dbObject.put(documentField.getKey(),
+										parseValue(documentField.getValue(), elementValue));
+							}
+						}
+					} catch (Exception ex) {
+						throw new EventParseSinkException("Error during event parse.", ex);
+					}
+				}
+			}
+		} else {
+			throw new MongoSinkException("Delimiter char must be set");
+		}
+
+		return dbObject;
+	}
+
 }
