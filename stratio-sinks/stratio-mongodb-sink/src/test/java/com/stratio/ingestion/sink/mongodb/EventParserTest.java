@@ -91,6 +91,7 @@ public class EventParserTest {
         final DateTime now = DateTime.now().toDateTime(DateTimeZone.UTC);
         assertThat(eventParser.parseValue(definition(MongoDataType.DATE), Long.toString(now.getMillis()))).isEqualTo(
                 now.toDate());
+              
         assertThat((eventParser.parseValue(definition(MongoDataType.DATE), ISODateTimeFormat.dateTime().print(now))))
                 .isEqualTo(
                         now.toDate());
@@ -119,6 +120,14 @@ public class EventParserTest {
         DateFieldDefinition fd = (DateFieldDefinition) definition(MongoDataType.DATE);
         fd.setDateFormat("yyyy/MM/dd");
         assertThat(eventParser.parseValue(fd, "2004/03/13")).isEqualTo(new Date(104, 2, 13));
+    }
+    
+    @Test
+    public void parseNegativeValueForDate() {
+    	final EventParser eventParser = new EventParser();
+    	long before1970Millis = -100;
+    	final DateTime pastDate = new DateTime(before1970Millis);
+    	assertThat(eventParser.parseValue(definition(MongoDataType.DATE), Long.toString(before1970Millis))).isEqualTo(pastDate.toDate());
     }
 
     @Test(expected = MongoSinkException.class)

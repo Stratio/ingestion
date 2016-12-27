@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.flume.Event;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.JsonNode;
@@ -97,7 +98,7 @@ class EventParser {
         case DATE:
             DateFormat dateFormat = ((DateFieldDefinition) fd).getDateFormat();
             if (dateFormat == null) {
-                if (StringUtils.isNumeric(stringValue)) {
+                if (NumberUtils.isNumber(stringValue)) {
                     return new Date(Long.parseLong(stringValue));
                 } else {
                     return ISODateTimeFormat.dateOptionalTimeParser().parseDateTime(stringValue).toDate();
